@@ -1,0 +1,6 @@
+#Generated files
+contract.rs
+ffi_enums.rs
+transaction.rs
+types.rs
+
