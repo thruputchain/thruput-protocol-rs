@@ -32,7 +32,9 @@ use std::io::{Read, Write};
 // WebAssembly exported function that was run, the code caused by a host
 // function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
 // host function returns HostFnErrorCode::kReturn.
+
 #[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
@@ -51,24 +53,6 @@ pub enum InvokeErrorCode {
     // Discovered during validation that proposer submitted bad data.
     kValidationFailure = 4,
 }
-#[cfg(feature="std")]
-impl TryFrom<i32> for InvokeErrorCode {
-    type Error = Error;
-
-    fn try_from(i: i32) -> Result<Self, Error> {
-        let e = match i {
-            0 => InvokeErrorCode::kNone,
-            1 => InvokeErrorCode::kDeterministic,
-            2 => InvokeErrorCode::kOutOfGas,
-            3 => InvokeErrorCode::kUnrecoverable,
-            4 => InvokeErrorCode::kValidationFailure,
-
-            #[allow(unreachable_patterns)]
-            _ => return Err(Error::Invalid),
-      };
-      Ok(e)
-  }
-}
 
 // HostFunctionErrorCode categorizes errors returned from system calls. The
 // normal usage pattern is to wrap them within HostFnStatus<int32_t>, where the
@@ -84,7 +68,9 @@ impl TryFrom<i32> for InvokeErrorCode {
 // function. The WebAssembly bytecode (the smart contract) itself never sees the
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
 // (returning to the caller), and are handled by the WebAssembly runtime.
+
 #[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
     kNoneOrRecoverable = 0,
@@ -123,25 +109,6 @@ pub enum HostFnErrorCode {
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kValidationFailure
     kValidationFailure = 5,
-}
-#[cfg(feature="std")]
-impl TryFrom<i32> for HostFnErrorCode {
-    type Error = Error;
-
-    fn try_from(i: i32) -> Result<Self, Error> {
-        let e = match i {
-            0 => HostFnErrorCode::kNoneOrRecoverable,
-            1 => HostFnErrorCode::kOutOfGas,
-            2 => HostFnErrorCode::kUnrecoverable,
-            3 => HostFnErrorCode::kReturn,
-            4 => HostFnErrorCode::kExit,
-            5 => HostFnErrorCode::kValidationFailure,
-
-            #[allow(unreachable_patterns)]
-            _ => return Err(Error::Invalid),
-      };
-      Ok(e)
-  }
 }
 
 

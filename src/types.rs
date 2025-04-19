@@ -15,10 +15,11 @@ use crate::*;
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+
+
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr))]
-#[cfg_attr(feature="std", derive(WriteXdr))]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct uint128_xdr {
     pub highbits: u64,
     pub lowbits: u64,
@@ -26,6 +27,7 @@ pub struct uint128_xdr {
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct int128_xdr {
     pub highbits: i64,
     pub lowbits: u64,
@@ -56,28 +58,17 @@ pub type Ed25519PublicKey = [u8; 32];
 // ed25519 secret key len is 64 bytes
 pub type Ed25519SecretKey = [u8; 64];
 
+
 #[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum CryptographicScheme {
     Ed25519 = 0,
 }
-#[cfg(feature="std")]
-impl TryFrom<i32> for CryptographicScheme {
-    type Error = Error;
-
-    fn try_from(i: i32) -> Result<Self, Error> {
-        let e = match i {
-            0 => CryptographicScheme::Ed25519,
-
-            #[allow(unreachable_patterns)]
-            _ => return Err(Error::Invalid),
-      };
-      Ok(e)
-  }
-}
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
@@ -87,6 +78,7 @@ pub enum Signature {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
@@ -96,6 +88,7 @@ pub enum PublicKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
@@ -105,6 +98,7 @@ pub enum SecretKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExtensionPoint {
     // case 0:
     //   void;
@@ -130,6 +124,7 @@ pub const kMaxReturnBufferLen: u32 = 1024;
 // Contracts are free to set their own conventions for keys.
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct AddressAndKey {
     pub address: ContractAddress,
     pub key: StorageKey,
@@ -137,6 +132,7 @@ pub struct AddressAndKey {
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct LogEntry {
     pub source_address: ContractAddress,
     pub message: VecM<u8, kMaxLogMessageLen>,

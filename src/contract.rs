@@ -22,32 +22,19 @@ use std::io::{Read, Write};
 
 pub type ContractBlob = VecM<u8, 0xffffffff>;
 
+
 #[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum ContractType {
     kWasmi = 0,
     kNative = 1,
     kMockTest = 2,
 }
-#[cfg(feature="std")]
-impl TryFrom<i32> for ContractType {
-    type Error = Error;
-
-    fn try_from(i: i32) -> Result<Self, Error> {
-        let e = match i {
-            0 => ContractType::kWasmi,
-            1 => ContractType::kNative,
-            2 => ContractType::kMockTest,
-
-            #[allow(unreachable_patterns)]
-            _ => return Err(Error::Invalid),
-      };
-      Ok(e)
-  }
-}
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -65,6 +52,7 @@ pub enum Contract {
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
     pub nonce: SHA256Hash,

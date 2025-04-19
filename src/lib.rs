@@ -5,15 +5,15 @@
 pub mod common_types;
 use common_types::*;
 
-#[cfg(feature="std")]
+#[cfg(feature = "std")]
 pub mod serialize;
-#[cfg(feature="std")]
+#[cfg(feature = "std")]
 use serialize::*;
 
-#[cfg(feature="std")]
-use protocol_macros::{ReadXdr,WriteXdr};
+#[cfg(feature = "std")]
+use protocol_macros::{ReadXdr, ReadXdrEnum, WriteXdr, WriteXdrEnum};
 
-#[rustfmt::skip]
+/*#[rustfmt::skip]
 pub mod contract;
 use contract::*;
 
@@ -23,10 +23,8 @@ use ffi_enums::*;
 
 #[rustfmt::skip]
 pub mod transaction;
-use transaction::*;
+use transaction::*; */
 
 #[rustfmt::skip]
 pub mod types;
 use types::*;
-
-

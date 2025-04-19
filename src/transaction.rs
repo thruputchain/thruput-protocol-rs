@@ -25,6 +25,7 @@ pub type ReturnBuffer = VecM<u8, 0xffffffff>;
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
     pub method: u32,
@@ -34,6 +35,7 @@ pub struct Invocation {
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct Transaction {
     pub invocation: Invocation,
     pub contracts_to_deploy: VecM<Contract, 0xffffffff>,
@@ -44,6 +46,7 @@ pub struct Transaction {
 // for a later PR.
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct SignedTransaction {
     pub tx: Transaction,
 }
@@ -51,6 +54,7 @@ pub struct SignedTransaction {
 // Nondeterministic data attached to a transaction by the proposer.
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
     // of the transaction.
@@ -64,6 +68,7 @@ pub struct NondeterministicProposalData {
 // attached to it.
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
     pub nondeterministic_proposal_data: NondeterministicProposalData,
