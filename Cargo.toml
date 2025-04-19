@@ -10,4 +10,11 @@ crate-type = ["rlib"]
 alloc = []
 std = ["alloc"]
 
+[workspace]
+members = ["protocol_macros"]
+
 [dependencies]
+protocol_macros = {path = "protocol_macros" }
+
+
+

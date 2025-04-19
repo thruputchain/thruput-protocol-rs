@@ -15,10 +15,10 @@ use crate::*;
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
-
-
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr))]
+#[cfg_attr(feature="std", derive(WriteXdr))]
 pub struct uint128_xdr {
     pub highbits: u64,
     pub lowbits: u64,

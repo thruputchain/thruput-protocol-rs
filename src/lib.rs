@@ -5,6 +5,14 @@
 pub mod common_types;
 use common_types::*;
 
+#[cfg(feature="std")]
+pub mod serialize;
+#[cfg(feature="std")]
+use serialize::*;
+
+#[cfg(feature="std")]
+use protocol_macros::{ReadXdr,WriteXdr};
+
 #[rustfmt::skip]
 pub mod contract;
 use contract::*;
@@ -20,3 +28,5 @@ use transaction::*;
 #[rustfmt::skip]
 pub mod types;
 use types::*;
+
+
