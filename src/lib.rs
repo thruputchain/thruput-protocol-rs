@@ -13,7 +13,7 @@ use serialize::*;
 #[cfg(feature = "std")]
 use protocol_macros::{ReadXdr, ReadXdrEnum, WriteXdr, WriteXdrEnum};
 
-/*#[rustfmt::skip]
+#[rustfmt::skip]
 pub mod contract;
 use contract::*;
 
@@ -23,7 +23,7 @@ use ffi_enums::*;
 
 #[rustfmt::skip]
 pub mod transaction;
-use transaction::*; */
+use transaction::*;
 
 #[rustfmt::skip]
 pub mod types;
