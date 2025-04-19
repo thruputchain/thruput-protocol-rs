@@ -170,43 +170,6 @@ fn impl_derive_write_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Opti
         }
     }
 
-    /*
-    let match_arms = data_enum.variants.iter().map(|variant| {
-        let variant_name = &variant.ident;
-
-        match &variant.fields {
-            // Expect struct-like field: `{ field_name: field_type }`
-            Fields::Named(fields_named) => {
-                if fields_named.named.len() == 1 {
-                    let field = fields_named.named.first().unwrap();
-                    let field_name = &field.ident;
-                    return Some(quote! {
-                        Self::#variant_name { #field_name } => { #field_name.write_xdr(w)?; }
-                    });
-                }
-                return None;
-            }
-            // This handles the case of a void union arm
-            Fields::Unit => {
-                return Some(quote! {
-                    Self::#variant_name => {} // nothing to do in void case, after discriminant is written
-                });
-            }
-            _ => {
-                return None;
-            }
-        };
-    });
-
-    for x in match_arms.clone() {
-        match x {
-            None => {
-                return None;
-            }
-            _ => {}
-        }
-    } */
-
     let discriminant_code = if let Some(name) = default_name {
         quote! {
             let discriminant: i32 = match self {
