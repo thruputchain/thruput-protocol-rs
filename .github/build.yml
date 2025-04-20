@@ -1,0 +1,24 @@
+# .github/workflows/build.yml
+name: Build
+
+on:
+  push:
+    branches:
+      - main  # or whichever branch you want
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: cargo build default
+        run: cargo build --verbose
+      - name: cargo build alloc
+        run: cargo build --verbose --features=alloc
+      - name: cargo build std
+        run: cargo build --verbose --features=std
+    
