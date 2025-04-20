@@ -12,10 +12,14 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: none
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
-            ${{ secrets.PROTOCOL_RS_GH_PROTOCOL_ACCESS_KEY_WITH_SLASH }}
+            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
