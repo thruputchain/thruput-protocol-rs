@@ -595,3 +595,22 @@ impl<T: WriteXdr, const MAX: u32> WriteXdr for VecM<T, MAX> {
         })
     }
 }
+
+#[cfg(test)]
+mod serialize_tests {
+
+    #[test]
+    fn default_arm_roundtrip() {
+        use crate::contract::Contract;
+        use crate::serialize::*;
+
+        // unknown contract type
+        // assert that discriminant on default arms is read/written correctly
+        let c = Contract::default {contract_type : 10};
+        let serialized_c = c.to_xdr(Limits::none()).unwrap();
+        let deserialized = Contract::from_xdr(&serialized_c, Limits::none()).unwrap();
+
+        assert_eq!(c.contract_type(), 10);
+    }
+
+}
