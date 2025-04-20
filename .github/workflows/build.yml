@@ -29,11 +29,11 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: cargo build default
-        run: cargo build --verbose
+        run: cargo build --verbose --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build alloc
-        run: cargo build --verbose --features=alloc
+        run: cargo build --verbose --features=alloc --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build std
-        run: cargo build --verbose --features=std
+        run: cargo build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: run tests
-        run: cargo test --features=std
+        run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
     
