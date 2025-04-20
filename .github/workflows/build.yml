@@ -15,7 +15,7 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
-            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
+            ${{ secrets.PROTOCOL_RS_GH_PROTOCOL_ACCESS_KEY_WITH_SLASH }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
