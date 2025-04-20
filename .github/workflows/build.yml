@@ -9,17 +9,24 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
+    # As far as I can tell (mostly with chatgpt help)
+    # the way that hogd does this (ssh-agent, then checkout)
+    # fails because webfactory does the ssh key targeting by
+    # some github insteadOf string replacements, which allow prefix matches
+    # and thus protocol-rs gets the key targeted to protocol.
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: none
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      - name: update submodules
+        run: git submodule update --init --recursive
 
       - name: cargo build default
         run: cargo build --verbose
