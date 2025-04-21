@@ -55,7 +55,9 @@ impl PartialEq for Error {
             // detrimental affect on failure testing, so this is a tradeoff.
             #[cfg(feature = "std")]
             (Self::Io(l), Self::Io(r)) => l.kind() == r.kind(),
-            _ => core::mem::discriminant(self) == core::mem::discriminant(other),
+            _ => {
+                core::mem::discriminant(self) == core::mem::discriminant(other)
+            }
         }
     }
 }
@@ -204,7 +206,8 @@ impl<T, const MAX: u32> TryFrom<Vec<T>> for VecM<T, MAX> {
     type Error = Error;
 
     fn try_from(v: Vec<T>) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v))
         } else {
@@ -249,7 +252,8 @@ impl<T: Clone, const MAX: u32> TryFrom<&[T]> for VecM<T, MAX> {
     type Error = Error;
 
     fn try_from(v: &[T]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.to_vec()))
         } else {
@@ -272,11 +276,14 @@ impl<T, const MAX: u32> AsRef<[T]> for VecM<T, MAX> {
 }
 
 #[cfg(feature = "alloc")]
-impl<T: Clone, const N: usize, const MAX: u32> TryFrom<[T; N]> for VecM<T, MAX> {
+impl<T: Clone, const N: usize, const MAX: u32> TryFrom<[T; N]>
+    for VecM<T, MAX>
+{
     type Error = Error;
 
     fn try_from(v: [T; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.to_vec()))
         } else {
@@ -286,21 +293,27 @@ impl<T: Clone, const N: usize, const MAX: u32> TryFrom<[T; N]> for VecM<T, MAX> 
 }
 
 #[cfg(feature = "alloc")]
-impl<T: Clone, const N: usize, const MAX: u32> TryFrom<VecM<T, MAX>> for [T; N] {
+impl<T: Clone, const N: usize, const MAX: u32> TryFrom<VecM<T, MAX>>
+    for [T; N]
+{
     type Error = VecM<T, MAX>;
 
     fn try_from(v: VecM<T, MAX>) -> core::result::Result<Self, Self::Error> {
-        let s: [T; N] = v.0.try_into().map_err(|v: Vec<T>| VecM::<T, MAX>(v))?;
+        let s: [T; N] =
+            v.0.try_into().map_err(|v: Vec<T>| VecM::<T, MAX>(v))?;
         Ok(s)
     }
 }
 
 #[cfg(feature = "alloc")]
-impl<T: Clone, const N: usize, const MAX: u32> TryFrom<&[T; N]> for VecM<T, MAX> {
+impl<T: Clone, const N: usize, const MAX: u32> TryFrom<&[T; N]>
+    for VecM<T, MAX>
+{
     type Error = Error;
 
     fn try_from(v: &[T; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.to_vec()))
         } else {
@@ -310,11 +323,14 @@ impl<T: Clone, const N: usize, const MAX: u32> TryFrom<&[T; N]> for VecM<T, MAX>
 }
 
 #[cfg(not(feature = "alloc"))]
-impl<T: Clone, const N: usize, const MAX: u32> TryFrom<&'static [T; N]> for VecM<T, MAX> {
+impl<T: Clone, const N: usize, const MAX: u32> TryFrom<&'static [T; N]>
+    for VecM<T, MAX>
+{
     type Error = Error;
 
     fn try_from(v: &'static [T; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v))
         } else {
@@ -328,7 +344,8 @@ impl<const MAX: u32> TryFrom<&String> for VecM<u8, MAX> {
     type Error = Error;
 
     fn try_from(v: &String) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.as_bytes().to_vec()))
         } else {
@@ -342,7 +359,8 @@ impl<const MAX: u32> TryFrom<String> for VecM<u8, MAX> {
     type Error = Error;
 
     fn try_from(v: String) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.into()))
         } else {
@@ -356,7 +374,8 @@ impl<const MAX: u32> TryFrom<&str> for VecM<u8, MAX> {
     type Error = Error;
 
     fn try_from(v: &str) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.into()))
         } else {
@@ -370,7 +389,8 @@ impl<const MAX: u32> TryFrom<&'static str> for VecM<u8, MAX> {
     type Error = Error;
 
     fn try_from(v: &'static str) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(VecM(v.as_bytes()))
         } else {
@@ -463,7 +483,8 @@ impl<const MAX: u32> TryFrom<Vec<u8>> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: Vec<u8>) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v))
         } else {
@@ -508,7 +529,8 @@ impl<const MAX: u32> TryFrom<&[u8]> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: &[u8]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.to_vec()))
         } else {
@@ -535,7 +557,8 @@ impl<const N: usize, const MAX: u32> TryFrom<[u8; N]> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: [u8; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.to_vec()))
         } else {
@@ -559,7 +582,8 @@ impl<const N: usize, const MAX: u32> TryFrom<&[u8; N]> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: &[u8; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.to_vec()))
         } else {
@@ -569,11 +593,14 @@ impl<const N: usize, const MAX: u32> TryFrom<&[u8; N]> for BytesM<MAX> {
 }
 
 #[cfg(not(feature = "alloc"))]
-impl<const N: usize, const MAX: u32> TryFrom<&'static [u8; N]> for BytesM<MAX> {
+impl<const N: usize, const MAX: u32> TryFrom<&'static [u8; N]>
+    for BytesM<MAX>
+{
     type Error = Error;
 
     fn try_from(v: &'static [u8; N]) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v))
         } else {
@@ -587,7 +614,8 @@ impl<const MAX: u32> TryFrom<&String> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: &String) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.as_bytes().to_vec()))
         } else {
@@ -601,7 +629,8 @@ impl<const MAX: u32> TryFrom<String> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: String) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.into()))
         } else {
@@ -615,7 +644,8 @@ impl<const MAX: u32> TryFrom<&str> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: &str) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.into()))
         } else {
@@ -629,7 +659,8 @@ impl<const MAX: u32> TryFrom<&'static str> for BytesM<MAX> {
     type Error = Error;
 
     fn try_from(v: &'static str) -> Result<Self, Error> {
-        let len: u32 = v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+        let len: u32 =
+            v.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
         if len <= MAX {
             Ok(BytesM(v.as_bytes()))
         } else {

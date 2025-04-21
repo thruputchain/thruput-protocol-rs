@@ -197,7 +197,10 @@ where
     ///
     /// Use [`ReadXdR: Read_xdr_into_to_end`] when the intent is for all bytes
     /// in the read implementation to be consumed by the read.
-    fn read_xdr_into<R: Read>(&mut self, r: &mut Limited<R>) -> Result<(), Error> {
+    fn read_xdr_into<R: Read>(
+        &mut self,
+        r: &mut Limited<R>,
+    ) -> Result<(), Error> {
         *self = Self::read_xdr(r)?;
         Ok(())
     }
@@ -220,7 +223,10 @@ where
     ///
     /// All implementations should continue if the read implementation returns
     /// [`ErrorKind::Interrupted`](std::io::ErrorKind::Interrupted).
-    fn read_xdr_into_to_end<R: Read>(&mut self, r: &mut Limited<R>) -> Result<(), Error> {
+    fn read_xdr_into_to_end<R: Read>(
+        &mut self,
+        r: &mut Limited<R>,
+    ) -> Result<(), Error> {
         Self::read_xdr_into(self, r)?;
         // Check that any further reads, such as this read of one byte, read no
         // data, indicating EOF. If a byte is read the data is invalid.
@@ -235,7 +241,10 @@ where
     ///
     /// An error is returned if the bytes are not completely consumed by the
     /// deserialization.
-    fn from_xdr(bytes: impl AsRef<[u8]>, limits: Limits) -> Result<Self, Error> {
+    fn from_xdr(
+        bytes: impl AsRef<[u8]>,
+        limits: Limits,
+    ) -> Result<Self, Error> {
         let mut cursor = Limited::new(Cursor::new(bytes.as_ref()), limits);
         let t = Self::read_xdr_to_end(&mut cursor)?;
         Ok(t)
@@ -455,7 +464,8 @@ impl<T: ReadXdr, const N: usize> ReadXdr for [T; N] {
                 let t = T::read_xdr(r)?;
                 vec.push(t);
             }
-            let arr: [T; N] = vec.try_into().unwrap_or_else(|_: Vec<T>| unreachable!());
+            let arr: [T; N] =
+                vec.try_into().unwrap_or_else(|_: Vec<T>| unreachable!());
             Ok(arr)
         })
     }
@@ -501,7 +511,8 @@ impl<const MAX: u32> ReadXdr for BytesM<MAX> {
 impl<const MAX: u32> WriteXdr for BytesM<MAX> {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
-            let len: u32 = self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+            let len: u32 =
+                self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
             len.write_xdr(w)?;
 
             w.consume_len(self.len())?;
@@ -546,7 +557,8 @@ impl<const MAX: u32> ReadXdr for VecM<u8, MAX> {
 impl<const MAX: u32> WriteXdr for VecM<u8, MAX> {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
-            let len: u32 = self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+            let len: u32 =
+                self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
             len.write_xdr(w)?;
 
             w.consume_len(self.len())?;
@@ -584,7 +596,8 @@ impl<T: ReadXdr, const MAX: u32> ReadXdr for VecM<T, MAX> {
 impl<T: WriteXdr, const MAX: u32> WriteXdr for VecM<T, MAX> {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
-            let len: u32 = self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+            let len: u32 =
+                self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
             len.write_xdr(w)?;
 
             for t in &self.0 {
@@ -606,11 +619,11 @@ mod serialize_tests {
 
         // 10 is an unknown contract type
         // assert that discriminant on default arms is read/written correctly
-        let c = Contract::default {contract_type : 10};
+        let c = Contract::default { contract_type: 10 };
         let serialized_c = c.to_xdr(Limits::none()).unwrap();
-        let deserialized = Contract::from_xdr(&serialized_c, Limits::none()).unwrap();
+        let deserialized =
+            Contract::from_xdr(&serialized_c, Limits::none()).unwrap();
 
         assert_eq!(deserialized.contract_type(), 10);
     }
-
 }

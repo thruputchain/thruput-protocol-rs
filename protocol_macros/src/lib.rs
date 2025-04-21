@@ -29,7 +29,10 @@ pub fn derive_write_xdr_enum(input: TokenStream) -> TokenStream {
     impl_derive_write_xdr_enum(&ast)
 }
 
-fn impl_derive_read_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Option<TokenStream2> {
+fn impl_derive_read_union(
+    name: &syn::Ident,
+    data_enum: &syn::DataEnum,
+) -> Option<TokenStream2> {
     let mut default_name = None;
     let mut match_arms = Vec::new();
 
@@ -54,7 +57,9 @@ fn impl_derive_read_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Optio
                             }
                         });
                     } else {
-                        panic!("Each union arm can only have at most one field");
+                        panic!(
+                            "Each union arm can only have at most one field"
+                        );
                     }
                 }
                 Fields::Unit => {
@@ -115,7 +120,10 @@ fn impl_derive_read_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Optio
     })
 }
 
-fn impl_derive_write_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Option<TokenStream2> {
+fn impl_derive_write_union(
+    name: &syn::Ident,
+    data_enum: &syn::DataEnum,
+) -> Option<TokenStream2> {
     let mut default_name = None;
     let mut match_arms = Vec::new();
 
@@ -135,7 +143,9 @@ fn impl_derive_write_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Opti
                             Self::#variant_name { #field_name } => { #field_name.write_xdr(w)?; }
                         });
                     } else {
-                        panic!("Each union arm can only have at most one field");
+                        panic!(
+                            "Each union arm can only have at most one field"
+                        );
                     }
                 }
                 Fields::Unit => {
@@ -201,7 +211,10 @@ fn impl_derive_write_union(name: &syn::Ident, data_enum: &syn::DataEnum) -> Opti
     })
 }
 
-fn impl_derive_read_enum(name: &syn::Ident, data_enum: &syn::DataEnum) -> Option<TokenStream2> {
+fn impl_derive_read_enum(
+    name: &syn::Ident,
+    data_enum: &syn::DataEnum,
+) -> Option<TokenStream2> {
     let match_arms = data_enum.variants.iter().map(|variant| {
         let variant_name = &variant.ident;
 
@@ -259,7 +272,10 @@ fn impl_derive_read_enum(name: &syn::Ident, data_enum: &syn::DataEnum) -> Option
     })
 }
 
-fn impl_derive_write_enum(name: &syn::Ident, data_enum: &syn::DataEnum) -> Option<TokenStream2> {
+fn impl_derive_write_enum(
+    name: &syn::Ident,
+    data_enum: &syn::DataEnum,
+) -> Option<TokenStream2> {
     for x in data_enum.variants.iter() {
         match x.fields {
             Fields::Unit => (),
@@ -326,7 +342,8 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
         },
         Data::Enum(ref data_enum) => {
             // Two types of rust enums used here, corresponding to Unions and Enums in XDR.
-            if let Some(union_tokens) = impl_derive_read_union(name, data_enum) {
+            if let Some(union_tokens) = impl_derive_read_union(name, data_enum)
+            {
                 union_tokens
             } else {
                 unimplemented!("Invalid usage of rust enum for XDR types");
@@ -378,7 +395,9 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
         },
         Data::Enum(ref data_enum) => {
             // Two types of rust enums used here, corresponding to Unions and Enums in XDR.
-            if let Some(union_tokens) = impl_derive_write_union(name, data_enum) {
+            if let Some(union_tokens) =
+                impl_derive_write_union(name, data_enum)
+            {
                 union_tokens
             } else {
                 unimplemented!("Invalid usage of rust enum for XDR types");
@@ -411,7 +430,8 @@ fn impl_derive_write_xdr_enum(ast: &syn::DeriveInput) -> TokenStream {
 
     let trait_output = match ast.data {
         Data::Enum(ref data_enum) => {
-            if let Some(enum_tokens) = impl_derive_write_enum(name, data_enum) {
+            if let Some(enum_tokens) = impl_derive_write_enum(name, data_enum)
+            {
                 enum_tokens
             } else {
                 unimplemented!("Invalid usage of rust enum for XDR types");
