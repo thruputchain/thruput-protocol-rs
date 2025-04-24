@@ -56,6 +56,7 @@ pub type MethodID = u32;
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct Ed25519Signature {
     pub inner: ByteArray<64>,
 }
@@ -64,6 +65,7 @@ pub struct Ed25519Signature {
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct Ed25519PublicKey {
     pub inner: ByteArray<32>,
 }
@@ -72,6 +74,7 @@ pub struct Ed25519PublicKey {
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct Ed25519SecretKey {
     pub inner: ByteArray<64>,
 }
@@ -128,6 +131,7 @@ pub enum ExtensionPoint {
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct SHA256Hash {
     pub inner: ByteArray<32>,
 }
@@ -136,6 +140,7 @@ pub struct SHA256Hash {
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct ContractAddress {
     pub inner: ByteArray<32>,
 }
@@ -144,6 +149,7 @@ pub struct ContractAddress {
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(transparent)]
 pub struct StorageKey {
     pub inner: ByteArray<32>,
 }
