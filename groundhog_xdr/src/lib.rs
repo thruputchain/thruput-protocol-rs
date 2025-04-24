@@ -2,6 +2,8 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
+pub mod byte_array;
+
 pub mod common_types;
 use common_types::*;
 

@@ -3,6 +3,7 @@
 // A few features we didn't need were removed.
 
 use crate::common_types::*;
+use crate::byte_array::*;
 use core::{fmt::Debug, marker::Sized};
 use std::io::{BufRead, Cursor, Read, Write};
 
@@ -443,6 +444,13 @@ impl<const N: usize> ReadXdr for [u8; N] {
     }
 }
 
+impl<const N: usize> ReadXdr for ByteArray<N> {
+    fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+        let array: [u8; N] = ReadXdr::read_xdr(r)?;
+        Ok(ByteArray::from(array))
+    }
+}
+
 impl<const N: usize> WriteXdr for [u8; N] {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
@@ -453,6 +461,12 @@ impl<const N: usize> WriteXdr for [u8; N] {
             w.write_all(&[0u8; 3][..padding])?;
             Ok(())
         })
+    }
+}
+
+impl<const N: usize> WriteXdr for ByteArray<N> {
+    fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+        self.as_array().write_xdr(w)
     }
 }
 

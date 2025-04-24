@@ -11,7 +11,14 @@ alloc = []
 std = ["alloc"]
 
 [dependencies]
-protocol_macros = {path = "../protocol_macros" }
+protocol_macros = { path = "../protocol_macros" }
 
+[dependencies.serde]
+version = "1.0.219"
+default-features = false
+features = ["alloc", "derive"]
 
-
+[dependencies.serde_arrays]
+path = "../../external/serde_arrays"
+default-features = false
+features = ["alloc"]

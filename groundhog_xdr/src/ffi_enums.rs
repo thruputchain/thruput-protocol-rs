@@ -11,6 +11,9 @@
 use core::option::Option;
 
 use crate::*;
+use crate::byte_array::*;
+use ::serde::{Serialize, Deserialize};
+use ::serde_arrays;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};

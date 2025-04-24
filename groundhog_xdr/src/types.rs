@@ -11,6 +11,9 @@
 use core::option::Option;
 
 use crate::*;
+use crate::byte_array::*;
+use ::serde::{Serialize, Deserialize};
+use ::serde_arrays;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
@@ -49,14 +52,29 @@ pub type GasAmount = u64;
 // uint32_t
 pub type MethodID = u32;
 
-// ed25519 sig len is 512 bits
-pub type Ed25519Signature = [u8; 64];
+//  ed25519 sig len is 512 bits
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct Ed25519Signature {
+    pub inner: ByteArray<64>,
+}
 
-// ed25519 key len is 256 bits
-pub type Ed25519PublicKey = [u8; 32];
+//  ed25519 key len is 256 bits
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct Ed25519PublicKey {
+    pub inner: ByteArray<32>,
+}
 
-// ed25519 secret key len is 64 bytes
-pub type Ed25519SecretKey = [u8; 64];
+//  ed25519 secret key len is 64 bytes
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct Ed25519SecretKey {
+    pub inner: ByteArray<64>,
+}
 
 
 #[derive(Clone, PartialEq, Debug)]
@@ -106,14 +124,29 @@ pub enum ExtensionPoint {
     
 }
 
-// 256 bit hash
-pub type SHA256Hash = [u8; 32];
+//  256 bit hash
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct SHA256Hash {
+    pub inner: ByteArray<32>,
+}
 
-// 256 bit contract addresses
-pub type ContractAddress = [u8; 32];
+//  256 bit contract addresses
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct ContractAddress {
+    pub inner: ByteArray<32>,
+}
 
-// arbitrary 32 bytes
-pub type StorageKey = [u8; 32];
+//  arbitrary 32 bytes
+#[repr(C)]
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub struct StorageKey {
+    pub inner: ByteArray<32>,
+}
 
 pub const kMaxLogMessageLen: u32 = 1024;
 

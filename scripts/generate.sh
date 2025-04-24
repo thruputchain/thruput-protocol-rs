@@ -8,7 +8,7 @@ fi
 function generate() {
     for i in $@; do
         filename=$(basename $i .x)
-        $XDRC --rust -o src/$filename.rs $i   
+        $XDRC --rust -o groundhog_xdr/src/$filename.rs $i
     done
 }
 
