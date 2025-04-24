@@ -8,12 +8,13 @@
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 
-use core::option::Option;
-
 use crate::*;
-use crate::byte_array::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+
+pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};

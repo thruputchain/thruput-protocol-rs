@@ -8,12 +8,13 @@
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 
-use core::option::Option;
-
 use crate::*;
-use crate::byte_array::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+
+pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
@@ -53,9 +54,9 @@ pub enum Contract {
     default { contract_type: i32 },
 }
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
     pub nonce: SHA256Hash,

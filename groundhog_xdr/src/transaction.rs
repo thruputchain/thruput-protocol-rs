@@ -8,12 +8,13 @@
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 
-use core::option::Option;
-
 use crate::*;
-use crate::byte_array::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+
+pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
@@ -26,9 +27,9 @@ pub type Calldata = VecM<u8, 0xffffffff>;
 
 pub type ReturnBuffer = VecM<u8, 0xffffffff>;
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
     pub method: u32,
@@ -36,9 +37,9 @@ pub struct Invocation {
     pub calldata: Calldata,
 }
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct Transaction {
     pub invocation: Invocation,
     pub contracts_to_deploy: VecM<Contract, 0xffffffff>,
@@ -47,17 +48,17 @@ pub struct Transaction {
 // Deliberately leaving this SignedTransaction object
 // (and all the other metadata)
 // for a later PR.
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct SignedTransaction {
     pub tx: Transaction,
 }
 
 // Nondeterministic data attached to a transaction by the proposer.
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
     // of the transaction.
@@ -69,9 +70,9 @@ pub struct NondeterministicProposalData {
 
 // A signed transaction, with the nondeterministic data from the proposer
 // attached to it.
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
     pub nondeterministic_proposal_data: NondeterministicProposalData,

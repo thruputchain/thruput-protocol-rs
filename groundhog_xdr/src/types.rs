@@ -8,29 +8,30 @@
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 
-use core::option::Option;
-
 use crate::*;
-use crate::byte_array::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+
+pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
 
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct uint128_xdr {
     pub highbits: u64,
     pub lowbits: u64,
 }
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct int128_xdr {
     pub highbits: i64,
     pub lowbits: u64,
@@ -53,30 +54,93 @@ pub type GasAmount = u64;
 pub type MethodID = u32;
 
 //  ed25519 sig len is 512 bits
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519Signature {
-    pub inner: ByteArray<64>,
+    inner: ByteArray<64>,
+}
+impl From<ByteArray<64>> for Ed25519Signature {
+    fn from(_inner: ByteArray<64>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl Ed25519Signature {
+    pub fn into_inner(self) -> ByteArray<64> {
+        self.inner
+    }
+}
+impl Deref for Ed25519Signature {
+    type Target = ByteArray<64>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for Ed25519Signature {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 //  ed25519 key len is 256 bits
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
-    pub inner: ByteArray<32>,
+    inner: ByteArray<32>,
+}
+impl From<ByteArray<32>> for Ed25519PublicKey {
+    fn from(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl Ed25519PublicKey {
+    pub fn into_inner(self) -> ByteArray<32> {
+        self.inner
+    }
+}
+impl Deref for Ed25519PublicKey {
+    type Target = ByteArray<32>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for Ed25519PublicKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 //  ed25519 secret key len is 64 bytes
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
-    pub inner: ByteArray<64>,
+    inner: ByteArray<64>,
+}
+impl From<ByteArray<64>> for Ed25519SecretKey {
+    fn from(_inner: ByteArray<64>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl Ed25519SecretKey {
+    pub fn into_inner(self) -> ByteArray<64> {
+        self.inner
+    }
+}
+impl Deref for Ed25519SecretKey {
+    type Target = ByteArray<64>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for Ed25519SecretKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 
@@ -128,30 +192,93 @@ pub enum ExtensionPoint {
 }
 
 //  256 bit hash
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct SHA256Hash {
-    pub inner: ByteArray<32>,
+    inner: ByteArray<32>,
+}
+impl From<ByteArray<32>> for SHA256Hash {
+    fn from(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl SHA256Hash {
+    pub fn into_inner(self) -> ByteArray<32> {
+        self.inner
+    }
+}
+impl Deref for SHA256Hash {
+    type Target = ByteArray<32>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for SHA256Hash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 //  256 bit contract addresses
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct ContractAddress {
-    pub inner: ByteArray<32>,
+    inner: ByteArray<32>,
+}
+impl From<ByteArray<32>> for ContractAddress {
+    fn from(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ContractAddress {
+    pub fn into_inner(self) -> ByteArray<32> {
+        self.inner
+    }
+}
+impl Deref for ContractAddress {
+    type Target = ByteArray<32>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ContractAddress {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 //  arbitrary 32 bytes
-#[repr(C)]
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct StorageKey {
-    pub inner: ByteArray<32>,
+    inner: ByteArray<32>,
+}
+impl From<ByteArray<32>> for StorageKey {
+    fn from(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl StorageKey {
+    pub fn into_inner(self) -> ByteArray<32> {
+        self.inner
+    }
+}
+impl Deref for StorageKey {
+    type Target = ByteArray<32>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for StorageKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
 }
 
 pub const kMaxLogMessageLen: u32 = 1024;
@@ -161,17 +288,17 @@ pub const kMaxReturnBufferLen: u32 = 1024;
 // in global storage:
 // [contract address + storage key] = 64 bytes
 // Contracts are free to set their own conventions for keys.
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct AddressAndKey {
     pub address: ContractAddress,
     pub key: StorageKey,
 }
 
-#[repr(C)]
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
 pub struct LogEntry {
     pub source_address: ContractAddress,
     pub message: VecM<u8, kMaxLogMessageLen>,

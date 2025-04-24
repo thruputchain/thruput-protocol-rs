@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use core::ops::{Deref, DerefMut};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
+#[repr(transparent)]
 pub struct ByteArray<const N: usize> {
     #[serde(with = "serde_arrays")]
     array: [u8; N],
@@ -48,13 +49,23 @@ impl<const N: usize> AsMut<[u8]> for ByteArray<N> {
 }
 
 impl<const N: usize> ByteArray<N> {
-    pub fn into_inner(self) -> [u8; N] {
+    pub fn into_array(self) -> [u8; N] {
         self.array
     }
 
     pub fn as_array(&self) -> &[u8; N] {
         &self.array
     }
+
+    /*
+    pub fn as_ptr(&self) -> *const u8 {
+        self.as_slice().as_ptr()
+    }
+
+    pub fn as_mut_ptr(&mut self) -> *const u8 {
+        self.as_mut_slice().as_mut_ptr()
+    }
+    */
 }
 
 impl<const N: usize> core::fmt::Display for ByteArray<N> {
