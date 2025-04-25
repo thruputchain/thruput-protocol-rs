@@ -56,16 +56,6 @@ impl<const N: usize> ByteArray<N> {
     pub fn as_array(&self) -> &[u8; N] {
         &self.array
     }
-
-    /*
-    pub fn as_ptr(&self) -> *const u8 {
-        self.as_slice().as_ptr()
-    }
-
-    pub fn as_mut_ptr(&mut self) -> *const u8 {
-        self.as_mut_slice().as_mut_ptr()
-    }
-    */
 }
 
 impl<const N: usize> core::fmt::Display for ByteArray<N> {
