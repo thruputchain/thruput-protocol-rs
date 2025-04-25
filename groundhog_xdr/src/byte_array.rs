@@ -1,7 +1,8 @@
 /// A wrapper type that allows arrays of arbitrary size
 /// to be serialized with serde
-use serde::{Deserialize, Serialize};
+
 use core::ops::{Deref, DerefMut};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Copy, Clone)]
 #[repr(transparent)]

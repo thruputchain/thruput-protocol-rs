@@ -2,8 +2,8 @@
 // https://github.com/stellar/xdrgen/blob/master/lib/xdrgen/generators/rust/src/types.rs
 // A few features we didn't need were removed.
 
-use crate::common_types::*;
 use crate::byte_array::*;
+use crate::common_types::*;
 use core::{fmt::Debug, marker::Sized};
 use std::io::{BufRead, Cursor, Read, Write};
 
