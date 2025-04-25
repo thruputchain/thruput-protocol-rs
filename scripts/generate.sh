@@ -1,9 +1,8 @@
 #!/bin/bash
 
-if [ -z $XDRC ]; then
-    echo "Must specify XDRC as command line variable (e.g. XDRC=\"path/to/xdrc\" ./generate.sh)"
-    exit 1
-fi
+[[ -z $XDRC ]] && XDRC=x23/x23c/x23c
+
+printf "\tUsing XDRC=\"%s\"\n" $XDRC >&2
 
 function generate() {
     for i in $@; do
