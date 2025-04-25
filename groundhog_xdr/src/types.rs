@@ -17,7 +17,7 @@ use ::serde_arrays;
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
-
+pub use crate::byte_array::*;
 
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]

@@ -5,3 +5,15 @@ impl From<SHA256Hash> for StorageKey {
         hash.into_inner().into()
     }
 }
+
+impl From<[u8; 32]> for StorageKey {
+    fn from(array: [u8; 32]) -> Self {
+        Self::from(ByteArray::from(array))
+    }
+}
+
+impl From<[u8; 32]> for ContractAddress {
+    fn from(array: [u8; 32]) -> Self {
+        Self::from(ByteArray::from(array))
+    }
+}
