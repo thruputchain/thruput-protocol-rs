@@ -7,6 +7,8 @@ use crate::byte_array::*;
 use core::{fmt::Debug, marker::Sized};
 use std::io::{BufRead, Cursor, Read, Write};
 
+pub use ::protocol_macros::{ReadXdr, ReadXdrEnum, WriteXdr, WriteXdrEnum};
+
 /// `Limits` contains the limits that a limited reader or writer will be
 /// constrained to.
 #[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]

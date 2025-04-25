@@ -8,7 +8,7 @@ use common_types::*;
 #[cfg(feature = "std")]
 pub mod serialize;
 #[cfg(feature = "std")]
-use protocol_macros::{ReadXdr, ReadXdrEnum, WriteXdr, WriteXdrEnum};
+use serialize::*;
 
 #[rustfmt::skip]
 pub mod types;
