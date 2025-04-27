@@ -43,19 +43,19 @@ use std::io::{Read, Write};
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
     // All others revert the call frame.
-    kNone = 0,
+    kInvokeNone = 0,
 
     // An unspecified deterministic error.
-    kDeterministic = 1,
+    kInvokeDeterministic = 1,
 
     // Runtime exceeded its gas budget.
-    kOutOfGas = 2,
+    kInvokeOutOfGas = 2,
 
     // Nondeterministic error during invocation (e.g. malloc error)
-    kUnrecoverable = 3,
+    kInvokeUnrecoverable = 3,
 
     // Discovered during validation that proposer submitted bad data.
-    kValidationFailure = 4,
+    kInvokeValidationFailure = 4,
 }
 
 // HostFunctionErrorCode categorizes errors returned from system calls. The
@@ -77,26 +77,26 @@ pub enum InvokeErrorCode {
 #[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
-    kNoneOrRecoverable = 0,
+    kHostNoneOrRecoverable = 0,
 
     // Insufficient gas to continue WebAssembly execution.
     //
     // Result: the WebAssembly runtime immediately returns an
-    // InvokeErrorCode::kOutOfGas.
-    kOutOfGas = 1,
+    // InvokeErrorCode::kHostOutOfGas.
+    kHostOutOfGas = 1,
 
     // Unrecoverable (nondeterministic) error, such as a malloc error.
     // The only course of action is to abort the entire transaction.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kUnrecoverable
-    kUnrecoverable = 2,
+    kHostUnrecoverable = 2,
 
     // Return from a WebAssembly invocation to the caller.  Registers a byte
     // buffer to be passed back to the caller.
     //
     // Result: Runtime immediately returns an {InvokeErrorCode::kNone, 0}.
-    kReturn = 3,
+    kHostReturn = 3,
 
     // Return from a WebAssembly invocation to the caller, with some (int32_t)
     // error code.
@@ -105,14 +105,14 @@ pub enum HostFnErrorCode {
     //
     // On a root smart contract invocation, a nonzero code is converted to a
     // InvokeErrorCode::kDeterministic.
-    kExit = 4,
+    kHostExit = 4,
 
     // Validation fails because a proposer submitted bad nondeterministic
     // proposal data.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kValidationFailure
-    kValidationFailure = 5,
+    kHostValidationFailure = 5,
 }
 
 

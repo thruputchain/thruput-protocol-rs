@@ -14,10 +14,12 @@ use core::ops::{Deref, DerefMut};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
+pub use crate::byte_array::*;
+
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
-pub use crate::byte_array::*;
+
 
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
@@ -51,7 +53,9 @@ pub type GasAmount = u64;
 // uint32_t
 pub type MethodID = u32;
 
-//  ed25519 sig len is 512 bits
+// ed25519 sig len is 512 bits
+// 
+// ed25519 key len is 256 bits
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -81,7 +85,8 @@ impl DerefMut for Ed25519Signature {
     }
 }
 
-//  ed25519 key len is 256 bits
+// 
+// ed25519 secret key len is 64 bytes
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -111,7 +116,7 @@ impl DerefMut for Ed25519PublicKey {
     }
 }
 
-//  ed25519 secret key len is 64 bytes
+// 
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -189,7 +194,9 @@ pub enum ExtensionPoint {
     
 }
 
-//  256 bit hash
+// 256 bit hash
+// 
+// 256 bit contract address
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -219,7 +226,8 @@ impl DerefMut for SHA256Hash {
     }
 }
 
-//  256 bit contract addresses
+// 
+// arbitrary 32-byte key into contract storage
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -249,7 +257,7 @@ impl DerefMut for ContractAddress {
     }
 }
 
-//  arbitrary 32 bytes
+// 
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
