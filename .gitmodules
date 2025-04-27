@@ -1,3 +1,6 @@
 [submodule "protocol"]
 	path = protocol
 	url = git@github.com:groundhogchain/protocol.git
+[submodule "x23"]
+	path = x23
+	url = git@github.com:groundhogchain/x23.git
