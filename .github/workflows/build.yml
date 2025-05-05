@@ -25,8 +25,9 @@ jobs:
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
+            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_SERDE_ARRAYS_KEY }}
       - name: update submodules
-        run: git submodule update --init protocol
+        run: git submodule update --init protocol && git submodule update --init external/serde-arrays
 
       - name: cargo build default
         run: cargo build --verbose --manifest-path=groundhog_xdr/Cargo.toml
