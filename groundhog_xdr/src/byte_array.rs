@@ -1,6 +1,5 @@
 /// A wrapper type that allows arrays of arbitrary size
 /// to be serialized with serde
-
 use core::ops::{Deref, DerefMut};
 use serde::{Deserialize, Serialize};
 
