@@ -64,7 +64,6 @@ impl PartialEq for Error {
 
 #[cfg(feature = "std")]
 impl error::Error for Error {
-    #[must_use]
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match self {
             Self::Io(e) => Some(e),
@@ -109,7 +108,6 @@ impl From<TryFromSliceError> for Error {
 
 #[cfg(feature = "std")]
 impl From<io::Error> for Error {
-    #[must_use]
     fn from(e: io::Error) -> Self {
         Error::Io(e)
     }
@@ -180,7 +178,6 @@ impl<T: Clone> VecM<T, 1> {
 
 #[cfg(not(feature = "alloc"))]
 impl<T: Clone> From<VecM<T, 1>> for Option<T> {
-    #[must_use]
     fn from(v: VecM<T, 1>) -> Self {
         v.to_option()
     }
@@ -196,7 +193,6 @@ impl<T> VecM<T, 1> {
 
 #[cfg(feature = "alloc")]
 impl<T> From<VecM<T, 1>> for Option<T> {
-    #[must_use]
     fn from(v: VecM<T, 1>) -> Self {
         v.into_option()
     }
@@ -217,7 +213,6 @@ impl<T, const MAX: u32> TryFrom<Vec<T>> for VecM<T, MAX> {
 }
 
 impl<T, const MAX: u32> From<VecM<T, MAX>> for Vec<T> {
-    #[must_use]
     fn from(v: VecM<T, MAX>) -> Self {
         v.0
     }
@@ -225,14 +220,12 @@ impl<T, const MAX: u32> From<VecM<T, MAX>> for Vec<T> {
 
 #[cfg(feature = "alloc")]
 impl<T: Clone, const MAX: u32> From<&VecM<T, MAX>> for Vec<T> {
-    #[must_use]
     fn from(v: &VecM<T, MAX>) -> Self {
         v.0.clone()
     }
 }
 
 impl<T, const MAX: u32> AsRef<Vec<T>> for VecM<T, MAX> {
-    #[must_use]
     fn as_ref(&self) -> &Vec<T> {
         &self.0
     }
@@ -264,12 +257,10 @@ impl<T: Clone, const MAX: u32> TryFrom<&[T]> for VecM<T, MAX> {
 
 impl<T, const MAX: u32> AsRef<[T]> for VecM<T, MAX> {
     #[cfg(feature = "alloc")]
-    #[must_use]
     fn as_ref(&self) -> &[T] {
         self.0.as_ref()
     }
     #[cfg(not(feature = "alloc"))]
-    #[must_use]
     fn as_ref(&self) -> &[T] {
         self.0
     }
@@ -494,7 +485,6 @@ impl<const MAX: u32> TryFrom<Vec<u8>> for BytesM<MAX> {
 }
 
 impl<const MAX: u32> From<BytesM<MAX>> for Vec<u8> {
-    #[must_use]
     fn from(v: BytesM<MAX>) -> Self {
         v.0
     }
@@ -502,14 +492,12 @@ impl<const MAX: u32> From<BytesM<MAX>> for Vec<u8> {
 
 #[cfg(feature = "alloc")]
 impl<const MAX: u32> From<&BytesM<MAX>> for Vec<u8> {
-    #[must_use]
     fn from(v: &BytesM<MAX>) -> Self {
         v.0.clone()
     }
 }
 
 impl<const MAX: u32> AsRef<Vec<u8>> for BytesM<MAX> {
-    #[must_use]
     fn as_ref(&self) -> &Vec<u8> {
         &self.0
     }
@@ -541,12 +529,10 @@ impl<const MAX: u32> TryFrom<&[u8]> for BytesM<MAX> {
 
 impl<const MAX: u32> AsRef<[u8]> for BytesM<MAX> {
     #[cfg(feature = "alloc")]
-    #[must_use]
     fn as_ref(&self) -> &[u8] {
         self.0.as_ref()
     }
     #[cfg(not(feature = "alloc"))]
-    #[must_use]
     fn as_ref(&self) -> &[u8] {
         self.0
     }
