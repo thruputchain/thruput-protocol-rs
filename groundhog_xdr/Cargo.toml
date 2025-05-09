@@ -7,7 +7,8 @@ edition = "2021"
 crate-type = ["rlib"]
 
 [features]
-alloc = []
+default = []
+alloc = ["serde/alloc", "serde_arrays/alloc"]
 std = ["alloc"]
 
 [dependencies]
@@ -16,9 +17,8 @@ protocol_macros = { path = "../protocol_macros" }
 [dependencies.serde]
 version = "1.0.219"
 default-features = false
-features = ["alloc", "derive"]
+features = ["derive"]
 
 [dependencies.serde_arrays]
 path = "../external/serde_arrays"
 default-features = false
-features = ["alloc"]
