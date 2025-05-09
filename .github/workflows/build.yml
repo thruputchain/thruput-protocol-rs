@@ -38,5 +38,5 @@ jobs:
       - name: run tests
         run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks
-        run: cargo fmt --check --manifest-path=groundhog_xdr/Cargo.toml
+        run: cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
     
