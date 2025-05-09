@@ -17,3 +17,11 @@ impl From<[u8; 32]> for ContractAddress {
         Self::from(ByteArray::from(array))
     }
 }
+
+impl Default for Signature {
+    fn default() -> Self {
+        Signature::Ed25519 {
+            ed25519: Ed25519Signature::default(),
+        }
+    }
+}
