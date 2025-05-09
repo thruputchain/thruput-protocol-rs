@@ -33,4 +33,3 @@ use retrocausal_queue::*;
 
 #[rustfmt::skip]
 pub mod transaction;
-
