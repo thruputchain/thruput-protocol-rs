@@ -11,4 +11,4 @@ function generate() {
     done
 }
 
-generate protocol/types.x protocol/contract.x protocol/transaction.x protocol/ffi_enums.x
+generate protocol/types.x protocol/contract.x protocol/transaction.x protocol/ffi_enums.x protocol/retrocausal_queue.x
