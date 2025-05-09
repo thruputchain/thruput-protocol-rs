@@ -28,7 +28,9 @@ use contract::*;
 pub mod ffi_enums;
 
 #[rustfmt::skip]
-pub mod transaction;
+pub mod retrocausal_queue;
+use retrocausal_queue::*;
 
 #[rustfmt::skip]
-pub mod retrocausal_queue;
+pub mod transaction;
+
