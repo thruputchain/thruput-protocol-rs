@@ -29,3 +29,6 @@ pub mod ffi_enums;
 
 #[rustfmt::skip]
 pub mod transaction;
+
+#[rustfmt::skip]
+pub mod retrocausal_queue;

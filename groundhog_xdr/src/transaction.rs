@@ -37,13 +37,30 @@ pub struct Invocation {
     pub calldata: Calldata,
 }
 
+
+#[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
+#[repr(i32)]
+pub enum InvokeFlag {
+    kInvokeFlagNone = 0,
+    kInvokeFlagTryInvoke = 0x00000001,
+}
+
+pub type InvokeFlagSet = i32;
+
+pub type OriginID = ByteArray<16>;
+
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct Transaction {
+    pub id: OriginID,
+    pub created: Timestamp,
     pub invocation: Invocation,
     pub contracts_to_deploy: VecM<Contract, 0xffffffff>,
 }
+
+pub type SignedTransactionHash = SHA256Hash;
 
 // Deliberately leaving this SignedTransaction object
 // (and all the other metadata)
@@ -52,6 +69,7 @@ pub struct Transaction {
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct SignedTransaction {
+    pub signature: Signature,
     pub tx: Transaction,
 }
 
@@ -67,8 +85,7 @@ pub struct NondeterministicProposalData {
     // (nondeterminstic_bits.size() returns the rounded-up length in bytes)
     pub nondeterministic_bit_count: u32,
     // sequence of queue entries observed by the proposer
-    // pub observed_queue_entry_sequence: VecM<QueueEntry, 0xffffffff>,
-    // XXX above commented out because QueueEntry is not defined in *.x
+    pub observed_queue_entry_sequence: VecM<QueueEntry, 0xffffffff>,
 }
 
 // A signed transaction, with the nondeterministic data from the proposer
