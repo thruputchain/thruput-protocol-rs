@@ -69,7 +69,12 @@ pub type SignedTransactionHash = SHA256Hash;
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct SignedTransaction {
-    pub signature: Signature,
+    // XXX Manually editing this out for now.
+    // We don't have a Default implementation for Signature,
+    // so it doesn't build with that in place.
+    // TODO: figure out if we want a Default impl on generated unions,
+    // or remove default more broadly (or change the type of Signature).
+    //pub signature: Signature,
     pub tx: Transaction,
 }
 
