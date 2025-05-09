@@ -37,6 +37,8 @@ jobs:
         run: cargo build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: run tests
         run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
+      - name: prep rustfmt
+        run: rustup component add --toolchain nightly-x86_64-unknown-linux-gnu rustfmt
       - name: format checks
         run: cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
     
