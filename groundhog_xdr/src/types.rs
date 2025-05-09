@@ -71,6 +71,9 @@ impl Ed25519Signature {
     pub fn into_inner(self) -> ByteArray<64> {
         self.inner
     }
+    pub const fn new(_inner: ByteArray<64>) -> Self {
+        Self { inner: _inner }
+    }
 }
 impl Deref for Ed25519Signature {
     type Target = ByteArray<64>;
@@ -102,6 +105,9 @@ impl Ed25519PublicKey {
     pub fn into_inner(self) -> ByteArray<32> {
         self.inner
     }
+    pub const fn new(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
 }
 impl Deref for Ed25519PublicKey {
     type Target = ByteArray<32>;
@@ -131,6 +137,9 @@ impl From<ByteArray<64>> for Ed25519SecretKey {
 impl Ed25519SecretKey {
     pub fn into_inner(self) -> ByteArray<64> {
         self.inner
+    }
+    pub const fn new(_inner: ByteArray<64>) -> Self {
+        Self { inner: _inner }
     }
 }
 impl Deref for Ed25519SecretKey {
@@ -212,6 +221,9 @@ impl SHA256Hash {
     pub fn into_inner(self) -> ByteArray<32> {
         self.inner
     }
+    pub const fn new(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
 }
 impl Deref for SHA256Hash {
     type Target = ByteArray<32>;
@@ -243,6 +255,9 @@ impl ContractAddress {
     pub fn into_inner(self) -> ByteArray<32> {
         self.inner
     }
+    pub const fn new(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
+    }
 }
 impl Deref for ContractAddress {
     type Target = ByteArray<32>;
@@ -272,6 +287,9 @@ impl From<ByteArray<32>> for StorageKey {
 impl StorageKey {
     pub fn into_inner(self) -> ByteArray<32> {
         self.inner
+    }
+    pub const fn new(_inner: ByteArray<32>) -> Self {
+        Self { inner: _inner }
     }
 }
 impl Deref for StorageKey {

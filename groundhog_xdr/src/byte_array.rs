@@ -49,6 +49,10 @@ impl<const N: usize> AsMut<[u8]> for ByteArray<N> {
 }
 
 impl<const N: usize> ByteArray<N> {
+    pub const fn new(array: [u8; N]) -> Self {
+        Self { array }
+    }
+
     pub fn into_array(self) -> [u8; N] {
         self.array
     }

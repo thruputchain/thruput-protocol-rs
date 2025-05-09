@@ -66,10 +66,16 @@ pub struct NondeterministicProposalData {
     // the length of the nondeterministic_bits string, in bits
     // (nondeterminstic_bits.size() returns the rounded-up length in bytes)
     pub nondeterministic_bit_count: u32,
+    // sequence of queue entries observed by the proposer
+    // pub observed_queue_entry_sequence: VecM<QueueEntry, 0xffffffff>,
+    // XXX above commented out because QueueEntry is not defined in *.x
 }
 
 // A signed transaction, with the nondeterministic data from the proposer
 // attached to it.
+// TODO(petar): Who is the signer? The originator of the transaction or the
+// validator proposing it?
+// TODO(petar): Should the signature capture the non-deterministic data?
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
