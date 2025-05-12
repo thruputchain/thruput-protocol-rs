@@ -25,3 +25,9 @@ impl Default for Signature {
         }
     }
 }
+
+impl ContractAddress {
+    pub const fn zero() -> Self {
+        Self::new(ByteArray::new([0; 32]))
+    }
+}
