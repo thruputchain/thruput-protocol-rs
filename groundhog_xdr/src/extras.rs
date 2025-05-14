@@ -31,3 +31,24 @@ impl ContractAddress {
         Self::new(ByteArray::new([0; 32]))
     }
 }
+
+impl AsRef<[u8]> for SHA256Hash {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self;
+        array.as_slice()
+    }
+}
+
+impl AsRef<[u8]> for ContractAddress {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self;
+        array.as_slice()
+    }
+}
+
+impl AsRef<[u8]> for StorageKey {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self;
+        array.as_slice()
+    }
+}
