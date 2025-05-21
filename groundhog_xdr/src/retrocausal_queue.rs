@@ -24,7 +24,7 @@ use std::io::{Read, Write};
 
 
 // clang-format on
-pub const kQueueEntryMaxLen: u32 = 256;
+pub const kQueueEntryMaxLen: u64 = 256;
 
 pub type QueueEntry = VecM<u8, kQueueEntryMaxLen>;
 

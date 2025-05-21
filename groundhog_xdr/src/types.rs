@@ -47,11 +47,12 @@ pub type RuntimeMemoryOffset = u32;
 // uint32_t
 pub type RuntimeMemoryLength = u32;
 
+// TODO(geoff): consider using a smaller type for GasAmount
 // uint64_t
 pub type GasAmount = u64;
 
-// uint32_t
-pub type MethodID = u32;
+// uint64_t
+pub type MethodID = u64;
 
 // ed25519 sig len is 512 bits
 // 
@@ -75,16 +76,9 @@ impl Ed25519Signature {
         Self { inner: _inner }
     }
 }
-impl Deref for Ed25519Signature {
-    type Target = ByteArray<64>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<64>> for Ed25519Signature {
+    fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
-    }
-}
-impl DerefMut for Ed25519Signature {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
@@ -109,16 +103,9 @@ impl Ed25519PublicKey {
         Self { inner: _inner }
     }
 }
-impl Deref for Ed25519PublicKey {
-    type Target = ByteArray<32>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<32>> for Ed25519PublicKey {
+    fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
-    }
-}
-impl DerefMut for Ed25519PublicKey {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
@@ -142,16 +129,9 @@ impl Ed25519SecretKey {
         Self { inner: _inner }
     }
 }
-impl Deref for Ed25519SecretKey {
-    type Target = ByteArray<64>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<64>> for Ed25519SecretKey {
+    fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
-    }
-}
-impl DerefMut for Ed25519SecretKey {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
@@ -225,21 +205,15 @@ impl SHA256Hash {
         Self { inner: _inner }
     }
 }
-impl Deref for SHA256Hash {
-    type Target = ByteArray<32>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<32>> for SHA256Hash {
+    fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
-    }
-}
-impl DerefMut for SHA256Hash {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
 // 
 // arbitrary 32-byte key into contract storage
+// This is the key type that contracts directly manipulate
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
@@ -259,16 +233,9 @@ impl ContractAddress {
         Self { inner: _inner }
     }
 }
-impl Deref for ContractAddress {
-    type Target = ByteArray<32>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<32>> for ContractAddress {
+    fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
-    }
-}
-impl DerefMut for ContractAddress {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
@@ -276,15 +243,15 @@ impl DerefMut for ContractAddress {
 #[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
-pub struct StorageKey {
+pub struct StorageKeyContractData {
     inner: ByteArray<32>,
 }
-impl From<ByteArray<32>> for StorageKey {
+impl From<ByteArray<32>> for StorageKeyContractData {
     fn from(_inner: ByteArray<32>) -> Self {
         Self { inner: _inner }
     }
 }
-impl StorageKey {
+impl StorageKeyContractData {
     pub fn into_inner(self) -> ByteArray<32> {
         self.inner
     }
@@ -292,22 +259,43 @@ impl StorageKey {
         Self { inner: _inner }
     }
 }
-impl Deref for StorageKey {
-    type Target = ByteArray<32>;
-
-    fn deref(&self) -> &Self::Target {
+impl AsRef<ByteArray<32>> for StorageKeyContractData {
+    fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
     }
 }
-impl DerefMut for StorageKey {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
-    }
+
+
+#[derive(Clone, PartialEq, Debug)]
+#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
+#[repr(i32)]
+pub enum StorageKeyType {
+    kStorageKeyTypeContractData = 0,
+    kStorageKeyTypeFreeNativeTokenBalance = 1,
 }
 
-pub const kMaxLogMessageLen: u32 = 1024;
+#[repr(i32)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub enum StorageKey {
+    // case kStorageKeyTypeContractData:
+    //   StorageKeyContractData contract_data_key;
+    kStorageKeyTypeContractData { contract_data_key: StorageKeyContractData } = StorageKeyType::kStorageKeyTypeContractData as i32,
+    // case kStorageKeyTypeFreeNativeTokenBalance:
+    //   void;
+    kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance as i32,
+    
+}
 
-pub const kMaxReturnBufferLen: u32 = 1024;
+pub const kMaxLogMessageLen: u64 = 1024;
+
+pub const kMaxReturnBufferLen: u64 = 1024;
+
+pub const kTotalHogSupply: u64 = 62_500_000_000;
+
+pub const kHogDivisibility: u64 = 10_000_000;
+
+// Each hog token is divisible into 10^7 units
 
 // in global storage:
 // [contract address + storage key] = 64 bytes
@@ -362,6 +350,15 @@ impl SecretKey {
 
 impl ExtensionPoint {
     pub fn v(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
+        }
+    }
+}
+
+impl StorageKey {
+    pub fn type(&self) -> i32 {
         match self {
             
             _ => unsafe { *(self as *const Self as *const i32) },

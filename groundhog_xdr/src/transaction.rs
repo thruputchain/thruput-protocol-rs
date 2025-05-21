@@ -32,7 +32,7 @@ pub type ReturnBuffer = VecM<u8, 0xffffffff>;
 #[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
-    pub method: u32,
+    pub method: MethodID,
     pub gas_limit: GasAmount,
     pub calldata: Calldata,
 }

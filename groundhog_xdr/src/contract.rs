@@ -63,6 +63,34 @@ pub struct ContractDeploymentHashPreimage {
     pub contract_hash: SHA256Hash,
 }
 
+// This type must be a valid "identifier" as defined in RFC 4506,
+// Section 6.2: "An identifier is a letter followed by an optional sequence
+// of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
+// which lists keywords that may not be used as identifiers.
+pub type Identifier = BytesM<0xffffffff>;
+
+// This type must be a valid version number as defined at
+// https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
+pub type SemVer = BytesM<0xffffffff>;
+
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
+pub struct ContractInterfaceIDPreimage {
+    pub name: Identifier,
+    pub vers: SemVer,
+}
+
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
+pub struct ContractEntrypointID {
+    // This field is computed as SHA256(ContractInterfaceIDPreimage)[0..6]
+    pub contract_interface_id: ByteArray<6>,
+    // The meaning of this field is defined by the contract-interface author
+    pub contract_method_id: ByteArray<2>,
+}
+
 
 //
 // XDR internals below this point
