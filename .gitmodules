@@ -1,9 +1,6 @@
 [submodule "protocol"]
 	path = protocol
 	url = git@github.com:groundhogchain/protocol.git
-[submodule "x23"]
-	path = x23
-	url = git@github.com:groundhogchain/x23.git
 [submodule "external/serde_arrays"]
 	path = external/serde_arrays
 	url = git@github.com:groundhogchain/serde_arrays.git

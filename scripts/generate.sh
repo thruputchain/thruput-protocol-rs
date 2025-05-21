@@ -1,14 +1,24 @@
 #!/bin/bash
 
-[[ -z $XDRC ]] && XDRC=x23/x23c/x23c
+# XDR files in protocol/ from which to generate rust
+protos=(
+  types.x
+  contract.x
+  transaction.x
+  ffi_enums.x
+  retrocausal_queue.x
+)
 
-printf "\tUsing XDRC=\"%s\"\n" $XDRC >&2
+[[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"
 
-function generate() {
-    for i in $@; do
-        filename=$(basename $i .x)
-        $XDRC --rust -o groundhog_xdr/src/$filename.rs $i
-    done
+echo "-- Using XDRC=${XDRC} --" >&2
+
+generate() {
+  proto=${1:?}
+  name=$(basename "${proto}" .x)
+  $XDRC --rust -o "groundhog_xdr/src/${name}.rs" "${proto}"
 }
 
-generate protocol/types.x protocol/contract.x protocol/transaction.x protocol/ffi_enums.x protocol/retrocausal_queue.x
+for proto in "${protos[@]}"; do
+  generate "protocol/${proto}"
+done
