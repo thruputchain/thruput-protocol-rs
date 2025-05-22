@@ -11,10 +11,6 @@
 use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
-use ::serde::{Serialize, Deserialize};
-use ::serde_arrays;
-
-pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};

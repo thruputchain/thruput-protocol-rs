@@ -11,14 +11,13 @@
 use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
-use ::serde::{Serialize, Deserialize};
-use ::serde_arrays;
-
-pub use crate::byte_array::*;
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+
+use ::serde::{Serialize, Deserialize};
+use ::serde_arrays;
 
 
 #[derive(PartialEq, Debug, Default, Clone)]
@@ -287,15 +286,18 @@ pub enum StorageKey {
     
 }
 
-pub const kMaxLogMessageLen: u64 = 1024;
+// 
+pub const kMaxLogMessageLen : u32 = 1024;
 
-pub const kMaxReturnBufferLen: u64 = 1024;
+// 
+pub const kMaxReturnBufferLen : u32 = 1024;
 
-pub const kTotalHogSupply: u64 = 62_500_000_000;
+// 
+pub const kTotalHogSupply : u64 = 62_500_000_000;
 
-pub const kHogDivisibility: u64 = 10_000_000;
-
+// 
 // Each hog token is divisible into 10^7 units
+pub const kHogDivisibility : u32 = 10_000_000;
 
 // in global storage:
 // [contract address + storage key] = 64 bytes
@@ -358,7 +360,7 @@ impl ExtensionPoint {
 }
 
 impl StorageKey {
-    pub fn type(&self) -> i32 {
+    pub fn key_type(&self) -> i32 {
         match self {
             
             _ => unsafe { *(self as *const Self as *const i32) },
