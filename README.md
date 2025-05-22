@@ -1,17 +1,17 @@
 # protocol-rs
 
-Protocol bindings for Rust.
-
-Generated via `x23c` from the XDR files in `protocol/`.
-
-## Build x23c
-
-```shell
-(cd x23 && cmake . && make)
-```
+Protocol bindings for Rust, generated via `x23c` from the XDR files in
+`protocol/`.
 
 ## Regenerate rust sources
 
 ```shell
-bash ./scripts/generate.sh"
+XDRC="../../hogd/build/x23/x23c/x23c" \
+    bash scripts/generate.sh
+```
+
+## CI check:
+
+```shell
+bash scripts/ci-check.sh
 ```
