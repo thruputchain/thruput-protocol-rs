@@ -36,7 +36,7 @@ impl Default for StorageKey {
     fn default() -> Self {
         Self::kStorageKeyTypeContractData { contract_data_key: StorageKeyContractData::default() }
     }
-}   
+}
 
 impl ContractAddress {
     pub const fn zero() -> Self {
@@ -44,25 +44,23 @@ impl ContractAddress {
     }
 }
 
-/*
 impl AsRef<[u8]> for SHA256Hash {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self;
+        let array: &ByteArray<32> = self.as_ref();
         array.as_slice()
     }
 }
 
 impl AsRef<[u8]> for ContractAddress {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self;
+        let array: &ByteArray<32> = self.as_ref();
         array.as_slice()
     }
 }
 
 impl AsRef<[u8]> for StorageKeyContractData {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self;
+        let array: &ByteArray<32> = &self.as_ref();
         array.as_slice()
     }
 }
-*/
