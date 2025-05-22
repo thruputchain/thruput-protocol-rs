@@ -8,29 +8,9 @@ impl From<SHA256Hash> for StorageKey {
     }
 }
 
-impl From<[u8; 32]> for StorageKey {
-    fn from(array: [u8; 32]) -> Self {
-        Self::kStorageKeyTypeContractData {
-            contract_data_key: array.into(),
-        }
-    }
-}
-
 impl From<SHA256Hash> for StorageKeyContractData {
     fn from(hash: SHA256Hash) -> Self {
         Self::new(hash.into_inner())
-    }
-}
-
-impl From<[u8; 32]> for StorageKeyContractData {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
-    }
-}
-
-impl From<[u8; 32]> for ContractAddress {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
     }
 }
 
@@ -53,26 +33,5 @@ impl Default for StorageKey {
 impl ContractAddress {
     pub const fn zero() -> Self {
         Self::new(ByteArray::new([0; 32]))
-    }
-}
-
-impl AsRef<[u8]> for SHA256Hash {
-    fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-
-impl AsRef<[u8]> for ContractAddress {
-    fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-
-impl AsRef<[u8]> for StorageKeyContractData {
-    fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = &self.as_ref();
-        array.as_slice()
     }
 }

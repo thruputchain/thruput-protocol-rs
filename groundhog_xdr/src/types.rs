@@ -78,10 +78,20 @@ impl Ed25519Signature {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<64>> for Ed25519Signature {
     fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for Ed25519Signature {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<64> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 64]> for Ed25519Signature {
+    fn from(array: [u8; 64]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
@@ -109,10 +119,20 @@ impl Ed25519PublicKey {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<32>> for Ed25519PublicKey {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for Ed25519PublicKey {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 32]> for Ed25519PublicKey {
+    fn from(array: [u8; 32]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
@@ -139,10 +159,20 @@ impl Ed25519SecretKey {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<64>> for Ed25519SecretKey {
     fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for Ed25519SecretKey {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<64> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 64]> for Ed25519SecretKey {
+    fn from(array: [u8; 64]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
@@ -219,10 +249,20 @@ impl SHA256Hash {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<32>> for SHA256Hash {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for SHA256Hash {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 32]> for SHA256Hash {
+    fn from(array: [u8; 32]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
@@ -251,10 +291,20 @@ impl ContractAddress {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<32>> for ContractAddress {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for ContractAddress {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 32]> for ContractAddress {
+    fn from(array: [u8; 32]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
@@ -281,10 +331,20 @@ impl StorageKeyContractData {
         self.inner.as_ptr()
     }
 }
-
 impl AsRef<ByteArray<32>> for StorageKeyContractData {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
+    }
+}
+impl AsRef<[u8]> for StorageKeyContractData {
+    fn as_ref(&self) -> &[u8] {
+        let array: &ByteArray<32> = self.as_ref();
+        array.as_slice()
+    }
+}
+impl From<[u8; 32]> for StorageKeyContractData {
+    fn from(array: [u8; 32]) -> Self {
+        Self::new(ByteArray::from(array))
     }
 }
 
