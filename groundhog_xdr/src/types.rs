@@ -74,7 +74,11 @@ impl Ed25519Signature {
     pub const fn new(_inner: ByteArray<64>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<64>> for Ed25519Signature {
     fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
@@ -101,7 +105,11 @@ impl Ed25519PublicKey {
     pub const fn new(_inner: ByteArray<32>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<32>> for Ed25519PublicKey {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
@@ -127,7 +135,11 @@ impl Ed25519SecretKey {
     pub const fn new(_inner: ByteArray<64>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<64>> for Ed25519SecretKey {
     fn as_ref(&self) -> &ByteArray<64> {
         &self.inner
@@ -203,7 +215,11 @@ impl SHA256Hash {
     pub const fn new(_inner: ByteArray<32>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<32>> for SHA256Hash {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
@@ -231,7 +247,11 @@ impl ContractAddress {
     pub const fn new(_inner: ByteArray<32>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<32>> for ContractAddress {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
@@ -257,7 +277,11 @@ impl StorageKeyContractData {
     pub const fn new(_inner: ByteArray<32>) -> Self {
         Self { inner: _inner }
     }
+    pub const fn as_ptr(&self) -> *const u8 {
+        self.inner.as_ptr()
+    }
 }
+
 impl AsRef<ByteArray<32>> for StorageKeyContractData {
     fn as_ref(&self) -> &ByteArray<32> {
         &self.inner
