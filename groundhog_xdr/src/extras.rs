@@ -16,6 +16,12 @@ impl From<[u8; 32]> for StorageKey {
     }
 }
 
+impl From<SHA256Hash> for StorageKeyContractData {
+    fn from(hash: SHA256Hash) -> Self {
+        Self::new(hash.into_inner())
+    }
+}
+
 impl From<[u8; 32]> for StorageKeyContractData {
     fn from(array: [u8; 32]) -> Self {
         Self::new(ByteArray::from(array))
