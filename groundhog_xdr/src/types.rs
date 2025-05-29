@@ -56,42 +56,42 @@ pub type MethodID = u64;
 // ed25519 sig len is 512 bits
 // 
 // ed25519 key len is 256 bits
-#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519Signature {
-    inner: ByteArray<64>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 64],
 }
-impl From<ByteArray<64>> for Ed25519Signature {
-    fn from(_inner: ByteArray<64>) -> Self {
+impl From<[u8; 64]> for Ed25519Signature {
+    fn from(_inner: [u8; 64]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519Signature {
-    pub fn into_inner(self) -> ByteArray<64> {
+    pub fn into_inner(self) -> [u8; 64] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<64>) -> Self {
+    pub const fn new(_inner: [u8; 64]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for Ed25519Signature {
+    type Target = [u8; 64];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<64>> for Ed25519Signature {
-    fn as_ref(&self) -> &ByteArray<64> {
-        &self.inner
+impl DerefMut for Ed25519Signature {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for Ed25519Signature {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<64> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 64]> for Ed25519Signature {
-    fn from(array: [u8; 64]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 
@@ -101,78 +101,78 @@ impl From<[u8; 64]> for Ed25519Signature {
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
-    inner: ByteArray<32>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 32],
 }
-impl From<ByteArray<32>> for Ed25519PublicKey {
-    fn from(_inner: ByteArray<32>) -> Self {
+impl From<[u8; 32]> for Ed25519PublicKey {
+    fn from(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519PublicKey {
-    pub fn into_inner(self) -> ByteArray<32> {
+    pub fn into_inner(self) -> [u8; 32] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<32>) -> Self {
+    pub const fn new(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for Ed25519PublicKey {
+    type Target = [u8; 32];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<32>> for Ed25519PublicKey {
-    fn as_ref(&self) -> &ByteArray<32> {
-        &self.inner
+impl DerefMut for Ed25519PublicKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for Ed25519PublicKey {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 32]> for Ed25519PublicKey {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 
 // 
-#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
-    inner: ByteArray<64>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 64],
 }
-impl From<ByteArray<64>> for Ed25519SecretKey {
-    fn from(_inner: ByteArray<64>) -> Self {
+impl From<[u8; 64]> for Ed25519SecretKey {
+    fn from(_inner: [u8; 64]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519SecretKey {
-    pub fn into_inner(self) -> ByteArray<64> {
+    pub fn into_inner(self) -> [u8; 64] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<64>) -> Self {
+    pub const fn new(_inner: [u8; 64]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for Ed25519SecretKey {
+    type Target = [u8; 64];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<64>> for Ed25519SecretKey {
-    fn as_ref(&self) -> &ByteArray<64> {
-        &self.inner
+impl DerefMut for Ed25519SecretKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for Ed25519SecretKey {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<64> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 64]> for Ed25519SecretKey {
-    fn from(array: [u8; 64]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 
@@ -231,38 +231,38 @@ pub enum ExtensionPoint {
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct SHA256Hash {
-    inner: ByteArray<32>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 32],
 }
-impl From<ByteArray<32>> for SHA256Hash {
-    fn from(_inner: ByteArray<32>) -> Self {
+impl From<[u8; 32]> for SHA256Hash {
+    fn from(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
 }
 impl SHA256Hash {
-    pub fn into_inner(self) -> ByteArray<32> {
+    pub fn into_inner(self) -> [u8; 32] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<32>) -> Self {
+    pub const fn new(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for SHA256Hash {
+    type Target = [u8; 32];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<32>> for SHA256Hash {
-    fn as_ref(&self) -> &ByteArray<32> {
-        &self.inner
+impl DerefMut for SHA256Hash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for SHA256Hash {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 32]> for SHA256Hash {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 
@@ -273,38 +273,38 @@ impl From<[u8; 32]> for SHA256Hash {
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct ContractAddress {
-    inner: ByteArray<32>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 32],
 }
-impl From<ByteArray<32>> for ContractAddress {
-    fn from(_inner: ByteArray<32>) -> Self {
+impl From<[u8; 32]> for ContractAddress {
+    fn from(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
 }
 impl ContractAddress {
-    pub fn into_inner(self) -> ByteArray<32> {
+    pub fn into_inner(self) -> [u8; 32] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<32>) -> Self {
+    pub const fn new(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for ContractAddress {
+    type Target = [u8; 32];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<32>> for ContractAddress {
-    fn as_ref(&self) -> &ByteArray<32> {
-        &self.inner
+impl DerefMut for ContractAddress {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for ContractAddress {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 32]> for ContractAddress {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 
@@ -313,38 +313,38 @@ impl From<[u8; 32]> for ContractAddress {
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct StorageKeyContractData {
-    inner: ByteArray<32>,
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 32],
 }
-impl From<ByteArray<32>> for StorageKeyContractData {
-    fn from(_inner: ByteArray<32>) -> Self {
+impl From<[u8; 32]> for StorageKeyContractData {
+    fn from(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
 }
 impl StorageKeyContractData {
-    pub fn into_inner(self) -> ByteArray<32> {
+    pub fn into_inner(self) -> [u8; 32] {
         self.inner
     }
-    pub const fn new(_inner: ByteArray<32>) -> Self {
+    pub const fn new(_inner: [u8; 32]) -> Self {
         Self { inner: _inner }
     }
-    pub const fn as_ptr(&self) -> *const u8 {
-        self.inner.as_ptr()
+}
+
+impl Deref for StorageKeyContractData {
+    type Target = [u8; 32];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
     }
 }
-impl AsRef<ByteArray<32>> for StorageKeyContractData {
-    fn as_ref(&self) -> &ByteArray<32> {
-        &self.inner
+impl DerefMut for StorageKeyContractData {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
     }
 }
 impl AsRef<[u8]> for StorageKeyContractData {
     fn as_ref(&self) -> &[u8] {
-        let array: &ByteArray<32> = self.as_ref();
-        array.as_slice()
-    }
-}
-impl From<[u8; 32]> for StorageKeyContractData {
-    fn from(array: [u8; 32]) -> Self {
-        Self::new(ByteArray::from(array))
+        self.deref().as_slice()
     }
 }
 

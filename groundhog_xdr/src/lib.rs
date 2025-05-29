@@ -14,9 +14,6 @@ use serialize::*;
 pub mod types;
 use types::*;
 
-pub mod byte_array;
-use byte_array::*;
-
 pub mod extras;
 use extras::*;
 

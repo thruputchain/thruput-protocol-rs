@@ -44,7 +44,7 @@ pub enum InvokeFlag {
 
 pub type InvokeFlagSet = i32;
 
-pub type OriginID = ByteArray<16>;
+pub type OriginID = [u8; 16];
 
 #[derive(PartialEq, Debug, Default, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]

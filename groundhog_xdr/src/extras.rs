@@ -1,3 +1,4 @@
+use core::ops::Deref;
 use crate::*;
 
 impl From<SHA256Hash> for StorageKey {
@@ -11,6 +12,13 @@ impl From<SHA256Hash> for StorageKey {
 impl From<SHA256Hash> for StorageKeyContractData {
     fn from(hash: SHA256Hash) -> Self {
         Self::new(hash.into_inner())
+    }
+}
+
+// arrays with size above 32 don't implement Default, so we can't derive it
+impl Default for Ed25519Signature {
+    fn default() -> Self {
+        Self::from([0; 64])
     }
 }
 
@@ -32,6 +40,6 @@ impl Default for StorageKey {
 
 impl ContractAddress {
     pub const fn zero() -> Self {
-        Self::new(ByteArray::new([0; 32]))
+        Self::new([0; 32])
     }
 }

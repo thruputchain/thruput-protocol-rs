@@ -82,9 +82,9 @@ pub struct ContractInterfaceIDPreimage {
 #[repr(C)]
 pub struct ContractEntrypointID {
     // This field is computed as SHA256(ContractInterfaceIDPreimage)[0..6]
-    pub contract_interface_id: ByteArray<6>,
+    pub contract_interface_id: [u8; 6],
     // The meaning of this field is defined by the contract-interface author
-    pub contract_method_id: ByteArray<2>,
+    pub contract_method_id: [u8; 2],
 }
 
 
