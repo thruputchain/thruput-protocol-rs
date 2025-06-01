@@ -95,6 +95,32 @@ pub enum Error {
     
 }
 
+#[repr(i32)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+pub enum Res<T> {
+    // case Ok:
+    //   T val;
+    Ok { val: T } = ResultType::Ok as i32,
+    // case Err:
+    //   Error err;
+    Err { err: Error } = ResultType::Err as i32,
+    
+}
+
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
+pub struct Void {
+    // temporary: ReadXdr/WriteXdr derive-macros don't support unnamed fields
+    pub not_void: i32,
+}
+
+pub type Amount = uint128_xdr;
+
+pub type Difference = int128_xdr;
+
+
 
 //
 // XDR internals below this point
@@ -120,6 +146,15 @@ impl ContractError {
 
 impl Error {
     pub fn err_type(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
+        }
+    }
+}
+
+impl<T> Res<T> {
+    pub fn is_err(&self) -> i32 {
         match self {
             
             _ => unsafe { *(self as *const Self as *const i32) },
