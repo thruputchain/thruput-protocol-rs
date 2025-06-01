@@ -2,6 +2,7 @@
 
 # XDR files in protocol/ from which to generate rust
 protos=(
+  result.x
   types.x
   contract.x
   transaction.x

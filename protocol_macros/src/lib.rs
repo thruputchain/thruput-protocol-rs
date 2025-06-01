@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
-use syn::{Data, Fields};
+use syn::{Data, Fields, parse::{Parse, Parser}};
 
 // XDR serialization generation for Structs and Unions
 #[proc_macro_derive(ReadXdr)]
@@ -32,6 +32,7 @@ pub fn derive_write_xdr_enum(input: TokenStream) -> TokenStream {
 fn impl_derive_read_union(
     name: &syn::Ident,
     data_enum: &syn::DataEnum,
+    generics: &syn::Generics,
 ) -> Option<TokenStream2> {
     let mut default_name = None;
     let mut match_arms = Vec::new();
@@ -104,8 +105,10 @@ fn impl_derive_read_union(
         }
     };
 
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+
     Some(quote! {
-        impl ReadXdr for #name {
+        impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
             fn read_xdr<R: std::io::Read>(r: &mut Limited<R>) -> Result<Self, Error> {
                 r.with_limited_depth(|r| {
                     let e = i32::read_xdr(r)?;
@@ -123,6 +126,7 @@ fn impl_derive_read_union(
 fn impl_derive_write_union(
     name: &syn::Ident,
     data_enum: &syn::DataEnum,
+    generics: &syn::Generics,
 ) -> Option<TokenStream2> {
     let mut default_name = None;
     let mut match_arms = Vec::new();
@@ -193,9 +197,11 @@ fn impl_derive_write_union(
         }
     };
 
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+
     Some(quote! {
 
-        impl WriteXdr for #name {
+        impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
             fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
                 w.with_limited_depth(|w| {
                     #discriminant_code
@@ -214,6 +220,7 @@ fn impl_derive_write_union(
 fn impl_derive_read_enum(
     name: &syn::Ident,
     data_enum: &syn::DataEnum,
+    generics: &syn::Generics,
 ) -> Option<TokenStream2> {
     let match_arms = data_enum.variants.iter().map(|variant| {
         let variant_name = &variant.ident;
@@ -245,8 +252,10 @@ fn impl_derive_read_enum(
         }
     }
 
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+
     Some(quote! {
-        impl TryFrom<i32> for #name {
+        impl #impl_generics TryFrom<i32> for #name #ty_generics #where_clause {
             type Error = Error;
 
             fn try_from(i: i32) -> Result<Self, Error> {
@@ -260,7 +269,7 @@ fn impl_derive_read_enum(
             }
         }
 
-        impl ReadXdr for #name {
+        impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
             fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
                 r.with_limited_depth(|r| {
                     let e = i32::read_xdr(r)?;
@@ -275,6 +284,7 @@ fn impl_derive_read_enum(
 fn impl_derive_write_enum(
     name: &syn::Ident,
     data_enum: &syn::DataEnum,
+    generics: &syn::Generics,
 ) -> Option<TokenStream2> {
     for x in data_enum.variants.iter() {
         match x.fields {
@@ -285,8 +295,10 @@ fn impl_derive_write_enum(
         }
     }
 
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+
     Some(quote! {
-        impl WriteXdr for #name {
+        impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
             fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
                 w.with_limited_depth(|w| {
                     let i: i32 = self.clone() as i32;
@@ -299,6 +311,7 @@ fn impl_derive_write_enum(
 
 fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
+    let generics = &ast.generics;
 
     // Generates code of the form
     // impl ReadXdr for ContractDeploymentHashPreimage {
@@ -312,6 +325,9 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
     //    })
     //  }
     // }
+
+    let generics = with_trait_bound(generics, quote!{ ReadXdr });
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
     let trait_output = match ast.data {
         Data::Struct(ref data_struct) => match &data_struct.fields {
@@ -327,7 +343,7 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
                 });
 
                 quote! {
-                    impl ReadXdr for #name {
+                    impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
                         fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
                             r.with_limited_depth(|r| {
                                 Ok(Self {
@@ -342,7 +358,7 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
         },
         Data::Enum(ref data_enum) => {
             // Two types of rust enums used here, corresponding to Unions and Enums in XDR.
-            if let Some(union_tokens) = impl_derive_read_union(name, data_enum)
+            if let Some(union_tokens) = impl_derive_read_union(name, data_enum, &generics)
             {
                 union_tokens
             } else {
@@ -356,6 +372,7 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
 
 fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
+    let generics = &ast.generics;
 
     // Generates code of the form
     // impl WriteXdr for ContractDeploymentHashPreimage {
@@ -369,6 +386,9 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
     // }
     //}
 
+    let generics = with_trait_bound(generics, quote!{ WriteXdr });
+    let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
+
     let trait_output = match ast.data {
         Data::Struct(ref data_struct) => match &data_struct.fields {
             Fields::Named(fields_named) => {
@@ -381,7 +401,7 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
                 });
 
                 quote! {
-                    impl WriteXdr for #name {
+                    impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
                         fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
                             w.with_limited_depth(|w| {
                                 #(#write_xdr_fields)*
@@ -396,7 +416,7 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
         Data::Enum(ref data_enum) => {
             // Two types of rust enums used here, corresponding to Unions and Enums in XDR.
             if let Some(union_tokens) =
-                impl_derive_write_union(name, data_enum)
+                impl_derive_write_union(name, data_enum, &generics)
             {
                 union_tokens
             } else {
@@ -410,11 +430,12 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
 
 fn impl_derive_read_xdr_enum(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
+    let generics = &ast.generics;
 
     let trait_output = match ast.data {
         Data::Enum(ref data_enum) => {
             // Two types of rust enums used here, corresponding to Unions and Enums in XDR.
-            if let Some(enum_tokens) = impl_derive_read_enum(name, data_enum) {
+            if let Some(enum_tokens) = impl_derive_read_enum(name, data_enum, generics) {
                 enum_tokens
             } else {
                 unimplemented!("Invalid usage of rust enum for XDR types");
@@ -427,10 +448,11 @@ fn impl_derive_read_xdr_enum(ast: &syn::DeriveInput) -> TokenStream {
 
 fn impl_derive_write_xdr_enum(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
+    let generics = &ast.generics;
 
     let trait_output = match ast.data {
         Data::Enum(ref data_enum) => {
-            if let Some(enum_tokens) = impl_derive_write_enum(name, data_enum)
+            if let Some(enum_tokens) = impl_derive_write_enum(name, data_enum, generics)
             {
                 enum_tokens
             } else {
@@ -440,4 +462,15 @@ fn impl_derive_write_xdr_enum(ast: &syn::DeriveInput) -> TokenStream {
         _ => unimplemented!("Only structs are supported"),
     };
     trait_output.into()
+}
+
+// Add a trait bound to all the generic type parameters
+fn with_trait_bound(generics: &syn::Generics, tokens: TokenStream2) -> syn::Generics {
+    let mut generics = generics.clone();
+    for type_param in generics.type_params_mut() {
+        let trait_bound = syn::TraitBound::parse.parse2(tokens.clone()).unwrap();
+        let bound = syn::TypeParamBound::Trait(trait_bound);
+        type_param.bounds.push(bound);
+    }
+    generics
 }
