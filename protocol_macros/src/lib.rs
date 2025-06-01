@@ -101,7 +101,7 @@ fn impl_derive_read_union(
     } else {
         quote! {
             #[allow(unreachable_patterns)]
-            _ => Err(Error::Invalid),
+            _ => Err(crate::Error::Invalid),
         }
     };
 
@@ -109,7 +109,7 @@ fn impl_derive_read_union(
 
     Some(quote! {
         impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
-            fn read_xdr<R: std::io::Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+            fn read_xdr<R: std::io::Read>(r: &mut Limited<R>) -> crate::Result<Self> {
                 r.with_limited_depth(|r| {
                     let e = i32::read_xdr(r)?;
                     match e {
@@ -202,7 +202,7 @@ fn impl_derive_write_union(
     Some(quote! {
 
         impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
-            fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+            fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> crate::Result<()> {
                 w.with_limited_depth(|w| {
                     #discriminant_code
                     //let discriminant: i32 = unsafe { *(self as *const Self as *const i32) };
@@ -256,21 +256,21 @@ fn impl_derive_read_enum(
 
     Some(quote! {
         impl #impl_generics TryFrom<i32> for #name #ty_generics #where_clause {
-            type Error = Error;
+            type Error = crate::Error;
 
-            fn try_from(i: i32) -> Result<Self, Error> {
+            fn try_from(i: i32) -> crate::Result<Self> {
                 let e = match i {
                     #(#match_arms,)*
 
                     #[allow(unreachable_patterns)]
-                    _ => return Err(Error::Invalid),
+                    _ => return Err(crate::Error::Invalid),
                 };
                 Ok(e)
             }
         }
 
         impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
-            fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+            fn read_xdr<R: Read>(r: &mut Limited<R>) -> crate::Result<Self> {
                 r.with_limited_depth(|r| {
                     let e = i32::read_xdr(r)?;
                     let v: Self = e.try_into()?;
@@ -299,7 +299,7 @@ fn impl_derive_write_enum(
 
     Some(quote! {
         impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
-            fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+            fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> crate::Result<()> {
                 w.with_limited_depth(|w| {
                     let i: i32 = self.clone() as i32;
                     i.write_xdr(w)
@@ -344,7 +344,7 @@ fn impl_derive_read_xdr(ast: &syn::DeriveInput) -> TokenStream {
 
                 quote! {
                     impl #impl_generics ReadXdr for #name #ty_generics #where_clause {
-                        fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+                        fn read_xdr<R: Read>(r: &mut Limited<R>) -> crate::Result<Self> {
                             r.with_limited_depth(|r| {
                                 Ok(Self {
                                     #(#read_xdr_fields,)*
@@ -402,7 +402,7 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
 
                 quote! {
                     impl #impl_generics WriteXdr for #name #ty_generics #where_clause {
-                        fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+                        fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> crate::Result<()> {
                             w.with_limited_depth(|w| {
                                 #(#write_xdr_fields)*
                                 Ok(())

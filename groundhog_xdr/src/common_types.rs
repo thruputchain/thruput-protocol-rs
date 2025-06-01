@@ -26,6 +26,8 @@ use alloc::{boxed::Box, string::String, vec::Vec};
 #[cfg(feature = "std")]
 use std::{error, io};
 
+pub type Result<T, E = Error> = core::result::Result<T, E>;
+
 /// Error contains all errors returned by functions in this crate. It can be
 /// compared via `PartialEq`, however any contained IO errors will only be
 /// compared on their `ErrorKind`.

@@ -2,12 +2,12 @@
 
 # XDR files in protocol/ from which to generate rust
 protos=(
-  result.x
   types.x
   contract.x
   transaction.x
   ffi_enums.x
   retrocausal_queue.x
+  erc20.x
 )
 
 [[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"

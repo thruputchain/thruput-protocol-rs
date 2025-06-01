@@ -30,3 +30,6 @@ use retrocausal_queue::*;
 
 #[rustfmt::skip]
 pub mod transaction;
+
+#[rustfmt::skip]
+pub mod erc20;
