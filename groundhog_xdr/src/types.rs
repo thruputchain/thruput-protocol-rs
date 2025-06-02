@@ -383,6 +383,8 @@ pub const kTotalHogSupply : u64 = 62_500_000_000;
 // Each hog token is divisible into 10^7 units
 pub const kHogDivisibility : u32 = 10_000_000;
 
+pub type ReplayNonce = u64;
+
 // in global storage:
 // [contract address + storage key] = 64 bytes
 // Contracts are free to set their own conventions for keys.

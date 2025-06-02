@@ -7,6 +7,7 @@ protos=(
   transaction.x
   ffi_enums.x
   retrocausal_queue.x
+  erc20.x
 )
 
 [[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"

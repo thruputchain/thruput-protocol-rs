@@ -16,6 +16,9 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 
+use ::serde::{Serialize, Deserialize};
+use ::serde_arrays;
+
 
 
 // clang-format on
@@ -77,14 +80,47 @@ pub struct ContractInterfaceIDPreimage {
     pub vers: SemVer,
 }
 
-#[derive(PartialEq, Debug, Default, Clone)]
+// This type is computed as SHA256(ContractInterfaceIDPreimage)[0..6],
+// concatenated with a two-byte "method id" defined by the author of
+// the contract interface
+// 
+#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
-#[repr(C)]
+#[repr(transparent)]
 pub struct ContractEntrypointID {
-    // This field is computed as SHA256(ContractInterfaceIDPreimage)[0..6]
-    pub contract_interface_id: [u8; 6],
-    // The meaning of this field is defined by the contract-interface author
-    pub contract_method_id: [u8; 2],
+    #[serde(with = "serde_arrays")]
+    inner: [u8; 8],
+}
+impl From<[u8; 8]> for ContractEntrypointID {
+    fn from(_inner: [u8; 8]) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ContractEntrypointID {
+    pub fn into_inner(self) -> [u8; 8] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 8]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ContractEntrypointID {
+    type Target = [u8; 8];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ContractEntrypointID {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+impl AsRef<[u8]> for ContractEntrypointID {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
 }
 
 

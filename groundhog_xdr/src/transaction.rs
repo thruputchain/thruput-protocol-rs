@@ -19,6 +19,8 @@ use std::io::{Read, Write};
 
 
 // clang-format on
+
+// BCS encoding of the call arguments (as a BCS tuple)
 pub type Calldata = VecM<u8, 0xffffffff>;
 
 pub type ReturnBuffer = VecM<u8, 0xffffffff>;
@@ -28,7 +30,7 @@ pub type ReturnBuffer = VecM<u8, 0xffffffff>;
 #[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
-    pub method: MethodID,
+    pub entrypoint: ContractEntrypointID,
     pub gas_limit: GasAmount,
     pub calldata: Calldata,
 }
@@ -40,6 +42,7 @@ pub struct Invocation {
 pub enum InvokeFlag {
     kInvokeFlagNone = 0,
     kInvokeFlagTryInvoke = 0x00000001,
+    kInvokeFlagReadOnly = 0x00000002,
 }
 
 pub type InvokeFlagSet = i32;
@@ -94,6 +97,15 @@ pub struct NondeterministicProposalData {
 #[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
+    pub nondeterministic_proposal_data: NondeterministicProposalData,
+}
+
+// Nominations, included in SCP messages, include only the ND data.
+// The transactions themselves are disseminated through the overlay.
+#[derive(PartialEq, Debug, Default, Clone)]
+#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[repr(C)]
+pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
 }
 
