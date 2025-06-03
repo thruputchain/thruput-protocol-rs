@@ -30,3 +30,30 @@ use retrocausal_queue::*;
 
 #[rustfmt::skip]
 pub mod transaction;
+
+pub use ::ciborium as cbor;
+pub trait CBOR {
+    fn to_cbor(&self) -> cbor::Value;
+    fn from_cbor(v: &cbor::Value) -> Self;
+}
+
+pub fn to_cbor<T: CBOR>(x: &T) -> cbor::Value {
+    x.to_cbor()
+}
+
+pub fn from_cbor<T: CBOR>(v: &cbor::Value) -> T {
+    T::from_cbor(v)
+}
+
+fn i32_from_cbor(v: &cbor::Value) -> i32 {
+    v.clone().into_integer().unwrap().try_into().unwrap()
+}
+fn u32_from_cbor(v: &cbor::Value) -> u32 {
+    v.clone().into_integer().unwrap().try_into().unwrap()
+}
+fn i64_from_cbor(v: &cbor::Value) -> i64 {
+    v.clone().into_integer().unwrap().try_into().unwrap()
+}
+fn u64_from_cbor(v: &cbor::Value) -> u64 {
+    v.clone().into_integer().unwrap().try_into().unwrap()
+}

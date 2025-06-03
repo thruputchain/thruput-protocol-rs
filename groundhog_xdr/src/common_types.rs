@@ -3,6 +3,12 @@
 #![allow(unused_imports)]
 #![allow(dead_code)]
 
+use ::serde::{Serialize, Deserialize};
+use ::ciborium as cbor;
+use cbor::cbor;
+use crate::{CBOR, to_cbor, from_cbor};
+
+
 // When feature alloc is turned off use static lifetime Box and Vec types.
 #[cfg(not(feature = "alloc"))]
 pub mod noalloc {
@@ -114,8 +120,35 @@ impl From<io::Error> for Error {
 }
 
 #[cfg(feature = "alloc")]
-#[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct VecM<T, const MAX: u32 = { u32::MAX }>(pub Vec<T>);
+
+impl<const MAX: u32> CBOR for VecM<u8, MAX> {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Bytes(self.to_vec())
+    }
+
+    fn from_cbor(v: &cbor::Value) -> Self {
+        match v {
+            cbor::Value::Bytes(v) => v.try_into().unwrap(),
+            _ => panic!("cbor"),
+        }
+    }
+}
+
+impl<T: CBOR, const MAX: u32> CBOR for VecM<T, MAX> {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Array(self.iter().map(to_cbor).collect())
+    }
+    fn from_cbor(v: &cbor::Value) -> Self {
+        match v {
+            cbor::Value::Array(vec) =>
+                vec.iter().map(from_cbor)
+                    .collect::<Vec<T>>().try_into().unwrap(),
+            _ => panic!("cbor"),
+        }
+    }
+}
 
 #[cfg(not(feature = "alloc"))]
 #[derive(Debug, Clone, Hash, PartialEq, Eq, PartialOrd, Ord)]

@@ -13,6 +13,7 @@ std = ["alloc"]
 
 [dependencies]
 protocol_macros = { path = "../protocol_macros" }
+ciborium = { version = "0.2.2", default-features = false }
 
 [dependencies.serde]
 version = "1.0.219"

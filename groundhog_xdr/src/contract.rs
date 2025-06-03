@@ -19,6 +19,8 @@ use std::io::{Read, Write};
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
+use ::ciborium as cbor;
+use cbor::cbor;
 
 
 // clang-format on
@@ -36,7 +38,7 @@ pub enum ContractType {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Contract {
     // case kWasmi:
@@ -51,6 +53,52 @@ pub enum Contract {
     // default:
     //   void;
     default { contract_type: i32 },
+}
+
+impl CBOR for Contract {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Array(vec![
+            cbor!(unsafe { *<*const _>::from(self).cast::<i32>() }).unwrap(),
+            match self {
+                Contract::kWasmi { wasmi_contract } => wasmi_contract.to_cbor(),
+                Contract::kNative { native_contract_id } => cbor!(native_contract_id).unwrap(),
+                Contract::kMockTest { mock_contract_id } => cbor!(mock_contract_id).unwrap(),
+                Contract::default { contract_type } => cbor!(contract_type).unwrap(),
+            },
+        ])
+    }
+
+    fn from_cbor(v: &cbor::Value) -> Self {
+        match v {
+            cbor::Value::Array(vec) => {
+                let mut x = vec.iter();
+                let ty: i32 = x.next().unwrap().clone()
+                    .into_integer().unwrap()
+                    .try_into().unwrap();
+                let content = x.next().unwrap();
+
+                match ty {
+                    k if k == ContractType::kWasmi as i32 => {
+                        let wasmi_contract = from_cbor(content);
+                        Contract::kWasmi { wasmi_contract }
+                    },
+                    k if k == ContractType::kNative as i32 => {
+                        let native_contract_id = u32_from_cbor(content);
+                        Contract::kNative { native_contract_id }
+                    },
+                    k if k == ContractType::kMockTest as i32 => {
+                        let mock_contract_id = u32_from_cbor(content);
+                        Contract::kMockTest { mock_contract_id }
+                    },
+                    _ => {
+                        let contract_type = i32_from_cbor(content);
+                        Contract::default { contract_type }
+                    },
+                }
+            },
+            _ => panic!("cbor"),
+        }
+    }
 }
 
 #[derive(PartialEq, Debug, Clone)]
@@ -122,6 +170,15 @@ impl AsRef<[u8]> for ContractEntrypointID {
         self.deref().as_slice()
     }
 }
+impl CBOR for ContractEntrypointID {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Bytes(Vec::from(self.as_slice()))
+    }
+    fn from_cbor(v: &cbor::Value) -> Self {
+        ContractEntrypointID::new(v.as_bytes().unwrap().as_slice().try_into().unwrap())
+    }
+}
+
 
 
 //

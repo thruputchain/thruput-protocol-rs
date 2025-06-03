@@ -18,6 +18,7 @@ use std::io::{Read, Write};
 
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+use ::ciborium as cbor;
 
 
 #[derive(PartialEq, Debug, Clone)]
@@ -92,6 +93,14 @@ impl DerefMut for Ed25519Signature {
 impl AsRef<[u8]> for Ed25519Signature {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
+    }
+}
+impl CBOR for Ed25519Signature {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Bytes(Vec::from(self.as_slice()))
+    }
+    fn from_cbor(v: &cbor::Value) -> Self {
+        Ed25519Signature::new(v.as_bytes().unwrap().as_slice().try_into().unwrap())
     }
 }
 
@@ -185,13 +194,36 @@ pub enum CryptographicScheme {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
     Ed25519 { ed25519: Ed25519Signature } = CryptographicScheme::Ed25519 as i32,
     
+}
+
+impl CBOR for Signature {
+    fn to_cbor(&self) -> cbor::Value {
+        match self {
+            Signature::Ed25519 { ed25519 } => {
+                cbor::Value::Array(vec![
+                    cbor::Value::Integer(cbor::value::Integer::from(CryptographicScheme::Ed25519 as i32)),
+                    ed25519.to_cbor(),
+                ])
+            },
+        }
+    }
+    fn from_cbor(v: &cbor::Value) -> Self {
+        let mut x = v.as_array().unwrap().iter();
+        let ty = i32_from_cbor(x.next().unwrap());
+        if ty == CryptographicScheme::Ed25519 as i32 {
+            let ed25519 = CBOR::from_cbor(x.next().unwrap());
+            Signature::Ed25519 { ed25519 }
+        } else {
+            panic!("cbor")
+        }
+    }
 }
 
 #[repr(i32)]
@@ -305,6 +337,15 @@ impl DerefMut for ContractAddress {
 impl AsRef<[u8]> for ContractAddress {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
+    }
+}
+
+impl CBOR for ContractAddress {
+    fn to_cbor(&self) -> cbor::Value {
+        cbor::Value::Bytes(Vec::from(self.as_slice()))
+    }
+    fn from_cbor(v: &cbor::Value) -> Self {
+        ContractAddress::new(v.as_bytes().unwrap().as_slice().try_into().unwrap())
     }
 }
 
