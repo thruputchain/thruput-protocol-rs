@@ -25,7 +25,7 @@ pub type Calldata = VecM<u8, 0xffffffff>;
 
 pub type ReturnBuffer = VecM<u8, 0xffffffff>;
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct Invocation {
@@ -49,7 +49,7 @@ pub type InvokeFlagSet = i32;
 
 pub type OriginID = [u8; 16];
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct Transaction {
@@ -64,7 +64,7 @@ pub type SignedTransactionHash = SHA256Hash;
 // Deliberately leaving this SignedTransaction object
 // (and all the other metadata)
 // for a later PR.
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct SignedTransaction {
@@ -73,7 +73,7 @@ pub struct SignedTransaction {
 }
 
 // Nondeterministic data attached to a transaction by the proposer.
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct NondeterministicProposalData {
@@ -92,7 +92,7 @@ pub struct NondeterministicProposalData {
 // TODO(petar): Who is the signer? The originator of the transaction or the
 // validator proposing it?
 // TODO(petar): Should the signature capture the non-deterministic data?
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct ProposedTransaction {
@@ -102,7 +102,7 @@ pub struct ProposedTransaction {
 
 // Nominations, included in SCP messages, include only the ND data.
 // The transactions themselves are disseminated through the overlay.
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct NominatedTransaction {

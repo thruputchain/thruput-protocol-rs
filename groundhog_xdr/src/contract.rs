@@ -53,7 +53,7 @@ pub enum Contract {
     default { contract_type: i32 },
 }
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
@@ -72,7 +72,7 @@ pub type Identifier = BytesM<0xffffffff>;
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = BytesM<0xffffffff>;
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
@@ -84,7 +84,7 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
