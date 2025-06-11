@@ -1,5 +1,5 @@
-use core::ops::Deref;
 use crate::*;
+use core::ops::Deref;
 
 impl From<SHA256Hash> for StorageKey {
     fn from(hash: SHA256Hash) -> Self {
