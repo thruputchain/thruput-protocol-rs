@@ -19,14 +19,18 @@ jobs:
         run: |
           echo "Cleaning up .gitconfig"
           rm -f /home/hogci/.gitconfig
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: none
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_SERDE_ARRAYS_KEY }}
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      - name: update submodules
+        run: git submodule update --init protocol && git submodule update --init external/serde_arrays
+
       - name: cargo build default
         run: cargo build --verbose --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build alloc
@@ -37,3 +41,4 @@ jobs:
         run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks
         run: cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
+    
