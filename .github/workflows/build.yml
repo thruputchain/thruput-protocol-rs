@@ -11,25 +11,18 @@ jobs:
   build:
     runs-on: self-hosted
 
-    env:
-      GIT_CONFIG_GLOBAL: /home/hogci/hogci_general/.gitconfig
-
     # This cloning setup is different from the one in hogd,
     # either because there's an obscure webfactory bug (my previous hypothesis)
     # or, more likely, I mistyped a repo name when creating the deploy keys.
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: none
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_SERDE_ARRAYS_KEY }}
-      - name: update submodules
-        run: git submodule update --init protocol && git submodule update --init external/serde_arrays
-
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: cargo build default
         run: cargo build --verbose --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build alloc
