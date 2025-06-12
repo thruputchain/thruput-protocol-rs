@@ -18,7 +18,7 @@ jobs:
       - name: Clean up .gitconfig
         run: |
           echo "Cleaning up .gitconfig"
-          rm -f ~/.gitconfig
+          rm -f /home/hogci/.gitconfig
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
