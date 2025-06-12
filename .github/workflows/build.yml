@@ -15,6 +15,10 @@ jobs:
     # either because there's an obscure webfactory bug (my previous hypothesis)
     # or, more likely, I mistyped a repo name when creating the deploy keys.
     steps:
+      - name: Clean up .gitconfig
+        run: |
+          echo "Cleaning up .gitconfig"
+          rm -f ~/.gitconfig
       - uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
@@ -33,4 +37,3 @@ jobs:
         run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks
         run: cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
-    
