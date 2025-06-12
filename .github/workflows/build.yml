@@ -9,13 +9,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
 
-    # As far as I can tell (mostly with chatgpt help)
-    # the way that hogd does this (ssh-agent, then checkout)
-    # fails because webfactory does the ssh key targeting by
-    # some github insteadOf string replacements, which allow prefix matches
-    # and thus protocol-rs gets the key targeted to protocol.
+    env:
+      GIT_CONFIG_GLOBAL: /home/hogci/hogci_general/.gitconfig
+
+    # This cloning setup is different from the one in hogd,
+    # either because there's an obscure webfactory bug (my previous hypothesis)
+    # or, more likely, I mistyped a repo name when creating the deploy keys.
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,8 +38,6 @@ jobs:
         run: cargo build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: run tests
         run: cargo test --features=std --manifest-path=groundhog_xdr/Cargo.toml
-      - name: prep rustfmt
-        run: rustup component add --toolchain nightly-x86_64-unknown-linux-gnu rustfmt
       - name: format checks
         run: cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
     
