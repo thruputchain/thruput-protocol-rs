@@ -1,5 +1,3 @@
-cargo-features = ["trim-paths", "profile-rustflags"] #unstable
-
 [package]
 name = "groundhog_xdr"
 version = "0.1.0"
@@ -24,21 +22,3 @@ features = ["derive"]
 [dependencies.serde_arrays]
 path = "../external/serde_arrays"
 default-features = false
-
-[profile.dev]
-opt-level = "z"
-overflow-checks = false
-debug = false
-strip = "debuginfo"
-panic = "abort"
-
-[profile.release]
-opt-level = 3
-overflow-checks = false
-debug = false
-strip = "symbols"
-debug-assertions = false
-panic = "abort"
-lto = true
-codegen-units = 1
-trim-paths = "all" # unstable
