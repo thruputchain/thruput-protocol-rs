@@ -15,21 +15,21 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
+
 
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct uint128_xdr {
     pub highbits: u64,
     pub lowbits: u64,
 }
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct int128_xdr {
     pub highbits: i64,
@@ -56,8 +56,7 @@ pub type MethodID = u64;
 // ed25519 sig len is 512 bits
 // 
 // ed25519 key len is 256 bits
-#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct Ed25519Signature {
     #[serde(with = "serde_arrays")]
@@ -97,8 +96,7 @@ impl AsRef<[u8]> for Ed25519Signature {
 
 // 
 // ed25519 secret key len is 64 bytes
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
     #[serde(with = "serde_arrays")]
@@ -137,8 +135,7 @@ impl AsRef<[u8]> for Ed25519PublicKey {
 }
 
 // 
-#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
     #[serde(with = "serde_arrays")]
@@ -178,7 +175,6 @@ impl AsRef<[u8]> for Ed25519SecretKey {
 
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum CryptographicScheme {
     Ed25519 = 0,
@@ -186,7 +182,7 @@ pub enum CryptographicScheme {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
@@ -196,7 +192,7 @@ pub enum Signature {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
@@ -206,7 +202,7 @@ pub enum PublicKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
@@ -216,7 +212,7 @@ pub enum SecretKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum ExtensionPoint {
     // case 0:
     //   void;
@@ -227,8 +223,7 @@ pub enum ExtensionPoint {
 // 256 bit hash
 // 
 // 256 bit contract address
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct SHA256Hash {
     #[serde(with = "serde_arrays")]
@@ -269,8 +264,7 @@ impl AsRef<[u8]> for SHA256Hash {
 // 
 // arbitrary 32-byte key into contract storage
 // This is the key type that contracts directly manipulate
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct ContractAddress {
     #[serde(with = "serde_arrays")]
@@ -309,8 +303,7 @@ impl AsRef<[u8]> for ContractAddress {
 }
 
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct StorageKeyContractData {
     #[serde(with = "serde_arrays")]
@@ -350,7 +343,6 @@ impl AsRef<[u8]> for StorageKeyContractData {
 
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0,
@@ -359,7 +351,7 @@ pub enum StorageKeyType {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum StorageKey {
     // case kStorageKeyTypeContractData:
     //   StorageKeyContractData contract_data_key;
@@ -388,20 +380,18 @@ pub type ReplayNonce = u64;
 // in global storage:
 // [contract address + storage key] = 64 bytes
 // Contracts are free to set their own conventions for keys.
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct AddressAndKey {
     pub address: ContractAddress,
     pub key: StorageKey,
 }
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct LogEntry {
     pub source_address: ContractAddress,
-    pub message: VecM<u8, kMaxLogMessageLen>,
+    pub message: BytesM<kMaxLogMessageLen>,
 }
 
 

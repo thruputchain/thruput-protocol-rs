@@ -8,11 +8,12 @@ crate-type = ["rlib"]
 
 [features]
 default = []
-alloc = ["serde/alloc", "serde_arrays/alloc"]
+alloc = ["serde/alloc", "serde_arrays/alloc", "xdrs/alloc"]
 std = ["alloc"]
 
 [dependencies]
 protocol_macros = { path = "../protocol_macros" }
+xdrs = { workspace = true, features = ["derive"] }
 
 [dependencies.serde]
 version = "1.0.219"

@@ -15,6 +15,8 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
+
 
 
 // Error codes returned from a runtime (wasmi) invocation.
@@ -34,7 +36,6 @@ use std::io::{Read, Write};
 // host function returns HostFnErrorCode::kReturn.
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
@@ -53,6 +54,16 @@ pub enum InvokeErrorCode {
     kInvokeUnrecoverable = 3,
 
     // Discovered during validation that proposer submitted bad data.
+    // If a block contains a transaction with this error, the block does not need
+    // to be discarded.  The transaction that causes this error is discarded,
+    // and the block proposer should be penalized (via whatever out of band
+    // mechanism),
+    // but the rest of the block can still be processed.
+    // Note that this is different from the case of a block proposal with
+    // conflicting transactions;
+    // those errors are discovered _after_ executing the transactions in a block,
+    // and require
+    // discarding the entire block.
     kInvokeValidationFailure = 4,
 
     // The transaction was aborted due to an external reason (such as the current
@@ -78,7 +89,6 @@ pub enum InvokeErrorCode {
 // (returning to the caller), and are handled by the WebAssembly runtime.
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
     kHostNoneOrRecoverable = 0,
