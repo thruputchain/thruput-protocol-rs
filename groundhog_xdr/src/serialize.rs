@@ -556,6 +556,13 @@ impl<const MAX: u32> ReadXdr for VecM<u8, MAX> {
     }
 }
 
+impl ReadXdr for Vec<u8> {
+    fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+        let vecm = VecM::<u8, { u32::MAX }>::read_xdr(r)?;
+        Ok(vecm.into())
+    }
+}
+
 impl<const MAX: u32> WriteXdr for VecM<u8, MAX> {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
@@ -568,6 +575,26 @@ impl<const MAX: u32> WriteXdr for VecM<u8, MAX> {
             w.consume_len(padding)?;
 
             w.write_all(&self.0)?;
+
+            w.write_all(&[0u8; 3][..padding])?;
+
+            Ok(())
+        })
+    }
+}
+
+impl WriteXdr for Vec<u8> {
+    fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+        w.with_limited_depth(|w| {
+            let len: u32 =
+                self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+            len.write_xdr(w)?;
+
+            w.consume_len(self.len())?;
+            let padding = pad_len(self.len());
+            w.consume_len(padding)?;
+
+            w.write_all(self)?;
 
             w.write_all(&[0u8; 3][..padding])?;
 
@@ -595,6 +622,13 @@ impl<T: ReadXdr, const MAX: u32> ReadXdr for VecM<T, MAX> {
     }
 }
 
+impl<T: ReadXdr> ReadXdr for Vec<T> {
+    fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
+        let vecm = VecM::<T, { u32::MAX }>::read_xdr(r)?;
+        Ok(vecm.into())
+    }
+}
+
 impl<T: WriteXdr, const MAX: u32> WriteXdr for VecM<T, MAX> {
     fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
         w.with_limited_depth(|w| {
@@ -603,6 +637,22 @@ impl<T: WriteXdr, const MAX: u32> WriteXdr for VecM<T, MAX> {
             len.write_xdr(w)?;
 
             for t in &self.0 {
+                t.write_xdr(w)?;
+            }
+
+            Ok(())
+        })
+    }
+}
+
+impl<T: WriteXdr> WriteXdr for Vec<T> {
+    fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
+        w.with_limited_depth(|w| {
+            let len: u32 =
+                self.len().try_into().map_err(|_| Error::LengthExceedsMax)?;
+            len.write_xdr(w)?;
+
+            for t in self {
                 t.write_xdr(w)?;
             }
 

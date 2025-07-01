@@ -15,19 +15,22 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
 
+
+#[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};
+#[cfg(feature = "serde")]
 use ::serde_arrays;
 
 
 
 // clang-format on
 
-pub type ContractBlob = VecM<u8, 0xffffffff>;
+pub type ContractBlob = BytesM;
 
 
-#[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
+#[derive(Clone, Copy, PartialEq, Debug)]
 #[repr(i32)]
 pub enum ContractType {
     kWasmi = 0,
@@ -37,7 +40,7 @@ pub enum ContractType {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(ReadXDR, WriteXDR)]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -50,11 +53,10 @@ pub enum Contract {
     kMockTest { mock_contract_id: u32 } = ContractType::kMockTest as i32,
     // default:
     //   void;
-    default { contract_type: i32 },
+    Default { contract_type: i32 },
 }
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
@@ -66,14 +68,13 @@ pub struct ContractDeploymentHashPreimage {
 // Section 6.2: "An identifier is a letter followed by an optional sequence
 // of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
 // which lists keywords that may not be used as identifiers.
-pub type Identifier = BytesM<0xffffffff>;
+pub type Identifier = BytesM;
 
 // This type must be a valid version number as defined at
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
-pub type SemVer = BytesM<0xffffffff>;
+pub type SemVer = BytesM;
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
     pub name: Identifier,
@@ -84,11 +85,11 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
-    #[serde(with = "serde_arrays")]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 8],
 }
 impl From<[u8; 8]> for ContractEntrypointID {
@@ -122,6 +123,18 @@ impl AsRef<[u8]> for ContractEntrypointID {
         self.deref().as_slice()
     }
 }
+impl<'a> From<&'a [u8; 8]> for &'a ContractEntrypointID {
+    fn from(arr: &[u8; 8]) -> Self {
+        unsafe { core::mem::transmute(arr) }
+    }
+}
+impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
+    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+        let arr: &[u8; 8] = xdrs::read_xdr(r)?;
+        let val = Self::from(arr);
+        Ok(val)
+    }
+}
 
 
 //
@@ -131,7 +144,7 @@ impl AsRef<[u8]> for ContractEntrypointID {
 impl Contract {
     pub fn contract_type(&self) -> i32 {
         match self {
-            Contract::default{ contract_type } => *contract_type ,
+            Contract::Default{ contract_type } => *contract_type ,
 
             _ => unsafe { *(self as *const Self as *const i32) },
         }

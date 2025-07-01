@@ -15,6 +15,8 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
+
 
 
 // Error codes returned from a runtime (wasmi) invocation.
@@ -33,8 +35,7 @@ use std::io::{Read, Write};
 // function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
 // host function returns HostFnErrorCode::kReturn.
 
-#[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
+#[derive(Clone, Copy, PartialEq, Debug)]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
@@ -87,8 +88,7 @@ pub enum InvokeErrorCode {
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
 // (returning to the caller), and are handled by the WebAssembly runtime.
 
-#[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
+#[derive(Clone, Copy, PartialEq, Debug)]
 #[repr(i32)]
 pub enum HostFnErrorCode {
     kHostNoneOrRecoverable = 0,
