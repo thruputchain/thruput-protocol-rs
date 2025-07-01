@@ -10,6 +10,13 @@ pub mod serialize;
 #[cfg(feature = "std")]
 use serialize::*;
 
+/*
+#[cfg(feature = "std")]
+pub mod serialize_xdrs;
+#[cfg(feature = "std")]
+use serialize_xdrs::*;
+*/
+
 #[rustfmt::skip]
 pub mod types;
 use types::*;

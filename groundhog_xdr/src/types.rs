@@ -186,7 +186,8 @@ pub enum CryptographicScheme {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Signature {
     // case Ed25519:
@@ -196,7 +197,8 @@ pub enum Signature {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum PublicKey {
     // case Ed25519:
@@ -206,7 +208,8 @@ pub enum PublicKey {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum SecretKey {
     // case Ed25519:
@@ -216,7 +219,8 @@ pub enum SecretKey {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExtensionPoint {
     // case 0:
@@ -359,7 +363,8 @@ pub enum StorageKeyType {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum StorageKey {
     // case kStorageKeyTypeContractData:

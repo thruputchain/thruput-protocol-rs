@@ -24,7 +24,7 @@ use ::xdrs::{ReadXDR, WriteXDR};
 
 // clang-format on
 
-pub type ContractBlob = Vec<u8>;
+pub type ContractBlob = VecM<u8>;
 
 
 #[derive(Clone, PartialEq, Debug)]
@@ -37,7 +37,7 @@ pub enum ContractType {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Contract {
     // case kWasmi:

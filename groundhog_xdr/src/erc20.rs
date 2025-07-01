@@ -39,7 +39,8 @@ pub type Amount = uint128_xdr;
 pub type Difference = int128_xdr;
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
@@ -51,7 +52,8 @@ pub enum ExpectedAmount {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExpectedVoid {
     // default:
