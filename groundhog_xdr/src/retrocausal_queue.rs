@@ -32,7 +32,7 @@ pub type QueueEntry = VecM<u8, kQueueEntryMaxLen>;
 #[repr(C)]
 pub struct RetrocausalQueueBlock {
     // Variable-length array of queue entries
-    pub entries: VecM<QueueEntry, 0xffffffff>,
+    pub entries: Vec<QueueEntry>,
     // Unique identifier and ordering for this block
     pub block_number: u64,
 }
@@ -54,14 +54,14 @@ pub struct RetrocausalQueuePastBlockConsumeDelta {
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
     pub past_block_consume: RetrocausalQueuePastBlockConsumeDelta,
-    pub current_block_consumed: VecM<QueueEntry, 0xffffffff>,
+    pub current_block_consumed: Vec<QueueEntry>,
 }
 
 #[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
-    pub added_entries: VecM<QueueEntry, 0xffffffff>,
+    pub added_entries: Vec<QueueEntry>,
 }
 
 #[derive(PartialEq, Debug, Clone)]

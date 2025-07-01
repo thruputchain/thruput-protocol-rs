@@ -21,9 +21,9 @@ use std::io::{Read, Write};
 // clang-format on
 
 // BCS encoding of the call arguments (as a BCS tuple)
-pub type Calldata = VecM<u8, 0xffffffff>;
+pub type Calldata = Vec<u8>;
 
-pub type ReturnBuffer = VecM<u8, 0xffffffff>;
+pub type ReturnBuffer = Vec<u8>;
 
 #[derive(PartialEq, Debug, Clone)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
@@ -56,7 +56,7 @@ pub struct Transaction {
     pub id: OriginID,
     pub created: Timestamp,
     pub invocation: Invocation,
-    pub contracts_to_deploy: VecM<Contract, 0xffffffff>,
+    pub contracts_to_deploy: Vec<Contract>,
 }
 
 pub type SignedTransactionHash = SHA256Hash;
@@ -79,12 +79,12 @@ pub struct SignedTransaction {
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
     // of the transaction.
-    pub nondeterministic_bits: VecM<u8, 0xffffffff>,
+    pub nondeterministic_bits: Vec<u8>,
     // the length of the nondeterministic_bits string, in bits
     // (nondeterminstic_bits.size() returns the rounded-up length in bytes)
     pub nondeterministic_bit_count: u32,
     // sequence of queue entries observed by the proposer
-    pub observed_queue_entry_sequence: VecM<QueueEntry, 0xffffffff>,
+    pub observed_queue_entry_sequence: Vec<QueueEntry>,
 }
 
 // A signed transaction, with the nondeterministic data from the proposer

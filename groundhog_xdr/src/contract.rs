@@ -18,12 +18,13 @@ use std::io::{Read, Write};
 
 use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
+use ::xdrs::{ReadXDR, WriteXDR};
 
 
 
 // clang-format on
 
-pub type ContractBlob = VecM<u8, 0xffffffff>;
+pub type ContractBlob = Vec<u8>;
 
 
 #[derive(Clone, PartialEq, Debug)]
@@ -36,7 +37,7 @@ pub enum ContractType {
 }
 
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Contract {
     // case kWasmi:
@@ -84,7 +85,7 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
 #[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {

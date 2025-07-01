@@ -108,7 +108,7 @@ fn impl_derive_read_union(
         impl ReadXdr for #name {
             fn read_xdr<R: std::io::Read>(r: &mut Limited<R>) -> Result<Self, Error> {
                 r.with_limited_depth(|r| {
-                    let e = i32::read_xdr(r)?;
+                    let e = <i32 as ReadXdr>::read_xdr(r)?;
                     match e {
                         #(#match_arms,)*
 
@@ -138,9 +138,12 @@ fn impl_derive_write_union(
                     if fields_named.named.len() == 1 {
                         let field = fields_named.named.first().unwrap();
                         let field_name = &field.ident;
+                        let field_ty = &field.ty;
 
                         match_arms.push(quote! {
-                            Self::#variant_name { #field_name } => { #field_name.write_xdr(w)?; }
+                            Self::#variant_name { #field_name } => {
+                                <#field_ty as WriteXdr>::write_xdr(#field_name, w)?;
+                            }
                         });
                     } else {
                         panic!(
@@ -200,7 +203,7 @@ fn impl_derive_write_union(
                 w.with_limited_depth(|w| {
                     #discriminant_code
                     //let discriminant: i32 = unsafe { *(self as *const Self as *const i32) };
-                    discriminant.write_xdr(w)?;
+                    <i32 as WriteXdr>::write_xdr(&discriminant, w)?;
                     match self {
                         #(#match_arms,)*
                     };
@@ -263,7 +266,7 @@ fn impl_derive_read_enum(
         impl ReadXdr for #name {
             fn read_xdr<R: Read>(r: &mut Limited<R>) -> Result<Self, Error> {
                 r.with_limited_depth(|r| {
-                    let e = i32::read_xdr(r)?;
+                    let e = <i32 as ReadXdr>::read_xdr(r)?;
                     let v: Self = e.try_into()?;
                     Ok(v)
                 })
@@ -290,7 +293,7 @@ fn impl_derive_write_enum(
             fn write_xdr<W: Write>(&self, w: &mut Limited<W>) -> Result<(), Error> {
                 w.with_limited_depth(|w| {
                     let i: i32 = self.clone() as i32;
-                    i.write_xdr(w)
+                    <i32 as WriteXdr>::write_xdr(&i, w)
                 })
             }
         }
@@ -374,9 +377,10 @@ fn impl_derive_write_xdr(ast: &syn::DeriveInput) -> TokenStream {
             Fields::Named(fields_named) => {
                 let write_xdr_fields = fields_named.named.iter().map(|f| {
                     let field_name = &f.ident;
+                    let field_ty = &f.ty;
 
                     quote! {
-                        self.#field_name.write_xdr(w)?;
+                        <#field_ty as WriteXdr>::write_xdr(&self.#field_name, w)?;
                     }
                 });
 
