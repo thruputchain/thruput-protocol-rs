@@ -4,11 +4,18 @@ const _: () = {
     use ::xdrs::serialize::writer::{Writer, Result};
 
     impl WriteXDR for VecM<u8> {
-        fn write_xdr<F, W: Writer<F>>(&self, w: W) -> Result<()> {
-            w.write_bytes(self.as_ref())
+        fn write_xdr<F, W: Writer<F>>(&self, w: &mut W) -> Result<()> {
+            self.0.write_xdr(w)
         }
     }
 
+    impl WriteXDR for BytesM {
+        fn write_xdr<F, W: Writer<F>>(&self, w: &mut W) -> Result<()> {
+            self.0.write_xdr(w)
+        }
+    }
+
+    /*
     impl<T> WriteXDR for VecM<T>
     where
         T: WriteXDR
@@ -18,6 +25,7 @@ const _: () = {
             w.write_slice(slice)
         }
     }
+    */
 };
 
 const _: () = {
@@ -25,15 +33,23 @@ const _: () = {
     use ::xdrs::{ReadXDR, read_xdr};
     use ::xdrs::serialize::reader::{Reader, Result};
 
-    use std::vec::Vec; // can use noalloc machinery in common_types to avoid this
+    use alloc::vec::Vec; // can use noalloc machinery in common_types to avoid this
+
+    impl<'r> ReadXDR<'r> for BytesM {
+        fn read_xdr<R: Reader<'r>>(r: &mut R) -> Result<Self> {
+            let vec: Vec<u8> = read_xdr(r)?;
+            Ok(Self(vec))
+        }
+    }
 
     impl<'r> ReadXDR<'r> for VecM<u8> {
         fn read_xdr<R: Reader<'r>>(r: &mut R) -> Result<Self> {
             let vec: Vec<u8> = read_xdr(r)?;
-            Ok(vec.into())
+            Ok(Self(vec))
         }
     }
 
+    /*
     impl<'r, T> ReadXDR<'r> for VecM<T>
     where
         T: ReadXDR<'r>
@@ -43,4 +59,5 @@ const _: () = {
             Ok(vec.into())
         }
     }
+    */
 };

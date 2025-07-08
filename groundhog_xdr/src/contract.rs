@@ -16,8 +16,6 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 
-use ::serde::{Serialize, Deserialize};
-use ::serde_arrays;
 use ::xdrs::{ReadXDR, WriteXDR};
 
 
@@ -28,7 +26,6 @@ pub type ContractBlob = VecM<u8>;
 
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum ContractType {
     kWasmi = 0,
@@ -38,7 +35,6 @@ pub enum ContractType {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -55,7 +51,6 @@ pub enum Contract {
 }
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
@@ -73,8 +68,7 @@ pub type Identifier = BytesM<0xffffffff>;
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = BytesM<0xffffffff>;
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
     pub name: Identifier,
@@ -85,11 +79,9 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, Serialize, Deserialize, ReadXDR, WriteXDR)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
-    #[serde(with = "serde_arrays")]
     inner: [u8; 8],
 }
 impl From<[u8; 8]> for ContractEntrypointID {

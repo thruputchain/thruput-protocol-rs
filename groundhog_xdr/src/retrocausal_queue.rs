@@ -28,7 +28,6 @@ pub type QueueEntry = VecM<u8, kQueueEntryMaxLen>;
 // number The entries are stored in lexicographically sorted order within the
 // block Block numbers are monotonically increasing
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueueBlock {
     // Variable-length array of queue entries
@@ -42,7 +41,6 @@ pub struct RetrocausalQueueBlock {
 // and removes the first partial_consumed_number entries from the
 // block number max_fully_consumed_block_number + 1.
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueuePastBlockConsumeDelta {
     pub max_fully_consumed_block_number: u64,
@@ -50,7 +48,6 @@ pub struct RetrocausalQueuePastBlockConsumeDelta {
 }
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
     pub past_block_consume: RetrocausalQueuePastBlockConsumeDelta,
@@ -58,14 +55,12 @@ pub struct RetrocausalQueueConsumeDelta {
 }
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
     pub added_entries: VecM<QueueEntry>,
 }
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct RetrocausalQueueDelta {
     // set to null if no entries are consumed.

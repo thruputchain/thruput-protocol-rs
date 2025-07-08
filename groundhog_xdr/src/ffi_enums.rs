@@ -34,7 +34,6 @@ use std::io::{Read, Write};
 // host function returns HostFnErrorCode::kReturn.
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
@@ -78,7 +77,6 @@ pub enum InvokeErrorCode {
 // (returning to the caller), and are handled by the WebAssembly runtime.
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
     kHostNoneOrRecoverable = 0,

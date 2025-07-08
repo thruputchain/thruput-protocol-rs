@@ -26,7 +26,6 @@ pub type Calldata = VecM<u8>;
 pub type ReturnBuffer = VecM<u8>;
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
@@ -37,7 +36,6 @@ pub struct Invocation {
 
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum InvokeFlag {
     kInvokeFlagNone = 0,
@@ -50,7 +48,6 @@ pub type InvokeFlagSet = i32;
 pub type OriginID = [u8; 16];
 
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct Transaction {
     pub id: OriginID,
@@ -65,7 +62,6 @@ pub type SignedTransactionHash = SHA256Hash;
 // (and all the other metadata)
 // for a later PR.
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct SignedTransaction {
     pub signature: Signature,
@@ -74,7 +70,6 @@ pub struct SignedTransaction {
 
 // Nondeterministic data attached to a transaction by the proposer.
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
@@ -93,7 +88,6 @@ pub struct NondeterministicProposalData {
 // validator proposing it?
 // TODO(petar): Should the signature capture the non-deterministic data?
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
@@ -103,7 +97,6 @@ pub struct ProposedTransaction {
 // Nominations, included in SCP messages, include only the ND data.
 // The transactions themselves are disseminated through the overlay.
 #[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 #[repr(C)]
 pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,

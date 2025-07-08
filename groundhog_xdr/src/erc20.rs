@@ -19,7 +19,6 @@ use std::io::{Read, Write};
 
 
 #[derive(Clone, PartialEq, Debug)]
-#[cfg_attr(feature="std", derive(ReadXdrEnum,WriteXdrEnum))]
 #[repr(i32)]
 pub enum ErrorType {
     ErrorTypeNone = 0,
@@ -41,7 +40,6 @@ pub type Difference = int128_xdr;
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
     //   Amount amount;
@@ -54,7 +52,6 @@ pub enum ExpectedAmount {
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature="std", derive(ReadXdr,WriteXdr))]
 pub enum ExpectedVoid {
     // default:
     //   void;
