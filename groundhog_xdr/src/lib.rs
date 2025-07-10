@@ -11,7 +11,7 @@ use common_types::*;
 #[cfg(feature = "alloc")]
 pub mod serialize_xdrs;
 #[cfg(feature = "alloc")]
-use serialize_xdrs::*;
+pub use serialize_xdrs::*;
 
 #[rustfmt::skip]
 pub mod types;

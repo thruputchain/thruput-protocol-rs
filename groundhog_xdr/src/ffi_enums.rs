@@ -15,7 +15,7 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
-use ::xdrs::{ReadXDR, WriteXDR};
+use xdrs::{ReadXDR, WriteXDR};
 
 
 
