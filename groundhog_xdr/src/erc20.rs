@@ -15,6 +15,8 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
+
 
 
 
@@ -46,7 +48,7 @@ pub enum ExpectedAmount {
     ErrorTypeNone { amount: Amount } = ErrorType::ErrorTypeNone as i32,
     // default:
     //   void;
-    default { err_type: i32 },
+    Default { err_type: i32 },
 }
 
 #[repr(i32)]
@@ -55,7 +57,7 @@ pub enum ExpectedAmount {
 pub enum ExpectedVoid {
     // default:
     //   void;
-    default { err_type: i32 },
+    Default { err_type: i32 },
 }
 
 
@@ -67,7 +69,7 @@ pub enum ExpectedVoid {
 impl ExpectedAmount {
     pub fn err_type(&self) -> i32 {
         match self {
-            ExpectedAmount::default{ err_type } => *err_type ,
+            ExpectedAmount::Default{ err_type } => *err_type ,
 
             _ => unsafe { *(self as *const Self as *const i32) },
         }
@@ -77,7 +79,7 @@ impl ExpectedAmount {
 impl ExpectedVoid {
     pub fn err_type(&self) -> i32 {
         match self {
-            ExpectedVoid::default{ err_type } => *err_type ,
+            ExpectedVoid::Default{ err_type } => *err_type ,
 
             _ => unsafe { *(self as *const Self as *const i32) },
         }

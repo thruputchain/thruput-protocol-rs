@@ -8,13 +8,6 @@ extern crate alloc;
 pub mod common_types;
 use common_types::*;
 
-/*
-#[cfg(feature = "std")]
-pub mod serialize;
-#[cfg(feature = "std")]
-use serialize::*;
-*/
-
 #[cfg(feature = "alloc")]
 pub mod serialize_xdrs;
 #[cfg(feature = "alloc")]

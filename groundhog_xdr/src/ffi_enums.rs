@@ -15,6 +15,8 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+use ::xdrs::{ReadXDR, WriteXDR};
+
 
 
 // Error codes returned from a runtime (wasmi) invocation.
