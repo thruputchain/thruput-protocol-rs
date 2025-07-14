@@ -20,7 +20,7 @@ use std::io::{Read, Write};
 
 // clang-format on
 
-// BCS encoding of the call arguments (as a BCS tuple)
+// TXS encoding of the call arguments (as a tuple)
 pub type Calldata = VecM<u8, 0xffffffff>;
 
 pub type ReturnBuffer = VecM<u8, 0xffffffff>;
