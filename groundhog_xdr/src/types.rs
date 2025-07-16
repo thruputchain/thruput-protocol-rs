@@ -98,7 +98,8 @@ impl AsRef<[u8]> for Ed25519Signature {
 }
 impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
     fn from(arr: &[u8; 64]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 64] as *const Ed25519Signature;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
@@ -151,7 +152,8 @@ impl AsRef<[u8]> for Ed25519PublicKey {
 }
 impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
     fn from(arr: &[u8; 32]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 32] as *const Ed25519PublicKey;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
@@ -203,7 +205,8 @@ impl AsRef<[u8]> for Ed25519SecretKey {
 }
 impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
     fn from(arr: &[u8; 64]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 64] as *const Ed25519SecretKey;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
@@ -304,7 +307,8 @@ impl AsRef<[u8]> for SHA256Hash {
 }
 impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
     fn from(arr: &[u8; 32]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 32] as *const SHA256Hash;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r SHA256Hash {
@@ -358,7 +362,8 @@ impl AsRef<[u8]> for ContractAddress {
 }
 impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
     fn from(arr: &[u8; 32]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 32] as *const ContractAddress;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r ContractAddress {
@@ -410,7 +415,8 @@ impl AsRef<[u8]> for StorageKeyContractData {
 }
 impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
     fn from(arr: &[u8; 32]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 32] as *const StorageKeyContractData;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {

@@ -125,7 +125,8 @@ impl AsRef<[u8]> for ContractEntrypointID {
 }
 impl<'a> From<&'a [u8; 8]> for &'a ContractEntrypointID {
     fn from(arr: &[u8; 8]) -> Self {
-        unsafe { core::mem::transmute(arr) }
+        let ptr = arr as *const [u8; 8] as *const ContractEntrypointID;
+        unsafe { &*ptr }
     }
 }
 impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
