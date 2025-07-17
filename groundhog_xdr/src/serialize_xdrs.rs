@@ -18,22 +18,15 @@ const _: () = {
             slice.write_xdr(w)
         }
     }
-
-    /*
-    impl WriteXDR for VecM<u8> {
-        fn write_xdr<F, W: Writer<F>>(&self, w: &mut W) -> Result<()> {
-            self.0.write_xdr(w)
-        }
-    }
-    */
 };
 
+#[cfg(feature = "alloc")]
 const _: () = {
     use crate::common_types::*;
     use ::xdrs::{ReadXDR, read_xdr};
     use ::xdrs::serialize::reader::{Reader, Result, Error};
 
-    use alloc::vec::Vec; // can use noalloc machinery in common_types to avoid this
+    use alloc::vec::Vec;
 
     impl<'r, const MAX: u32> ReadXDR<'r> for BytesM<MAX> {
         fn read_xdr<R: Reader<'r>>(r: &mut R) -> Result<Self> {
@@ -57,16 +50,4 @@ const _: () = {
             Ok(Self(vec))
         }
     }
-
-    /*
-    impl<'r, T> ReadXDR<'r> for VecM<T>
-    where
-        T: ReadXDR<'r>
-    {
-        fn read_xdr<R: Reader<'r>>(r: &mut R) -> Result<Self> {
-            let vec: Vec<T> = read_xdr(r)?;
-            Ok(vec.into())
-        }
-    }
-    */
 };

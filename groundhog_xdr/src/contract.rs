@@ -27,6 +27,7 @@ use ::serde_arrays;
 
 // clang-format on
 
+#[cfg(feature = "alloc")]
 pub type ContractBlob = BytesM;
 
 
@@ -38,6 +39,7 @@ pub enum ContractType {
     kMockTest = 2,
 }
 
+#[cfg(feature = "alloc")]
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
 #[derive(ReadXDR, WriteXDR)]
@@ -68,12 +70,15 @@ pub struct ContractDeploymentHashPreimage {
 // Section 6.2: "An identifier is a letter followed by an optional sequence
 // of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
 // which lists keywords that may not be used as identifiers.
+#[cfg(feature = "alloc")]
 pub type Identifier = BytesM;
 
 // This type must be a valid version number as defined at
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
+#[cfg(feature = "alloc")]
 pub type SemVer = BytesM;
 
+#[cfg(feature = "alloc")]
 #[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
@@ -142,6 +147,7 @@ impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
 // XDR internals below this point
 //
 
+#[cfg(feature = "alloc")]
 impl Contract {
     pub fn contract_type(&self) -> i32 {
         match self {

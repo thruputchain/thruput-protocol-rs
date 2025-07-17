@@ -37,16 +37,6 @@ pub struct Invocation {
 }
 
 
-#[derive(Clone, Copy, PartialEq, Debug)]
-#[repr(i32)]
-pub enum InvokeFlag {
-    kInvokeFlagNone = 0,
-    kInvokeFlagTryInvoke = 0x00000001,
-    kInvokeFlagReadOnly = 0x00000002,
-}
-
-pub type InvokeFlagSet = i32;
-
 pub type OriginID = [u8; 16];
 
 #[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]

@@ -14,7 +14,7 @@ serde = ["dep:serde", "dep:serde_arrays"]
 
 [dependencies]
 protocol_macros = { path = "../protocol_macros" }
-xdrs = { workspace = true, features = ["derive"] }
+xdrs = { workspace = true, default-features = false, features = ["strict", "derive"] }
 
 [dependencies.serde]
 optional = true

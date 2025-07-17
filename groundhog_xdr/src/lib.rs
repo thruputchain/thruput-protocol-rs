@@ -8,9 +8,7 @@ extern crate alloc;
 pub mod common_types;
 use common_types::*;
 
-#[cfg(feature = "alloc")]
 pub mod serialize_xdrs;
-#[cfg(feature = "alloc")]
 pub use serialize_xdrs::*;
 
 #[rustfmt::skip]
@@ -20,16 +18,21 @@ use types::*;
 pub mod extras;
 use extras::*;
 
+// #[cfg(feature = "alloc")]
 #[rustfmt::skip]
 pub mod contract;
+// #[cfg(feature = "alloc")]
 use contract::*;
 
 #[rustfmt::skip]
 pub mod ffi_enums;
 
+#[cfg(feature = "alloc")]
 #[rustfmt::skip]
 pub mod retrocausal_queue;
+#[cfg(feature = "alloc")]
 use retrocausal_queue::*;
 
+#[cfg(feature = "alloc")]
 #[rustfmt::skip]
 pub mod transaction;

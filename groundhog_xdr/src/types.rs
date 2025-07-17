@@ -24,6 +24,17 @@ use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
 
+#[derive(Clone, Copy, PartialEq, Debug)]
+#[repr(i32)]
+pub enum InvokeFlag {
+    kInvokeFlagNone = 0,
+    kInvokeFlagTryInvoke = 0x00000001,
+    kInvokeFlagReadOnly = 0x00000002,
+}
+
+pub type InvokeFlagSet = i32;
+
+
 #[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct uint128_xdr {
@@ -473,6 +484,7 @@ pub struct AddressAndKey {
     pub key: StorageKey,
 }
 
+#[cfg(feature = "alloc")]
 #[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
 #[repr(C)]
 pub struct LogEntry {
