@@ -24,6 +24,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_SERDE_ARRAYS_KEY }}
+            ${{ secrets.PROTOCOL_RS_SELF_ACCESS_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
