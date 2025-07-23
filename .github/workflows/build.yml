@@ -25,10 +25,13 @@ jobs:
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_SERDE_ARRAYS_KEY }}
             ${{ secrets.PROTOCOL_RS_SELF_ACCESS_KEY }}
+            ${{ secrets.PROTOCOL_RS_TO_XDRS_ACCESS_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Add Cargo to PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: cargo build default
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build alloc
