@@ -16,7 +16,7 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 use ::xdrs::{ReadXDR, WriteXDR};
-
+use ::xdr_common::*;
 
 
 // Error codes returned from a runtime (wasmi) invocation.

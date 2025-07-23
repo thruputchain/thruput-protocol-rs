@@ -23,6 +23,8 @@ use ::serde::{Serialize, Deserialize};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
+use ::xdr_common::*;
+
 
 
 // clang-format on
