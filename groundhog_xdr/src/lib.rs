@@ -5,14 +5,6 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
-pub mod common_types;
-use common_types::*;
-
-#[cfg(feature = "alloc")]
-pub mod serialize_xdrs;
-#[cfg(feature = "alloc")]
-pub use serialize_xdrs::*;
-
 #[rustfmt::skip]
 pub mod types;
 use types::*;
