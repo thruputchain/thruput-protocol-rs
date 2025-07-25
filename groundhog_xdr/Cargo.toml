@@ -9,8 +9,9 @@ crate-type = ["rlib"]
 [features]
 default = []
 alloc = ["serde/alloc", "serde_arrays/alloc", "xdrs/alloc"]
-std = ["alloc"]
+std = ["alloc", "xdrs"]
 serde = ["dep:serde", "dep:serde_arrays"]
+xdrs = []
 
 [dependencies]
 xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
