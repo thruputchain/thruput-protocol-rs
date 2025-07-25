@@ -1,6 +1,8 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
+// Generated from xdrc commit: 2381d783e8135e959527afe5c866b659c118f2f5
+
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
@@ -15,8 +17,9 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+#[cfg(feature="xdrs")]
 use ::xdrs::{ReadXDR, WriteXDR};
-use ::xdr_common::*;
+
 
 
 // Error codes returned from a runtime (wasmi) invocation.
@@ -36,6 +39,7 @@ use ::xdr_common::*;
 // host function returns HostFnErrorCode::kReturn.
 
 #[derive(Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
@@ -89,6 +93,7 @@ pub enum InvokeErrorCode {
 // (returning to the caller), and are handled by the WebAssembly runtime.
 
 #[derive(Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
     kHostNoneOrRecoverable = 0,

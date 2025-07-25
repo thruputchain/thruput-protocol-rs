@@ -1,6 +1,8 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
+// Generated from xdrc commit: 2381d783e8135e959527afe5c866b659c118f2f5
+
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
@@ -15,9 +17,11 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+#[cfg(feature="xdrs")]
 use ::xdrs::{ReadXDR, WriteXDR};
-use ::xdr_common::*;
 
+
+use xdr_common::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};
@@ -25,14 +29,16 @@ use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
 
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct uint128_xdr {
     pub highbits: u64,
     pub lowbits: u64,
 }
 
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct int128_xdr {
     pub highbits: i64,
@@ -59,7 +65,8 @@ pub type MethodID = u64;
 // ed25519 sig len is 512 bits
 // 
 // ed25519 key len is 256 bits
-#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519Signature {
@@ -102,7 +109,8 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
         let ptr = arr as *const [u8; 64] as *const Ed25519Signature;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -113,7 +121,8 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 
 // 
 // ed25519 secret key len is 64 bytes
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
@@ -156,7 +165,8 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
         let ptr = arr as *const [u8; 32] as *const Ed25519PublicKey;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -166,7 +176,8 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 }
 
 // 
-#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
@@ -209,7 +220,8 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
         let ptr = arr as *const [u8; 64] as *const Ed25519SecretKey;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -220,6 +232,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 
 
 #[derive(Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum CryptographicScheme {
     Ed25519 = 0,
@@ -227,7 +240,7 @@ pub enum CryptographicScheme {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
@@ -237,7 +250,7 @@ pub enum Signature {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
@@ -247,7 +260,7 @@ pub enum PublicKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
@@ -257,7 +270,7 @@ pub enum SecretKey {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum ExtensionPoint {
     // case 0:
     //   void;
@@ -268,7 +281,8 @@ pub enum ExtensionPoint {
 // 256 bit hash
 // 
 // 256 bit contract address
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct SHA256Hash {
@@ -311,7 +325,8 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
         let ptr = arr as *const [u8; 32] as *const SHA256Hash;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r SHA256Hash {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -323,7 +338,8 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 // 
 // arbitrary 32-byte key into contract storage
 // This is the key type that contracts directly manipulate
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct ContractAddress {
@@ -366,7 +382,8 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
         let ptr = arr as *const [u8; 32] as *const ContractAddress;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r ContractAddress {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -376,7 +393,8 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 }
 
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct StorageKeyContractData {
@@ -419,7 +437,8 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
         let ptr = arr as *const [u8; 32] as *const StorageKeyContractData;
         unsafe { &*ptr }
     }
-}
+}#[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -430,6 +449,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 
 
 #[derive(Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0,
@@ -438,7 +458,7 @@ pub enum StorageKeyType {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum StorageKey {
     // case kStorageKeyTypeContractData:
     //   StorageKeyContractData contract_data_key;
@@ -467,14 +487,16 @@ pub type ReplayNonce = u64;
 // in global storage:
 // [contract address + storage key] = 64 bytes
 // Contracts are free to set their own conventions for keys.
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct AddressAndKey {
     pub address: ContractAddress,
     pub key: StorageKey,
 }
 
-#[derive(PartialEq, Debug, Clone, ReadXDR, WriteXDR)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct LogEntry {
     pub source_address: ContractAddress,

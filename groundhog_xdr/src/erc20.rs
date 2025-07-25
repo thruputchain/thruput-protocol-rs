@@ -1,6 +1,8 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
+// Generated from xdrc commit: 2381d783e8135e959527afe5c866b659c118f2f5
+
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
@@ -15,12 +17,14 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature="std")]
 use std::io::{Read, Write};
 
+#[cfg(feature="xdrs")]
 use ::xdrs::{ReadXDR, WriteXDR};
 
 
 
 
 #[derive(Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ErrorType {
     ErrorTypeNone = 0,
@@ -41,7 +45,7 @@ pub type Difference = int128_xdr;
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
     //   Amount amount;
@@ -53,7 +57,7 @@ pub enum ExpectedAmount {
 
 #[repr(i32)]
 #[derive(PartialEq, Debug, Clone)]
-#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum ExpectedVoid {
     // default:
     //   void;
