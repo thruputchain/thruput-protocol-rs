@@ -43,3 +43,9 @@ impl ContractAddress {
         Self::new([0; 32])
     }
 }
+
+impl ContractEntrypointID {
+    pub const fn from_u64(n: u64) -> Self {
+        Self::new(n.to_be_bytes())
+    }
+}
