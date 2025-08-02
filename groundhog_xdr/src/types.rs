@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 2381d783e8135e959527afe5c866b659c118f2f5
+// Generated from xdrc commit: 95cf7048eb36eb22e5c6f8420bb95c599066ad06
 
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
@@ -109,8 +109,8 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
         let ptr = arr as *const [u8; 64] as *const Ed25519Signature;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -118,6 +118,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
         Ok(val)
     }
 }
+
 
 // 
 // ed25519 secret key len is 64 bytes
@@ -165,8 +166,8 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
         let ptr = arr as *const [u8; 32] as *const Ed25519PublicKey;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -174,6 +175,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
         Ok(val)
     }
 }
+
 
 // 
 #[derive(PartialEq, Debug, Clone, Eq, Hash, Copy)]
@@ -220,8 +222,8 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
         let ptr = arr as *const [u8; 64] as *const Ed25519SecretKey;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -229,6 +231,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
         Ok(val)
     }
 }
+
 
 
 #[derive(Clone, Copy, PartialEq, Debug)]
@@ -325,8 +328,8 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
         let ptr = arr as *const [u8; 32] as *const SHA256Hash;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r SHA256Hash {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -334,6 +337,7 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
         Ok(val)
     }
 }
+
 
 // 
 // arbitrary 32-byte key into contract storage
@@ -382,8 +386,8 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
         let ptr = arr as *const [u8; 32] as *const ContractAddress;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r ContractAddress {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -391,6 +395,7 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
         Ok(val)
     }
 }
+
 
 // 
 #[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
@@ -437,8 +442,8 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
         let ptr = arr as *const [u8; 32] as *const StorageKeyContractData;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -446,6 +451,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
         Ok(val)
     }
 }
+
 
 
 #[derive(Clone, Copy, PartialEq, Debug)]

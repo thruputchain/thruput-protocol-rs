@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 2381d783e8135e959527afe5c866b659c118f2f5
+// Generated from xdrc commit: 95cf7048eb36eb22e5c6f8420bb95c599066ad06
 
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
@@ -137,8 +137,8 @@ impl<'a> From<&'a [u8; 8]> for &'a ContractEntrypointID {
         let ptr = arr as *const [u8; 8] as *const ContractEntrypointID;
         unsafe { &*ptr }
     }
-}#[cfg(feature = "xdrs")]
-
+}
+#[cfg(feature = "xdrs")]
 impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
     fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
         let arr: &[u8; 8] = xdrs::read_xdr(r)?;
@@ -146,6 +146,7 @@ impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
         Ok(val)
     }
 }
+
 
 
 //
