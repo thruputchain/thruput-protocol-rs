@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 95cf7048eb36eb22e5c6f8420bb95c599066ad06
+// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
 
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
@@ -50,6 +50,7 @@ pub enum InvokeFlag {
     kInvokeFlagNone = 0,
     kInvokeFlagTryInvoke = 0x00000001,
     kInvokeFlagReadOnly = 0x00000002,
+    kInvokeFlagDelegateCall = 0x00000004,
 }
 
 pub type InvokeFlagSet = i32;

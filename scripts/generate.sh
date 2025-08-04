@@ -4,8 +4,9 @@
 protos=(
   types.x
   contract.x
-  transaction.x
+  contract_error.x
   ffi_enums.x
+  transaction.x
   retrocausal_queue.x
   erc20.x
 )

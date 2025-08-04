@@ -17,6 +17,10 @@ pub mod contract;
 use contract::*;
 
 #[rustfmt::skip]
+pub mod contract_error;
+use contract_error::*;
+
+#[rustfmt::skip]
 pub mod ffi_enums;
 
 #[rustfmt::skip]
