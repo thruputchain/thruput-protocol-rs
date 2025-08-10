@@ -18,7 +18,12 @@ xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
 
 [dependencies.xdrs]
 git = "ssh://git@github.com/groundhogchain/xdrs.git"
-features = ["derive", "cxs", "txs", "strict"]
+branch = "dbg/repr"
+features = ["derive", "alloc"]
+
+[dependencies.xdr-repr]
+git = "ssh://git@github.com/groundhogchain/xdrs.git"
+branch = "dbg/repr"
 
 [dependencies.serde]
 optional = true

@@ -1,14 +1,16 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
 
 use crate::*;
 use core::option::Option;
@@ -18,7 +20,10 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{ReadXDR, WriteXDR};
+use ::xdrs::{XDR, ReadXDR, WriteXDR};
+
+#[cfg(feature="xdrs")]
+use ::xdr_repr::*;
 
 
 use xdr_common::*;
@@ -34,19 +39,20 @@ use ::serde_arrays;
 
 pub type ContractBlob = BytesM;
 
-
-#[derive(Clone, Copy, PartialEq, Debug)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ContractType {
-    kWasmi = 0,
-    kNative = 1,
-    kMockTest = 2,
-}
+    kWasmi = 0 as i32,
+    kNative = 1 as i32,
+    kMockTest = 2 as i32,
+}pub use ContractType::*;
 
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -62,8 +68,8 @@ pub enum Contract {
     Default { contract_type: i32 },
 }
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
@@ -81,8 +87,8 @@ pub type Identifier = BytesM;
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = BytesM;
 
-#[derive(PartialEq, Debug, Clone)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
     pub name: Identifier,
@@ -93,8 +99,9 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Default, Copy)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
