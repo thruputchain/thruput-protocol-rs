@@ -28,11 +28,6 @@ use ::xdr_repr::*;
 
 use xdr_common::*;
 
-#[cfg(feature = "serde")]
-use ::serde::{Serialize, Deserialize};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
-
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
@@ -73,10 +68,8 @@ pub type MethodID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519Signature {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 64],
 }
 impl From<[u8; 64]> for Ed25519Signature {
@@ -131,10 +124,8 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32],
 }
 impl From<[u8; 32]> for Ed25519PublicKey {
@@ -188,10 +179,8 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 64],
 }
 impl From<[u8; 64]> for Ed25519SecretKey {
@@ -296,10 +285,8 @@ pub enum ExtensionPoint {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct SHA256Hash {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32],
 }
 impl From<[u8; 32]> for SHA256Hash {
@@ -355,10 +342,8 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct ContractAddress {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32],
 }
 impl From<[u8; 32]> for ContractAddress {
@@ -412,10 +397,8 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct StorageKeyContractData {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32],
 }
 impl From<[u8; 32]> for StorageKeyContractData {

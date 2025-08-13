@@ -34,7 +34,39 @@ use xdr_common::*;
 
 pub const kQueueEntryMaxLen : u32 = 256;
 
-pub type QueueEntry = BytesM::<kQueueEntryMaxLen>;
+// 
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[repr(transparent)]
+pub struct QueueEntry {
+    inner: BytesM<kQueueEntryMaxLen>,
+}
+impl From<BytesM<kQueueEntryMaxLen>> for QueueEntry {
+    fn from(_inner: BytesM<kQueueEntryMaxLen>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl QueueEntry {
+    pub fn into_inner(self) -> BytesM<kQueueEntryMaxLen> {
+        self.inner
+    }
+    pub const fn new(_inner: BytesM<kQueueEntryMaxLen>) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for QueueEntry {
+    type Target = BytesM<kQueueEntryMaxLen>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for QueueEntry {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 // A block in a retrocausal queue, containing a list of entries and a block
 // number The entries are stored in lexicographically sorted order within the

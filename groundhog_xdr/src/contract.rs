@@ -28,11 +28,6 @@ use ::xdr_repr::*;
 
 use xdr_common::*;
 
-#[cfg(feature = "serde")]
-use ::serde::{Serialize, Deserialize};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
-
 
 
 // clang-format on
@@ -102,10 +97,8 @@ pub struct ContractInterfaceIDPreimage {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 8],
 }
 impl From<[u8; 8]> for ContractEntrypointID {
