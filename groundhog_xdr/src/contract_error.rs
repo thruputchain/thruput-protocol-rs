@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -63,7 +63,20 @@ pub enum StorageErrorType {
     kStorageErrorTypeSyscall = 0 as i32,
     kStorageErrorTypeSerialization = 1 as i32,
     kStorageErrorTypeIndexOutOfBounds = 2 as i32,
-}pub use StorageErrorType::*;
+}
+pub use StorageErrorType::*;
+
+impl TryFrom<i32> for StorageErrorType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kStorageErrorTypeSyscall),
+            1 => Ok(Self::kStorageErrorTypeSerialization),
+            2 => Ok(Self::kStorageErrorTypeIndexOutOfBounds),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -110,7 +123,20 @@ pub enum ContractErrorType {
     kContractErrorTypeCustom = 0 as i32,
     kContractErrorTypeSyscall = 1 as i32,
     kContractErrorTypeStorage = 2 as i32,
-}pub use ContractErrorType::*;
+}
+pub use ContractErrorType::*;
+
+impl TryFrom<i32> for ContractErrorType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kContractErrorTypeCustom),
+            1 => Ok(Self::kContractErrorTypeSyscall),
+            2 => Ok(Self::kContractErrorTypeStorage),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -146,7 +172,19 @@ pub enum ContractErrorXDR {
 pub enum ErrorType {
     kErrorTypeCaller = 0 as i32,
     kErrorTypeContract = 1 as i32,
-}pub use ErrorType::*;
+}
+pub use ErrorType::*;
+
+impl TryFrom<i32> for ErrorType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kErrorTypeCaller),
+            1 => Ok(Self::kErrorTypeContract),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]

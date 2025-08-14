@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -39,7 +39,21 @@ pub enum ErrorType {
 
     // "Internal contract error"
     InternalErr = -1 as i32,
-}pub use ErrorType::*;
+}
+pub use ErrorType::*;
+
+impl TryFrom<i32> for ErrorType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::ErrorTypeNone),
+            1 => Ok(Self::AlreadyInitialized),
+            2 => Ok(Self::MustBeContractOwner),
+            -1 => Ok(Self::InternalErr),
+            _ => Err(()),
+        }
+    }
+}
 
 
 pub type Amount = uint128_xdr;

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -77,7 +77,23 @@ pub enum InvokeErrorCode {
     // but this is not the result of a totally unrecoverable error. This is to be
     // expected during normal system operation.
     kInvokeAbortTransaction = 5 as i32,
-}pub use InvokeErrorCode::*;
+}
+pub use InvokeErrorCode::*;
+
+impl TryFrom<i32> for InvokeErrorCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kInvokeNone),
+            1 => Ok(Self::kInvokeDeterministic),
+            2 => Ok(Self::kInvokeOutOfGas),
+            3 => Ok(Self::kInvokeUnrecoverable),
+            4 => Ok(Self::kInvokeValidationFailure),
+            5 => Ok(Self::kInvokeAbortTransaction),
+            _ => Err(()),
+        }
+    }
+}
 
 
 // HostFunctionErrorCode categorizes errors returned from system calls. The
@@ -145,7 +161,24 @@ pub enum HostFnErrorCode {
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kAbortTransaction
     kHostAbortTransaction = 6 as i32,
-}pub use HostFnErrorCode::*;
+}
+pub use HostFnErrorCode::*;
+
+impl TryFrom<i32> for HostFnErrorCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kHostNoneOrRecoverable),
+            1 => Ok(Self::kHostOutOfGas),
+            2 => Ok(Self::kHostUnrecoverable),
+            3 => Ok(Self::kHostReturn),
+            4 => Ok(Self::kHostExit),
+            5 => Ok(Self::kHostValidationFailure),
+            6 => Ok(Self::kHostAbortTransaction),
+            _ => Err(()),
+        }
+    }
+}
 
 
 

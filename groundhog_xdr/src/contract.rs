@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -44,7 +44,20 @@ pub enum ContractType {
     kWasmi = 0 as i32,
     kNative = 1 as i32,
     kMockTest = 2 as i32,
-}pub use ContractType::*;
+}
+pub use ContractType::*;
+
+impl TryFrom<i32> for ContractType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kWasmi),
+            1 => Ok(Self::kNative),
+            2 => Ok(Self::kMockTest),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]

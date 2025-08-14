@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -53,7 +53,21 @@ pub enum InvokeFlag {
     kInvokeFlagTryInvoke = 0x00000001 as i32,
     kInvokeFlagReadOnly = 0x00000002 as i32,
     kInvokeFlagDelegateCall = 0x00000004 as i32,
-}pub use InvokeFlag::*;
+}
+pub use InvokeFlag::*;
+
+impl TryFrom<i32> for InvokeFlag {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kInvokeFlagNone),
+            0x00000001 => Ok(Self::kInvokeFlagTryInvoke),
+            0x00000002 => Ok(Self::kInvokeFlagReadOnly),
+            0x00000004 => Ok(Self::kInvokeFlagDelegateCall),
+            _ => Err(()),
+        }
+    }
+}
 
 
 pub type InvokeFlagSet = i32;
@@ -126,7 +140,18 @@ pub struct NominatedTransaction {
 #[repr(i32)]
 pub enum TransactionStatistic {
     kTxStatGasRemaining = 0 as i32,
-}pub use TransactionStatistic::*;
+}
+pub use TransactionStatistic::*;
+
+impl TryFrom<i32> for TransactionStatistic {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kTxStatGasRemaining),
+            _ => Err(()),
+        }
+    }
+}
 
 
 

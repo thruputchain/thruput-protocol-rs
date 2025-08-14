@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -79,7 +79,32 @@ pub enum SyscallErrorCode {
 
     // Child call frame manually reverted
     kFrameReverted = -2 as i32,
-}pub use SyscallErrorCode::*;
+}
+pub use SyscallErrorCode::*;
+
+impl TryFrom<i32> for SyscallErrorCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kNone),
+            1 => Ok(Self::kFault),
+            2 => Ok(Self::kNoSyscall),
+            3 => Ok(Self::kIsRootTransaction),
+            4 => Ok(Self::kContractLookupFailed),
+            5 => Ok(Self::kContractAlreadyDeployed),
+            6 => Ok(Self::kNoReturnBufferAvailable),
+            7 => Ok(Self::kInsufficientGasForInvocation),
+            8 => Ok(Self::kInvalidSyscallInput),
+            9 => Ok(Self::kStorageKeyNotExist),
+            10 => Ok(Self::kNoRetrocausalQueueEntry),
+            100 => Ok(Self::kCalldataParseError),
+            101 => Ok(Self::kReturnParseError),
+            -1 => Ok(Self::kDeterministicWasm),
+            -2 => Ok(Self::kFrameReverted),
+            _ => Err(()),
+        }
+    }
+}
 
 
 

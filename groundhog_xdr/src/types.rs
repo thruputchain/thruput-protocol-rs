@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
+// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -244,7 +244,18 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 #[repr(i32)]
 pub enum CryptographicScheme {
     Ed25519 = 0 as i32,
-}pub use CryptographicScheme::*;
+}
+pub use CryptographicScheme::*;
+
+impl TryFrom<i32> for CryptographicScheme {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::Ed25519),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -471,7 +482,19 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0 as i32,
     kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
-}pub use StorageKeyType::*;
+}
+pub use StorageKeyType::*;
+
+impl TryFrom<i32> for StorageKeyType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kStorageKeyTypeContractData),
+            1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
+            _ => Err(()),
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
