@@ -21,7 +21,7 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="xdrs")]
+#[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
 
@@ -41,7 +41,8 @@ use xdrs::xdr_repr::*;
 // WebAssembly exported function that was run, the code caused by a host
 // function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
 // host function returns HostFnErrorCode::kReturn.
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]
@@ -96,7 +97,8 @@ pub enum InvokeErrorCode {
 // function. The WebAssembly bytecode (the smart contract) itself never sees the
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
 // (returning to the caller), and are handled by the WebAssembly runtime.
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]

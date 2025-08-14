@@ -21,12 +21,17 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="xdrs")]
+#[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
 
 #[cfg(not(feature="xdrs"))]
 use xdr_common::*;
+
+#[cfg(feature = "serde")]
+use ::serde::{Serialize, Deserialize};
+#[cfg(feature = "serde")]
+use ::serde_arrays;
 
 
 
@@ -34,7 +39,8 @@ use xdr_common::*;
 
 pub type ContractBlob = BytesM;
 
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]
@@ -46,7 +52,8 @@ pub enum ContractType {
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum Contract {
     // case kWasmi:
@@ -63,8 +70,9 @@ pub enum Contract {
     Default { contract_type: i32 },
 }
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
     pub deployer_address: ContractAddress,
@@ -82,8 +90,9 @@ pub type Identifier = BytesM;
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = BytesM;
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
     pub name: Identifier,
@@ -94,11 +103,14 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(transparent)]
 pub struct ContractEntrypointID {
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 8],
 }
 impl From<[u8; 8]> for ContractEntrypointID {

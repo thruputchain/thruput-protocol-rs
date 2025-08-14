@@ -21,7 +21,7 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="xdrs")]
+#[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
 
@@ -37,8 +37,9 @@ pub type Calldata = BytesM;
 
 pub type ReturnBuffer = BytesM;
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
@@ -47,7 +48,8 @@ pub struct Invocation {
     pub calldata: Calldata,
 }
 
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]
@@ -63,8 +65,9 @@ pub type InvokeFlagSet = i32;
 
 pub type OriginID = [u8; 16];
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct Transaction {
     pub id: OriginID,
@@ -78,8 +81,9 @@ pub type SignedTransactionHash = SHA256Hash;
 // Deliberately leaving this SignedTransaction object
 // (and all the other metadata)
 // for a later PR.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct SignedTransaction {
     pub signature: Signature,
@@ -87,8 +91,9 @@ pub struct SignedTransaction {
 }
 
 // Nondeterministic data attached to a transaction by the proposer.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
@@ -106,8 +111,9 @@ pub struct NondeterministicProposalData {
 // TODO(petar): Who is the signer? The originator of the transaction or the
 // validator proposing it?
 // TODO(petar): Should the signature capture the non-deterministic data?
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
@@ -116,14 +122,16 @@ pub struct ProposedTransaction {
 
 // Nominations, included in SCP messages, include only the ND data.
 // The transactions themselves are disseminated through the overlay.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
 }
 
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]

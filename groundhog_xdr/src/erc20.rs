@@ -21,12 +21,13 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="xdrs")]
+#[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
 
 
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
 #[repr(i32)]
@@ -49,7 +50,8 @@ pub type Amount = uint128_xdr;
 pub type Difference = int128_xdr;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
@@ -61,7 +63,8 @@ pub enum ExpectedAmount {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ExpectedVoid {
     // default:

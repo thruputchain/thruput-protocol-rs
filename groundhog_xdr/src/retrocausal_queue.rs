@@ -21,7 +21,7 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="xdrs")]
+#[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
 
@@ -35,8 +35,9 @@ use xdr_common::*;
 pub const kQueueEntryMaxLen : u32 = 256;
 
 // 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(transparent)]
 pub struct QueueEntry {
     inner: BytesM<kQueueEntryMaxLen>,
@@ -71,8 +72,9 @@ impl DerefMut for QueueEntry {
 // A block in a retrocausal queue, containing a list of entries and a block
 // number The entries are stored in lexicographically sorted order within the
 // block Block numbers are monotonically increasing
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueBlock {
     // Variable-length array of queue entries
@@ -85,31 +87,35 @@ pub struct RetrocausalQueueBlock {
 // in blocks less than or equal to max_fully_consumed_block_number,
 // and removes the first partial_consumed_number entries from the
 // block number max_fully_consumed_block_number + 1.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueuePastBlockConsumeDelta {
     pub max_fully_consumed_block_number: u64,
     pub partial_consumed_number: u64,
 }
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
     pub past_block_consume: RetrocausalQueuePastBlockConsumeDelta,
     pub current_block_consumed: VecM<QueueEntry>,
 }
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
     pub added_entries: VecM<QueueEntry>,
 }
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueDelta {
     // set to null if no entries are consumed.
