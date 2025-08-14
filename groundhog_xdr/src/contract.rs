@@ -1,14 +1,16 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
+// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
 
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
 
 use crate::*;
 use core::option::Option;
@@ -34,19 +36,20 @@ use ::serde_arrays;
 
 pub type ContractBlob = BytesM;
 
-
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ContractType {
-    kWasmi = 0,
-    kNative = 1,
-    kMockTest = 2,
-}
+    kWasmi = 0 as i32,
+    kNative = 1 as i32,
+    kMockTest = 2 as i32,
+}pub use ContractType::*;
 
-#[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[repr(i32)]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -62,7 +65,7 @@ pub enum Contract {
     Default { contract_type: i32 },
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
@@ -81,7 +84,7 @@ pub type Identifier = BytesM;
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = BytesM;
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
@@ -93,7 +96,8 @@ pub struct ContractInterfaceIDPreimage {
 // concatenated with a two-byte "method id" defined by the author of
 // the contract interface
 // 
-#[derive(PartialEq, Debug, Clone, Default, Eq, Hash, Copy)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Default, Copy)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[repr(transparent)]

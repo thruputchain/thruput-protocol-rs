@@ -1,14 +1,16 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
+// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
 
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
 
 use crate::*;
 use core::option::Option;
@@ -34,7 +36,7 @@ pub type QueueEntry = BytesM::<kQueueEntryMaxLen>;
 // A block in a retrocausal queue, containing a list of entries and a block
 // number The entries are stored in lexicographically sorted order within the
 // block Block numbers are monotonically increasing
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueBlock {
@@ -48,7 +50,7 @@ pub struct RetrocausalQueueBlock {
 // in blocks less than or equal to max_fully_consumed_block_number,
 // and removes the first partial_consumed_number entries from the
 // block number max_fully_consumed_block_number + 1.
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueuePastBlockConsumeDelta {
@@ -56,7 +58,7 @@ pub struct RetrocausalQueuePastBlockConsumeDelta {
     pub partial_consumed_number: u64,
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
@@ -64,14 +66,14 @@ pub struct RetrocausalQueueConsumeDelta {
     pub current_block_consumed: VecM<QueueEntry>,
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
     pub added_entries: VecM<QueueEntry>,
 }
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(C)]
 pub struct RetrocausalQueueDelta {

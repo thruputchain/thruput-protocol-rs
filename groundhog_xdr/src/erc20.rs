@@ -1,14 +1,16 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
+// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
 
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
 
 use crate::*;
 use core::option::Option;
@@ -22,30 +24,31 @@ use ::xdrs::{ReadXDR, WriteXDR};
 
 
 
-
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ErrorType {
-    ErrorTypeNone = 0,
+    ErrorTypeNone = 0 as i32,
 
     // Contract already initialized
-    AlreadyInitialized = 1,
+    AlreadyInitialized = 1 as i32,
 
     // Caller must be contract owner
-    MustBeContractOwner = 2,
+    MustBeContractOwner = 2 as i32,
 
     // "Internal contract error"
-    InternalErr = -1,
-}
+    InternalErr = -1 as i32,
+}pub use ErrorType::*;
+
 
 pub type Amount = uint128_xdr;
 
 pub type Difference = int128_xdr;
 
-#[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[repr(i32)]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
     //   Amount amount;
@@ -55,9 +58,9 @@ pub enum ExpectedAmount {
     Default { err_type: i32 },
 }
 
-#[repr(i32)]
-#[derive(PartialEq, Debug, Clone)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[repr(i32)]
 pub enum ExpectedVoid {
     // default:
     //   void;

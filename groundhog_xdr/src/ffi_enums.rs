@@ -1,14 +1,16 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5fcc48434475432f0002d5f4bf88d312484a410d
+// Generated from xdrc commit: 74c1a1e419bbfa05a03794d705fc288dad068094
 
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 #![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
 
 use crate::*;
 use core::option::Option;
@@ -37,25 +39,25 @@ use ::xdrs::{ReadXDR, WriteXDR};
 // WebAssembly exported function that was run, the code caused by a host
 // function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
 // host function returns HostFnErrorCode::kReturn.
-
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
     // All others revert the call frame.
-    kInvokeNone = 0,
+    kInvokeNone = 0 as i32,
 
     // An unspecified deterministic error.
-    kInvokeDeterministic = 1,
+    kInvokeDeterministic = 1 as i32,
 
     // Runtime exceeded its gas budget.
-    kInvokeOutOfGas = 2,
+    kInvokeOutOfGas = 2 as i32,
 
     // Nondeterministic error during invocation (e.g. malloc error)
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    kInvokeUnrecoverable = 3,
+    kInvokeUnrecoverable = 3 as i32,
 
     // Discovered during validation that proposer submitted bad data.
     // If a block contains a transaction with this error, the block does not need
@@ -68,14 +70,15 @@ pub enum InvokeErrorCode {
     // those errors are discovered _after_ executing the transactions in a block,
     // and require
     // discarding the entire block.
-    kInvokeValidationFailure = 4,
+    kInvokeValidationFailure = 4 as i32,
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded),
     // but this is not the result of a totally unrecoverable error. This is to be
     // expected during normal system operation.
-    kInvokeAbortTransaction = 5,
-}
+    kInvokeAbortTransaction = 5 as i32,
+}pub use InvokeErrorCode::*;
+
 
 // HostFunctionErrorCode categorizes errors returned from system calls. The
 // normal usage pattern is to wrap them within HostFnStatus<int32_t>, where the
@@ -91,18 +94,18 @@ pub enum InvokeErrorCode {
 // function. The WebAssembly bytecode (the smart contract) itself never sees the
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
 // (returning to the caller), and are handled by the WebAssembly runtime.
-
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum HostFnErrorCode {
-    kHostNoneOrRecoverable = 0,
+    kHostNoneOrRecoverable = 0 as i32,
 
     // Insufficient gas to continue WebAssembly execution.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kHostOutOfGas.
-    kHostOutOfGas = 1,
+    kHostOutOfGas = 1 as i32,
 
     // Unrecoverable (nondeterministic) error, such as a malloc error.
     // The only course of action is to abort the entire transaction.
@@ -111,13 +114,13 @@ pub enum HostFnErrorCode {
     // InvokeErrorCode::kUnrecoverable
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    kHostUnrecoverable = 2,
+    kHostUnrecoverable = 2 as i32,
 
     // Return from a WebAssembly invocation to the caller.  Registers a byte
     // buffer to be passed back to the caller.
     //
     // Result: Runtime immediately returns an {InvokeErrorCode::kNone, 0}.
-    kHostReturn = 3,
+    kHostReturn = 3 as i32,
 
     // Return from a WebAssembly invocation to the caller, with some (int32_t)
     // error code.
@@ -126,14 +129,14 @@ pub enum HostFnErrorCode {
     //
     // On a root smart contract invocation, a nonzero code is converted to a
     // InvokeErrorCode::kDeterministic.
-    kHostExit = 4,
+    kHostExit = 4 as i32,
 
     // Validation fails because a proposer submitted bad nondeterministic
     // proposal data.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kValidationFailure
-    kHostValidationFailure = 5,
+    kHostValidationFailure = 5 as i32,
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded), but this is not the result of a totally
@@ -141,8 +144,9 @@ pub enum HostFnErrorCode {
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kAbortTransaction
-    kHostAbortTransaction = 6,
-}
+    kHostAbortTransaction = 6 as i32,
+}pub use HostFnErrorCode::*;
+
 
 
 //

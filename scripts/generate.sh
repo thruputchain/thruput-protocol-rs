@@ -8,6 +8,7 @@ protos=(
   ffi_enums.x
   transaction.x
   retrocausal_queue.x
+  syscall_error.x
   erc20.x
 )
 
