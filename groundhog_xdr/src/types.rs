@@ -20,12 +20,12 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{XDR, ReadXDR, WriteXDR};
-
+use xdrs::*;
 #[cfg(feature="xdrs")]
-use ::xdr_repr::*;
+use xdrs::xdr_repr::*;
 
 
+#[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
 
@@ -230,9 +230,9 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 }
 
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum CryptographicScheme {
     Ed25519 = 0 as i32,
@@ -448,9 +448,9 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 }
 
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0 as i32,

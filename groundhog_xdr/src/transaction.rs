@@ -20,12 +20,12 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{XDR, ReadXDR, WriteXDR};
-
+use xdrs::*;
 #[cfg(feature="xdrs")]
-use ::xdr_repr::*;
+use xdrs::xdr_repr::*;
 
 
+#[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
 
@@ -47,9 +47,9 @@ pub struct Invocation {
     pub calldata: Calldata,
 }
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum InvokeFlag {
     kInvokeFlagNone = 0 as i32,
@@ -123,9 +123,9 @@ pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
 }
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum TransactionStatistic {
     kTxStatGasRemaining = 0 as i32,

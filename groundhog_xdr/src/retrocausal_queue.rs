@@ -20,12 +20,12 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{XDR, ReadXDR, WriteXDR};
-
+use xdrs::*;
 #[cfg(feature="xdrs")]
-use ::xdr_repr::*;
+use xdrs::xdr_repr::*;
 
 
+#[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
 

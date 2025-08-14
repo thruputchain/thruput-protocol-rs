@@ -13,17 +13,10 @@ std = ["alloc", "xdrs"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
 
-[dependencies]
-xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
-
 [dependencies.xdrs]
 git = "ssh://git@github.com/groundhogchain/xdrs.git"
 branch = "dbg/repr"
-features = ["derive", "alloc"]
-
-[dependencies.xdr-repr]
-git = "ssh://git@github.com/groundhogchain/xdrs.git"
-branch = "dbg/repr"
+features = ["derive", "alloc", "xdr_common"]
 
 [dependencies.serde]
 optional = true

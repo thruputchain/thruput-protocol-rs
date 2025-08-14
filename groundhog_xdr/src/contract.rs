@@ -20,12 +20,12 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{XDR, ReadXDR, WriteXDR};
-
+use xdrs::*;
 #[cfg(feature="xdrs")]
-use ::xdr_repr::*;
+use xdrs::xdr_repr::*;
 
 
+#[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
 
@@ -34,9 +34,9 @@ use xdr_common::*;
 
 pub type ContractBlob = BytesM;
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ContractType {
     kWasmi = 0 as i32,

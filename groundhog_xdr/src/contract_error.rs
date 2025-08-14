@@ -20,10 +20,9 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{XDR, ReadXDR, WriteXDR};
-
+use xdrs::*;
 #[cfg(feature="xdrs")]
-use ::xdr_repr::*;
+use xdrs::xdr_repr::*;
 
 
 
@@ -58,9 +57,9 @@ pub type SysErrXDR = i32;
 //    IndexOutOfBounds { len: u64, access: u64 },
 //}
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum StorageErrorType {
     kStorageErrorTypeSyscall = 0 as i32,
@@ -105,9 +104,9 @@ pub enum StorageErrXDR {
 //     Storage(#[from] StorageErr),
 // }
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ContractErrorType {
     kContractErrorTypeCustom = 0 as i32,
@@ -142,9 +141,9 @@ pub enum ContractErrorXDR {
 //    Contract(#[from] ContractError),
 //}
 
+#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(XDR, ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ErrorType {
     kErrorTypeCaller = 0 as i32,

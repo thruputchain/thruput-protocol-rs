@@ -49,3 +49,33 @@ impl ContractEntrypointID {
         Self::new(n.to_be_bytes())
     }
 }
+
+impl From<uint128_xdr> for u128 {
+    fn from(u: uint128_xdr) -> Self {
+        ((u.highbits as u128) << 64) | (u.lowbits as u128)
+    }
+}
+
+impl Into<uint128_xdr> for u128 {
+    fn into(self: u128) -> uint128_xdr {
+        uint128_xdr {
+            lowbits: (self & 0xffffffffffffffff) as u64,
+            highbits: (self >> 64) as u64,
+        }
+    }
+}
+
+impl From<int128_xdr> for i128 {
+    fn from(i: int128_xdr) -> Self {
+        ((i.highbits as i128) << 64) | (i.lowbits as i128)
+    }
+}
+
+impl Into<int128_xdr> for i128  {
+    fn into(self: i128) -> int128_xdr {
+        int128_xdr {
+            lowbits: (self & 0xffffffffffffffff) as u64,
+            highbits: (self >> 64) as i64,
+        }
+    }
+}
