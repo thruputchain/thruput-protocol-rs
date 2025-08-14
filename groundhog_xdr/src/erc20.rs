@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,13 +20,16 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{ReadXDR, WriteXDR};
+use xdrs::*;
+#[cfg(feature="spec")]
+use xdrs::xdr_repr::*;
 
 
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ErrorType {
     ErrorTypeNone = 0 as i32,
@@ -62,6 +65,7 @@ pub type Difference = int128_xdr;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ExpectedAmount {
     // case ErrorTypeNone:
@@ -74,6 +78,7 @@ pub enum ExpectedAmount {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ExpectedVoid {
     // default:

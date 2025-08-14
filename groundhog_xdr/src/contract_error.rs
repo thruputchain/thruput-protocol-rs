@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,7 +20,9 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{ReadXDR, WriteXDR};
+use xdrs::*;
+#[cfg(feature="spec")]
+use xdrs::xdr_repr::*;
 
 
 
@@ -55,9 +57,10 @@ pub type SysErrXDR = i32;
 //    IndexOutOfBounds { len: u64, access: u64 },
 //}
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum StorageErrorType {
     kStorageErrorTypeSyscall = 0 as i32,
@@ -79,8 +82,9 @@ impl TryFrom<i32> for StorageErrorType {
 }
 
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct IndexOutOfBoundsXDR {
     pub len: u64,
@@ -89,6 +93,7 @@ pub struct IndexOutOfBoundsXDR {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum StorageErrXDR {
     // case kStorageErrorTypeSyscall:
@@ -115,9 +120,10 @@ pub enum StorageErrXDR {
 //     Storage(#[from] StorageErr),
 // }
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ContractErrorType {
     kContractErrorTypeCustom = 0 as i32,
@@ -141,6 +147,7 @@ impl TryFrom<i32> for ContractErrorType {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ContractErrorXDR {
     // case kContractErrorTypeCustom:
@@ -165,9 +172,10 @@ pub enum ContractErrorXDR {
 //    Contract(#[from] ContractError),
 //}
 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Copy)]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[repr(i32)]
 pub enum ErrorType {
     kErrorTypeCaller = 0 as i32,
@@ -189,6 +197,7 @@ impl TryFrom<i32> for ErrorType {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum ErrorXDR {
     // case kErrorTypeCaller:

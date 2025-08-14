@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d186232e27cd16b0bc090bb23cd5c474b02b30bf
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,9 +20,12 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
-use ::xdrs::{ReadXDR, WriteXDR};
+use xdrs::*;
+#[cfg(feature="spec")]
+use xdrs::xdr_repr::*;
 
 
+#[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
 
@@ -31,13 +34,47 @@ use xdr_common::*;
 
 pub const kQueueEntryMaxLen : u32 = 256;
 
-pub type QueueEntry = BytesM::<kQueueEntryMaxLen>;
+// 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(transparent)]
+pub struct QueueEntry {
+    inner: BytesM<kQueueEntryMaxLen>,
+}
+impl From<BytesM<kQueueEntryMaxLen>> for QueueEntry {
+    fn from(_inner: BytesM<kQueueEntryMaxLen>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl QueueEntry {
+    pub fn into_inner(self) -> BytesM<kQueueEntryMaxLen> {
+        self.inner
+    }
+    pub const fn new(_inner: BytesM<kQueueEntryMaxLen>) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for QueueEntry {
+    type Target = BytesM<kQueueEntryMaxLen>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for QueueEntry {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 // A block in a retrocausal queue, containing a list of entries and a block
 // number The entries are stored in lexicographically sorted order within the
 // block Block numbers are monotonically increasing
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct RetrocausalQueueBlock {
     // Variable-length array of queue entries
@@ -50,31 +87,35 @@ pub struct RetrocausalQueueBlock {
 // in blocks less than or equal to max_fully_consumed_block_number,
 // and removes the first partial_consumed_number entries from the
 // block number max_fully_consumed_block_number + 1.
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct RetrocausalQueuePastBlockConsumeDelta {
     pub max_fully_consumed_block_number: u64,
     pub partial_consumed_number: u64,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
     pub past_block_consume: RetrocausalQueuePastBlockConsumeDelta,
     pub current_block_consumed: VecM<QueueEntry>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
     pub added_entries: VecM<QueueEntry>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct RetrocausalQueueDelta {
     // set to null if no entries are consumed.
