@@ -32,4 +32,8 @@ pub mod syscall_error;
 use syscall_error::*;
 
 #[rustfmt::skip]
+pub mod storage_delta_flags;
+use storage_delta_flags::*;
+
+#[rustfmt::skip]
 pub mod transaction;
