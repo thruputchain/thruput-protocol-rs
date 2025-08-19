@@ -6,6 +6,7 @@ protos=(
   contract.x
   contract_error.x
   ffi_enums.x
+  genesis.x
   transaction.x
   retrocausal_queue.x
   storage_delta_flags.x

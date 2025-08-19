@@ -24,6 +24,10 @@ use contract_error::*;
 pub mod ffi_enums;
 
 #[rustfmt::skip]
+pub mod genesis;
+use genesis::*;
+
+#[rustfmt::skip]
 pub mod retrocausal_queue;
 use retrocausal_queue::*;
 
