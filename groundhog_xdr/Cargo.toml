@@ -15,8 +15,8 @@ xdrs = []
 spec = ["xdrs", "xdrs/repr"]
 
 [dependencies.xdrs]
-workspace = true
-features = ["derive", "xdr_common"]
+git = "ssh://git@github.com/groundhogchain/xdrs.git"
+features = ["derive", "xdr_common", "extras", "int128_xdr"]
 
 [dependencies.serde]
 optional = true
