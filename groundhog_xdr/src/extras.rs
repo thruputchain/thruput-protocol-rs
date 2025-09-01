@@ -71,7 +71,7 @@ impl From<int128_xdr> for i128 {
     }
 }
 
-impl Into<int128_xdr> for i128  {
+impl Into<int128_xdr> for i128 {
     fn into(self: i128) -> int128_xdr {
         int128_xdr {
             lowbits: (self & 0xffffffffffffffff) as u64,
