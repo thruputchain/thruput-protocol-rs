@@ -33,12 +33,16 @@ jobs:
           submodules: recursive
       - name: Add Cargo to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: install workspace toml
+        run: cp ci_Cargo.toml Cargo.toml
       - name: cargo build default
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build alloc
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=alloc --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build std
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
+      - name: cargo build xdrs
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs --manifest-path=groundhog_xdr/Cargo.toml
       - name: run tests
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks

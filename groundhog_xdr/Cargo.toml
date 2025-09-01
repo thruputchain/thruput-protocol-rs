@@ -18,6 +18,9 @@ spec = ["xdrs", "xdrs/repr"]
 workspace = true
 features = ["derive", "xdr_common"]
 
+[dependencies.xdr_common]
+workspace = true
+
 [dependencies.serde]
 optional = true
 version = "1.0.219"

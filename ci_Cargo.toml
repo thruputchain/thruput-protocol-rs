@@ -1,0 +1,41 @@
+cargo-features = ["trim-paths"] #unstable
+
+[workspace]
+members = [
+    "groundhog_xdr",
+    ]
+
+[workspace.dependencies]
+xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["extras", "int128_xdr", "xdr_common", "derive", "ns"] }
+xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
+
+[profile.dev]
+opt-level = 3
+overflow-checks = false
+debug = false
+strip = "none"
+panic = "abort"
+lto = true
+codegen-units = 1
+trim-paths = "all" # unstable
+
+[profile.test]
+# settings inherited from profile.dev
+opt-level = 0
+overflow-checks = true
+debug = true
+strip = "none"
+debug-assertions = true
+
+[profile.release]
+opt-level = 3
+overflow-checks = false
+debug = false
+strip = "symbols"
+debug-assertions = false
+panic = "abort"
+lto = true
+codegen-units = 1
+trim-paths = "all" # unstable
+# also see rust flags set in .cargo/config.toml
+
