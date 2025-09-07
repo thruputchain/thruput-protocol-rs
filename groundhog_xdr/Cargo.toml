@@ -13,6 +13,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
 spec = ["xdrs", "xdrs/repr"]
+rpc = ["dep:rpc_driver"]
 
 [dependencies.xdrs]
 workspace = true
@@ -20,6 +21,10 @@ features = ["derive", "xdr_common"]
 
 [dependencies.xdr_common]
 workspace = true
+
+[dependencies.rpc_driver]
+workspace = true
+optional = true
 
 [dependencies.serde]
 optional = true

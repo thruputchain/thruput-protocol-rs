@@ -4,10 +4,12 @@ cargo-features = ["trim-paths"] #unstable
 members = [
     "groundhog_xdr",
     ]
+resolver = "2"
 
 [workspace.dependencies]
 xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["extras", "int128_xdr", "xdr_common", "derive", "ns"] }
 xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
+rpc_driver = { git = "ssh://git@github.com/groundhogchain/xdr_rpc.git" }
 
 [profile.dev]
 opt-level = 3
