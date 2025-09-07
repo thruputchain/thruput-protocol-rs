@@ -27,6 +27,7 @@ jobs:
             ${{ secrets.PROTOCOL_RS_SELF_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_TO_XDRS_ACCESS_KEY }}
             ${{ secrets.PROTOCOL_RS_TO_XDR_COMMON }}
+            ${{ secrets.PROTOCOL_RS_TO_XDR_RPC }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
