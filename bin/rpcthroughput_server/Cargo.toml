@@ -1,0 +1,15 @@
+[package]
+name = "rpcthroughput_server"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rpcthroughput_server"
+path = "src/main.rs"
+
+[dependencies]
+groundhog_rpc = { path = "../../groundhog_rpc" }
+groundhog_xdr = { path = "../../groundhog_xdr" }
+tokio = { version = "1.0", features = ["full"] }
+async-trait = "0.1"
+rpc_driver = { workspace = true }

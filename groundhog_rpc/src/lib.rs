@@ -3,4 +3,4 @@
 
 #[rustfmt::skip]
 pub mod test_rpc;
-use test_rpc::*;
+pub use test_rpc::*;

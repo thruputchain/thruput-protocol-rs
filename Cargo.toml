@@ -4,6 +4,7 @@ cargo-features = ["trim-paths"] #unstable
 members = [
     "groundhog_xdr",
     "groundhog_rpc",
+    "bin/rpcthroughput_server",
     ]
 resolver = "2"
 

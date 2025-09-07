@@ -120,8 +120,6 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "rpc_driver",
- "serde",
- "serde_arrays",
  "xdr_common",
  "xdrs",
 ]
@@ -270,12 +268,23 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.1.0"
-source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#9101db3797672f74f9f507f592ec761044e48e17"
+source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#cfc5d70aa6f5283e45d84b73a6c568dced491c41"
 dependencies = [
  "async-trait",
  "thiserror",
  "tokio",
  "xdrs",
+]
+
+[[package]]
+name = "rpcthroughput_server"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "groundhog_rpc",
+ "groundhog_xdr",
+ "rpc_driver",
+ "tokio",
 ]
 
 [[package]]
