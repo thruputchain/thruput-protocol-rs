@@ -1,0 +1,38 @@
+[package]
+name = "groundhog_rpc"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = ["alloc", "std"]
+alloc = ["serde/alloc", "serde_arrays/alloc", "xdrs/alloc"]
+std = ["alloc"]
+serde = ["dep:serde", "dep:serde_arrays"]
+xdrs = []
+
+[dependencies]
+async-trait = "0.1.89"
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "xdr_common", "extras", "int128_xdr", "ns", "alloc"]
+
+[dependencies.xdr_common]
+workspace = true
+
+[dependencies.rpc_driver]
+workspace = true
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.serde_arrays]
+optional = true
+path = "../external/serde_arrays"
+default-features = false

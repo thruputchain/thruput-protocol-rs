@@ -115,6 +115,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
 
 [[package]]
+name = "groundhog_rpc"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "rpc_driver",
+ "serde",
+ "serde_arrays",
+ "xdr_common",
+ "xdrs",
+]
+
+[[package]]
 name = "groundhog_xdr"
 version = "0.1.0"
 dependencies = [
@@ -258,7 +270,7 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.1.0"
-source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#938a6ddafc5a085ca0c57f45a862f8d1205bee3f"
+source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#9101db3797672f74f9f507f592ec761044e48e17"
 dependencies = [
  "async-trait",
  "thiserror",

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: eec8441e729c8656ee3890ba7fde622083d93bde
+// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -83,11 +83,50 @@ pub type OriginID = [u8; 16];
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
+pub struct Uniquifier {
+    pub block_expiry_height: BlockHeight,
+    pub nonce: u64,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
 pub struct Transaction {
     pub origin_id: OriginID,
-    pub created: Timestamp,
     pub invocation: Invocation,
+    pub uniquifier: Uniquifier,
+    // New contracts to deploy.
     pub contracts_to_deploy: VecM<Contract>,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct AuthSignaturePreimage {
+    pub signature_weight: Weight,
+    pub message: BytesM,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct DecoratedSignature {
+    // uint32_t
+    pub public_key_id: u32,
+    pub weight: Weight,
+    pub signature: Signature,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct AuxiliaryDecoratedSignatures {
+    pub address: ContractAddress,
+    pub signatures: VecM<DecoratedSignature>,
 }
 
 pub type SignedTransactionHash = SHA256Hash;
@@ -100,8 +139,9 @@ pub type SignedTransactionHash = SHA256Hash;
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct SignedTransaction {
-    pub signature: Signature,
     pub tx: Transaction,
+    pub signatures: VecM<DecoratedSignature>,
+    pub aux_signatures: VecM<AuxiliaryDecoratedSignatures>,
 }
 
 // Nondeterministic data attached to a transaction by the proposer.

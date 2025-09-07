@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: eec8441e729c8656ee3890ba7fde622083d93bde
+// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -36,19 +36,11 @@ use xdr_common::*;
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
-pub struct InitializationArgs {
-    pub entrypoint: ContractEntrypointID,
-    pub calldata: Calldata,
-}
-
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[repr(C)]
 pub struct PresetDeploymentConfig {
     pub initial_nonce: SHA256Hash,
     pub contract_hash: SHA256Hash,
-    pub initialization_args: Option<InitializationArgs>,
+    pub entrypoint: ContractEntrypointID,
+    pub calldata: Calldata,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]

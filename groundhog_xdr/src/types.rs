@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: eec8441e729c8656ee3890ba7fde622083d93bde
+// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -563,6 +563,15 @@ pub struct LogEntry {
     pub source_address: ContractAddress,
     pub message: BytesM<kMaxLogMessageLen>,
 }
+
+// BlockHeight is the height of a block. It is signed to prevent overflows in
+// calculations.
+pub type BlockHeight = i64;
+
+// uint32_t
+pub type Weight = u32;
+
+pub type BitMap = u64;
 
 
 //

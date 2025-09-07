@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: eec8441e729c8656ee3890ba7fde622083d93bde
+// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -36,52 +36,52 @@ use xdrs::xdr_repr::*;
 #[repr(i32)]
 pub enum SyscallErrorCode {
     // No error
-    kNone = 0 as i32,
+    kSyscallErrorCodeNone = 0 as i32,
 
     // Out of bounds pointer to wasm memory passed to syscall
-    kFault = 1 as i32,
+    kSyscallErrorCodeFault = 1 as i32,
 
     // System call for supplied number is not supported
-    kNoSyscall = 2 as i32,
+    kSyscallErrorCodeNoSyscall = 2 as i32,
 
     // Cannot call get_msg_sender on root invocation
-    kIsRootTransaction = 3 as i32,
+    kSyscallErrorCodeIsRootTransaction = 3 as i32,
 
     // Failed to find contract
-    kContractLookupFailed = 4 as i32,
+    kSyscallErrorCodeContractLookupFailed = 4 as i32,
 
     // Attempt made to deploy a contract twice (same nonce and contract hash, from
     // same address)
-    kContractAlreadyDeployed = 5 as i32,
+    kSyscallErrorCodeContractAlreadyDeployed = 5 as i32,
 
     // No return buffer is available.  Either the most recent subcall failed, or
     // there have been no subcalls within this call frame.
-    kNoReturnBufferAvailable = 6 as i32,
+    kSyscallErrorCodeNoReturnBufferAvailable = 6 as i32,
 
     // Insufficient gas in call frame to supply requested gas limit for child
     // invocation
-    kInsufficientGasForInvocation = 7 as i32,
+    kSyscallErrorCodeInsufficientGasForInvocation = 7 as i32,
 
     // Invalid input to a syscall, such as subtracting below 0 on an nnint64
-    kInvalidSyscallInput = 8 as i32,
+    kSyscallErrorCodeInvalidSyscallInput = 8 as i32,
 
     // Accessing a storage key that does not exist in the current view
-    kStorageKeyNotExist = 9 as i32,
+    kSyscallErrorCodeStorageKeyNotExist = 9 as i32,
 
     // No entry in the retrocausal queue to consume
-    kNoRetrocausalQueueEntry = 10 as i32,
+    kSyscallErrorCodeNoRetrocausalQueueEntry = 10 as i32,
 
     // Failed to parse calldata
-    kCalldataParseError = 100 as i32,
+    kSyscallErrorCodeCalldataParseError = 100 as i32,
 
     // Failed to parse returned data
-    kReturnParseError = 101 as i32,
+    kSyscallErrorCodeReturnParseError = 101 as i32,
 
     // Deterministic error within called wasm (i.e. trap)
-    kDeterministicWasm = -1 as i32,
+    kSyscallErrorCodeDeterministicWasm = -1 as i32,
 
     // Child call frame manually reverted
-    kFrameReverted = -2 as i32,
+    kSyscallErrorCodeFrameReverted = -2 as i32,
 }
 pub use SyscallErrorCode::*;
 
@@ -89,21 +89,21 @@ impl TryFrom<i32> for SyscallErrorCode {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
         match value {
-            0 => Ok(Self::kNone),
-            1 => Ok(Self::kFault),
-            2 => Ok(Self::kNoSyscall),
-            3 => Ok(Self::kIsRootTransaction),
-            4 => Ok(Self::kContractLookupFailed),
-            5 => Ok(Self::kContractAlreadyDeployed),
-            6 => Ok(Self::kNoReturnBufferAvailable),
-            7 => Ok(Self::kInsufficientGasForInvocation),
-            8 => Ok(Self::kInvalidSyscallInput),
-            9 => Ok(Self::kStorageKeyNotExist),
-            10 => Ok(Self::kNoRetrocausalQueueEntry),
-            100 => Ok(Self::kCalldataParseError),
-            101 => Ok(Self::kReturnParseError),
-            -1 => Ok(Self::kDeterministicWasm),
-            -2 => Ok(Self::kFrameReverted),
+            0 => Ok(Self::kSyscallErrorCodeNone),
+            1 => Ok(Self::kSyscallErrorCodeFault),
+            2 => Ok(Self::kSyscallErrorCodeNoSyscall),
+            3 => Ok(Self::kSyscallErrorCodeIsRootTransaction),
+            4 => Ok(Self::kSyscallErrorCodeContractLookupFailed),
+            5 => Ok(Self::kSyscallErrorCodeContractAlreadyDeployed),
+            6 => Ok(Self::kSyscallErrorCodeNoReturnBufferAvailable),
+            7 => Ok(Self::kSyscallErrorCodeInsufficientGasForInvocation),
+            8 => Ok(Self::kSyscallErrorCodeInvalidSyscallInput),
+            9 => Ok(Self::kSyscallErrorCodeStorageKeyNotExist),
+            10 => Ok(Self::kSyscallErrorCodeNoRetrocausalQueueEntry),
+            100 => Ok(Self::kSyscallErrorCodeCalldataParseError),
+            101 => Ok(Self::kSyscallErrorCodeReturnParseError),
+            -1 => Ok(Self::kSyscallErrorCodeDeterministicWasm),
+            -2 => Ok(Self::kSyscallErrorCodeFrameReverted),
             _ => Err(()),
         }
     }

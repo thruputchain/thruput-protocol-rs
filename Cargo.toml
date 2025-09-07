@@ -3,6 +3,7 @@ cargo-features = ["trim-paths"] #unstable
 [workspace]
 members = [
     "groundhog_xdr",
+    "groundhog_rpc",
     ]
 resolver = "2"
 
