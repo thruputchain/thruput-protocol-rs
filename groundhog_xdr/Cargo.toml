@@ -13,7 +13,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
 spec = ["xdrs", "xdrs/repr"]
-rpc = ["dep:rpc_driver"]
+syscalls = ["dep:macros"]
 
 [dependencies.xdrs]
 workspace = true
@@ -21,10 +21,6 @@ features = ["derive", "xdr_common"]
 
 [dependencies.xdr_common]
 workspace = true
-
-[dependencies.rpc_driver]
-workspace = true
-optional = true
 
 [dependencies.serde]
 optional = true
@@ -34,5 +30,9 @@ features = ["derive"]
 
 [dependencies.serde_arrays]
 optional = true
-path = "../external/serde_arrays"
+git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
 default-features = false
+
+[dependencies.macros]
+path = "../macros"
+optional = true
