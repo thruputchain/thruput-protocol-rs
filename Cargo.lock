@@ -302,7 +302,7 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.1.0"
-source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#87dbfef10a66e6c9f8171505bd2b7da0986e756a"
+source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#8056fc196c2c946fc2811af9d1ad1e7c213c62c0"
 dependencies = [
  "async-trait",
  "thiserror",
