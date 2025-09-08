@@ -45,5 +45,5 @@ jobs:
       - name: run tests
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly fmt --check -F syscalls --manifest-path=groundhog_xdr/Cargo.toml
     
