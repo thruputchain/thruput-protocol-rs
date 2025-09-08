@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut service_map = ServiceMap::new();
     service_map.add_service(Box::new(blank_rpc_blank_rpc_v1_Dispatcher::new(Box::new(BlankRpcServer::new()))));
 
-    let listener = TcpListener::bind("127.0.0.1:12345").await?;
+    let listener = TcpListener::bind("[::]:12345").await?;
     let addr = listener.local_addr().unwrap();
     println!("RPC Throughput Server listening on {}", addr);
     
