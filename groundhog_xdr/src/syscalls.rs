@@ -42,15 +42,15 @@ impl From<SysErr> for i32 {
 
 extern "C" {
     fn syscall_wrapper_impl(
-    syscall_no: SyscallNo,
-    arg1: u64,
-    arg2: u64,
-    arg3: u64,
-    arg4: u64,
-    arg5: u64,
-    arg6: u64,
-    arg7: u64,
-) -> SysErr;
+        syscall_no: SyscallNo,
+        arg1: u64,
+        arg2: u64,
+        arg3: u64,
+        arg4: u64,
+        arg5: u64,
+        arg6: u64,
+        arg7: u64,
+    ) -> SysErr;
 }
 
 fn syscall_wrapper(
@@ -63,7 +63,11 @@ fn syscall_wrapper(
     arg6: u64,
     arg7: u64,
 ) -> SysErr {
-    unsafe { syscall_wrapper_impl(syscall_no, arg1, arg2, arg3, arg4, arg5, arg6, arg7) }
+    unsafe {
+        syscall_wrapper_impl(
+            syscall_no, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
+        )
+    }
 }
 
 macros::generate_syscall_decls!("../protocol/syscalls.yaml");

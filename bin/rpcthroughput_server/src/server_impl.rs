@@ -1,5 +1,5 @@
-use groundhog_rpc::{blank_rpc_blank_rpc_v1, Data};
 use async_trait::async_trait;
+use groundhog_rpc::{blank_rpc_blank_rpc_v1, Data};
 
 pub struct BlankRpcServer;
 
@@ -15,8 +15,11 @@ impl blank_rpc_blank_rpc_v1 for BlankRpcServer {
         // Simple null operation - just return success
         Ok(())
     }
-    
-    async fn echo(&self, data: Data) -> Result<Data, ::rpc_driver::ProgramError> {
+
+    async fn echo(
+        &self,
+        data: Data,
+    ) -> Result<Data, ::rpc_driver::ProgramError> {
         // Echo the data back
         Ok(data)
     }
