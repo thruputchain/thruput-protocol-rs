@@ -40,3 +40,4 @@ optional = true
 [dependencies.thiserror]
 optional = true
 version = "2.0.16"
+default-features = false
