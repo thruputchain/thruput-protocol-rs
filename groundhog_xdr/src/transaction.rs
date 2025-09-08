@@ -116,7 +116,6 @@ pub struct AuthSignaturePreimage {
 pub struct DecoratedSignature {
     // uint32_t
     pub public_key_id: u32,
-    pub weight: Weight,
     pub signature: Signature,
 }
 

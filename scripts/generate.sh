@@ -13,6 +13,13 @@ protos=(
   syscall_error.x
 )
 
+scps=(
+  scp.x
+  scp_config.x
+  scp_control.x
+  scp_handle.x
+)
+
 rpcs=(
   test_rpc.x
 )
@@ -34,4 +41,8 @@ done
 
 for rpc in "${rpcs[@]}"; do
   generate "protocol/${rpc}" "groundhog_rpc"
+done
+
+for scp in "${scps[@]}"; do
+  generate "protocol/${scp}" "groundhog_scp"
 done

@@ -131,6 +131,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "groundhog_scp"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "groundhog_xdr",
+ "rpc_driver",
+ "xdr_common",
+ "xdrs",
+]
+
+[[package]]
 name = "groundhog_xdr"
 version = "0.1.0"
 dependencies = [
