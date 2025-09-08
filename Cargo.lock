@@ -137,6 +137,7 @@ dependencies = [
  "macros",
  "serde",
  "serde_arrays",
+ "thiserror",
  "xdr_common",
  "xdrs",
 ]

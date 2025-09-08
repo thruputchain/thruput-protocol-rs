@@ -13,7 +13,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
 spec = ["xdrs", "xdrs/repr"]
-syscalls = ["dep:macros"]
+syscalls = ["dep:macros", "dep:thiserror"]
 
 [dependencies.xdrs]
 workspace = true
@@ -36,3 +36,7 @@ default-features = false
 [dependencies.macros]
 path = "../macros"
 optional = true
+
+[dependencies.thiserror]
+optional = true
+version = "2.0.16"

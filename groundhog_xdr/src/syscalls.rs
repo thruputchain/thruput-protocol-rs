@@ -1,7 +1,12 @@
 use crate::*;
+use thiserror::Error;
 
 macros::generate_syscall_numbers!("../protocol/syscalls.yaml");
 
+#[derive(xdrs::ReadXDR, xdrs::WriteXDR)]
+#[cfg_attr(feature = "spec", derive(xdrs::XDR))]
+#[derive(Error, Copy, Clone, Debug, PartialEq, Eq)]
+#[error("SysErr({0})")]
 #[repr(transparent)]
 pub struct SysErr(pub i32);
 pub type SyscallResult<T> = core::result::Result<T, SysErr>;
