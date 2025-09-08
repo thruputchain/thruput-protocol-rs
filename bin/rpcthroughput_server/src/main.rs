@@ -15,6 +15,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     service_map.add_service(Box::new(blank_rpc_blank_rpc_v1_Dispatcher::new(Box::new(BlankRpcServer::new()))));
 
     let listener = TcpListener::bind("127.0.0.1:12345").await?;
+    let addr = listener.local_addr().unwrap();
+    println!("RPC Throughput Server listening on {}", addr);
+    
     let server = rpc_driver::RpcServer::new(service_map, listener);
 
     tokio::spawn(async move {
@@ -22,9 +25,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     });
 
     println!("RPC Throughput Server running with blank_rpc implementation. Press Ctrl+C to stop.");
-    println!("Server supports:");
-    println!("  - null(): Simple null operation");
-    println!("  - echo(data): Echo data back to client");
     
     // Keep the server running
     tokio::signal::ctrl_c().await?;
