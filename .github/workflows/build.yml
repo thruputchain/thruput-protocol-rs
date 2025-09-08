@@ -42,8 +42,10 @@ jobs:
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: cargo build xdrs
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs --manifest-path=groundhog_xdr/Cargo.toml
+      - name: cargo build syscalls
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs,syscalls --manifest-path=groundhog_xdr/Cargo.toml
       - name: run tests
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly test --features=std --manifest-path=groundhog_xdr/Cargo.toml
       - name: format checks
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly fmt --check -F syscalls --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly fmt --check --manifest-path=groundhog_xdr/Cargo.toml
     
