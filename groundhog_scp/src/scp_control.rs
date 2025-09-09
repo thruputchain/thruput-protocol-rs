@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
+// Generated from xdrc commit: 38532d0a38c23c7ef3af6692e53a6da4711fbc89
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -119,23 +119,23 @@ impl SCP_Control_SCP_Control1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn scp_control_nominate(&self, arg0 : SCPSlotIndex, arg1 : SCPValue, arg2 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::serialize_txs::encode(&(arg0, arg1, arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn scp_control_nominate(&self, arg0 : &SCPSlotIndex, arg1 : &SCPValue, arg2 : &SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn scp_control_stop_nomination(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::serialize_txs::encode(&(arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn scp_control_stop_nomination(&self, arg0 : &SCPSlotIndex) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn scp_control_update_local_quorum_set(&self, arg0 : SCPQuorumSet) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::serialize_txs::encode(&(arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn scp_control_update_local_quorum_set(&self, arg0 : &SCPQuorumSet) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn scp_control_received_envelope(&self, arg0 : SCPEnvelope) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::serialize_txs::encode(&(arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn scp_control_received_envelope(&self, arg0 : &SCPEnvelope) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 200, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
