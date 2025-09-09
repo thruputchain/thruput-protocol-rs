@@ -50,7 +50,7 @@ impl From<SysErr> for i32 {
 extern "C" {
     #[link_name = "syscall"]
     fn syscall_wrapper_impl(
-        syscall_no: SyscallNo,
+        syscall_no: u64,
         arg1: u64,
         arg2: u64,
         arg3: u64,
@@ -64,7 +64,7 @@ extern "C" {
 #[cfg(feature = "syscalls_mock")]
 extern "C-unwind" {
     fn syscall_wrapper_impl(
-        syscall_no: SyscallNo,
+        syscall_no: u64,
         arg1: u64,
         arg2: u64,
         arg3: u64,
@@ -87,7 +87,7 @@ fn syscall_wrapper(
 ) -> SysErr {
     unsafe {
         syscall_wrapper_impl(
-            syscall_no, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
+            syscall_no as u64, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
         )
     }
 }
