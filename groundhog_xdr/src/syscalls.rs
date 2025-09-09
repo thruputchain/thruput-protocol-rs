@@ -45,7 +45,9 @@ impl From<SysErr> for i32 {
     }
 }
 
+#[link(wasm_import_module = "marmot")]
 extern "C" {
+    #[link_name = "syscall"]
     fn syscall_wrapper_impl(
         syscall_no: SyscallNo,
         arg1: u64,
