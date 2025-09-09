@@ -45,9 +45,24 @@ impl From<SysErr> for i32 {
     }
 }
 
+#[cfg(not(feature = "syscalls_mock"))]
 #[link(wasm_import_module = "marmot")]
 extern "C" {
     #[link_name = "syscall"]
+    fn syscall_wrapper_impl(
+        syscall_no: SyscallNo,
+        arg1: u64,
+        arg2: u64,
+        arg3: u64,
+        arg4: u64,
+        arg5: u64,
+        arg6: u64,
+        arg7: u64,
+    ) -> SysErr;
+}
+
+#[cfg(feature = "syscalls_mock")]
+extern "C-unwind" {
     fn syscall_wrapper_impl(
         syscall_no: SyscallNo,
         arg1: u64,
