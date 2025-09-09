@@ -1,0 +1,265 @@
+// -*-Rust-*-
+// Generated Code: DO NOT CHECK IN
+
+// Generated from xdrc commit: 8baa274ecf4fe3c90881e7240f8a0437a95f2eaa
+
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(non_upper_case_globals)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(unexpected_cfgs)]
+#![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
+
+use crate::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
+
+#[cfg(feature="std")]
+use std::io::{Read, Write};
+
+#[cfg(feature="xdrs")]
+use xdrs::*;
+#[cfg(feature="spec")]
+use xdrs::xdr_repr::*;
+
+
+
+
+
+#[allow(non_camel_case_types)]
+#[async_trait::async_trait]
+pub trait SCP_Handle_SCP_Handle1: Send + Sync {    
+    async fn scp_handle_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+          // hooks
+
+
+    async fn scp_handle_validate_ballot_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_validate_nomination_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_extract_valid_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPOptValue, ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_combine_candidates(&self, arg0 : SCPSlotIndex, arg1 : SCPValues) -> Result<SCPOptValue, ::rpc_driver::ProgramError>;
+          // notifications
+
+
+    async fn scp_handle_value_externalized(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_nominating_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_updated_candidate_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_started_ballot_proto(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_accepted_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_confirmed_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_accepted_commit(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
+    async fn scp_handle_ballot_did_hear_from_quorum(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+}
+
+
+#[allow(non_camel_case_types)]
+pub struct SCP_Handle_SCP_Handle1_Dispatcher {
+  inner: Box<dyn SCP_Handle_SCP_Handle1>,
+}
+
+impl SCP_Handle_SCP_Handle1_Dispatcher {
+  pub fn new(inner: Box<dyn SCP_Handle_SCP_Handle1>) -> Self {
+    Self { inner }
+  }
+}
+
+#[async_trait::async_trait]
+impl ::rpc_driver::ServerDispatch for SCP_Handle_SCP_Handle1_Dispatcher {
+    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
+        ::rpc_driver::ProgVers::new(0x9aa92002, 1)
+    }
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+        match proc {
+            // scp_handle_null
+            0 => {
+                let args: () =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_validate_ballot_value
+            10 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_validate_ballot_value(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_validate_nomination_value
+            20 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_validate_nomination_value(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_extract_valid_value
+            30 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_extract_valid_value(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_combine_candidates
+            40 => {
+                let args: (SCPSlotIndex, SCPValues, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_combine_candidates(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_value_externalized
+            100 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_value_externalized(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_nominating_value
+            200 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_nominating_value(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_updated_candidate_value
+            210 => {
+                let args: (SCPSlotIndex, SCPValue, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_updated_candidate_value(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_started_ballot_proto
+            310 => {
+                let args: (SCPSlotIndex, SCPBallot, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_started_ballot_proto(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_accepted_ballot_prepared
+            320 => {
+                let args: (SCPSlotIndex, SCPBallot, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_accepted_ballot_prepared(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_confirmed_ballot_prepared
+            330 => {
+                let args: (SCPSlotIndex, SCPBallot, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_confirmed_ballot_prepared(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_accepted_commit
+            340 => {
+                let args: (SCPSlotIndex, SCPBallot, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_accepted_commit(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // scp_handle_ballot_did_hear_from_quorum
+            350 => {
+                let args: (SCPSlotIndex, SCPBallot, ) =
+                    xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_handle_ballot_did_hear_from_quorum(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
+        }
+    }
+}
+
+pub struct SCP_Handle_SCP_Handle1_Client {
+    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+}
+
+impl SCP_Handle_SCP_Handle1_Client {
+    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+        Self { handle }
+    }
+
+    fn prog_vers() -> ::rpc_driver::ProgVers {
+        ::rpc_driver::ProgVers::new(0x9aa92002, 1)
+    }
+    pub async fn scp_handle_null(&self) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_validate_ballot_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_validate_nomination_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_extract_valid_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPOptValue, ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_combine_candidates(&self, arg0 : SCPSlotIndex, arg1 : SCPValues) -> Result<SCPOptValue, ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 40, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_value_externalized(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 100, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_nominating_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 200, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_updated_candidate_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 210, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_started_ballot_proto(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 310, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_accepted_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 320, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_confirmed_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 330, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_accepted_commit(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 340, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_handle_ballot_did_hear_from_quorum(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0, arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 350, &data).await?;
+         xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+}
+
+
+
+//
+// XDR internals below this point
+//
+
+
