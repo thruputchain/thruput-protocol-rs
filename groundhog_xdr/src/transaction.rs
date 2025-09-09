@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 38532d0a38c23c7ef3af6692e53a6da4711fbc89
+// Generated from xdrc commit: af7ecf4a4dc1cf1c12cfd67f41044f04349e57af
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -93,7 +93,6 @@ pub struct Uniquifier {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct Transaction {
-    pub origin_id: OriginID,
     pub invocation: Invocation,
     pub uniquifier: Uniquifier,
     // New contracts to deploy.
@@ -139,6 +138,7 @@ pub type SignedTransactionHash = SHA256Hash;
 #[repr(C)]
 pub struct SignedTransaction {
     pub tx: Transaction,
+    pub signature_weight: Weight,
     pub signatures: VecM<DecoratedSignature>,
     pub aux_signatures: VecM<AuxiliaryDecoratedSignatures>,
 }

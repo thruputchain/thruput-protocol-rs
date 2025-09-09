@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 38532d0a38c23c7ef3af6692e53a6da4711fbc89
+// Generated from xdrc commit: af7ecf4a4dc1cf1c12cfd67f41044f04349e57af
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -97,8 +97,8 @@ impl blank_rpc_blank_rpc_v1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn echo(&self, arg0 : &Data) -> Result<Data, ::rpc_driver::RpcError> {
-         let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn echo(&self, arg0 : Data) -> Result<Data, ::rpc_driver::RpcError> {
+         let data = xdrs::serialize_txs::encode(&(arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
