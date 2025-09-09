@@ -87,7 +87,14 @@ fn syscall_wrapper(
 ) -> SysErr {
     unsafe {
         syscall_wrapper_impl(
-            syscall_no as u64, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
+            syscall_no as u64,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
+            arg7,
         )
     }
 }
