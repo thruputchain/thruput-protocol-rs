@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 562f3380a6cb29fb06026708c3daebd59bd787b3
+// Generated from xdrc commit: ffca4687d2e1efa064b4e7cd0f984db514637343
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -499,6 +499,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0 as i32,
     kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
+    kStorageKeyTypeAccountAuthData = 2 as i32,
 }
 pub use StorageKeyType::*;
 
@@ -508,6 +509,7 @@ impl TryFrom<i32> for StorageKeyType {
         match value {
             0 => Ok(Self::kStorageKeyTypeContractData),
             1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
+            2 => Ok(Self::kStorageKeyTypeAccountAuthData),
             _ => Err(()),
         }
     }
@@ -525,6 +527,9 @@ pub enum StorageKey {
     // case kStorageKeyTypeFreeNativeTokenBalance:
     //   void;
     kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance as i32,
+    // case kStorageKeyTypeAccountAuthData:
+    //   void;
+    kStorageKeyTypeAccountAuthData = StorageKeyType::kStorageKeyTypeAccountAuthData as i32,
     
 }
 
