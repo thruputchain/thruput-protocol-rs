@@ -199,6 +199,8 @@ pub struct SCPQuorumSet {
     pub inner_sets: VecM<SCPQuorumSet>,
 }
 
+pub type SCPOptQuorumSet = Option::<SCPQuorumSet>;
+
 
 //
 // XDR internals below this point
