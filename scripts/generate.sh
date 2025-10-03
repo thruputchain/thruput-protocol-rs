@@ -9,6 +9,7 @@ protos=(
   genesis.x
   transaction.x
   retrocausal_queue.x
+  storage_cost.x
   storage_delta_flags.x
   syscall_error.x
 )
