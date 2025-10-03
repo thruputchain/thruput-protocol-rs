@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 6a533c8cf616a2c8b429c77eeaadf3a2c7f5d604
+// Generated from xdrc commit: b0b17a8c21c4830fc2b8731c46f419e789d2ce56
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -52,9 +52,9 @@ pub struct int128_xdr {
     pub lowbits: u64,
 }
 
-// int64_t, Unix time as nanoseconds elapsed since
+// uint64_t, Unix time as nanoseconds elapsed since
 // January 1, 1970 UTC
-pub type Timestamp = i64;
+pub type Timestamp = u64;
 
 // uint32_t
 pub type RuntimeMemoryOffset = u32;
@@ -500,6 +500,7 @@ pub enum StorageKeyType {
     kStorageKeyTypeContractData = 0 as i32,
     kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
     kStorageKeyTypeAccountAuthData = 2 as i32,
+    kStorageKeyTypeAddressMetadata = 3 as i32,
 }
 pub use StorageKeyType::*;
 
@@ -510,6 +511,7 @@ impl TryFrom<i32> for StorageKeyType {
             0 => Ok(Self::kStorageKeyTypeContractData),
             1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
             2 => Ok(Self::kStorageKeyTypeAccountAuthData),
+            3 => Ok(Self::kStorageKeyTypeAddressMetadata),
             _ => Err(()),
         }
     }
@@ -530,6 +532,9 @@ pub enum StorageKey {
     // case kStorageKeyTypeAccountAuthData:
     //   void;
     kStorageKeyTypeAccountAuthData = StorageKeyType::kStorageKeyTypeAccountAuthData as i32,
+    // case kStorageKeyTypeAddressMetadata:
+    //   void;
+    kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata as i32,
     
 }
 
