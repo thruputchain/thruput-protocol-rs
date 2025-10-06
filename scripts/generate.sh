@@ -5,6 +5,7 @@ protos=(
   types.x
   contract.x
   contract_error.x
+  event.x
   ffi_enums.x
   genesis.x
   transaction.x

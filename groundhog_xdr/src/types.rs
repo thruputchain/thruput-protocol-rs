@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b0b17a8c21c4830fc2b8731c46f419e789d2ce56
+// Generated from xdrc commit: e8b2a5c6376874d6fdb8de6ffada6edd68211553
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -54,7 +54,7 @@ pub struct int128_xdr {
 
 // uint64_t, Unix time as nanoseconds elapsed since
 // January 1, 1970 UTC
-pub type Timestamp = u64;
+pub type TimePoint = u64;
 
 // uint32_t
 pub type RuntimeMemoryOffset = u32;
@@ -582,6 +582,17 @@ pub type BlockHeight = i64;
 pub type Weight = u32;
 
 pub type BitMap = u64;
+
+// ServerAddress is an IP (or hostname) and port address, separated by a
+// colon.
+pub type ServerAddress = BytesM;
+
+// UPID is a globally unique process identifier (function of start time, place
+// and randomness)
+pub type UPID = [u8; 8];
+
+// Protocol describes a specific protocol and version.
+pub type Protocol = BytesM;
 
 
 //

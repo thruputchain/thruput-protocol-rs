@@ -47,5 +47,9 @@ use storage_delta_flags::*;
 pub mod transaction;
 use transaction::*;
 
+#[rustfmt::skip]
+pub mod event;
+use event::*;
+
 #[cfg(feature = "syscalls")]
 pub mod syscalls;

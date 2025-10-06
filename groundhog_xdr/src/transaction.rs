@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b0b17a8c21c4830fc2b8731c46f419e789d2ce56
+// Generated from xdrc commit: e8b2a5c6376874d6fdb8de6ffada6edd68211553
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -37,6 +37,18 @@ pub type Calldata = BytesM;
 
 pub type ReturnBuffer = BytesM;
 
+// A claim about sponsored gas units for a transaction.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct GasClaim {
+    // The contract being sponsored.
+    pub sponsored_contract: ContractAddress,
+    // The number of gas units being sponsored.
+    pub amount: GasAmount,
+}
+
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -45,6 +57,7 @@ pub struct Invocation {
     pub invoked_address: ContractAddress,
     pub entrypoint: ContractEntrypointID,
     pub gas_limit: GasAmount,
+    pub gas_claims: VecM<GasClaim>,
     pub calldata: Calldata,
 }
 
