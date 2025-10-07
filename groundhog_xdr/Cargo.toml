@@ -10,19 +10,22 @@ crate-type = ["rlib"]
 default = []
 std = ["alloc"]
 alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs?/alloc"]
+
+xdrs = ["dep:xdrs"]
+spec = ["xdrs", "xdrs/repr"]
 serde = ["dep:serde", "dep:serde_arrays"]
 syscalls = ["dep:macros", "dep:thiserror"]
 syscalls_mock = ["syscalls"] # required for native_exec integration
-xdrs = ["dep:xdrs"]
-spec = ["xdrs", "xdrs/repr"]
+
+[dependencies]
+xdr_common.workspace = true
+
+# Optional dependencies
 
 [dependencies.xdrs]
 workspace = true
-optional = true
 features = ["derive", "xdr_common"]
-
-[dependencies.xdr_common]
-workspace = true
+optional = true
 
 [dependencies.serde]
 version = "1.0.219"
