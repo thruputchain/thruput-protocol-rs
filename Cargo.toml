@@ -6,10 +6,14 @@ members = [
     "bin/rpcthroughput_server",
     "macros",
     ]
-resolver = "2"
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
 
 [workspace.dependencies]
-xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["extras", "int128_xdr", "xdr_common", "derive", "ns"] }
+xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git" }
 xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git" }
 rpc_driver = { git = "ssh://git@github.com/groundhogchain/xdr_rpc.git" }
 
@@ -40,4 +44,3 @@ panic = "abort"
 lto = true
 codegen-units = 1
 # also see rust flags set in .cargo/config.toml
-
