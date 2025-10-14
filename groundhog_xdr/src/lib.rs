@@ -51,5 +51,9 @@ use transaction::*;
 pub mod event;
 use event::*;
 
+#[rustfmt::skip]
+pub mod auth_claim;
+use auth_claim::*;
+
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
