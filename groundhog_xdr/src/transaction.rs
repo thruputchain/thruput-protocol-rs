@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e8b2a5c6376874d6fdb8de6ffada6edd68211553
+// Generated from xdrc commit: 762022f1f3117f2d6d0e41af026a4a7a1553fe27
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -57,7 +57,6 @@ pub struct Invocation {
     pub invoked_address: ContractAddress,
     pub entrypoint: ContractEntrypointID,
     pub gas_limit: GasAmount,
-    pub gas_claims: VecM<GasClaim>,
     pub calldata: Calldata,
 }
 
@@ -110,15 +109,8 @@ pub struct Transaction {
     pub uniquifier: Uniquifier,
     // New contracts to deploy.
     pub contracts_to_deploy: VecM<Contract>,
-}
-
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub struct AuthSignaturePreimage {
-    pub signature_weight: Weight,
-    pub message: BytesM,
+    pub auth_claims: AuthClaimData,
+    pub gas_claims: VecM<GasClaim>,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -131,29 +123,19 @@ pub struct DecoratedSignature {
     pub signature: Signature,
 }
 
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub struct AuxiliaryDecoratedSignatures {
-    pub address: ContractAddress,
-    pub signatures: VecM<DecoratedSignature>,
-}
-
 pub type SignedTransactionHash = SHA256Hash;
 
-// Deliberately leaving this SignedTransaction object
-// (and all the other metadata)
-// for a later PR.
+pub type DecoratedSignatureList = VecM::<DecoratedSignature>;
+
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct SignedTransaction {
     pub tx: Transaction,
-    pub signature_weight: Weight,
-    pub signatures: VecM<DecoratedSignature>,
-    pub aux_signatures: VecM<AuxiliaryDecoratedSignatures>,
+    // These signatures get matched against the auth claims in the transaction.
+    // These signatures are over corresponding AuthClaimPreimage objects.
+    pub signatures: VecM<DecoratedSignatureList>,
 }
 
 // Nondeterministic data attached to a transaction by the proposer.
@@ -174,9 +156,6 @@ pub struct NondeterministicProposalData {
 
 // A signed transaction, with the nondeterministic data from the proposer
 // attached to it.
-// TODO(petar): Who is the signer? The originator of the transaction or the
-// validator proposing it?
-// TODO(petar): Should the signature capture the non-deterministic data?
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]

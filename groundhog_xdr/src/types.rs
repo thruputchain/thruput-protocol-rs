@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e8b2a5c6376874d6fdb8de6ffada6edd68211553
+// Generated from xdrc commit: 762022f1f3117f2d6d0e41af026a4a7a1553fe27
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -501,6 +501,7 @@ pub enum StorageKeyType {
     kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
     kStorageKeyTypeAccountAuthData = 2 as i32,
     kStorageKeyTypeAddressMetadata = 3 as i32,
+    kStorageKeyTypeReplayCache = 4 as i32,
 }
 pub use StorageKeyType::*;
 
@@ -512,6 +513,7 @@ impl TryFrom<i32> for StorageKeyType {
             1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
             2 => Ok(Self::kStorageKeyTypeAccountAuthData),
             3 => Ok(Self::kStorageKeyTypeAddressMetadata),
+            4 => Ok(Self::kStorageKeyTypeReplayCache),
             _ => Err(()),
         }
     }
@@ -535,6 +537,9 @@ pub enum StorageKey {
     // case kStorageKeyTypeAddressMetadata:
     //   void;
     kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata as i32,
+    // case kStorageKeyTypeReplayCache:
+    //   void;
+    kStorageKeyTypeReplayCache = StorageKeyType::kStorageKeyTypeReplayCache as i32,
     
 }
 
