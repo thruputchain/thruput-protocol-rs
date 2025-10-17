@@ -32,22 +32,22 @@ jobs:
       - name: Add Cargo to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: cargo build default
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose
       - name: cargo build alloc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose --features=alloc
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=alloc
       - name: cargo build std
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose --features=std
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=std
       - name: cargo build xdrs
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose --features=xdrs
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs
       - name: cargo build syscalls
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose --features=xdrs,syscalls
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs,syscalls
       - name: cargo build syscalls mock
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr build --verbose --features=xdrs,syscalls_mock
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs,syscalls_mock
       - name: run tests
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_xdr test --features=std
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo test -p groundhog_xdr --features=std
       - name: build rpc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_rpc build --verbose
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_rpc --verbose
       - name: build scp
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo -p groundhog_scp build --verbose
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_scp --verbose
       - name: format checks
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo fmt --check
