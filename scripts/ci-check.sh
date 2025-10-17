@@ -8,10 +8,12 @@ set -o xtrace
 
 git submodule update --init --recursive
 
-g="--manifest-path groundhog_xdr/Cargo.toml"
+g="-p groundhog_xdr"
 
 cargo build $g
 cargo build $g -F alloc
 cargo build $g -F std
+cargo build $g -F xdrs
+cargo build $g -F xdrs,syscalls_mock
 cargo test  $g -F std
-cargo +nightly fmt $g --check
+cargo fmt $g --check
