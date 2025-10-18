@@ -32,23 +32,22 @@ jobs:
       - name: Add Cargo to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: cargo build default
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose
       - name: cargo build alloc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=alloc --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=alloc
       - name: cargo build std
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=std --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=std
       - name: cargo build xdrs
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs
       - name: cargo build syscalls
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs,syscalls --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs,syscalls
       - name: cargo build syscalls mock
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --features=xdrs,syscalls_mock --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --verbose --features=xdrs,syscalls_mock
       - name: run tests
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly test --features=std --manifest-path=groundhog_xdr/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo test -p groundhog_xdr --features=std
       - name: build rpc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --manifest-path=groundhog_rpc/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_rpc --verbose
       - name: build scp
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly build --verbose --manifest-path=groundhog_scp/Cargo.toml
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_scp --verbose
       - name: format checks
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly fmt --check
-    
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo fmt --check
