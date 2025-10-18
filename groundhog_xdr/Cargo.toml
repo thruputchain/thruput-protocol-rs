@@ -24,7 +24,7 @@ xdr_common.workspace = true
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "xdr_common"]
+features = ["derive", "xdr_common", "extras", "int128_xdr"]
 optional = true
 
 [dependencies.serde]
