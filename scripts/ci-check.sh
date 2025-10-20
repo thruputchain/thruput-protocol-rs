@@ -13,5 +13,6 @@ g="--manifest-path groundhog_xdr/Cargo.toml"
 cargo build $g
 cargo build $g -F alloc
 cargo build $g -F std
+cargo build $g -F spec
 cargo test  $g -F std
 cargo +nightly fmt $g --check

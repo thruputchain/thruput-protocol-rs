@@ -12,7 +12,7 @@ alloc = ["serde/alloc", "serde_arrays/alloc", "xdrs/alloc"]
 std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
-spec = ["xdrs", "xdrs/repr"]
+spec = ["std", "xdrs", "xdrs/repr"]
 syscalls = ["dep:macros", "dep:thiserror"]
 syscalls_mock = ["syscalls"] # required for native_exec integration
 

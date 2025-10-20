@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 762022f1f3117f2d6d0e41af026a4a7a1553fe27
+// Generated from xdrc commit: cf97ef93e476696a208681298310e15f4b728136
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -125,7 +125,13 @@ pub struct DecoratedSignature {
 
 pub type SignedTransactionHash = SHA256Hash;
 
-pub type DecoratedSignatureList = VecM::<DecoratedSignature>;
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct DecoratedSignatureList {
+    pub list: VecM<DecoratedSignature>,
+}
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
