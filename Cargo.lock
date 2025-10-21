@@ -126,8 +126,8 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "rpc_driver",
- "xdr_common",
- "xdrs",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git?rev=fe9df26f21f9e69c6d3cd18ac2409aef5abcec25)",
+ "xdrs 0.2.0",
 ]
 
 [[package]]
@@ -137,8 +137,8 @@ dependencies = [
  "async-trait",
  "groundhog_xdr",
  "rpc_driver",
- "xdr_common",
- "xdrs",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git?rev=fe9df26f21f9e69c6d3cd18ac2409aef5abcec25)",
+ "xdrs 0.2.0",
 ]
 
 [[package]]
@@ -149,8 +149,8 @@ dependencies = [
  "serde",
  "serde_arrays",
  "thiserror",
- "xdr_common",
- "xdrs",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git?rev=fe9df26f21f9e69c6d3cd18ac2409aef5abcec25)",
+ "xdrs 0.2.0",
 ]
 
 [[package]]
@@ -314,12 +314,12 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.1.0"
-source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#6d8f76f50788a11bb68916a37563842df24ebb13"
+source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git?rev=6d8f76f50788a11bb68916a37563842df24ebb13#6d8f76f50788a11bb68916a37563842df24ebb13"
 dependencies = [
  "async-trait",
  "thiserror",
  "tokio",
- "xdrs",
+ "xdrs 0.1.0",
 ]
 
 [[package]]
@@ -594,12 +594,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "xdr-derive"
+version = "0.2.0"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef#d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "xdr-repr"
 version = "0.1.0"
 source = "git+ssh://git@github.com/groundhogchain/xdrs.git#a5d982c2847344ba126684fdea5bed76d991cf31"
 dependencies = [
- "xdr_common",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git)",
 ]
+
+[[package]]
+name = "xdr-repr"
+version = "0.2.0"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef#d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef"
+dependencies = [
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git)",
+]
+
+[[package]]
+name = "xdr_common"
+version = "0.1.0"
+source = "git+ssh://git@github.com/groundhogchain/xdr_common.git?rev=fe9df26f21f9e69c6d3cd18ac2409aef5abcec25#fe9df26f21f9e69c6d3cd18ac2409aef5abcec25"
 
 [[package]]
 name = "xdr_common"
@@ -612,7 +636,18 @@ version = "0.1.0"
 source = "git+ssh://git@github.com/groundhogchain/xdrs.git#a5d982c2847344ba126684fdea5bed76d991cf31"
 dependencies = [
  "thiserror",
- "xdr-derive",
- "xdr-repr",
- "xdr_common",
+ "xdr-derive 0.1.0",
+ "xdr-repr 0.1.0",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git)",
+]
+
+[[package]]
+name = "xdrs"
+version = "0.2.0"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef#d5a4fc8d7c1f30eb13bb58cddd733695aac3d0ef"
+dependencies = [
+ "thiserror",
+ "xdr-derive 0.2.0",
+ "xdr-repr 0.2.0",
+ "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git)",
 ]
