@@ -29,8 +29,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Add Cargo to PATH
-        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: Setup environment
+        uses: ./.github/actions/setup
       - name: cargo build default
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr
       - name: cargo build alloc
