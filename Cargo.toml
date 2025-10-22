@@ -9,7 +9,7 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
-xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["extras", "int128_xdr", "xdr_common", "derive", "ns"], rev = "1abdc50233c56de9680bf6174bf942aa306ed155" }
+xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["extras", "int128_xdr", "xdr_common", "derive", "ns"] }
 xdr_common = { git = "ssh://git@github.com/groundhogchain/xdr_common.git", rev = "fe9df26f21f9e69c6d3cd18ac2409aef5abcec25" }
 rpc_driver = { git = "ssh://git@github.com/groundhogchain/xdr_rpc.git", rev = "6d8f76f50788a11bb68916a37563842df24ebb13" }
 
