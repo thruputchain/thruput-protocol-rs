@@ -14,6 +14,7 @@ protos=(
   storage_delta_flags.x
   syscall_error.x
   auth_claim.x
+  standard_asset_events.x
 )
 
 scps=(

@@ -30,30 +30,12 @@ use xdr_common::*;
 
 
 
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub struct EventData {
-    pub topics: VecM<SHA256Hash, 3>,
-    pub event: BytesM,
-}
+// The event format puts the first N * 32 bytes of the data
+// as the topics.
 
-// The structure of an event that is placed into our merkle-patricia trie
-// For contracts that structure their data appropriately (specify the topic types, no more than 3 topics), 
-// this can be converted into a stellar::ContractEvent.
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub struct Event {
-    // sha256(ProposedTransaction)
-    pub proposed_tx_hash: SHA256Hash,
-    // uniquifies the event
-    pub sequence_number: u32,
-    pub contract_address: ContractAddress,
-    pub data: EventData,
-}
+pub const kMaxEventLength : u32 = 1024;
+
+pub const kMaxTopics : u32 = 3;
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -61,10 +43,13 @@ pub struct Event {
 #[repr(C)]
 pub struct TxEmittedEvent {
     pub contract_address: ContractAddress,
-    // serialized EventData
-    pub serialized_event: BytesM,
+    // <= kMaxTopics
+    pub num_topics: u32,
+    pub serialized_event: BytesM<kMaxEventLength>,
 }
 
+// This is the struct that goes in the merkle-patricia trie.
+// The key is the proposed_tx_hash field, and the value is the events field.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -73,6 +58,20 @@ pub struct TxEventLog {
     // sha256(ProposedTransaction)
     pub proposed_tx_hash: SHA256Hash,
     pub events: VecM<TxEmittedEvent>,
+}
+
+// Information that suffices to uniquely identify an event.
+// This information can be reconstructed from the TxEmittedEvent.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub struct IdentifiedEvent {
+    // sha256(ProposedTransaction)
+    pub proposed_tx_hash: SHA256Hash,
+    // uniquifies the event
+    pub sequence_number: u32,
+    pub emitted_event: TxEmittedEvent,
 }
 
 
