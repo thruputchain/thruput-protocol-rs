@@ -52,6 +52,10 @@ pub mod event;
 use event::*;
 
 #[rustfmt::skip]
+pub mod standard_asset_events;
+use standard_asset_events::*;
+
+#[rustfmt::skip]
 pub mod auth_claim;
 use auth_claim::*;
 
