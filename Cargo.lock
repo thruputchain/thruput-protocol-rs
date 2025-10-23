@@ -596,7 +596,7 @@ dependencies = [
 [[package]]
 name = "xdr-derive"
 version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=1abdc50233c56de9680bf6174bf942aa306ed155#1abdc50233c56de9680bf6174bf942aa306ed155"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=46b836ed8db17784c687bce1364863f200ccfef0#46b836ed8db17784c687bce1364863f200ccfef0"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -615,7 +615,7 @@ dependencies = [
 [[package]]
 name = "xdr-repr"
 version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=1abdc50233c56de9680bf6174bf942aa306ed155#1abdc50233c56de9680bf6174bf942aa306ed155"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=46b836ed8db17784c687bce1364863f200ccfef0#46b836ed8db17784c687bce1364863f200ccfef0"
 dependencies = [
  "xdr_common 0.1.0 (git+ssh://git@github.com/groundhogchain/xdr_common.git?rev=fe9df26f21f9e69c6d3cd18ac2409aef5abcec25)",
 ]
@@ -644,7 +644,7 @@ dependencies = [
 [[package]]
 name = "xdrs"
 version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=1abdc50233c56de9680bf6174bf942aa306ed155#1abdc50233c56de9680bf6174bf942aa306ed155"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git?rev=46b836ed8db17784c687bce1364863f200ccfef0#46b836ed8db17784c687bce1364863f200ccfef0"
 dependencies = [
  "thiserror",
  "xdr-derive 0.2.0",
