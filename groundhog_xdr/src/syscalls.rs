@@ -1,7 +1,7 @@
 use crate::*;
 use thiserror::Error;
 
-macros::generate_syscall_numbers!("../protocol/syscalls.yaml");
+groundhog_xdr_macros::generate_syscall_numbers!("../protocol/syscalls.yaml");
 
 #[derive(xdrs::ReadXDR, xdrs::WriteXDR)]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
@@ -99,4 +99,4 @@ fn syscall_wrapper(
     }
 }
 
-macros::generate_syscall_decls!("../protocol/syscalls.yaml");
+groundhog_xdr_macros::generate_syscall_decls!("../protocol/syscalls.yaml");

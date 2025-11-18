@@ -13,7 +13,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
-syscalls = ["dep:macros", "dep:thiserror"]
+syscalls = ["dep:groundhog_xdr_macros", "dep:thiserror"]
 syscalls_mock = ["syscalls"] # required for native_exec integration
 
 [dependencies.xdrs]
@@ -34,7 +34,7 @@ optional = true
 git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
 default-features = false
 
-[dependencies.macros]
+[dependencies.groundhog_xdr_macros]
 path = "../macros"
 optional = true
 
