@@ -72,22 +72,26 @@ impl Syscall {
 #[derive(Debug, serde::Deserialize)]
 struct Arg {
     name: String,
-    span_argument: Option<bool>,
+
+    #[serde(default)]
+    span_argument: bool,
+
     typename: Option<String>,
+
     rust_typename: Option<String>,
+
     #[serde(default)]
     primitive_type: bool, // default to false
+
     #[serde(default)]
     optional: bool, // default to false
 }
 
 impl Arg {
     fn is_span_argument(&self) -> bool {
-        if let Some(x) = self.span_argument {
-            return x;
-        }
-        return false;
+        self.span_argument
     }
+
     fn formatted_name(&self) -> proc_macro2::Ident {
         syn::Ident::new(&self.name, proc_macro2::Span::call_site())
     }
@@ -100,32 +104,32 @@ impl Arg {
             None => {
                 return None;
             }
-            Some(name) => return type_map.get(&name.clone()),
+            Some(name) => return type_map.get(name.as_str()),
         }
     }
 
     fn fixed_size_typename(&self, type_map: &TypeMap) -> Option<String> {
-        match &self.typename {
-            None => {
-                return None;
-            }
-            _ => {}
+        // Return `None` if we have no typename
+        let typename: &str = self.typename.as_ref()?.as_ref();
+
+        let name = if let Some(type_details) = self.get_type_details(type_map)
+        {
+            type_details.rust_name.clone()
+        } else if let Some(x) = &self.rust_typename {
+            x.clone()
+        } else {
+            typename.to_owned()
         };
 
-        if let Some(type_details) = self.get_type_details(type_map) {
-            return Some(type_details.rust_name.clone());
-        }
-        if let Some(x) = &self.rust_typename {
-            return Some(x.clone());
-        }
-        self.typename.clone()
+        Some(name)
     }
 
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
-            return type_details.rust_uses_as_ptr;
+            type_details.rust_uses_as_ptr
+        } else {
+            true
         }
-        return true;
     }
 
     pub fn to_u64s(
@@ -136,135 +140,105 @@ impl Arg {
         let name = self.formatted_name();
 
         if self.is_span_argument() {
-            if is_input {
-                return vec![
-                    quote! {
-                        #name.as_ptr() as u64,
-                    },
-                    quote! {
-                        #name.len() as u64,
-                    },
-                ];
-            }
-            return vec![
+            let span_len = quote! { #name.len() as u64 };
+            let span_ptr = if is_input {
                 quote! {
-                    #name.as_mut_ptr() as u64,
-                },
-                quote! {
-                    #name.len() as u64,
-                },
-            ];
-        }
-
-        if let Some(_) = self.fixed_size_typename(type_map) {
-            if self.primitive_type {
-                if is_input {
-                    return vec![quote! {
-                        #name as u64,
-                    }];
+                    #name.as_ptr() as u64
                 }
-                return vec![quote! {
-                    #name as *mut _ as u64,
-                }];
-            }
-            if self.optional {
+            } else {
+                quote! {
+                    #name.as_mut_ptr() as u64
+                }
+            };
+            vec![span_ptr, span_len]
+        } else if self.fixed_size_typename(type_map).is_some() {
+            let arg = if self.primitive_type {
+                if is_input {
+                    quote! { #name as u64 }
+                } else {
+                    quote! { #name as *mut _ as u64 }
+                }
+            } else if self.optional {
                 assert!(is_input);
                 if self.uses_as_ptr(type_map) {
-                    return vec![quote! {
+                    quote! {
                         match #name {
                             Some(x) => x.as_ptr() as u64,
                             None => u64::MAX,
-                        },
-                    }];
+                        }
+                    }
+                } else {
+                    quote! {
+                        match #name {
+                            Some(x) => x as *const _ as u64,
+                            None => u64::MAX,
+                        }
+                    }
                 }
-                return vec![quote! {
-                    match #name {
-                        Some(x) => x as *const _ as u64,
-                        None => u64::MAX,
-                    },
-                }];
-            }
-
-            if self.uses_as_ptr(type_map) {
+            } else if self.uses_as_ptr(type_map) {
                 if is_input {
-                    return vec![quote! {
-                        #name.as_ptr() as u64,
-                    }];
+                    quote! { #name.as_ptr() as u64 }
+                } else {
+                    quote! { #name.as_mut_ptr() as u64 }
                 }
-                return vec![quote! {
-                    #name.as_mut_ptr() as u64,
-                }];
-            }
-            // else it's, at this point in time, a 128 bit int
-            if is_input {
-                return vec![quote! {
-                    #name as *const _ as u64,
-                }];
-            }
+            } else {
+                // else it's, at this point in time, a 128 bit int
+                if is_input {
+                    quote! { #name as *const _ as u64 }
+                } else {
+                    quote! { #name as *mut _ as u64 }
+                }
+            };
 
-            return vec![quote! {
-                #name as *mut _ as u64,
-            }];
+            vec![arg]
+        } else {
+            unimplemented!("Unknown arg type");
         }
-
-        unimplemented!("Unknown arg type");
     }
 
-    // does not include trailing comma
-    pub fn to_uninit_input(
+    pub fn to_uninit_param(
         &self,
         is_input: bool,
         type_map: &TypeMap,
     ) -> TokenStream2 {
-        let name = self.formatted_name();
-        if self.is_span_argument() {
+        let uninit_ty = if self.is_span_argument() {
             if is_input {
-                return quote! {
-                    #name : &[u8]
-                };
+                quote! { &[u8] }
+            } else {
+                quote! { &mut [::core::mem::MaybeUninit<u8>] }
             }
-            return quote! {
-                #name :  &mut [::core::mem::MaybeUninit<u8>]
-            };
-        }
-        if let Some(type_str) = self.fixed_size_typename(type_map) {
+        } else if let Some(type_str) = self.fixed_size_typename(type_map) {
             let ty = format_ident!("{}", type_str);
+
             if is_input {
                 if self.primitive_type {
-                    return quote! {
-                        #name : #ty
-                    };
+                    quote! { #ty }
+                } else if self.optional {
+                    quote! { Option<&#ty> }
+                } else {
+                    quote! { &#ty }
                 }
-                if self.optional {
-                    return quote! {
-                        #name : Option<&#ty>
-                    };
-                }
-                return quote! {
-                    #name : &#ty
-                };
+            } else if self.primitive_type {
+                quote! { &mut #ty }
+            } else {
+                quote! { &mut ::core::mem::MaybeUninit<#ty> }
             }
-            if self.primitive_type {
-                return quote! {
-                    #name : &mut #ty
-                };
-            }
-            return quote! {
-                #name : &mut ::core::mem::MaybeUninit<#ty>
-            };
-        }
+        } else {
+            unimplemented!("Unknown arg type");
+        };
 
-        unimplemented!("Unknown arg type");
+        let name = self.formatted_name();
+
+        quote! {
+            #name: #uninit_ty
+        }
     }
 
-    // does not include trailing comma
-    pub fn to_raw_input(
+    pub fn to_raw_param(
         &self,
         is_input: bool,
         type_map: &TypeMap,
     ) -> TokenStream2 {
-        let name = self.formatted_name();
-
         let ty = if self.is_span_argument() {
             quote! { [u8] }
         } else if let Some(type_str) = self.fixed_size_typename(type_map) {
@@ -274,24 +248,23 @@ impl Arg {
             unimplemented!("Unknown arg type");
         };
 
-        if is_input {
+        let raw_ty = if is_input {
             if self.primitive_type {
-                return quote! {
-                    #name : #ty
-                };
+                ty
+            } else if self.optional {
+                quote! { Option<&#ty> }
+            } else {
+                quote! { &#ty }
             }
-            if self.optional {
-                return quote! {
-                    #name : Option<&#ty>
-                };
-            }
-            return quote! {
-                #name : &#ty
-            };
-        }
-        return quote! {
-            #name : &mut #ty
+        } else {
+            quote! { &mut #ty }
         };
+
+        let name = self.formatted_name();
+
+        quote! {
+            #name: #raw_ty
+        }
     }
 
     // raw_SYSCALL wraps uninit_SYSCALL, getting rid of the MaybeUninit usage.
@@ -331,14 +304,14 @@ fn generate_uninit_syscall_inputs(
     let mut args: Vec<TokenStream2> = syscall
         .inputs
         .iter()
-        .map(|inp| inp.to_uninit_input(true, type_map))
+        .map(|inp| inp.to_uninit_param(true, type_map))
         .collect();
 
     // outputs
     let output_args: Vec<TokenStream2> = syscall
         .outputs
         .iter()
-        .map(|outp| outp.to_uninit_input(false, type_map))
+        .map(|outp| outp.to_uninit_param(false, type_map))
         .collect();
 
     args.extend(output_args);
@@ -369,7 +342,7 @@ fn generate_raw_through_calls(
     args
 }
 
-fn generate_raw_syscall_inputs(
+fn generate_raw_syscall_args(
     syscall: &Syscall,
     type_map: &TypeMap,
 ) -> Vec<TokenStream2> {
@@ -377,14 +350,14 @@ fn generate_raw_syscall_inputs(
     let mut args: Vec<TokenStream2> = syscall
         .inputs
         .iter()
-        .map(|inp| inp.to_raw_input(true, type_map))
+        .map(|inp| inp.to_raw_param(true, type_map))
         .collect();
 
     // outputs
     let output_args: Vec<TokenStream2> = syscall
         .outputs
         .iter()
-        .map(|outp| outp.to_raw_input(false, type_map))
+        .map(|outp| outp.to_raw_param(false, type_map))
         .collect();
 
     args.extend(output_args);
@@ -419,7 +392,7 @@ fn generate_u64_syscall_args(
         }];
     }
 
-    u64_args.resize(syscall_input_count, quote! { 0, });
+    u64_args.resize(syscall_input_count, quote! { 0 });
 
     u64_args
 }
@@ -477,7 +450,7 @@ fn generate_syscall_uninit_decl(
             // syscall will initialize outputs, if error is kNone
             let err: SysErr =
                 syscall_wrapper(SyscallNo::#syscall_no,
-                    #(#u64_args)*);
+                    #(#u64_args),*);
 
             #post_syscall
         }
@@ -488,7 +461,7 @@ fn generate_syscall_raw_decl(
     syscall: &Syscall,
     type_map: &TypeMap,
 ) -> TokenStream2 {
-    let raw_syscall_inputs = generate_raw_syscall_inputs(&syscall, type_map);
+    let raw_syscall_inputs = generate_raw_syscall_args(&syscall, type_map);
     let forward_args = generate_raw_through_calls(&syscall, type_map);
 
     let uninit_ident = format_ident!("uninit_{}", &syscall.name);
