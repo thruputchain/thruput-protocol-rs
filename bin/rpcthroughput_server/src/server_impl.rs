@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use groundhog_rpc::{blank_rpc_blank_rpc_v1, Data};
+use groundhog_rpc::{Data, blank_rpc_blank_rpc_v1};
 
 pub struct BlankRpcServer;
 

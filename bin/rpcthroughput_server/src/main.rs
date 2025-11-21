@@ -30,7 +30,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .unwrap();
     });
 
-    println!("RPC Throughput Server running with blank_rpc implementation. Press Ctrl+C to stop.");
+    println!(
+        "RPC Throughput Server running with blank_rpc implementation. Press Ctrl+C to stop."
+    );
 
     // Keep the server running
     tokio::signal::ctrl_c().await?;

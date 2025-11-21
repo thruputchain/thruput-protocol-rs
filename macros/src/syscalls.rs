@@ -1,7 +1,7 @@
 use ::serde;
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
-use quote::{format_ident, quote, ToTokens};
+use quote::{ToTokens, format_ident, quote};
 use std::collections::HashMap;
 
 #[derive(Debug, serde::Deserialize)]
@@ -105,13 +105,19 @@ impl ArgMapped {
 
     fn to_uninit_param(&self) -> TokenStream2 {
         match *self {
-            ArgMapped::Span { is_input } =>
+            ArgMapped::Span { is_input } => {
                 if is_input {
                     quote! { &[u8] }
                 } else {
                     quote! { &mut [::core::mem::MaybeUninit<u8>] }
-                },
-            ArgMapped::FixedSize { ref ty, is_input, is_primitive, is_optional } => {
+                }
+            }
+            ArgMapped::FixedSize {
+                ref ty,
+                is_input,
+                is_primitive,
+                is_optional,
+            } => {
                 let ty = if is_input {
                     if is_primitive {
                         quote! { #ty }
@@ -126,7 +132,11 @@ impl ArgMapped {
                     }
                 };
 
-                let ty = if is_optional { quote! { Option<#ty> } } else { ty };
+                let ty = if is_optional {
+                    quote! { Option<#ty> }
+                } else {
+                    ty
+                };
 
                 ty
             }
@@ -135,8 +145,7 @@ impl ArgMapped {
 
     fn to_raw_param(&self) -> TokenStream2 {
         let mut ty = match self {
-            ArgMapped::Span { .. } =>
-                quote! { [u8] },
+            ArgMapped::Span { .. } => quote! { [u8] },
             ArgMapped::FixedSize { ty, .. } => {
                 quote! { #ty }
             }
@@ -202,10 +211,15 @@ impl Arg {
             let ty: syn::Type = match syn::parse_str(type_expr) {
                 Ok(ty) => ty,
                 Err(e) => {
-                    let err = syn::Error::new(e.span(),
-                        format!("Couldn't parse `type_expr` expression: \"{}\"", type_expr));
+                    let err = syn::Error::new(
+                        e.span(),
+                        format!(
+                            "Couldn't parse `type_expr` expression: \"{}\"",
+                            type_expr
+                        ),
+                    );
                     return Some(err.into_compile_error());
-                },
+                }
             };
 
             return Some(quote! { #ty });
