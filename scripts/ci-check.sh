@@ -14,7 +14,10 @@ cargo build $g -F alloc
 cargo build $g -F std
 cargo build $g -F spec
 cargo test $g -F std
-cargo fmt $g --check
 
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp
+
+cargo fmt --check
+
+echo ">> CI clean!"
