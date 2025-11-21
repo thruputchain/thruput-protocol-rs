@@ -166,6 +166,7 @@ struct Arg {
     span_argument: bool,
 
     typename: Option<String>,
+    type_expr: Option<String>,
 
     rust_typename: Option<String>,
 
@@ -195,7 +196,21 @@ impl Arg {
         type_map.get(typename)
     }
 
-    fn fixed_size_typename(&self, type_map: &TypeMap) -> Option<String> {
+    fn fixed_size_type(&self, type_map: &TypeMap) -> Option<TokenStream2> {
+        if let Some(type_expr) = self.type_expr.as_ref() {
+            let type_expr = type_expr.as_str();
+            let ty: syn::Type = match syn::parse_str(type_expr) {
+                Ok(ty) => ty,
+                Err(e) => {
+                    let err = syn::Error::new(e.span(),
+                        format!("Couldn't parse `type_expr` expression: \"{}\"", type_expr));
+                    return Some(err.into_compile_error());
+                },
+            };
+
+            return Some(quote! { #ty });
+        }
+
         // Return `None` if we have no typename
         let typename: &str = self.typename.as_ref()?.as_ref();
 
@@ -208,12 +223,9 @@ impl Arg {
             typename.to_owned()
         };
 
-        Some(name)
-    }
+        let ident = format_ident!("{}", name);
 
-    fn fixed_size_type(&self, type_map: &TypeMap) -> Option<TokenStream2> {
-        self.fixed_size_typename(type_map).map(|name|
-            format_ident!("{}", name).into_token_stream())
+        Some(ident.into_token_stream())
     }
 
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
@@ -258,7 +270,7 @@ impl Arg {
                 }
             };
             vec![span_ptr, span_len]
-        } else if self.fixed_size_typename(type_map).is_some() {
+        } else if self.fixed_size_type(type_map).is_some() {
             let arg = if self.primitive_type {
                 if is_input {
                     quote! { #name as u64 }
@@ -347,8 +359,7 @@ impl Arg {
                 unsafe {core::mem::transmute::<&mut [u8], &mut [::core::mem::MaybeUninit<u8>]>(#name)}
             };
         }
-        if let Some(type_str) = self.fixed_size_typename(type_map) {
-            let ty = format_ident!("{}", type_str);
+        if let Some(ty) = self.fixed_size_type(type_map) {
             return quote! {
                 unsafe {core::mem::transmute::<&mut #ty, &mut ::core::mem::MaybeUninit<#ty>>(#name)}
             };
