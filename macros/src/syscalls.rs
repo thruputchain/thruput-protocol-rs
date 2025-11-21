@@ -1,7 +1,7 @@
 use ::serde;
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 
 #[derive(Debug, serde::Deserialize)]
@@ -69,6 +69,95 @@ impl Syscall {
     }
 }
 
+enum ArgMapped {
+    Span {
+        is_input: bool,
+    },
+    FixedSize {
+        ty: TokenStream2,
+        is_input: bool,
+        is_primitive: bool,
+        is_optional: bool,
+    },
+}
+
+impl ArgMapped {
+    fn is_input(&self) -> bool {
+        match *self {
+            ArgMapped::Span { is_input } => is_input,
+            ArgMapped::FixedSize { is_input, .. } => is_input,
+        }
+    }
+
+    fn is_primitive(&self) -> bool {
+        match *self {
+            ArgMapped::FixedSize { is_primitive, .. } => is_primitive,
+            _ => false,
+        }
+    }
+
+    fn is_optional(&self) -> bool {
+        match *self {
+            ArgMapped::FixedSize { is_optional, .. } => is_optional,
+            _ => false,
+        }
+    }
+
+    fn to_uninit_param(&self) -> TokenStream2 {
+        match *self {
+            ArgMapped::Span { is_input } =>
+                if is_input {
+                    quote! { &[u8] }
+                } else {
+                    quote! { &mut [::core::mem::MaybeUninit<u8>] }
+                },
+            ArgMapped::FixedSize { ref ty, is_input, is_primitive, is_optional } => {
+                let ty = if is_input {
+                    if is_primitive {
+                        quote! { #ty }
+                    } else {
+                        quote! { &#ty }
+                    }
+                } else {
+                    if is_primitive {
+                        quote! { &mut #ty }
+                    } else {
+                        quote! { &mut ::core::mem::MaybeUninit<#ty> }
+                    }
+                };
+
+                let ty = if is_optional { quote! { Option<#ty> } } else { ty };
+
+                ty
+            }
+        }
+    }
+
+    fn to_raw_param(&self) -> TokenStream2 {
+        let mut ty = match self {
+            ArgMapped::Span { .. } =>
+                quote! { [u8] },
+            ArgMapped::FixedSize { ty, .. } => {
+                quote! { #ty }
+            }
+        };
+
+        if self.is_input() {
+            if !self.is_primitive() {
+                ty = quote! { &#ty };
+            }
+        } else {
+            ty = quote! { &mut #ty };
+        }
+
+        if self.is_optional() {
+            ty = quote! { Option<#ty> };
+        }
+
+        ty
+    }
+}
+
 #[derive(Debug, serde::Deserialize)]
 struct Arg {
     name: String,
@@ -100,12 +189,10 @@ impl Arg {
         &self,
         type_map: &'a TypeMap,
     ) -> Option<&'a TypeInfo> {
-        match &self.typename {
-            None => {
-                return None;
-            }
-            Some(name) => return type_map.get(name.as_str()),
-        }
+        // Return `None` if we have no typename
+        let typename: &str = self.typename.as_ref()?.as_ref();
+
+        type_map.get(typename)
     }
 
     fn fixed_size_typename(&self, type_map: &TypeMap) -> Option<String> {
@@ -124,11 +211,31 @@ impl Arg {
         Some(name)
     }
 
+    fn fixed_size_type(&self, type_map: &TypeMap) -> Option<TokenStream2> {
+        self.fixed_size_typename(type_map).map(|name|
+            format_ident!("{}", name).into_token_stream())
+    }
+
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.rust_uses_as_ptr
         } else {
             true
+        }
+    }
+
+    fn mapped(&self, is_input: bool, type_map: &TypeMap) -> ArgMapped {
+        if self.is_span_argument() {
+            ArgMapped::Span { is_input }
+        } else if let Some(ty) = self.fixed_size_type(type_map) {
+            ArgMapped::FixedSize {
+                ty,
+                is_input,
+                is_primitive: self.primitive_type,
+                is_optional: self.optional,
+            }
+        } else {
+            unimplemented!("Unknown arg type");
         }
     }
 
@@ -201,33 +308,8 @@ impl Arg {
         is_input: bool,
         type_map: &TypeMap,
     ) -> TokenStream2 {
-        let uninit_ty = if self.is_span_argument() {
-            if is_input {
-                quote! { &[u8] }
-            } else {
-                quote! { &mut [::core::mem::MaybeUninit<u8>] }
-            }
-        } else if let Some(type_str) = self.fixed_size_typename(type_map) {
-            let ty = format_ident!("{}", type_str);
-
-            if is_input {
-                if self.primitive_type {
-                    quote! { #ty }
-                } else if self.optional {
-                    quote! { Option<&#ty> }
-                } else {
-                    quote! { &#ty }
-                }
-            } else if self.primitive_type {
-                quote! { &mut #ty }
-            } else {
-                quote! { &mut ::core::mem::MaybeUninit<#ty> }
-            }
-        } else {
-            unimplemented!("Unknown arg type");
-        };
-
         let name = self.formatted_name();
+        let uninit_ty = self.mapped(is_input, type_map).to_uninit_param();
 
         quote! {
             #name: #uninit_ty
@@ -239,28 +321,8 @@ impl Arg {
         is_input: bool,
         type_map: &TypeMap,
     ) -> TokenStream2 {
-        let ty = if self.is_span_argument() {
-            quote! { [u8] }
-        } else if let Some(type_str) = self.fixed_size_typename(type_map) {
-            let ident = format_ident!("{}", type_str);
-            quote! { #ident }
-        } else {
-            unimplemented!("Unknown arg type");
-        };
-
-        let raw_ty = if is_input {
-            if self.primitive_type {
-                ty
-            } else if self.optional {
-                quote! { Option<&#ty> }
-            } else {
-                quote! { &#ty }
-            }
-        } else {
-            quote! { &mut #ty }
-        };
-
         let name = self.formatted_name();
+        let raw_ty = self.mapped(is_input, type_map).to_raw_param();
 
         quote! {
             #name: #raw_ty
