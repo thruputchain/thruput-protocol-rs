@@ -118,7 +118,7 @@ impl ArgMapped {
                 is_primitive,
                 is_optional,
             } => {
-                let ty = if is_input {
+                let mut ty = if is_input {
                     if is_primitive {
                         quote! { #ty }
                     } else {
@@ -132,11 +132,9 @@ impl ArgMapped {
                     }
                 };
 
-                let ty = if is_optional {
-                    quote! { Option<#ty> }
-                } else {
-                    ty
-                };
+                if is_optional {
+                    ty = quote! { Option<#ty> };
+                }
 
                 ty
             }
@@ -175,7 +173,6 @@ struct Arg {
     span_argument: bool,
 
     typename: Option<String>,
-    type_expr: Option<String>,
 
     rust_typename: Option<String>,
 
@@ -206,40 +203,35 @@ impl Arg {
     }
 
     fn fixed_size_type(&self, type_map: &TypeMap) -> Option<TokenStream2> {
-        if let Some(type_expr) = self.type_expr.as_ref() {
-            let type_expr = type_expr.as_str();
-            let ty: syn::Type = match syn::parse_str(type_expr) {
-                Ok(ty) => ty,
-                Err(e) => {
-                    let err = syn::Error::new(
-                        e.span(),
-                        format!(
-                            "Couldn't parse `type_expr` expression: \"{}\"",
-                            type_expr
-                        ),
-                    );
-                    return Some(err.into_compile_error());
-                }
-            };
-
-            return Some(quote! { #ty });
-        }
-
         // Return `None` if we have no typename
         let typename: &str = self.typename.as_ref()?.as_ref();
 
-        let name = if let Some(type_details) = self.get_type_details(type_map)
-        {
-            type_details.rust_name.clone()
-        } else if let Some(x) = &self.rust_typename {
-            x.clone()
-        } else {
-            typename.to_owned()
-        };
+        // Is it an identifier that has a mapping?
+        if let Some(type_details) = type_map.get(typename) {
+            let name = &type_details.rust_name;
 
-        let ident = format_ident!("{}", name);
+            return Some(format_ident!("{}", name).into_token_stream());
+        }
 
-        Some(ident.into_token_stream())
+        // Is there an explicit `rust_typename` field?
+        if let Some(name) = self.rust_typename.as_ref() {
+            return Some(format_ident!("{}", name).into_token_stream());
+        }
+
+        // It's an (unmapped) identifier or some other kind of type expression
+        match syn::parse_str::<syn::Type>(typename) {
+            Ok(ty) => Some(ty.into_token_stream()),
+            Err(e) => {
+                let err = syn::Error::new(
+                    e.span(),
+                    format!(
+                        "Couldn't parse `typename` field as a type expression: \"{}\"",
+                        typename
+                    ),
+                );
+                Some(err.into_compile_error())
+            }
+        }
     }
 
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
