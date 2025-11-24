@@ -174,8 +174,6 @@ struct Arg {
 
     typename: Option<String>,
 
-    rust_typename: Option<String>,
-
     #[serde(default)]
     primitive_type: bool, // default to false
 
@@ -213,12 +211,7 @@ impl Arg {
             return Some(format_ident!("{}", name).into_token_stream());
         }
 
-        // Is there an explicit `rust_typename` field?
-        if let Some(name) = self.rust_typename.as_ref() {
-            return Some(format_ident!("{}", name).into_token_stream());
-        }
-
-        // It's an (unmapped) identifier or some other kind of type expression
+        // It's an unmapped identifier or some other kind of type expression
         match syn::parse_str::<syn::Type>(typename) {
             Ok(ty) => Some(ty.into_token_stream()),
             Err(e) => {
