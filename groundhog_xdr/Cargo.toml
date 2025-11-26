@@ -8,7 +8,7 @@ crate-type = ["rlib"]
 
 [features]
 default = []
-alloc = ["serde/alloc", "serde_arrays/alloc", "xdrs/alloc"]
+alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
 std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays"]
 xdrs = []
