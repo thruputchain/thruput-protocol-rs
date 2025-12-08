@@ -1,14 +1,16 @@
 use crate::*;
 use thiserror::Error;
+use core::fmt;
 
 groundhog_xdr_macros::generate_syscall_numbers!("../protocol/syscalls.yaml");
 
-#[derive(xdrs::ReadXDR, xdrs::WriteXDR)]
+#[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
-#[derive(Error, Copy, Clone, Debug, PartialEq, Eq)]
-#[error("SysErr({0})")]
+#[derive(Error, Copy, Clone, PartialEq, Eq)]
+#[error("{:?}", self)]
 #[repr(transparent)]
 pub struct SysErr(pub i32);
+
 pub type SyscallResult<T> = core::result::Result<T, SysErr>;
 
 impl SysErr {
@@ -28,8 +30,22 @@ impl SysErr {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist)
     }
 
+    pub fn is_invalid_input(self) -> bool {
+        self.is_code(SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput)
+    }
+
     pub fn is_aborted(self) -> bool {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeFrameReverted)
+    }
+}
+
+impl fmt::Debug for SysErr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if let Ok(code) = TryInto::<SyscallErrorCode>::try_into(self.0) {
+            write!(f, "SysErr<{:?}>", code)
+        } else {
+            write!(f, "SysErr({})", self.0)
+        }
     }
 }
 
