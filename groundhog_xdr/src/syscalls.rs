@@ -1,6 +1,6 @@
 use crate::*;
-use thiserror::Error;
 use core::fmt;
+use thiserror::Error;
 
 groundhog_xdr_macros::generate_syscall_numbers!("../protocol/syscalls.yaml");
 
