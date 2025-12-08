@@ -11,7 +11,13 @@ impl From<SHA256Hash> for StorageKey {
 
 impl From<SHA256Hash> for StorageKeyContractData {
     fn from(hash: SHA256Hash) -> Self {
-        Self::new(hash.into_inner())
+        hash.into_inner().into()
+    }
+}
+
+impl From<ContractAddress> for StorageKeyContractData {
+    fn from(addr: ContractAddress) -> Self {
+        addr.into_inner().into()
     }
 }
 
