@@ -12,8 +12,8 @@ extern crate alloc;
 pub mod types;
 use types::*;
 
-pub mod extras;
-use extras::*;
+pub mod impls;
+use impls::*;
 
 #[rustfmt::skip]
 pub mod contract;
