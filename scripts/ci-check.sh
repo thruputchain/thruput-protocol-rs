@@ -8,6 +8,8 @@ set -o xtrace
 
 git submodule update --init --recursive
 
+export RUSTFLAGS="--deny warnings"
+
 g="-p groundhog_xdr"
 cargo build $g
 cargo build $g -F alloc

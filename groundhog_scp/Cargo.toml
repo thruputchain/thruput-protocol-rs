@@ -11,6 +11,7 @@ default = ["alloc", "std", "xdrs"]
 alloc = ["xdrs", "xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
+spec = [] # enable dump of XDR specs
 
 [dependencies]
 async-trait = "0.1.89"
