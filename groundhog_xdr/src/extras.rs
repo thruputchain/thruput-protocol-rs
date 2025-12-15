@@ -1,5 +1,5 @@
 use crate::*;
-use core::ops::Deref;
+use core::ops::*;
 
 impl From<SHA256Hash> for StorageKey {
     fn from(hash: SHA256Hash) -> Self {
@@ -18,6 +18,84 @@ impl From<SHA256Hash> for StorageKeyContractData {
 impl From<ContractAddress> for StorageKeyContractData {
     fn from(addr: ContractAddress) -> Self {
         addr.into_inner().into()
+    }
+}
+
+impl BitXor for StorageKeyContractData {
+    type Output = Self;
+
+    fn bitxor(mut self, rhs: Self) -> Self::Output {
+        self ^= &rhs.into_inner();
+
+        self
+    }
+}
+
+impl BitXor<&Self> for StorageKeyContractData {
+    type Output = Self;
+
+    fn bitxor(mut self, rhs: &Self) -> Self::Output {
+        let rhs: &[u8; 32] = &*rhs;
+
+        self ^= rhs;
+
+        self
+    }
+}
+
+impl BitXorAssign<&[u8; 32]> for StorageKeyContractData {
+    fn bitxor_assign(&mut self, rhs: &[u8; 32]) {
+        let (lchunks, []) = (&mut *self).as_chunks_mut::<4>() else {
+            unreachable!()
+        };
+        let (rchunks, []) = rhs.as_chunks::<4>() else {
+            unreachable!()
+        };
+        lchunks
+            .iter_mut()
+            .zip(rchunks.iter())
+            .for_each(|(lbytes, rbytes)| {
+                let l = u32::from_le_bytes(lbytes.clone());
+                let r = u32::from_le_bytes(rbytes.clone());
+                *lbytes = (l ^ r).to_le_bytes();
+            });
+    }
+}
+
+#[cfg(test)]
+mod xor_test {
+    use super::*;
+    use std::ops::Range;
+    use std::vec::Vec;
+
+    #[test]
+    fn sk_bit_xor() {
+        let l: Vec<u8> = Range::from(0..32).into_iter().collect();
+        let l: &[u8; 32] = l.as_slice().try_into().unwrap();
+        let l: StorageKeyContractData = l.clone().into();
+
+        let rv: Vec<u8> = Range::from(107..139).into_iter().rev().collect();
+        let rs: &[u8; 32] = rv.as_slice().try_into().unwrap();
+        let r: StorageKeyContractData = rs.clone().into();
+
+        let expected = xor_arrays(&*l, &*r);
+
+        let x: StorageKeyContractData = l ^ r;
+        assert_eq!(*x, expected);
+
+        let x: StorageKeyContractData = l ^ &r;
+        assert_eq!(*x, expected);
+
+        let mut x: StorageKeyContractData = l;
+        x ^= rs;
+        assert_eq!(*x, expected);
+    }
+
+    fn xor_arrays(a: &[u8; 32], b: &[u8; 32]) -> [u8; 32] {
+        let out: Vec<_> =
+            a.iter().zip(b.iter()).map(|(a, b)| *a ^ *b).collect();
+        let out: &[u8; 32] = out.as_slice().try_into().unwrap();
+        out.clone()
     }
 }
 
