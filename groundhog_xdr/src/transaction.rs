@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cf97ef93e476696a208681298310e15f4b728136
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -40,7 +40,7 @@ pub type ReturnBuffer = BytesM;
 // A claim about sponsored gas units for a transaction.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct GasClaim {
     // The contract being sponsored.
@@ -51,7 +51,7 @@ pub struct GasClaim {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Invocation {
     pub invoked_address: ContractAddress,
@@ -62,7 +62,7 @@ pub struct Invocation {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(i32)]
 pub enum InvokeFlag {
@@ -93,7 +93,7 @@ pub type OriginID = [u8; 16];
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Uniquifier {
     pub block_expiry_height: BlockHeight,
@@ -102,7 +102,7 @@ pub struct Uniquifier {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Transaction {
     pub invocation: Invocation,
@@ -115,7 +115,7 @@ pub struct Transaction {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DecoratedSignature {
     // uint32_t
@@ -127,7 +127,7 @@ pub type SignedTransactionHash = SHA256Hash;
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DecoratedSignatureList {
     pub list: VecM<DecoratedSignature>,
@@ -135,7 +135,7 @@ pub struct DecoratedSignatureList {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SignedTransaction {
     pub tx: Transaction,
@@ -144,10 +144,18 @@ pub struct SignedTransaction {
     pub signatures: VecM<DecoratedSignatureList>,
 }
 
+pub type SignedTransactionBatch = VecM::<SignedTransaction>;
+
+pub type OptSignedTransaction = Option::<SignedTransaction>;
+
+pub type OptSignedTransactionBatch = VecM::<OptSignedTransaction>;
+
+pub type SignedTransactionHashBatch = VecM::<SignedTransactionHash>;
+
 // Nondeterministic data attached to a transaction by the proposer.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct NondeterministicProposalData {
     // string of nondeterministic bits generated during the course
@@ -164,7 +172,7 @@ pub struct NondeterministicProposalData {
 // attached to it.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
@@ -173,9 +181,10 @@ pub struct ProposedTransaction {
 
 // Nominations, included in SCP messages, include only the ND data.
 // The transactions themselves are disseminated through the overlay.
+// XXX(petar): rename to TransactionProposalData
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
@@ -183,7 +192,7 @@ pub struct NominatedTransaction {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(i32)]
 pub enum TransactionStatistic {

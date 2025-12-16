@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cf97ef93e476696a208681298310e15f4b728136
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -43,7 +43,7 @@ use xdrs::xdr_repr::*;
 // host function returns HostFnErrorCode::kReturn.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(i32)]
 pub enum InvokeErrorCode {
@@ -115,7 +115,7 @@ impl TryFrom<i32> for InvokeErrorCode {
 // (returning to the caller), and are handled by the WebAssembly runtime.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(i32)]
 pub enum HostFnErrorCode {
@@ -179,6 +179,48 @@ impl TryFrom<i32> for HostFnErrorCode {
             4 => Ok(Self::kHostExit),
             5 => Ok(Self::kHostValidationFailure),
             6 => Ok(Self::kHostAbortTransaction),
+            _ => Err(()),
+        }
+    }
+}
+
+
+// General-purpose system error codes returned from within various executor operations.
+// These can be mapped into either InvokeErrorCode or HostFnErrorCode, depending on the context in which the
+// error occurs.
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum SystemErrorCode {
+    // Unrecoverable error (e.g. out of memory, or critical logic error).
+    // Only recourse is to abort entire transaction and possibly crash binary.
+    // Signals serious error, which we should investigate.
+    // This converts to InvokeErrorCode::kInvokeUnrecoverable or HostFnErrorCode::kHostUnrecoverable.
+    kSystemUnrecoverable = 1 as i32,
+
+    // Nondeterministic error that occurs during normal course of operation.
+    // E.g. a transaction is being executed concurrently with the whole block
+    // getting cancelled.
+    // Only recourse is to abort the entire transaction.
+    // This converts to InvokeErrorCode::kInvokeAbortTransaction or HostFnErrorCode::kHostAbortTransaction.
+    kSystemAbortTransaction = 2 as i32,
+
+    // Failure during validation of a transaction.  Signals that the whole
+    // block must be aborted.
+    // This converts to InvokeErrorCode::kInvokeValidationFailure or HostFnErrorCode::kHostValidationFailure.
+    kSystemValidationFailure = 3 as i32,
+}
+pub use SystemErrorCode::*;
+
+impl TryFrom<i32> for SystemErrorCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(Self::kSystemUnrecoverable),
+            2 => Ok(Self::kSystemAbortTransaction),
+            3 => Ok(Self::kSystemValidationFailure),
             _ => Err(()),
         }
     }

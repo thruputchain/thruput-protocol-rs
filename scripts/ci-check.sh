@@ -15,6 +15,7 @@ cargo build $g
 cargo build $g -F alloc
 cargo build $g -F std
 cargo build $g -F spec
+cargo build $g -F syscalls
 cargo test $g -F std
 
 cargo build -p groundhog_rpc

@@ -19,7 +19,9 @@ fn default_true() -> bool {
 struct Syscall {
     name: String,
     number: i32,
+    #[serde(default)]
     inputs: Vec<Arg>,
+    #[serde(default)]
     outputs: Vec<Arg>,
     #[serde(default = "default_true")]
     returns: bool, // default to true
@@ -202,13 +204,11 @@ impl Arg {
 
     fn fixed_size_type(&self, type_map: &TypeMap) -> Option<TokenStream2> {
         // Return `None` if we have no typename
-        let typename: &str = self.typename.as_ref()?.as_ref();
+        let mut typename: &str = self.typename.as_ref()?.as_ref();
 
-        // Is it an identifier that has a mapping?
+        // Possibly translate via the type map
         if let Some(type_details) = type_map.get(typename) {
-            let name = &type_details.rust_name;
-
-            return Some(format_ident!("{}", name).into_token_stream());
+            typename = &type_details.rust_name;
         }
 
         // It's an unmapped identifier or some other kind of type expression
