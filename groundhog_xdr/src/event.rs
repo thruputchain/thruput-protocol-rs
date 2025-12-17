@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 
+// Generated from xdrc commit: 886f03972a2c44b0feddb4b5ba95d1b3d049d38a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -46,7 +46,7 @@ pub const kMaxTopics : u32 = 3;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 pub struct Topic {
@@ -102,7 +102,7 @@ impl<'r> ReadXDR<'r> for &'r Topic {
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct TxEmittedEvent {
     pub contract_address: ContractAddress,
@@ -115,7 +115,7 @@ pub struct TxEmittedEvent {
 // The key is the proposed_tx_hash field, and the value is the events field.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct TxEventLog {
     // sha256(ProposedTransaction)
@@ -127,7 +127,7 @@ pub struct TxEventLog {
 // This information can be reconstructed from the TxEmittedEvent.
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 #[repr(C)]
 pub struct IdentifiedEvent {
     // sha256(ProposedTransaction)
