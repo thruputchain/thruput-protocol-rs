@@ -62,5 +62,9 @@ use standard_asset_events::*;
 pub mod auth_claim;
 use auth_claim::*;
 
+#[rustfmt::skip]
+pub mod exec_result;
+use exec_result::*;
+
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
