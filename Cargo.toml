@@ -3,6 +3,8 @@ members = [
     "groundhog_xdr",
     "groundhog_rpc",
     "groundhog_scp",
+    "groundhog_coordinator",
+    "groundhog_hogx",
     "bin/rpcthroughput_server",
     "macros",
     ]
@@ -40,4 +42,3 @@ panic = "abort"
 lto = true
 codegen-units = 1
 # also see rust flags set in .cargo/config.toml
-

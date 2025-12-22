@@ -20,6 +20,8 @@ cargo test $g -F std
 
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp
+cargo build -p groundhog_coordinator
+cargo build -p groundhog_hogx
 
 cargo fmt --check
 

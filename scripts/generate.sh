@@ -29,6 +29,19 @@ rpcs=(
   test_rpc.x
 )
 
+coordinators=(
+  discovery.x
+)
+
+hogxs=(
+    hogx_agent.x
+    hogx_base.x
+    hogx_cluster.x
+    hogx_host.x
+    hogx_service.x
+    hogx_validator.x
+)
+
 [[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"
 
 echo "-- Using XDRC=${XDRC} --" >&2
@@ -50,4 +63,12 @@ done
 
 for scp in "${scps[@]}"; do
   generate "protocol/${scp}" "groundhog_scp"
+done
+
+for coordinator in "${coordinators[@]}"; do
+  generate "protocol/${coordinator}" "groundhog_coordinator"
+done
+
+for hogx in "${hogxs[@]}"; do
+  generate "protocol/${hogx}" "groundhog_hogx"
 done

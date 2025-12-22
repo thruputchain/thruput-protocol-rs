@@ -1,0 +1,67 @@
+// -*-Rust-*-
+// Generated Code: DO NOT CHECK IN
+
+// Generated from xdrc commit: 3557ba2b43fa86e8979c6b959082b8c54f8f5966
+
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(non_upper_case_globals)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(unexpected_cfgs)]
+#![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
+
+use crate::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
+
+#[cfg(feature="std")]
+use std::io::{Read, Write};
+
+#[cfg(feature="xdrs")]
+use xdrs::*;
+#[cfg(feature="spec")]
+use xdrs::xdr_repr::*;
+
+
+#[cfg(not(feature="xdrs"))]
+use xdr_common::*;
+
+
+
+// clang-format on
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct HostConfig {
+    // sets HOGX_PUBLIC_IP
+    pub public_ip: BytesM,
+    // sets HOGX_PRIVATE_IP
+    pub private_ip: BytesM,
+    // sets HOGX_PKG_DIR
+    pub pkg_dir: VecM<Path>,
+    // sets HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
+    pub app_dir: VecM<Path>,
+    // sets HOGX_VAR_DIR; host lifetime: configs, logs, core dumps
+    pub var_dir: VecM<Path>,
+    // sets HOGX_TMP_DIR; process lifetime
+    pub tmp_dir: VecM<Path>,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct HostState {
+    pub config: HostConfig,
+}
+
+
+//
+// XDR internals below this point
+//
+
+
