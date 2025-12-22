@@ -130,7 +130,7 @@ impl ArgMapped {
                 is_optional,
             } => {
                 let mut ty = if is_input {
-                    if is_primitive {
+                    if is_primitive && !is_optional {
                         quote! { #ty }
                     } else {
                         quote! { &#ty }
@@ -161,7 +161,7 @@ impl ArgMapped {
         };
 
         if self.is_input() {
-            if !self.is_primitive() {
+            if !self.is_primitive() || self.is_optional() {
                 ty = quote! { &#ty };
             }
         } else {
@@ -289,14 +289,7 @@ impl Arg {
         } else if self.fixed_size_type(type_map).is_some() {
             let arg = if self.optional {
                 assert!(is_input);
-                if self.is_primitive(type_map) {
-                    quote! {
-                        match #name {
-                            Some(x) => x as u64,
-                            None => u64::MAX,
-                        }
-                    }
-                } else if self.uses_as_ptr(type_map) {
+                if self.uses_as_ptr(type_map) {
                     quote! {
                         match #name {
                             Some(x) => x.as_ptr() as u64,
