@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ec70d954e6212413cb8f425960cead9ebb97c570
+// Generated from xdrc commit: 3e58ee8c6a00fd61a2c001ee770521762106ad2f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -130,24 +130,24 @@ pub struct ContractInterfaceIDPreimage {
 #[repr(transparent)]
 pub struct ContractEntrypointID {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 8 as usize],
+    inner: [u8; 8],
 }
-impl From<[u8; 8 as usize]> for ContractEntrypointID {
-    fn from(_inner: [u8; 8 as usize]) -> Self {
+impl From<[u8; 8]> for ContractEntrypointID {
+    fn from(_inner: [u8; 8]) -> Self {
         Self { inner: _inner }
     }
 }
 impl ContractEntrypointID {
-    pub fn into_inner(self) -> [u8; 8 as usize] {
+    pub fn into_inner(self) -> [u8; 8] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 8 as usize]) -> Self {
+    pub const fn new(_inner: [u8; 8]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for ContractEntrypointID {
-    type Target = [u8; 8 as usize];
+    type Target = [u8; 8];
 
     fn deref(&self) -> &Self::Target {
         &self.inner

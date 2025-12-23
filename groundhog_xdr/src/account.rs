@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ec70d954e6212413cb8f425960cead9ebb97c570
+// Generated from xdrc commit: 3e58ee8c6a00fd61a2c001ee770521762106ad2f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -62,6 +62,19 @@ pub struct GasPermissionConfig {
     pub required_weight: Weight,
 }
 
+// If an address is initialized as a new address (via the hash of a public key).,
+// we will interpret the missing auth data following these sensible defaults.
+// we additionally interpret that initial key as key 0 with weight 1.
+// TODO(geoff) and TODO(dobog): The initialization workflow (when upgrading an address from just a pk to a full contract)
+// should explicitly set the auth data with these defaults (maybe optionally something else),
+// so that the default is NOT to accidentally lock the address.
+
+pub const kDefaultNewAddressRequiredWeight : u32 = 1;
+
+pub const kDefaultNewAddressAcceptedKeys : u32 = 0xFFFFFFFF;
+
+pub const kDefaultNewAddressKeyID : u32 = 0;
+
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -111,7 +124,7 @@ impl DerefMut for PublicKeyConfigOpt {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AccountAuthData {
-    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS as usize],
+    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS],
     pub gas_permissions: VecM<GasPermissionConfig, MAX_GAS_CONFIGS>,
     pub nonce_config: NonceConfig,
     // TODO(geoff): this can be removed once hogdb has a way to track this directly
