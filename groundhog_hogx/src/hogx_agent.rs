@@ -87,10 +87,10 @@ pub enum HogxHostQueryResult {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
-pub enum HogxServiceStartResult {
+pub enum HogxUnitStartResult {
     // case HOGX_OK:
-    //   ServiceState service_state;
-    HOGX_OK { service_state: ServiceState } = HogxOutcome::HOGX_OK as i32,
+    //   UnitState unit_state;
+    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
@@ -101,10 +101,10 @@ pub enum HogxServiceStartResult {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
-pub enum HogxServiceStopResult {
+pub enum HogxUnitStopResult {
     // case HOGX_OK:
-    //   ServiceState service_state;
-    HOGX_OK { service_state: ServiceState } = HogxOutcome::HOGX_OK as i32,
+    //   UnitState unit_state;
+    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
@@ -115,10 +115,10 @@ pub enum HogxServiceStopResult {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
-pub enum HogxServiceQueryResult {
+pub enum HogxUnitQueryResult {
     // case HOGX_OK:
-    //   ServiceState service_state;
-    HOGX_OK { service_state: ServiceState } = HogxOutcome::HOGX_OK as i32,
+    //   UnitState unit_state;
+    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
@@ -129,10 +129,10 @@ pub enum HogxServiceQueryResult {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
-pub enum HogxServiceListResult {
+pub enum HogxUnitListResult {
     // case HOGX_OK:
-    //   VecM<ServiceState> service_state;
-    HOGX_OK { service_state: VecM<ServiceState> } = HogxOutcome::HOGX_OK as i32,
+    //   VecM<UnitState> unit_state;
+    HOGX_OK { unit_state: VecM<UnitState> } = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
@@ -149,13 +149,13 @@ pub trait HogxAgent_HogxAgent1: Send + Sync {
     
     async fn hogxagent_host_query(&self) -> Result<HogxHostQueryResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_service_start(&self, arg0 : ServiceDef) -> Result<HogxServiceStartResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_start(&self, arg0 : UnitDef) -> Result<HogxUnitStartResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_service_stop(&self, arg0 : ServiceID) -> Result<HogxServiceStopResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_stop(&self, arg0 : UnitID) -> Result<HogxUnitStopResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_service_query(&self, arg0 : ServiceID) -> Result<HogxServiceQueryResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_query(&self, arg0 : UnitID) -> Result<HogxUnitQueryResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_service_list(&self) -> Result<HogxServiceListResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -198,32 +198,32 @@ impl ::rpc_driver::ServerDispatch for HogxAgent_HogxAgent1_Dispatcher {
                 let res = self.inner.hogxagent_host_query().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // hogxagent_service_start
+            // hogxagent_unit_start
             200 => {
-                let args: (ServiceDef, ) =
+                let args: (UnitDef, ) =
                     xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_service_start(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_start(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // hogxagent_service_stop
+            // hogxagent_unit_stop
             210 => {
-                let args: (ServiceID, ) =
+                let args: (UnitID, ) =
                     xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_service_stop(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_stop(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // hogxagent_service_query
+            // hogxagent_unit_query
             220 => {
-                let args: (ServiceID, ) =
+                let args: (UnitID, ) =
                     xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_service_query(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_query(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // hogxagent_service_list
+            // hogxagent_unit_list
             230 => {
                 let args: () =
                     xdrs::serialize_txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_service_list().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_list().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::serialize_txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -259,22 +259,22 @@ impl HogxAgent_HogxAgent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 110, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn hogxagent_service_start(&self, arg0 : &ServiceDef) -> Result<HogxServiceStartResult, ::rpc_driver::RpcError> {
+    pub async fn hogxagent_unit_start(&self, arg0 : &UnitDef) -> Result<HogxUnitStartResult, ::rpc_driver::RpcError> {
          let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 200, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn hogxagent_service_stop(&self, arg0 : &ServiceID) -> Result<HogxServiceStopResult, ::rpc_driver::RpcError> {
+    pub async fn hogxagent_unit_stop(&self, arg0 : &UnitID) -> Result<HogxUnitStopResult, ::rpc_driver::RpcError> {
          let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 210, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn hogxagent_service_query(&self, arg0 : &ServiceID) -> Result<HogxServiceQueryResult, ::rpc_driver::RpcError> {
+    pub async fn hogxagent_unit_query(&self, arg0 : &UnitID) -> Result<HogxUnitQueryResult, ::rpc_driver::RpcError> {
          let data = xdrs::serialize_txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 220, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn hogxagent_service_list(&self) -> Result<HogxServiceListResult, ::rpc_driver::RpcError> {
+    pub async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_driver::RpcError> {
          let data = xdrs::serialize_txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 230, &data).await?;
          xdrs::serialize_txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -305,7 +305,7 @@ impl HogxHostQueryResult {
     }
 }
 
-impl HogxServiceStartResult {
+impl HogxUnitStartResult {
     pub fn outcome(&self) -> i32 {
         match self {
             
@@ -314,7 +314,7 @@ impl HogxServiceStartResult {
     }
 }
 
-impl HogxServiceStopResult {
+impl HogxUnitStopResult {
     pub fn outcome(&self) -> i32 {
         match self {
             
@@ -323,7 +323,7 @@ impl HogxServiceStopResult {
     }
 }
 
-impl HogxServiceQueryResult {
+impl HogxUnitQueryResult {
     pub fn outcome(&self) -> i32 {
         match self {
             
@@ -332,7 +332,7 @@ impl HogxServiceQueryResult {
     }
 }
 
-impl HogxServiceListResult {
+impl HogxUnitListResult {
     pub fn outcome(&self) -> i32 {
         match self {
             

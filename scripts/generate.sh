@@ -39,7 +39,7 @@ hogxs=(
     hogx_base.x
     hogx_cluster.x
     hogx_host.x
-    hogx_service.x
+    hogx_unit.x
     hogx_validator.x
 )
 

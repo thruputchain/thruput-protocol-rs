@@ -22,8 +22,8 @@ pub mod hogx_host;
 pub use hogx_host::*;
 
 #[rustfmt::skip]
-pub mod hogx_service;
-pub use hogx_service::*;
+pub mod hogx_unit;
+pub use hogx_unit::*;
 
 #[rustfmt::skip]
 pub mod hogx_validator;
