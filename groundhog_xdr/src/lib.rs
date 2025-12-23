@@ -66,5 +66,9 @@ use auth_claim::*;
 pub mod exec_result;
 use exec_result::*;
 
+#[rustfmt::skip]
+pub mod account;
+use account::*;
+
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
