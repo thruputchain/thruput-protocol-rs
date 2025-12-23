@@ -15,6 +15,10 @@ fn default_true() -> bool {
     true
 }
 
+fn default_false() -> bool {
+    false
+}
+
 #[derive(Debug, serde::Deserialize)]
 struct Syscall {
     name: String,
@@ -33,24 +37,29 @@ struct TypeMapping {
     rust_name: String,
     #[serde(default = "default_true")]
     rust_uses_as_ptr: bool,
+    #[serde(default = "default_false")]
+    primitive_type: bool,
 }
 
+#[derive(Debug)]
 struct TypeInfo {
     rust_name: String,
     rust_uses_as_ptr: bool,
+    primitive_type: bool,
 }
 
 type TypeMap = HashMap<String, TypeInfo>;
 
 impl SyscallSpec {
     pub fn get_type_map(&self) -> TypeMap {
-        let mut out = HashMap::new();
+        let mut out: HashMap<String, TypeInfo> = HashMap::new();
         for elt in &self.type_mappings {
             out.insert(
                 elt.base_name.clone(),
                 TypeInfo {
                     rust_name: elt.rust_name.clone(),
                     rust_uses_as_ptr: elt.rust_uses_as_ptr,
+                    primitive_type: elt.primitive_type,
                 },
             );
         }
@@ -121,7 +130,7 @@ impl ArgMapped {
                 is_optional,
             } => {
                 let mut ty = if is_input {
-                    if is_primitive {
+                    if is_primitive && !is_optional {
                         quote! { #ty }
                     } else {
                         quote! { &#ty }
@@ -152,7 +161,7 @@ impl ArgMapped {
         };
 
         if self.is_input() {
-            if !self.is_primitive() {
+            if !self.is_primitive() || self.is_optional() {
                 ty = quote! { &#ty };
             }
         } else {
@@ -227,6 +236,14 @@ impl Arg {
         }
     }
 
+    fn is_primitive(&self, type_map: &TypeMap) -> bool {
+        if let Some(type_details) = self.get_type_details(type_map) {
+            type_details.primitive_type
+        } else {
+            self.primitive_type
+        }
+    }
+
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.rust_uses_as_ptr
@@ -242,7 +259,7 @@ impl Arg {
             ArgMapped::FixedSize {
                 ty,
                 is_input,
-                is_primitive: self.primitive_type,
+                is_primitive: self.is_primitive(type_map),
                 is_optional: self.optional,
             }
         } else {
@@ -270,13 +287,7 @@ impl Arg {
             };
             vec![span_ptr, span_len]
         } else if self.fixed_size_type(type_map).is_some() {
-            let arg = if self.primitive_type {
-                if is_input {
-                    quote! { #name as u64 }
-                } else {
-                    quote! { #name as *mut _ as u64 }
-                }
-            } else if self.optional {
+            let arg = if self.optional {
                 assert!(is_input);
                 if self.uses_as_ptr(type_map) {
                     quote! {
@@ -292,6 +303,12 @@ impl Arg {
                             None => u64::MAX,
                         }
                     }
+                }
+            } else if self.is_primitive(type_map) {
+                if is_input {
+                    quote! { #name as u64 }
+                } else {
+                    quote! { #name as *mut _ as u64 }
                 }
             } else if self.uses_as_ptr(type_map) {
                 if is_input {
@@ -349,7 +366,7 @@ impl Arg {
     ) -> TokenStream2 {
         let name = self.formatted_name();
 
-        if is_input || self.primitive_type {
+        if is_input || self.is_primitive(type_map) {
             return quote! { #name };
         }
         if self.is_span_argument() {

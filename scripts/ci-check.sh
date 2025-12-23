@@ -25,4 +25,6 @@ cargo build -p groundhog_hogx
 
 cargo fmt --check
 
+cargo test -p groundhog_xdr_syscall_tests
+
 echo ">> CI clean!"

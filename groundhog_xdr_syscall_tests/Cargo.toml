@@ -1,0 +1,14 @@
+[package]
+name = "groundhog_xdr_syscall_tests"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "groundhog_xdr_syscall_tests"
+path = "src/lib.rs"
+
+[dependencies]
+groundhog_xdr = { path = "../groundhog_xdr", features = ["syscalls_mock", "std"] }
+
+[dev-dependencies]
+

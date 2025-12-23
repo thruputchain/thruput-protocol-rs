@@ -7,6 +7,7 @@ members = [
     "groundhog_hogx",
     "bin/rpcthroughput_server",
     "macros",
+    "groundhog_xdr_syscall_tests",
     ]
 resolver = "2"
 
