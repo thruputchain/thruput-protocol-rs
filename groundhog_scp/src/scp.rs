@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3e58ee8c6a00fd61a2c001ee770521762106ad2f
+// Generated from xdrc commit: a138999f82aee3194ca1e6460e1084adff7b8161
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -32,7 +32,7 @@ use xdr_common::*;
 
 // clang-format on
 
-pub type SCPHash = [u8; 32];
+pub type SCPHash = [u8; 32 as usize];
 
 pub type SCPNodeID = PublicKey;
 

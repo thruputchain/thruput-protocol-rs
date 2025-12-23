@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3e58ee8c6a00fd61a2c001ee770521762106ad2f
+// Generated from xdrc commit: a138999f82aee3194ca1e6460e1084adff7b8161
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -124,7 +124,7 @@ impl DerefMut for PublicKeyConfigOpt {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AccountAuthData {
-    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS],
+    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS as usize],
     pub gas_permissions: VecM<GasPermissionConfig, MAX_GAS_CONFIGS>,
     pub nonce_config: NonceConfig,
     // TODO(geoff): this can be removed once hogdb has a way to track this directly
