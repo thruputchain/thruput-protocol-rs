@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3e16fec198246fef8b0deaab118d9f65fe1c6a9e
+// Generated from xdrc commit: ec70d954e6212413cb8f425960cead9ebb97c570
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]

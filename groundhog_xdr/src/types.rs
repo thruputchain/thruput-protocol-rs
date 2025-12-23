@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3e16fec198246fef8b0deaab118d9f65fe1c6a9e
+// Generated from xdrc commit: ec70d954e6212413cb8f425960cead9ebb97c570
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -80,24 +80,24 @@ pub type MethodID = u64;
 #[repr(transparent)]
 pub struct Ed25519Signature {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 64],
+    inner: [u8; 64 as usize],
 }
-impl From<[u8; 64]> for Ed25519Signature {
-    fn from(_inner: [u8; 64]) -> Self {
+impl From<[u8; 64 as usize]> for Ed25519Signature {
+    fn from(_inner: [u8; 64 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519Signature {
-    pub fn into_inner(self) -> [u8; 64] {
+    pub fn into_inner(self) -> [u8; 64 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 64]) -> Self {
+    pub const fn new(_inner: [u8; 64 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for Ed25519Signature {
-    type Target = [u8; 64];
+    type Target = [u8; 64 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -139,24 +139,24 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 #[repr(transparent)]
 pub struct Ed25519PublicKey {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 32],
+    inner: [u8; 32 as usize],
 }
-impl From<[u8; 32]> for Ed25519PublicKey {
-    fn from(_inner: [u8; 32]) -> Self {
+impl From<[u8; 32 as usize]> for Ed25519PublicKey {
+    fn from(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519PublicKey {
-    pub fn into_inner(self) -> [u8; 32] {
+    pub fn into_inner(self) -> [u8; 32 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 32]) -> Self {
+    pub const fn new(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for Ed25519PublicKey {
-    type Target = [u8; 32];
+    type Target = [u8; 32 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -197,24 +197,24 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 #[repr(transparent)]
 pub struct Ed25519SecretKey {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 64],
+    inner: [u8; 64 as usize],
 }
-impl From<[u8; 64]> for Ed25519SecretKey {
-    fn from(_inner: [u8; 64]) -> Self {
+impl From<[u8; 64 as usize]> for Ed25519SecretKey {
+    fn from(_inner: [u8; 64 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl Ed25519SecretKey {
-    pub fn into_inner(self) -> [u8; 64] {
+    pub fn into_inner(self) -> [u8; 64 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 64]) -> Self {
+    pub const fn new(_inner: [u8; 64 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for Ed25519SecretKey {
-    type Target = [u8; 64];
+    type Target = [u8; 64 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -322,24 +322,24 @@ pub enum ExtensionPoint {
 #[repr(transparent)]
 pub struct SHA256Hash {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 32],
+    inner: [u8; 32 as usize],
 }
-impl From<[u8; 32]> for SHA256Hash {
-    fn from(_inner: [u8; 32]) -> Self {
+impl From<[u8; 32 as usize]> for SHA256Hash {
+    fn from(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl SHA256Hash {
-    pub fn into_inner(self) -> [u8; 32] {
+    pub fn into_inner(self) -> [u8; 32 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 32]) -> Self {
+    pub const fn new(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for SHA256Hash {
-    type Target = [u8; 32];
+    type Target = [u8; 32 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -380,24 +380,24 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 #[repr(transparent)]
 pub struct ContractAddress {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 32],
+    inner: [u8; 32 as usize],
 }
-impl From<[u8; 32]> for ContractAddress {
-    fn from(_inner: [u8; 32]) -> Self {
+impl From<[u8; 32 as usize]> for ContractAddress {
+    fn from(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl ContractAddress {
-    pub fn into_inner(self) -> [u8; 32] {
+    pub fn into_inner(self) -> [u8; 32 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 32]) -> Self {
+    pub const fn new(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for ContractAddress {
-    type Target = [u8; 32];
+    type Target = [u8; 32 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -442,24 +442,24 @@ pub type ContractAddressBatch = VecM::<ContractAddress>;
 #[repr(transparent)]
 pub struct StorageKeyContractData {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-    inner: [u8; 32],
+    inner: [u8; 32 as usize],
 }
-impl From<[u8; 32]> for StorageKeyContractData {
-    fn from(_inner: [u8; 32]) -> Self {
+impl From<[u8; 32 as usize]> for StorageKeyContractData {
+    fn from(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 impl StorageKeyContractData {
-    pub fn into_inner(self) -> [u8; 32] {
+    pub fn into_inner(self) -> [u8; 32 as usize] {
         self.inner
     }
-    pub const fn new(_inner: [u8; 32]) -> Self {
+    pub const fn new(_inner: [u8; 32 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
 
 impl Deref for StorageKeyContractData {
-    type Target = [u8; 32];
+    type Target = [u8; 32 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -610,7 +610,7 @@ pub type ServerAddress = BytesM;
 
 // UPID is a globally unique process identifier (function of start time, place
 // and randomness)
-pub type UPID = [u8; 8];
+pub type UPID = [u8; 8 as usize];
 
 // Protocol describes a specific protocol and version.
 pub type Protocol = BytesM;

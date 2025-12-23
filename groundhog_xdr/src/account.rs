@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3e16fec198246fef8b0deaab118d9f65fe1c6a9e
+// Generated from xdrc commit: ec70d954e6212413cb8f425960cead9ebb97c570
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -44,10 +44,12 @@ pub struct PublicKeyConfig {
 // the bitmap.
 // This constant is intended to match the MAX_SIGNERS constant in the Stellar protocol,
 // which is 20.  We add 1 to account for the primary key on a Stellar account.
-pub const MAX_SIGNERS : u32 = 21;
-
+// 
 // Could be 1; Slightly useful to have multiple for sponsored gas,
 // i.e. separating sponsor ops vs contract owner management
+pub const MAX_SIGNERS : u32 = 21;
+
+// 
 pub const MAX_GAS_CONFIGS : u32 = 5;
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -69,14 +71,47 @@ pub struct NonceConfig {
     pub required_weight: Weight,
 }
 
-pub type PublicKeyConfigOpt = Option::<PublicKeyConfig>;
+// 
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+pub struct PublicKeyConfigOpt {
+    inner: Option<PublicKeyConfig>,
+}
+impl From<Option<PublicKeyConfig>> for PublicKeyConfigOpt {
+    fn from(_inner: Option<PublicKeyConfig>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl PublicKeyConfigOpt {
+    pub fn into_inner(self) -> Option<PublicKeyConfig> {
+        self.inner
+    }
+    pub const fn new(_inner: Option<PublicKeyConfig>) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for PublicKeyConfigOpt {
+    type Target = Option<PublicKeyConfig>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for PublicKeyConfigOpt {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AccountAuthData {
-    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS],
+    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS as usize],
     pub gas_permissions: VecM<GasPermissionConfig, MAX_GAS_CONFIGS>,
     pub nonce_config: NonceConfig,
     // TODO(geoff): this can be removed once hogdb has a way to track this directly
