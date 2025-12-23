@@ -23,8 +23,8 @@ fn test_get_msg_sender_fixed_size_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetMsgSender syscall number is 1
-    assert_eq!(invocations[0].syscall_no, 1);
+    // GetMsgSender syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetMsgSender as u64);
 
     // arg1: sender pointer
     assert_eq!(invocations[0].args[0], sender.as_mut_ptr() as u64);
@@ -50,8 +50,11 @@ fn test_get_source_transaction_hash_fixed_size_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetSourceTransactionHash syscall number is 11
-    assert_eq!(invocations[0].syscall_no, 11);
+    // GetSourceTransactionHash syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kGetSourceTransactionHash as u64
+    );
 
     // arg1: source_tx_hash pointer
     assert_eq!(invocations[0].args[0], source_tx_hash.as_mut_ptr() as u64);
@@ -82,8 +85,8 @@ fn test_deploy_contract_fixed_size_input_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // DeployContract syscall number is 10
-    assert_eq!(invocations[0].syscall_no, 10);
+    // DeployContract syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kDeployContract as u64);
 
     // arg1: nonce pointer
     assert_eq!(invocations[0].args[0], nonce.as_ptr() as u64);
@@ -115,8 +118,11 @@ fn test_bytestring_get_len_fixed_size_input() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // BytestringGetLen syscall number is 13
-    assert_eq!(invocations[0].syscall_no, 13);
+    // BytestringGetLen syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kBytestringGetLen as u64
+    );
 
     // arg1: key pointer
     assert_eq!(invocations[0].args[0], key.as_ptr() as u64);
@@ -146,8 +152,8 @@ fn test_bytestring_set_fixed_size_input() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // BytestringSet syscall number is 15
-    assert_eq!(invocations[0].syscall_no, 15);
+    // BytestringSet syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kBytestringSet as u64);
 
     // arg1: key pointer
     assert_eq!(invocations[0].args[0], key.as_ptr() as u64);
@@ -177,8 +183,11 @@ fn test_get_current_address_fixed_size_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetCurrentAddress syscall number is 19
-    assert_eq!(invocations[0].syscall_no, 19);
+    // GetCurrentAddress syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kGetCurrentAddress as u64
+    );
 
     // arg1: address pointer
     assert_eq!(invocations[0].args[0], address.as_mut_ptr() as u64);

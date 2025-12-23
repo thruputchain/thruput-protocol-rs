@@ -35,8 +35,11 @@ fn test_get_deploy_address_optional_input() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetDeployAddress syscall number is 9
-    assert_eq!(invocations[0].syscall_no, 9);
+    // first invocation should be syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kGetDeployAddress as u64
+    );
 
     // arg1: caller_address pointer (Some value)
     assert_eq!(invocations[0].args[0], caller_addr.as_ptr() as u64);
@@ -74,8 +77,11 @@ fn test_get_deploy_address_optional_none() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetDeployAddress syscall number is 9
-    assert_eq!(invocations[0].syscall_no, 9);
+    // first invocation should be syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kGetDeployAddress as u64
+    );
 
     // arg1: caller_address should be u64::MAX when None
     assert_eq!(invocations[0].args[0], u64::MAX);
@@ -115,8 +121,8 @@ fn test_log_event_optional_topics() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // LogEvent syscall number is 24
-    assert_eq!(invocations[0].syscall_no, 24);
+    // LogEvent syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kLogEvent as u64);
 
     // arg1: topic0 pointer (Some value)
     assert_eq!(invocations[0].args[0], topic0_arr.as_ptr() as u64);
@@ -160,8 +166,11 @@ fn test_change_public_key_registration_optional_params() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // ChangePublicKeyRegistration syscall number is 23
-    assert_eq!(invocations[0].syscall_no, 23);
+    // ChangePublicKeyRegistration syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kChangePublicKeyRegistration as u64
+    );
 
     // arg1: key_index (u32 primitive, passed by value)
     assert_eq!(invocations[0].args[0], key_index as u64);

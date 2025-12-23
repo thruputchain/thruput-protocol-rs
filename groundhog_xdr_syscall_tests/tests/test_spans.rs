@@ -25,8 +25,8 @@ fn test_sha256_span_input_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // SHA256 syscall number is 0
-    assert_eq!(invocations[0].syscall_no, 0);
+    // SHA256 syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kSHA256 as u64);
 
     // arg1: input buffer pointer
     assert_eq!(invocations[0].args[0], input_buffer.as_ptr() as u64);
@@ -58,8 +58,8 @@ fn test_get_calldata_span_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetCalldata syscall number is 3
-    assert_eq!(invocations[0].syscall_no, 3);
+    // GetCalldata syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetCalldata as u64);
 
     // arg1: output buffer pointer
     assert_eq!(invocations[0].args[0], buffer.as_mut_ptr() as u64);
@@ -91,8 +91,11 @@ fn test_get_returned_buffer_span_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // GetReturnedBuffer syscall number is 7
-    assert_eq!(invocations[0].syscall_no, 7);
+    // GetReturnedBuffer syscall number
+    assert_eq!(
+        invocations[0].syscall_no,
+        SyscallNo::kGetReturnedBuffer as u64
+    );
 
     // arg1: output buffer pointer
     assert_eq!(invocations[0].args[0], buffer.as_mut_ptr() as u64);
@@ -126,8 +129,8 @@ fn test_bytestring_get_span_output() {
     let invocations = handler.get_invocations();
     assert_eq!(invocations.len(), 1);
 
-    // BytestringGet syscall number is 14
-    assert_eq!(invocations[0].syscall_no, 14);
+    // BytestringGet syscall number
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kBytestringGet as u64);
 
     // arg1: key pointer
     assert_eq!(invocations[0].args[0], key.as_ptr() as u64);
