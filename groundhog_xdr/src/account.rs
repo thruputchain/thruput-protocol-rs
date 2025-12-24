@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a138999f82aee3194ca1e6460e1084adff7b8161
+// Generated from xdrc commit: 4ebd3046fbb9768c5b28ea399f4e59957cfef5fe
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -39,18 +39,6 @@ pub struct PublicKeyConfig {
     pub key: PublicKey,
     pub max_weight: Weight,
 }
-
-// If we use the bitmap approach below, should be less than the width of
-// the bitmap.
-// This constant is intended to match the MAX_SIGNERS constant in the Stellar protocol,
-// which is 20.  We add 1 to account for the primary key on a Stellar account.
-// 
-// Could be 1; Slightly useful to have multiple for sponsored gas,
-// i.e. separating sponsor ops vs contract owner management
-pub const MAX_SIGNERS : u32 = 21;
-
-// 
-pub const MAX_GAS_CONFIGS : u32 = 5;
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -124,8 +112,8 @@ impl DerefMut for PublicKeyConfigOpt {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AccountAuthData {
-    pub public_keys: [PublicKeyConfigOpt; MAX_SIGNERS as usize],
-    pub gas_permissions: VecM<GasPermissionConfig, MAX_GAS_CONFIGS>,
+    pub public_keys: [PublicKeyConfigOpt; kMaxSigners as usize],
+    pub gas_permissions: VecM<GasPermissionConfig, kMaxGasConfigs>,
     pub nonce_config: NonceConfig,
     // TODO(geoff): this can be removed once hogdb has a way to track this directly
     // on each db item.

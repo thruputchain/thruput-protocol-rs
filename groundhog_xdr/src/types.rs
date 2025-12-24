@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a138999f82aee3194ca1e6460e1084adff7b8161
+// Generated from xdrc commit: 4ebd3046fbb9768c5b28ea399f4e59957cfef5fe
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -614,6 +614,18 @@ pub type UPID = [u8; 8 as usize];
 
 // Protocol describes a specific protocol and version.
 pub type Protocol = BytesM;
+
+// If we use the bitmap approach, should be less than the width of
+// the bitmap.
+// This constant is intended to match the MAX_SIGNERS constant in the Stellar protocol,
+// which is 20.  We add 1 to account for the primary key on a Stellar account.
+// 
+// Could be 1; Slightly useful to have multiple for sponsored gas,
+// i.e. separating sponsor ops vs contract owner management
+pub const kMaxSigners : u32 = 21;
+
+// 
+pub const kMaxGasConfigs : u32 = 5;
 
 
 //
