@@ -42,13 +42,13 @@ pub struct HostConfig {
     // sets HOGX_PRIVATE_IP
     pub private_ip: BytesM,
     // sets HOGX_PKG_DIR
-    pub pkg_dir: VecM<Path>,
+    pub pkg_dir: Path,
     // sets HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
-    pub app_dir: VecM<Path>,
+    pub app_dir: Path,
     // sets HOGX_VAR_DIR; host lifetime: configs, logs, core dumps
-    pub var_dir: VecM<Path>,
+    pub var_dir: Path,
     // sets HOGX_TMP_DIR; process lifetime
-    pub tmp_dir: VecM<Path>,
+    pub tmp_dir: Path,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
