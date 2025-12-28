@@ -61,7 +61,7 @@ pub struct KeySocketAddress {
     pub address: BytesM,
 }
 
-pub type SocketAddressMap = KeySocketAddress;
+pub type SocketAddressMap = VecM::<KeySocketAddress>;
 
 
 //
