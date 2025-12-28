@@ -60,9 +60,9 @@ pub struct UnitBuild {
 #[repr(C)]
 pub struct UnitAgreement {
     // can use env variables
-    pub meta: VecM<StringMap>,
+    pub meta: StringMap,
     // can use env variables; e.g. {"public-metrics": 178.10.0.3:2222}
-    pub endpoint: VecM<SocketAddressMap>,
+    pub endpoint: SocketAddressMap,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -75,7 +75,7 @@ pub struct Command {
     // can use env variables
     pub flag: VecM<Flag>,
     // can use env variables
-    pub env: VecM<StringMap>,
+    pub env: StringMap,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]

@@ -44,29 +44,24 @@ pub type Flag = BytesM;
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct StringMap {
+pub struct KeyString {
     pub key: BytesM,
     pub value: BytesM,
 }
 
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct PortMap {
-    pub key: BytesM,
-    pub port: i32,
-}
+pub type StringMap = VecM::<KeyString>;
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SocketAddressMap {
+pub struct KeySocketAddress {
     pub key: BytesM,
     // ip4 or ip6 + port
     pub address: BytesM,
 }
+
+pub type SocketAddressMap = KeySocketAddress;
 
 
 //
