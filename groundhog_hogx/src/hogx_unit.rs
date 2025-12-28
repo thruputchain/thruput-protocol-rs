@@ -62,7 +62,7 @@ pub struct UnitAgreement {
     // can use env variables
     pub meta: VecM<StringMap>,
     // can use env variables; e.g. {"public-metrics": 178.10.0.3:2222}
-    pub endpoint: VecM<AddressMap>,
+    pub endpoint: VecM<SocketAddressMap>,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]

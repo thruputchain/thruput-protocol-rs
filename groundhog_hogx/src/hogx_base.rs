@@ -62,9 +62,10 @@ pub struct PortMap {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct AddressMap {
+pub struct SocketAddressMap {
     pub key: BytesM,
-    pub address: i32,
+    // ip4 or ip6 + port
+    pub address: BytesM,
 }
 
 
