@@ -69,7 +69,7 @@ pub struct UnitAgreement {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct Command {
+pub struct UnitCommand {
     // can use env variables
     pub binary: Path,
     // can use env variables
@@ -86,16 +86,21 @@ pub struct UnitDef {
     pub id: UnitID,
     pub build: UnitBuild,
     pub agreement: UnitAgreement,
-    pub cmd: Command,
+    pub command: UnitCommand,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct ProcessState {
-    pub pid: i64,
-    pub age: i64,
+pub struct UnitConfig {
+    pub binary_file: Path,
+    pub app_dir: Path,
+    pub stdout_file: Path,
+    pub stderr_file: Path,
+    pub tmp_dir: Path,
+    pub flag: VecM<Flag>,
+    pub env: StringMap,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -103,13 +108,10 @@ pub struct ProcessState {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitState {
-    pub unit_def: UnitDef,
+    pub def: UnitDef,
+    pub config: UnitConfig,
     pub started: Timestamp,
-    pub stopped: Option<Timestamp>,
-    // unit and its child processes
-    pub process_state: VecM<ProcessState>,
-    pub stdout: Path,
-    pub stderr: Path,
+    pub pid: Option<u32>,
 }
 
 
