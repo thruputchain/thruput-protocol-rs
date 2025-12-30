@@ -32,12 +32,14 @@ use xdr_common::*;
 
 // clang-format on
 
+// input
+
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitID {
-    // sets HOGX_SYSTEM_ID; identifies a set of unit instances comprising a system deployment
+    // sets HOGX_UNIT_SYSTEM_ID; identifies a set of unit instances comprising a system deployment
     pub system_id: BytesM,
     // sets HOGX_UNIT_TYPE; e.g. `coordinator`, `mempool`, `exec`, `db`, `event`
     pub unit_type: BytesM,
@@ -50,7 +52,7 @@ pub struct UnitID {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitBuild {
-    // sets HOGX_PKG
+    // sets HOGX_UNIT_PKG
     pub pkg: BytesM,
 }
 
@@ -59,9 +61,9 @@ pub struct UnitBuild {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitAgreement {
-    // can use env variables
+    // can use link variables
     pub meta: StringMap,
-    // can use env variables; e.g. {"public-metrics": 178.10.0.3:2222}
+    // can use link variables
     pub endpoint: SocketAddressMap,
 }
 
@@ -70,11 +72,11 @@ pub struct UnitAgreement {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitCommand {
-    // can use env variables
+    // can use link variables
     pub binary: Path,
-    // can use env variables
+    // can use link variables
     pub flag: VecM<Flag>,
-    // can use env variables
+    // can use link variables
     pub env: StringMap,
 }
 
@@ -85,20 +87,39 @@ pub struct UnitCommand {
 pub struct UnitDef {
     pub id: UnitID,
     pub build: UnitBuild,
+    // can use link variables
     pub agreement: UnitAgreement,
+    // can use link variables
     pub command: UnitCommand,
+}
+
+// output: linked definitions
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct UnitAgreementLinked {
+    pub meta: StringMap,
+    pub endpoint: SocketAddressMap,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct UnitConfig {
+pub struct UnitCommandLinked {
     pub binary_file: Path,
+    // holds persistent application data; does not depend on system_id
     pub app_dir: Path,
-    pub stdout_file: Path,
-    pub stderr_file: Path,
+    // holds log files and core dumps; mounted as /var; depends on system_id
+    pub var_dir: Path,
+    // mounted as /tmp; depends on system_id
     pub tmp_dir: Path,
+    // resides in var_dir
+    pub stdout_file: Path,
+    // resides in var_dir
+    pub stderr_file: Path,
     pub flag: VecM<Flag>,
     pub env: StringMap,
 }
@@ -107,9 +128,20 @@ pub struct UnitConfig {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
+pub struct UnitDefLinked {
+    pub id: UnitID,
+    pub build: UnitBuild,
+    pub agreement: UnitAgreementLinked,
+    pub command: UnitCommandLinked,
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
 pub struct UnitState {
     pub def: UnitDef,
-    pub config: UnitConfig,
+    pub def_linked: UnitDefLinked,
     pub started: Timestamp,
     pub pid: Option<u32>,
 }

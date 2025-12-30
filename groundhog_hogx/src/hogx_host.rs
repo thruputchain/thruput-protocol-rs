@@ -37,17 +37,17 @@ use xdr_common::*;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct HostConfig {
-    // sets HOGX_PUBLIC_IP
+    // HOGX_PUBLIC_IP
     pub public_ip: BytesM,
-    // sets HOGX_PRIVATE_IP
+    // HOGX_PRIVATE_IP
     pub private_ip: BytesM,
-    // sets HOGX_PKG_DIR
+    // HOGX_PKG_DIR
     pub pkg_dir: Path,
-    // sets HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
+    // HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
     pub app_dir: Path,
-    // sets HOGX_VAR_DIR; host lifetime: configs, logs, core dumps
+    // HOGX_VAR_DIR; host lifetime: configs, logs, core dumps
     pub var_dir: Path,
-    // sets HOGX_TMP_DIR; process lifetime
+    // HOGX_TMP_DIR; process lifetime
     pub tmp_dir: Path,
 }
 
