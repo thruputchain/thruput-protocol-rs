@@ -64,7 +64,7 @@ pub struct UnitAgreement {
     // can use link variables
     pub meta: StringMap,
     // can use link variables
-    pub endpoint: SocketAddressMap,
+    pub endpoint: StringMap,
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
