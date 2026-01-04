@@ -138,17 +138,63 @@ pub struct UnitDefLinked {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum ProcessStatus {
+    PROCESS_RUNNING = 1 as i32,
+    PROCESS_EXITED = 2 as i32,
+}
+pub use ProcessStatus::*;
+
+impl TryFrom<i32> for ProcessStatus {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(Self::PROCESS_RUNNING),
+            2 => Ok(Self::PROCESS_EXITED),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[repr(i32)]
+pub enum ProcessState {
+    // case PROCESS_RUNNING:
+    //   u32 pid;
+    PROCESS_RUNNING { pid: u32 } = ProcessStatus::PROCESS_RUNNING as i32,
+    // case PROCESS_EXITED:
+    //   i32 exit;
+    PROCESS_EXITED { exit: i32 } = ProcessStatus::PROCESS_EXITED as i32,
+    
+}
+
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitState {
     pub def: UnitDef,
     pub def_linked: UnitDefLinked,
     pub started: Timestamp,
-    pub pid: Option<u32>,
+    pub process_state: ProcessState,
 }
 
 
 //
 // XDR internals below this point
 //
+
+impl ProcessState {
+    pub fn status(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
+        }
+    }
+}
 
 
