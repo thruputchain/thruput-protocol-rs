@@ -89,8 +89,8 @@ pub enum HogxHostQueryResult {
 #[repr(i32)]
 pub enum HogxUnitStartResult {
     // case HOGX_OK:
-    //   UnitState unit_state;
-    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
+    //   void;
+    HOGX_OK = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
@@ -103,8 +103,8 @@ pub enum HogxUnitStartResult {
 #[repr(i32)]
 pub enum HogxUnitStopResult {
     // case HOGX_OK:
-    //   UnitState unit_state;
-    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
+    //   void;
+    HOGX_OK = HogxOutcome::HOGX_OK as i32,
     // case HOGX_ERROR:
     //   BytesM error;
     HOGX_ERROR { error: BytesM } = HogxOutcome::HOGX_ERROR as i32,
