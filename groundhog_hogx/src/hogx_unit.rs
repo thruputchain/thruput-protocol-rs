@@ -34,15 +34,20 @@ use xdr_common::*;
 
 // input
 
+pub type SystemID = BytesM;
+
+// `coordinator`, `mempool`, `exec`, `db`, `event`
+pub type UnitType = BytesM;
+
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitID {
     // sets HOGX_UNIT_SYSTEM_ID; identifies a set of unit instances comprising a system deployment
-    pub system_id: BytesM,
-    // sets HOGX_UNIT_TYPE; e.g. `coordinator`, `mempool`, `exec`, `db`, `event`
-    pub unit_type: BytesM,
+    pub system_id: SystemID,
+    // sets HOGX_UNIT_TYPE
+    pub unit_type: VecM<UnitType>,
     // sets HOGX_UNIT_SHARD
     pub unit_shard: BytesM,
 }
