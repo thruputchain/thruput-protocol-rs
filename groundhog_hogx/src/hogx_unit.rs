@@ -47,7 +47,7 @@ pub struct UnitID {
     // sets HOGX_UNIT_SYSTEM_ID; identifies a set of unit instances comprising a system deployment
     pub system_id: SystemID,
     // sets HOGX_UNIT_TYPE
-    pub unit_type: VecM<UnitType>,
+    pub unit_type: UnitType,
     // sets HOGX_UNIT_SHARD
     pub unit_shard: BytesM,
 }
