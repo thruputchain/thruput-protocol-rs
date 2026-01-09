@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa4044fcf179388ba5139fcce7f661ebdc1663bd
+// Generated from xdrc commit: 321f47351e98f77462428ad681c4796ef8e8b5ea
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -28,6 +28,11 @@ use xdrs::xdr_repr::*;
 #[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
+#[cfg(feature = "serde")]
+use ::serde::{Serialize, Deserialize};
+#[cfg(feature = "serde")]
+use ::serde_arrays;
+
 
 
 // clang-format on
@@ -39,6 +44,7 @@ pub type SystemID = BytesM;
 // `coordinator`, `mempool`, `exec`, `db`, `event`
 pub type UnitType = BytesM;
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -52,6 +58,7 @@ pub struct UnitID {
     pub unit_shard: BytesM,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -61,6 +68,7 @@ pub struct UnitBuild {
     pub pkg: BytesM,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -72,6 +80,7 @@ pub struct UnitAgreement {
     pub endpoint: StringMap,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -85,6 +94,7 @@ pub struct UnitCommand {
     pub env: StringMap,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -100,6 +110,7 @@ pub struct UnitDef {
 
 // output: linked definitions
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -109,6 +120,7 @@ pub struct UnitAgreementLinked {
     pub endpoint: SocketAddressMap,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -129,6 +141,7 @@ pub struct UnitCommandLinked {
     pub env: StringMap,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -140,6 +153,7 @@ pub struct UnitDefLinked {
     pub command: UnitCommandLinked,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -164,6 +178,7 @@ impl TryFrom<i32> for ProcessStatus {
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
@@ -177,6 +192,7 @@ pub enum ProcessState {
     
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

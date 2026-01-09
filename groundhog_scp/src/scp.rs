@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa4044fcf179388ba5139fcce7f661ebdc1663bd
+// Generated from xdrc commit: 321f47351e98f77462428ad681c4796ef8e8b5ea
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -28,6 +28,11 @@ use xdrs::xdr_repr::*;
 #[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
+#[cfg(feature = "serde")]
+use ::serde::{Serialize, Deserialize};
+#[cfg(feature = "serde")]
+use ::serde_arrays;
+
 
 
 // clang-format on
@@ -46,6 +51,7 @@ pub type SCPValues = VecM::<SCPValue>;
 
 pub type SCPOptValue = Option::<SCPValue>;
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -57,6 +63,7 @@ pub struct SCPBallot {
     pub value: SCPValue,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -84,6 +91,7 @@ impl TryFrom<i32> for SCPStatementType {
 }
 
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -97,6 +105,7 @@ pub struct SCPStatementNominate {
     pub accepted: VecM<SCPValue>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -116,6 +125,7 @@ pub struct SCPStatementPrepare {
     pub n_h: SCPCount,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -133,6 +143,7 @@ pub struct SCPStatementConfirm {
     pub quorum_set_hash: SCPHash,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -147,6 +158,7 @@ pub struct SCPStatementExternalize {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
@@ -166,6 +178,7 @@ pub enum SCPStatement_pledges {
     
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -178,6 +191,7 @@ pub struct SCPStatement {
     pub pledges: SCPStatement_pledges,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -191,6 +205,7 @@ pub type SCPEnvelopes = VecM::<SCPEnvelope>;
 
 // supports things like: A,B,C,(D,E,F),(G,H,(I,J,K,L))
 // only allows 2 levels of nesting
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
