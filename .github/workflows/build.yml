@@ -43,6 +43,12 @@ jobs:
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr --features=xdrs,syscalls
       - name: cargo build syscalls mock
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr --features=xdrs,syscalls_mock
+      - name: cargo build serde
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr --features=serde
+      - name: cargo build serde xdrs
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr --features=serde,xdrs
+      - name: cargo build serde alloc
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -v -p groundhog_xdr --features=serde,alloc
       - name: run tests
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo test --features=std
       - name: build rpc
