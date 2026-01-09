@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa4044fcf179388ba5139fcce7f661ebdc1663bd
+// Generated from xdrc commit: d44b7a1c80834f63b4a5047f7b841784412b52b2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -28,6 +28,11 @@ use xdrs::xdr_repr::*;
 #[cfg(not(feature="xdrs"))]
 use xdr_common::*;
 
+#[cfg(feature = "serde")]
+use ::serde::{Serialize, Deserialize};
+#[cfg(feature = "serde")]
+use ::serde_arrays;
+
 
 
 // clang-format on
@@ -40,6 +45,7 @@ pub type Tag = BytesM;
 
 pub type Flag = BytesM;
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -51,6 +57,7 @@ pub struct KeyString {
 
 pub type StringMap = VecM::<KeyString>;
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

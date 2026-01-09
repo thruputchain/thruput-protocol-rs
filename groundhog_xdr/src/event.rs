@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa4044fcf179388ba5139fcce7f661ebdc1663bd
+// Generated from xdrc commit: d44b7a1c80834f63b4a5047f7b841784412b52b2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -100,6 +100,7 @@ impl<'r> ReadXDR<'r> for &'r Topic {
 }
 
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -113,6 +114,7 @@ pub struct TxEmittedEvent {
 
 // This is the struct that goes in the merkle-patricia trie.
 // The key is the proposed_tx_hash field, and the value is the events field.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -125,6 +127,7 @@ pub struct TxEventLog {
 
 // Information that suffices to uniquely identify an event.
 // This information can be reconstructed from the TxEmittedEvent.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
