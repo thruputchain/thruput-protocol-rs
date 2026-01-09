@@ -50,7 +50,9 @@ jobs:
       - name: cargo build serde alloc
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --features=serde,alloc
       - name: cargo build wasm
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --target=wasm32-unknown-unknown
+        run: |
+          rustup target add wasm32-unknown-unknown
+          CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --target=wasm32-unknown-unknown
       - name: cargo build wasm xdrs
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_xdr --target=wasm32-unknown-unknown --features=xdrs
       - name: cargo build wasm alloc
