@@ -12,11 +12,35 @@ alloc = ["xdrs", "xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
 spec = [] # enable dump of XDR specs
+serde = [
+    "dep:serde",
+    "dep:serde_arrays",
+    "xdr_common/serde",
+    "groundhog_scp/serde",
+    "groundhog_xdr/serde",
+]
 
 [dependencies]
 async-trait = "0.1.89"
-groundhog_xdr = { path = "../groundhog_xdr", features = ["std", "xdrs"] }
-groundhog_scp = { path = "../groundhog_scp", features = ["std", "xdrs"] }
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.serde_arrays]
+optional = true
+git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
+default-features = false
+
+[dependencies.groundhog_scp]
+path = "../groundhog_scp"
+features = ["std", "xdrs"]
+
+[dependencies.groundhog_xdr]
+path = "../groundhog_xdr"
+features = ["std", "xdrs"]
 
 [dependencies.xdrs]
 workspace = true
