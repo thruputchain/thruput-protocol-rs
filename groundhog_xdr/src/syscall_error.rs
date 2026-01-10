@@ -64,25 +64,18 @@ pub enum SyscallErrorCode {
     // there have been no subcalls within this call frame.
     kSyscallErrorCodeNoReturnBufferAvailable = 6 as i32,
 
-    // Insufficient gas in call frame to supply requested gas limit for child
-    // invocation
-    kSyscallErrorCodeInsufficientGasForInvocation = 7 as i32,
-
     // Invalid input to a syscall, such as subtracting below 0 on an nnint64
-    kSyscallErrorCodeInvalidSyscallInput = 8 as i32,
+    // or a bytestring that is too long
+    kSyscallErrorCodeInvalidSyscallInput = 7 as i32,
 
     // Accessing a storage key that does not exist in the current view
-    kSyscallErrorCodeStorageKeyNotExist = 9 as i32,
+    kSyscallErrorCodeStorageKeyNotExist = 8 as i32,
 
     // No entry in the retrocausal queue to consume
-    kSyscallErrorCodeNoRetrocausalQueueEntry = 10 as i32,
+    kSyscallErrorCodeNoRetrocausalQueueEntry = 9 as i32,
 
-    // Failed to parse calldata
-    kSyscallErrorCodeCalldataParseError = 100 as i32,
-
-    // Failed to parse returned data
-    kSyscallErrorCodeReturnParseError = 101 as i32,
-
+    // ===== Error codes that signal the called frame reverted =====
+    
     // Deterministic error within called wasm (i.e. trap)
     kSyscallErrorCodeDeterministicWasm = -1 as i32,
 
@@ -102,12 +95,9 @@ impl TryFrom<i32> for SyscallErrorCode {
             4 => Ok(Self::kSyscallErrorCodeContractLookupFailed),
             5 => Ok(Self::kSyscallErrorCodeContractAlreadyDeployed),
             6 => Ok(Self::kSyscallErrorCodeNoReturnBufferAvailable),
-            7 => Ok(Self::kSyscallErrorCodeInsufficientGasForInvocation),
-            8 => Ok(Self::kSyscallErrorCodeInvalidSyscallInput),
-            9 => Ok(Self::kSyscallErrorCodeStorageKeyNotExist),
-            10 => Ok(Self::kSyscallErrorCodeNoRetrocausalQueueEntry),
-            100 => Ok(Self::kSyscallErrorCodeCalldataParseError),
-            101 => Ok(Self::kSyscallErrorCodeReturnParseError),
+            7 => Ok(Self::kSyscallErrorCodeInvalidSyscallInput),
+            8 => Ok(Self::kSyscallErrorCodeStorageKeyNotExist),
+            9 => Ok(Self::kSyscallErrorCodeNoRetrocausalQueueEntry),
             -1 => Ok(Self::kSyscallErrorCodeDeterministicWasm),
             -2 => Ok(Self::kSyscallErrorCodeFrameReverted),
             _ => Err(()),
