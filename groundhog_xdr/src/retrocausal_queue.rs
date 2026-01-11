@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 321f47351e98f77462428ad681c4796ef8e8b5ea
+// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -45,6 +45,7 @@ pub const kQueueEntryMaxLen : u32 = 256;
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct QueueEntry {
     inner: BytesM<kQueueEntryMaxLen>,
 }

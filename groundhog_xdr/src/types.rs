@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 321f47351e98f77462428ad681c4796ef8e8b5ea
+// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -80,6 +80,7 @@ pub type MethodID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519Signature {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 64 as usize],
@@ -139,6 +140,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519PublicKey {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32 as usize],
@@ -197,6 +199,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519SecretKey {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 64 as usize],
@@ -327,6 +330,7 @@ pub enum ExtensionPoint {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct SHA256Hash {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32 as usize],
@@ -385,6 +389,7 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct ContractAddress {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32 as usize],
@@ -447,6 +452,7 @@ pub type ContractAddressBatch = VecM::<ContractAddress>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
 pub struct StorageKeyContractData {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     inner: [u8; 32 as usize],
