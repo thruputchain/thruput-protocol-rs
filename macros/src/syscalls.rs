@@ -2,8 +2,8 @@ use ::serde;
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::{ToTokens, format_ident, quote};
-use std::collections::HashMap;
 use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 #[derive(Debug, serde::Deserialize)]
 struct SyscallSpec {
@@ -539,18 +539,18 @@ fn generate_syscall_uninit_decl(
     let mut doc_lines = Vec::new();
     let has_outputs = !syscall.outputs.is_empty();
     let has_inputs = !syscall.inputs.is_empty();
-    
+
     if let Some(doc) = doc {
         // Add main description
         if !doc.description.is_empty() {
             doc_lines.extend(doc.description.iter().cloned());
             doc_lines.push(String::new());
         }
-        
+
         // Add inputs/outputs lists
         doc_lines.push("## Arguments".to_string());
         doc_lines.push(String::new());
-        
+
         // Inputs
         doc_lines.push("### Inputs".to_string());
         if has_inputs {
@@ -561,7 +561,7 @@ fn generate_syscall_uninit_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Outputs
         doc_lines.push("### Outputs".to_string());
         if has_outputs {
@@ -573,14 +573,17 @@ fn generate_syscall_uninit_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Add note about uninit variant only if there are outputs
         if has_outputs {
             doc_lines.push(format!("This is the `uninit_{}` variant that takes `MaybeUninit` parameters for outputs.", &syscall.name));
-            doc_lines.push("The syscall will initialize outputs if the error is `kNone`.".to_string());
+            doc_lines.push(
+                "The syscall will initialize outputs if the error is `kNone`."
+                    .to_string(),
+            );
             doc_lines.push(String::new());
         }
-        
+
         // Add error documentation
         if !doc.errors.is_empty() {
             doc_lines.push("## Errors".to_string());
@@ -596,7 +599,7 @@ fn generate_syscall_uninit_decl(
         // Add inputs/outputs lists
         doc_lines.push("## Arguments".to_string());
         doc_lines.push(String::new());
-        
+
         // Inputs
         doc_lines.push("### Inputs".to_string());
         if has_inputs {
@@ -607,7 +610,7 @@ fn generate_syscall_uninit_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Outputs
         doc_lines.push("### Outputs".to_string());
         if has_outputs {
@@ -621,7 +624,7 @@ fn generate_syscall_uninit_decl(
             doc_lines.push("- None".to_string());
         }
     }
-    
+
     let doc_comment = generate_doc_comment(&doc_lines);
 
     quote! {
@@ -655,18 +658,18 @@ fn generate_syscall_raw_decl(
     let mut doc_lines = Vec::new();
     let has_outputs = !syscall.outputs.is_empty();
     let has_inputs = !syscall.inputs.is_empty();
-    
+
     if let Some(doc) = doc {
         // Add main description
         if !doc.description.is_empty() {
             doc_lines.extend(doc.description.iter().cloned());
             doc_lines.push(String::new());
         }
-        
+
         // Add inputs/outputs lists
         doc_lines.push("## Arguments".to_string());
         doc_lines.push(String::new());
-        
+
         // Inputs
         doc_lines.push("### Inputs".to_string());
         if has_inputs {
@@ -677,7 +680,7 @@ fn generate_syscall_raw_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Outputs
         doc_lines.push("### Outputs".to_string());
         if has_outputs {
@@ -688,16 +691,22 @@ fn generate_syscall_raw_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Add note about raw variant
         if has_outputs {
-            doc_lines.push(format!("This is the `raw_{}` variant that wraps `uninit_{}`.", &syscall.name, &syscall.name));
+            doc_lines.push(format!(
+                "This is the `raw_{}` variant that wraps `uninit_{}`.",
+                &syscall.name, &syscall.name
+            ));
             doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls `uninit_{}`.", &syscall.name));
         } else {
-            doc_lines.push(format!("This is the `raw_{}` variant that wraps `uninit_{}`.", &syscall.name, &syscall.name));
+            doc_lines.push(format!(
+                "This is the `raw_{}` variant that wraps `uninit_{}`.",
+                &syscall.name, &syscall.name
+            ));
         }
         doc_lines.push(String::new());
-        
+
         // Add error documentation
         if !doc.errors.is_empty() {
             doc_lines.push("## Errors".to_string());
@@ -713,7 +722,7 @@ fn generate_syscall_raw_decl(
         // Add inputs/outputs lists
         doc_lines.push("## Arguments".to_string());
         doc_lines.push(String::new());
-        
+
         // Inputs
         doc_lines.push("### Inputs".to_string());
         if has_inputs {
@@ -724,7 +733,7 @@ fn generate_syscall_raw_decl(
             doc_lines.push("- None".to_string());
         }
         doc_lines.push(String::new());
-        
+
         // Outputs
         doc_lines.push("### Outputs".to_string());
         if has_outputs {
@@ -732,15 +741,21 @@ fn generate_syscall_raw_decl(
                 doc_lines.push(format!("- `{}`", output.name));
             }
             doc_lines.push(String::new());
-            doc_lines.push(format!("This is the `raw_{}` variant that wraps `uninit_{}`.", &syscall.name, &syscall.name));
+            doc_lines.push(format!(
+                "This is the `raw_{}` variant that wraps `uninit_{}`.",
+                &syscall.name, &syscall.name
+            ));
             doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls `uninit_{}`.", &syscall.name));
         } else {
             doc_lines.push("- None".to_string());
             doc_lines.push(String::new());
-            doc_lines.push(format!("This is the `raw_{}` variant that wraps `uninit_{}`.", &syscall.name, &syscall.name));
+            doc_lines.push(format!(
+                "This is the `raw_{}` variant that wraps `uninit_{}`.",
+                &syscall.name, &syscall.name
+            ));
         }
     }
-    
+
     let doc_comment = generate_doc_comment(&doc_lines);
 
     quote! {
@@ -797,15 +812,18 @@ fn generate_doc_comment(lines: &[String]) -> TokenStream2 {
     if lines.is_empty() {
         return quote! {};
     }
-    
-    let doc_lines: Vec<TokenStream2> = lines.iter().map(|line| {
-        let line_str = line.as_str();
-        // Format as /// doc comment - use #[doc = "..."] for proper escaping
-        quote! {
-            #[doc = #line_str]
-        }
-    }).collect();
-    
+
+    let doc_lines: Vec<TokenStream2> = lines
+        .iter()
+        .map(|line| {
+            let line_str = line.as_str();
+            // Format as /// doc comment - use #[doc = "..."] for proper escaping
+            quote! {
+                #[doc = #line_str]
+            }
+        })
+        .collect();
+
     quote! {
         #(#doc_lines)*
     }
@@ -815,7 +833,7 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path.clone());
     let type_map = spec.get_type_map();
-    
+
     // Try to load documentation JSON (relative to the YAML file)
     let yaml_path_buf = std::path::PathBuf::from(&file_path);
     let yaml_dir = yaml_path_buf.parent().unwrap();
