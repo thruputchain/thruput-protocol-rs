@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -39,10 +39,10 @@ use ::serde_arrays;
 
 // input
 
-pub type SystemID = BytesM;
+pub type SystemID = StringM;
 
 // `coordinator`, `mempool`, `exec`, `db`, `event`
-pub type UnitType = BytesM;
+pub type UnitType = StringM;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -55,7 +55,7 @@ pub struct UnitID {
     // sets HOGX_UNIT_TYPE
     pub unit_type: UnitType,
     // sets HOGX_UNIT_SHARD
-    pub unit_shard: BytesM,
+    pub unit_shard: StringM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -65,7 +65,7 @@ pub struct UnitID {
 #[repr(C)]
 pub struct UnitBuild {
     // sets HOGX_UNIT_PKG
-    pub pkg: BytesM,
+    pub pkg: StringM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

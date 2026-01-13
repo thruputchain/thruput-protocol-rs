@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -624,14 +624,14 @@ pub struct DbTip {
 
 // ServerAddress is an IP (or hostname) and port address, separated by a
 // colon.
-pub type ServerAddress = BytesM;
+pub type ServerAddress = StringM;
 
 // UPID is a globally unique process identifier (function of start time, place
 // and randomness)
 pub type UPID = [u8; 8 as usize];
 
 // Protocol describes a specific protocol and version.
-pub type Protocol = BytesM;
+pub type Protocol = StringM;
 
 // If we use the bitmap approach, should be less than the width of
 // the bitmap.

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -45,12 +45,12 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct HostDef {
-    pub host_id: BytesM,
+    pub host_id: StringM,
     pub host_tags: VecM<Tag>,
     //
-    pub ssh_user: BytesM,
-    pub ssh_address: BytesM,
-    pub ssh_private_key: BytesM,
+    pub ssh_user: StringM,
+    pub ssh_address: StringM,
+    pub ssh_private_key: StringM,
     //
     pub host_config: HostConfig,
 }
@@ -65,8 +65,8 @@ pub struct HostDef {
 #[repr(C)]
 pub struct LayoutUnit {
     pub unit_type: UnitType,
-    pub unit_shard: BytesM,
-    pub host_id: BytesM,
+    pub unit_shard: StringM,
+    pub host_id: StringM,
 }
 
 // LayoutDef maps all system units to cluster hosts.
@@ -76,7 +76,7 @@ pub struct LayoutUnit {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct LayoutDef {
-    pub layout_id: BytesM,
+    pub layout_id: StringM,
     pub layout_units: VecM<LayoutUnit>,
 }
 

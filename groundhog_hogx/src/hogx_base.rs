@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -39,11 +39,11 @@ use ::serde_arrays;
 
 pub type Timestamp = i64;
 
-pub type Path = BytesM;
+pub type Path = StringM;
 
-pub type Tag = BytesM;
+pub type Tag = StringM;
 
-pub type Flag = BytesM;
+pub type Flag = StringM;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -51,8 +51,8 @@ pub type Flag = BytesM;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct KeyString {
-    pub key: BytesM,
-    pub value: BytesM,
+    pub key: StringM,
+    pub value: StringM,
 }
 
 pub type StringMap = VecM::<KeyString>;
@@ -63,9 +63,9 @@ pub type StringMap = VecM::<KeyString>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct KeySocketAddress {
-    pub key: BytesM,
+    pub key: StringM,
     // ip4 or ip6 + port
-    pub address: BytesM,
+    pub address: StringM,
 }
 
 pub type SocketAddressMap = VecM::<KeySocketAddress>;

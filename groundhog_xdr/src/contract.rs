@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -107,11 +107,11 @@ pub struct ContractDeploymentHashPreimage {
 // Section 6.2: "An identifier is a letter followed by an optional sequence
 // of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
 // which lists keywords that may not be used as identifiers.
-pub type Identifier = BytesM;
+pub type Identifier = StringM;
 
 // This type must be a valid version number as defined at
 // https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
-pub type SemVer = BytesM;
+pub type SemVer = StringM;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]

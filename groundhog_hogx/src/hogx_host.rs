@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a19da5c3031c095e58b2778999c3e9fcc359023
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -25,9 +25,6 @@ use xdrs::*;
 use xdrs::xdr_repr::*;
 
 
-#[cfg(not(feature="xdrs"))]
-use xdr_common::*;
-
 #[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};
 #[cfg(feature = "serde")]
@@ -44,9 +41,9 @@ use ::serde_arrays;
 #[repr(C)]
 pub struct HostConfig {
     // HOGX_PUBLIC_IP
-    pub public_ip: BytesM,
+    pub public_ip: StringM,
     // HOGX_PRIVATE_IP
-    pub private_ip: BytesM,
+    pub private_ip: StringM,
     // HOGX_PKG_DIR
     pub pkg_dir: Path,
     // HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
