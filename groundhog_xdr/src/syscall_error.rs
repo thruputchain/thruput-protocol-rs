@@ -53,9 +53,6 @@ pub enum SyscallErrorCode {
     // Cannot call get_msg_sender on root invocation
     kSyscallErrorCodeIsRootTransaction = 3 as i32,
 
-    // Failed to find contract
-    kSyscallErrorCodeContractLookupFailed = 4 as i32,
-
     // Attempt made to deploy a contract twice (same nonce and contract hash, from
     // same address)
     kSyscallErrorCodeContractAlreadyDeployed = 5 as i32,
@@ -92,7 +89,6 @@ impl TryFrom<i32> for SyscallErrorCode {
             1 => Ok(Self::kSyscallErrorCodeFault),
             2 => Ok(Self::kSyscallErrorCodeNoSyscall),
             3 => Ok(Self::kSyscallErrorCodeIsRootTransaction),
-            4 => Ok(Self::kSyscallErrorCodeContractLookupFailed),
             5 => Ok(Self::kSyscallErrorCodeContractAlreadyDeployed),
             6 => Ok(Self::kSyscallErrorCodeNoReturnBufferAvailable),
             7 => Ok(Self::kSyscallErrorCodeInvalidSyscallInput),
