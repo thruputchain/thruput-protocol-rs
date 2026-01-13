@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
+// Generated from xdrc commit: b276e3d2f1e9a04f8d23893cd6efa71dc03a2e47
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -69,6 +69,18 @@ pub struct KeySocketAddress {
 }
 
 pub type SocketAddressMap = VecM::<KeySocketAddress>;
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct File {
+    pub path: Path,
+    pub content: BytesM,
+}
+
+pub type Files = VecM::<File>;
 
 
 //
