@@ -73,3 +73,7 @@ done
 for hogx in "${hogxs[@]}"; do
   generate "protocol/${hogx}" "groundhog_hogx"
 done
+
+# Generate syscall documentation
+echo "-- Generating syscall documentation --" >&2
+python3 protocol/generate_syscalls_doc.py

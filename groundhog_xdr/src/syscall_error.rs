@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b276e3d2f1e9a04f8d23893cd6efa71dc03a2e47
+// Generated from xdrc commit: d7d7b09004fd533e825a9f6ce3a355c28934f2ee
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -34,6 +34,8 @@ use ::serde_arrays;
 
 // clang-format on
 
+// triple slash comments are added to the generated rust docs
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -41,42 +43,42 @@ use ::serde_arrays;
 #[derive(Copy)]
 #[repr(i32)]
 pub enum SyscallErrorCode {
-    // No error
+    /// No error
     kSyscallErrorCodeNone = 0 as i32,
 
-    // Out of bounds pointer to wasm memory passed to syscall
+    /// Out of bounds pointer to wasm memory passed to syscall
     kSyscallErrorCodeFault = 1 as i32,
 
-    // System call for supplied number is not supported
+    /// System call for supplied number is not supported
     kSyscallErrorCodeNoSyscall = 2 as i32,
 
-    // Cannot call get_msg_sender on root invocation
+    /// Cannot call get_msg_sender on root invocation
     kSyscallErrorCodeIsRootTransaction = 3 as i32,
 
-    // Attempt made to deploy a contract twice (same nonce and contract hash, from
-    // same address)
+    /// Attempt made to deploy a contract twice (same nonce and contract hash, from
+    /// same address)
     kSyscallErrorCodeContractAlreadyDeployed = 5 as i32,
 
-    // No return buffer is available.  Either the most recent subcall failed, or
-    // there have been no subcalls within this call frame.
+    /// No return buffer is available.  Either the most recent subcall failed, or
+    /// there have been no subcalls within this call frame.
     kSyscallErrorCodeNoReturnBufferAvailable = 6 as i32,
 
-    // Invalid input to a syscall, such as subtracting below 0 on an nnint64
-    // or a bytestring that is too long
+    /// Invalid input to a syscall, such as subtracting below 0 on an nnint64
+    /// or a bytestring that is too long
     kSyscallErrorCodeInvalidSyscallInput = 7 as i32,
 
-    // Accessing a storage key that does not exist in the current view
+    /// Accessing a storage key that does not exist in the current view
     kSyscallErrorCodeStorageKeyNotExist = 8 as i32,
 
-    // No entry in the retrocausal queue to consume
+    /// No entry in the retrocausal queue to consume
     kSyscallErrorCodeNoRetrocausalQueueEntry = 9 as i32,
 
     // ===== Error codes that signal the called frame reverted =====
     
-    // Deterministic error within called wasm (i.e. trap)
+    /// Deterministic error within called wasm (i.e. trap)
     kSyscallErrorCodeDeterministicWasm = -1 as i32,
 
-    // Child call frame manually reverted
+    /// Child call frame manually reverted
     kSyscallErrorCodeFrameReverted = -2 as i32,
 }
 pub use SyscallErrorCode::*;
