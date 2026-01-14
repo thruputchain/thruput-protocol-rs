@@ -35,8 +35,7 @@ use ::serde_arrays;
 
 
 
-// clang-format on
-
+/// An opaque blob of WebAssembly code.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -72,6 +71,16 @@ impl TryFrom<i32> for ContractType {
 }
 
 
+/// A `Contract` is something that can be deployed and invoked onchain.
+/// A contract can be deployed to a specific `ContractAddress`,
+/// and then invoked at that address.
+///
+/// Groundhog currently supports three types of contracts:
+/// - `kWasmi`: A contract that is implemented as a WASM blob.
+/// - `kNative`: A contract that is implemented as a precompiled native contract.   
+///   The primary example of a native contract is the one that implements the native token of the chain.
+/// - `kMockTest`: A `kMockTest` contract is is never deployed on chain, 
+///   but rather is created as part of the test harness when testing new contracts locally.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -87,11 +96,12 @@ pub enum Contract {
     // case kMockTest:
     //   i32 mock_contract_id;
     kMockTest { mock_contract_id: i32 } = ContractType::kMockTest as i32,
-    // default:
-    //   void;
-    Default { contract_type: i32 },
+    
 }
 
+/// When one contract deploys another, the address of the resulting contract is the hash of this struct.
+/// The nonce is an arbitrary value supplied by the calling contract.
+/// Informally, this is the groundhog analogue of the Ethereum virtual machine's `CREATE2` opcode.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -103,16 +113,17 @@ pub struct ContractDeploymentHashPreimage {
     pub contract_hash: SHA256Hash,
 }
 
-// This type must be a valid "identifier" as defined in RFC 4506,
-// Section 6.2: "An identifier is a letter followed by an optional sequence
-// of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
-// which lists keywords that may not be used as identifiers.
+/// This type must be a valid "identifier" as defined in RFC 4506,
+/// Section 6.2: "An identifier is a letter followed by an optional sequence
+/// of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
+/// which lists keywords that may not be used as identifiers.
 pub type Identifier = StringM;
 
-// This type must be a valid version number as defined at
-// https://semver.org/.  For example, "0.1.3" or "1.0.0-alpha+001".
+/// This type must be a valid version number as defined at
+/// <https://semver.org/>.  For example, "0.1.3" or "1.0.0-alpha+001".
 pub type SemVer = StringM;
 
+/// The hash of this type is used to compute the first 6 bytes of contract interface method IDs.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -123,9 +134,9 @@ pub struct ContractInterfaceIDPreimage {
     pub vers: SemVer,
 }
 
-// This type is computed as SHA256(ContractInterfaceIDPreimage)[0..6],
-// concatenated with a two-byte "method id" defined by the author of
-// the contract interface
+/// This is an 8-byte opaque type that is computed as SHA256(ContractInterfaceIDPreimage)[0..6],
+/// concatenated with a two-byte "method id" defined by the author of
+/// the contract interface
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -194,8 +205,7 @@ impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
 impl Contract {
     pub fn contract_type(&self) -> i32 {
         match self {
-            Contract::Default{ contract_type } => *contract_type ,
-
+            
             _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
