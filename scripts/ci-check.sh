@@ -18,6 +18,8 @@ cargo build $g -F spec
 cargo build $g -F syscalls
 cargo test $g -F std
 
+RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog_xdr
+
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp
 cargo build -p groundhog_coordinator
