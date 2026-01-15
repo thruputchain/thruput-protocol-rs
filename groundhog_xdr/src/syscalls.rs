@@ -1,3 +1,35 @@
+//! # Syscalls Module
+//!
+//! This contains the generated system call bindings for all syscalls in groundhog.
+//! In most cases, you should not need to call these functions directly.  Instead,
+//! the SDK provides a higher-level interface for using these functions.
+//! 
+//! There are two variants generated for each syscall.  The 
+//! raw_{syscall_name} variant takes its input arguments
+//! as immutable references (&) or, for trivially copyable types that fit within a u64,
+//! as the value itself.  Outputs are taken as mutable references (&mut).
+//! 
+//! The syscall returns an i32 error code (wrapped as a SysErr).  This error code is 
+//! a SyscallErrorCode enum value.  Each syscall can return a specific set of errors;
+//! check each syscall's documentation for details.
+//! The output variables are modified only if the error is `kSyscallErrorCodeNone` (0).
+//! 
+//! The uninit_{syscall_name} differs from the raw_{syscall_name} variant in that it
+//! takes as its outputs not mutable references but `&mut MaybeUninit<T>` arguments.
+//! The output variables are initialized only if the error is `kSyscallErrorCodeNone` (0).
+//! 
+//! Internal notes, for those who are curious:
+//! 
+//! The raw_{syscall_name} variant is a thin wrapper around the uninit_{syscall_name} variant,
+//! with appropriate transmute calls to convert from `&mut T` to `&mut MaybeUninit<T>`.
+//! 
+//! These bindings are a thin wrapper around the webassembly imported function
+//! that is invoked to leave a webassembly module (and execute a system call).
+//! That function (here, `syscall_wrapper`) is imported as the webassembly module `marmot` function name `syscall`.
+//! You should never need to invoke `syscall_wrapper` directly (which is why that function is not a public member of this module).
+//! Instead, use the typed bindings as generated in this module.  
+//! Under the hood, these bindings encode their arguments as either integers or pointers into WebAssembly memory.  
+
 use crate::*;
 use core::fmt;
 use thiserror::Error;
@@ -74,7 +106,7 @@ extern "C" {
         arg5: u64,
         arg6: u64,
         arg7: u64,
-    ) -> SysErr;
+    ) -> i32;
 }
 
 #[cfg(feature = "syscalls_mock")]
@@ -88,7 +120,7 @@ extern "C-unwind" {
         arg5: u64,
         arg6: u64,
         arg7: u64,
-    ) -> SysErr;
+    ) -> i32;
 }
 
 fn syscall_wrapper(
@@ -102,7 +134,7 @@ fn syscall_wrapper(
     arg7: u64,
 ) -> SysErr {
     unsafe {
-        syscall_wrapper_impl(
+        SysErr(syscall_wrapper_impl(
             syscall_no as u64,
             arg1,
             arg2,
@@ -111,7 +143,7 @@ fn syscall_wrapper(
             arg5,
             arg6,
             arg7,
-        )
+        ))
     }
 }
 

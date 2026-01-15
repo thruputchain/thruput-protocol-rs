@@ -698,10 +698,10 @@ fn generate_syscall_raw_decl(
                 "This is the `raw_{}` variant that wraps `uninit_{}`.",
                 &syscall.name, &syscall.name
             ));
-            doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls `uninit_{}`.", &syscall.name));
+            doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls [`uninit_{}`](uninit_{}).", &syscall.name, &syscall.name));
         } else {
             doc_lines.push(format!(
-                "This is the `raw_{}` variant that wraps `uninit_{}`.",
+                "This is the a thin wrapper around [`uninit_{}`](uninit_{}).",
                 &syscall.name, &syscall.name
             ));
         }
