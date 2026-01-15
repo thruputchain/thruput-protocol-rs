@@ -834,11 +834,10 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     let spec = load_syscall_yaml(file_path.clone());
     let type_map = spec.get_type_map();
 
-    // Try to load documentation JSON (relative to the YAML file)
-    let yaml_path_buf = std::path::PathBuf::from(&file_path);
-    let yaml_dir = yaml_path_buf.parent().unwrap();
-    let docs_path = yaml_dir.join("syscalls_docs.json");
-    let docs = load_syscall_docs(docs_path.to_string_lossy().to_string());
+    // Try to load documentation JSON (from the crate directory)
+    // The JSON is generated into the groundhog_xdr directory by the build script
+    let docs_path = "syscalls_docs.json";
+    let docs = load_syscall_docs(docs_path.to_string());
 
     let decls = spec.syscalls.iter().map(|func| {
         let doc = docs.get(&func.name);
