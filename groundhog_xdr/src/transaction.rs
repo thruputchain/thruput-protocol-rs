@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b276e3d2f1e9a04f8d23893cd6efa71dc03a2e47
+// Generated from xdrc commit: 945426766165b74bc74075ecbe5703f7037b36af
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -191,18 +191,6 @@ pub struct NondeterministicProposalData {
 #[repr(C)]
 pub struct ProposedTransaction {
     pub signed_tx: SignedTransaction,
-    pub nondeterministic_proposal_data: NondeterministicProposalData,
-}
-
-// Nominations, included in SCP messages, include only the ND data.
-// The transactions themselves are disseminated through the overlay.
-// XXX(petar): rename to TransactionProposalData
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct NominatedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
 }
 
