@@ -38,6 +38,7 @@ use ::serde_arrays;
 // The event format puts the first N * 32 bytes of the data
 // as the topics.
 
+// 
 pub const kMaxEventLength : u32 = 1024;
 
 pub const kMaxTopics : u32 = 3;

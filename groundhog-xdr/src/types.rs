@@ -25,15 +25,14 @@ use xdrs::*;
 use xdrs::xdr_repr::*;
 
 
-#[cfg(not(feature="xdrs"))]
-use xdr_common::*;
-
 #[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
 
+/// Encodes a 128-bit unsigned integer as two 64-bit unsigned integers.
+/// Under the standard XDR encoding, this type serializes as a big-endian u128.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -44,6 +43,8 @@ pub struct uint128_xdr {
     pub lowbits: u64,
 }
 
+/// Encodes a 128-bit signed integer as two 64-bit signed integers.
+/// Under the standard XDR encoding, this type serializes as a big-endian i128.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -54,26 +55,24 @@ pub struct int128_xdr {
     pub lowbits: u64,
 }
 
-// uint64_t, Unix time as nanoseconds elapsed since
-// January 1, 1970 UTC
+/// uint64_t, Unix time as nanoseconds elapsed since
+/// January 1, 1970 UTC
 pub type TimePoint = u64;
 
-// uint32_t
-pub type RuntimeMemoryOffset = u32;
-
+/// Typedef representing a length of memory in bytes, within
+/// a wasm runtime.  This is primarily used as an argument to syscalls,
+/// and should not be directly used by most contracts.
 // uint32_t
 pub type RuntimeMemoryLength = u32;
 
 // TODO(geoff): consider using a smaller type for GasAmount
+/// Represents a quantity of gas.  Alias of u64.
 // uint64_t
 pub type GasAmount = u64;
 
-// uint64_t
-pub type MethodID = u64;
-
-// ed25519 sig len is 512 bits
+/// Represents a 512-bit Ed25519 signature.
 // 
-// ed25519 key len is 256 bits
+/// Represents a 256-bit Ed25519 public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -133,7 +132,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 
 
 // 
-// ed25519 secret key len is 64 bytes
+/// Represents a 64-byte Ed25519 secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -251,6 +250,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 }
 
 
+/// Represents the cryptographic scheme used for a signature or public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -273,6 +273,7 @@ impl TryFrom<i32> for CryptographicScheme {
 }
 
 
+/// Union of a Signature type over the various cryptographic schemes.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -285,6 +286,7 @@ pub enum Signature {
     
 }
 
+/// Union of a PublicKey type over the various cryptographic schemes.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -297,6 +299,7 @@ pub enum PublicKey {
     
 }
 
+/// Union of a SecretKey type over the various cryptographic schemes.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -309,6 +312,13 @@ pub enum SecretKey {
     
 }
 
+/// An ExtensionPoint is a struct that can be embedded as the first
+/// element of other XDR structs in order to allow future upgradeability
+/// without breaking serialization of pre-existing objects.
+/// This serializes as a 32-bit integer.  In its current state,
+/// the only valid byte value is 0, but a struct that embeds this can
+/// later replace itself with a union (with the prior struct as variant 0)
+/// without breaking backwards compatibility.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -321,9 +331,8 @@ pub enum ExtensionPoint {
     
 }
 
-// 256 bit hash
+/// Represents a 256-bit SHA-256 hash.
 // 
-// 256 bit contract address
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -382,6 +391,9 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 }
 
 
+/// Represents a 256-bit contract address.
+/// In the groundhog storage model, each contract is deployed at a 
+/// 32-byte unique `ContractAddress`.
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -441,10 +453,45 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 }
 
 
-pub type ContractAddressBatch = VecM::<ContractAddress>;
+/// Each ContractAddress owns a namespace of storage keys.
+/// Most of the keyspace is made up of ContractData keys, which are indexed
+/// by 32-byte (arbitrary) identifiers (the [`StorageKeyContractData`](struct.StorageKeyContractData.html) type).
+/// The other variants here have special purposes, and cannot be freely accessed
+/// by contracts.
+/// Contracts are free to set their own conventions for indexing data within 
+/// the StorageKeyContractData subspace..
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum StorageKeyType {
+    kStorageKeyTypeContractData = 0 as i32,
+    kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
+    kStorageKeyTypeAccountAuthData = 2 as i32,
+    kStorageKeyTypeAddressMetadata = 3 as i32,
+    kStorageKeyTypeReplayCache = 4 as i32,
+}
+pub use StorageKeyType::*;
 
-// arbitrary 32-byte key into contract storage
-// This is the key type that contracts directly manipulate
+impl TryFrom<i32> for StorageKeyType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kStorageKeyTypeContractData),
+            1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
+            2 => Ok(Self::kStorageKeyTypeAccountAuthData),
+            3 => Ok(Self::kStorageKeyTypeAddressMetadata),
+            4 => Ok(Self::kStorageKeyTypeReplayCache),
+            _ => Err(()),
+        }
+    }
+}
+
+
+/// Represents an arbitrary 32-byte key into contract storage.
+/// This is the key type that contracts directly manipulate
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -504,36 +551,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 }
 
 
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
-#[repr(i32)]
-pub enum StorageKeyType {
-    kStorageKeyTypeContractData = 0 as i32,
-    kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
-    kStorageKeyTypeAccountAuthData = 2 as i32,
-    kStorageKeyTypeAddressMetadata = 3 as i32,
-    kStorageKeyTypeReplayCache = 4 as i32,
-}
-pub use StorageKeyType::*;
-
-impl TryFrom<i32> for StorageKeyType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kStorageKeyTypeContractData),
-            1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
-            2 => Ok(Self::kStorageKeyTypeAccountAuthData),
-            3 => Ok(Self::kStorageKeyTypeAddressMetadata),
-            4 => Ok(Self::kStorageKeyTypeReplayCache),
-            _ => Err(()),
-        }
-    }
-}
-
-
+/// Union of a StorageKey type over the various storage key types.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -559,23 +577,13 @@ pub enum StorageKey {
 }
 
 // 
-pub const kMaxLogMessageLen : u32 = 1024;
-
-// 
-pub const kMaxReturnBufferLen : u32 = 1024;
-
-// 
 pub const kTotalHogSupply : u64 = 62_500_000_000;
 
 // 
 // Each hog token is divisible into 10^7 units
 pub const kHogDivisibility : u32 = 10_000_000;
 
-pub type ReplayNonce = u64;
-
-// in global storage:
-// [contract address + storage key] = 64 bytes
-// Contracts are free to set their own conventions for keys.
+/// In the global storage, every item is indexed by a unique [contract address + storage key] pair.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -586,64 +594,11 @@ pub struct AddressAndKey {
     pub key: StorageKey,
 }
 
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct LogEntry {
-    pub source_address: ContractAddress,
-    pub message: BytesM<kMaxLogMessageLen>,
-}
-
-// BlockHeight is the height of a block. It is signed to prevent overflows in
-// calculations.
+/// BlockHeight is the height of a block, measured as the number of blocks since the genesis of the chain.
+/// The first block of transactions is at height 1.
+/// It is signed to prevent overflows in
+/// calculations.
 pub type BlockHeight = i64;
-
-// uint32_t
-pub type Weight = u32;
-
-pub type BitMap = u64;
-
-// XXX(petar): BlockHash should be renamed to MerkleHash
-pub type BlockHash = SHA256Hash;
-
-// An internal unique ID describing a block.
-pub type BlockID = u64;
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct DbTip {
-    pub height: BlockHeight,
-    pub hash: BlockHash,
-    pub id: BlockID,
-}
-
-// ServerAddress is an IP (or hostname) and port address, separated by a
-// colon.
-pub type ServerAddress = StringM;
-
-// UPID is a globally unique process identifier (function of start time, place
-// and randomness)
-pub type UPID = [u8; 8 as usize];
-
-// Protocol describes a specific protocol and version.
-pub type Protocol = StringM;
-
-// If we use the bitmap approach, should be less than the width of
-// the bitmap.
-// This constant is intended to match the MAX_SIGNERS constant in the Stellar protocol,
-// which is 20.  We add 1 to account for the primary key on a Stellar account.
-// 
-// Could be 1; Slightly useful to have multiple for sponsored gas,
-// i.e. separating sponsor ops vs contract owner management
-pub const kMaxSigners : u32 = 21;
-
-// 
-pub const kMaxGasConfigs : u32 = 5;
 
 
 //

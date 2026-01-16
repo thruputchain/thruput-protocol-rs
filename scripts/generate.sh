@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# XDR files in protocol/ from which to generate rust
+# XDR files in protocol/ from which to generate rust for groundhog-xdr
 protos=(
   types.x
   contract.x
@@ -24,6 +24,7 @@ scps=(
   scp_config.x
   scp_control.x
   scp_handle.x
+  network.x
 )
 
 rpcs=(
@@ -55,7 +56,7 @@ generate() {
 }
 
 for proto in "${protos[@]}"; do
-  generate "protocol/${proto}" "groundhog_xdr"
+  generate "protocol/${proto}" "groundhog-xdr"
 done
 
 for rpc in "${rpcs[@]}"; do
@@ -76,4 +77,4 @@ done
 
 # Generate syscall documentation
 echo "-- Generating syscall documentation --" >&2
-python3 protocol/generate_syscalls_doc.py --json-output groundhog_xdr/syscalls_docs.json
+python3 protocol/generate_syscalls_doc.py --json-output groundhog-xdr/syscalls_docs.json

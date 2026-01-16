@@ -17,7 +17,7 @@ serde = [
     "dep:serde_arrays",
     "xdr_common/serde",
     "groundhog_scp/serde",
-    "groundhog_xdr/serde",
+    "groundhog-xdr/serde",
     "groundhog_coordinator/serde",
 ]
 
@@ -39,8 +39,8 @@ default-features = false
 path = "../groundhog_scp"
 features = ["std", "xdrs"]
 
-[dependencies.groundhog_xdr]
-path = "../groundhog_xdr"
+[dependencies.groundhog-xdr]
+path = "../groundhog-xdr"
 features = ["std", "xdrs"]
 
 [dependencies.groundhog_coordinator]

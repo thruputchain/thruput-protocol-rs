@@ -207,12 +207,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "groundhog-xdr"
+version = "0.1.0"
+dependencies = [
+ "groundhog_xdr_macros",
+ "serde",
+ "serde_arrays",
+ "thiserror",
+ "xdr_common",
+ "xdrs",
+]
+
+[[package]]
 name = "groundhog_coordinator"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-xdr",
  "groundhog_scp",
- "groundhog_xdr",
  "rpc_driver",
  "serde",
  "serde_arrays",
@@ -225,9 +237,9 @@ name = "groundhog_hogx"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-xdr",
  "groundhog_coordinator",
  "groundhog_scp",
- "groundhog_xdr",
  "rpc_driver",
  "serde",
  "serde_arrays",
@@ -252,22 +264,10 @@ name = "groundhog_scp"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "groundhog_xdr",
+ "groundhog-xdr",
  "rpc_driver",
  "serde",
  "serde_arrays",
- "xdr_common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_xdr"
-version = "0.1.0"
-dependencies = [
- "groundhog_xdr_macros",
- "serde",
- "serde_arrays",
- "thiserror",
  "xdr_common",
  "xdrs",
 ]
@@ -289,7 +289,7 @@ dependencies = [
 name = "groundhog_xdr_syscall_tests"
 version = "0.1.0"
 dependencies = [
- "groundhog_xdr",
+ "groundhog-xdr",
 ]
 
 [[package]]
@@ -537,7 +537,6 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "groundhog_rpc",
- "groundhog_xdr",
  "rpc_driver",
  "tokio",
 ]

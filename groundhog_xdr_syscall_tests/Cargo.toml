@@ -8,7 +8,7 @@ name = "groundhog_xdr_syscall_tests"
 path = "src/lib.rs"
 
 [dependencies]
-groundhog_xdr = { path = "../groundhog_xdr", features = ["syscalls_mock", "std"] }
+groundhog-xdr = { path = "../groundhog-xdr", features = ["syscalls_mock", "std"] }
 
 [dev-dependencies]
 
