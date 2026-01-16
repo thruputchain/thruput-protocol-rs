@@ -1,4 +1,4 @@
-use crate::ffi_enums::{SystemErrorCode, HostFnErrorCode, InvokeErrorCode};
+use crate::ffi_enums::{HostFnErrorCode, InvokeErrorCode, SystemErrorCode};
 
 impl From<SystemErrorCode> for HostFnErrorCode {
     fn from(error_code: SystemErrorCode) -> Self {
