@@ -7,7 +7,6 @@ protos=(
   contract_error.x
   exec_result.x
   event.x
-  ffi_enums.x
   genesis.x
   transaction.x
   retrocausal_queue.x
@@ -17,6 +16,11 @@ protos=(
   auth_claim.x
   standard_asset_events.x
   address_auth.x
+)
+
+# XDR files for hogexec-internal
+hogexec_internal=(
+  ffi_enums.x
 )
 
 scps=(
@@ -57,6 +61,10 @@ generate() {
 
 for proto in "${protos[@]}"; do
   generate "protocol/${proto}" "groundhog-xdr"
+done
+
+for ffi_enum in "${hogexec_internal[@]}"; do
+  generate "protocol/${ffi_enum}" "hogexec-internal"
 done
 
 for rpc in "${rpcs[@]}"; do
