@@ -40,7 +40,10 @@ use ::serde_arrays;
 // TXS encoding of the call arguments (as a tuple)
 pub type Calldata = BytesM;
 
-pub type ReturnBuffer = BytesM;
+// 
+pub const kMaxReturnBufferLen : u32 = 1024;
+
+pub type ReturnBuffer = BytesM::<kMaxReturnBufferLen>;
 
 // A claim about sponsored gas units for a transaction.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

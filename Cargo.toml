@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "groundhog_xdr",
+    "groundhog-xdr",
     "groundhog_rpc",
     "groundhog_scp",
     "groundhog_coordinator",

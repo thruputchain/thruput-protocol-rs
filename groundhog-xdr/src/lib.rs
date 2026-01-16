@@ -8,6 +8,8 @@ extern crate std;
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+/// Core type definitions for the Groundhog protocol.
+#[doc = include_str!("../docs/types.md")]
 #[rustfmt::skip]
 pub mod types;
 use types::*;

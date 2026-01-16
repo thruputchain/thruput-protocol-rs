@@ -73,7 +73,7 @@ fn test_invoke_primitive_inputs() {
     // Output: return_buffer_len: RuntimeMemoryLength (u32, primitive)
 
     let address = ContractAddress::from([0x42; 32]);
-    let method: MethodID = 0x1234567890ABCDEF;
+    let method: u64 = 0x1234567890ABCDEF;
     let gas_limit: GasAmount = 1000000;
     let calldata = b"test calldata";
     let flags: InvokeFlagSet = 0x01;

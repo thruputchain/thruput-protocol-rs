@@ -10,7 +10,7 @@ git submodule update --init --recursive
 
 export RUSTFLAGS="--deny warnings"
 
-g="-p groundhog_xdr"
+g="-p groundhog-xdr"
 cargo build $g
 cargo build $g -F alloc
 cargo build $g -F std
@@ -18,7 +18,7 @@ cargo build $g -F spec
 cargo build $g -F syscalls
 cargo test $g -F std
 
-RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog_xdr
+RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
 
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp
