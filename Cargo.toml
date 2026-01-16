@@ -8,6 +8,7 @@ members = [
     "bin/rpcthroughput_server",
     "macros",
     "groundhog_xdr_syscall_tests",
+    "hogexec-internal",
     ]
 resolver = "2"
 

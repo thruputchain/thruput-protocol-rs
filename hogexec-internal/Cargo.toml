@@ -1,0 +1,34 @@
+[package]
+name = "hogexec-internal"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = []
+alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
+std = ["alloc"]
+serde = ["dep:serde", "dep:serde_arrays", "xdr_common/serde"]
+xdrs = []
+spec = ["std", "xdrs", "xdrs/repr"]
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "xdr_common"]
+
+[dependencies.xdr_common]
+workspace = true
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.serde_arrays]
+optional = true
+git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
+default-features = false
+
