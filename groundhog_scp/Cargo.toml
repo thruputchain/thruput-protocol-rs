@@ -16,7 +16,7 @@ serde = [
     "dep:serde",
     "dep:serde_arrays",
     "xdr_common/serde",
-    "groundhog_xdr/serde",
+    "groundhog-xdr/serde",
 ]
 
 [dependencies]
@@ -33,8 +33,8 @@ optional = true
 git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
 default-features = false
 
-[dependencies.groundhog_xdr]
-path = "../groundhog_xdr"
+[dependencies.groundhog-xdr]
+path = "../groundhog-xdr"
 features = ["std", "xdrs"]
 
 [dependencies.xdrs]
