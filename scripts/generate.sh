@@ -24,6 +24,7 @@ scps=(
   scp_config.x
   scp_control.x
   scp_handle.x
+  network.x
 )
 
 rpcs=(

@@ -1,10 +1,10 @@
 # Groundhog XDR Documentation
 
-This directory contains module-level documentation for the `groundhog_xdr` crate.
+This directory contains module-level documentation for the `groundhog-xdr` crate.
 
 ## Structure
 
-Each module in `groundhog_xdr` can have a corresponding markdown file in this directory. These markdown files are included in the Rust documentation via `#[doc = include_str!("...")]` attributes in `lib.rs`.
+Each module in `groundhog-xdr` can have a corresponding markdown file in this directory. These markdown files are included in the Rust documentation via `#[doc = include_str!("...")]` attributes in `lib.rs`.
 
 ## Adding Documentation
 
