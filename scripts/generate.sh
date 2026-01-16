@@ -16,7 +16,7 @@ protos=(
   syscall_error.x
   auth_claim.x
   standard_asset_events.x
-  account.x
+  address_auth.x
 )
 
 scps=(

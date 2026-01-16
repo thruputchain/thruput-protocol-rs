@@ -17,6 +17,8 @@ use types::*;
 pub mod impls;
 use impls::*;
 
+/// Contract deployment, execution, and interface management.
+#[doc = include_str!("../docs/contract.md")]
 #[rustfmt::skip]
 pub mod contract;
 use contract::*;
@@ -60,6 +62,8 @@ use event::*;
 pub mod standard_asset_events;
 use standard_asset_events::*;
 
+/// Transaction authorization claims and signature verification.
+#[doc = include_str!("../docs/auth_claim.md")]
 #[rustfmt::skip]
 pub mod auth_claim;
 use auth_claim::*;
@@ -68,9 +72,11 @@ use auth_claim::*;
 pub mod exec_result;
 use exec_result::*;
 
+/// Address authorization configuration and multi-signature management.
+#[doc = include_str!("../docs/address_auth.md")]
 #[rustfmt::skip]
-pub mod account;
-use account::*;
+pub mod address_auth;
+use address_auth::*;
 
 #[cfg(feature = "syscalls")]
 pub mod syscalls;

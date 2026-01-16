@@ -452,12 +452,14 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 
 
 /// Each ContractAddress owns a namespace of storage keys.
+///
 /// Most of the keyspace is made up of ContractData keys, which are indexed
-/// by 32-byte (arbitrary) identifiers (the [`StorageKeyContractData`](struct.StorageKeyContractData.html) type).
+/// by 32-byte (arbitrary) identifiers (the `StorageKeyContractData` type).
 /// The other variants here have special purposes, and cannot be freely accessed
 /// by contracts.
-/// Contracts are free to set their own conventions for indexing data within 
-/// the StorageKeyContractData subspace..
+///
+/// Contracts are free to set their own conventions for indexing data within
+/// the StorageKeyContractData subspace.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -465,10 +467,32 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 #[derive(Copy)]
 #[repr(i32)]
 pub enum StorageKeyType {
+    /// Contract-controlled data.
+    ///
+    /// Stores arbitrary data managed by the contract at this address.
     kStorageKeyTypeContractData = 0 as i32,
+
+    /// Native token balance.
+    ///
+    /// Stores the free balance of the native HOG token for this address.
     kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
-    kStorageKeyTypeAccountAuthData = 2 as i32,
+
+    /// Address authorization data.
+    ///
+    /// Stores [`AddressAuthData`] - the authorization configuration including
+    /// public keys, weights, gas permissions, and nonce rules.
+    kStorageKeyTypeAddressAuthData = 2 as i32,
+
+    /// Address metadata.
+    ///
+    /// Stores [`AddressMetadata`] - metadata about the contract deployed at
+    /// this address (hash, size, type).
     kStorageKeyTypeAddressMetadata = 3 as i32,
+
+    /// Replay cache for nonce tracking.
+    ///
+    /// Stores a set of active [`Uniquifier`] objects
+    /// to prevent transaction replay attacks.
     kStorageKeyTypeReplayCache = 4 as i32,
 }
 impl TryFrom<i32> for StorageKeyType {
@@ -477,7 +501,7 @@ impl TryFrom<i32> for StorageKeyType {
         match value {
             0 => Ok(Self::kStorageKeyTypeContractData),
             1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
-            2 => Ok(Self::kStorageKeyTypeAccountAuthData),
+            2 => Ok(Self::kStorageKeyTypeAddressAuthData),
             3 => Ok(Self::kStorageKeyTypeAddressMetadata),
             4 => Ok(Self::kStorageKeyTypeReplayCache),
             _ => Err(()),
@@ -560,9 +584,9 @@ pub enum StorageKey {
     // case kStorageKeyTypeFreeNativeTokenBalance:
     //   void;
     kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance as i32,
-    // case kStorageKeyTypeAccountAuthData:
+    // case kStorageKeyTypeAddressAuthData:
     //   void;
-    kStorageKeyTypeAccountAuthData = StorageKeyType::kStorageKeyTypeAccountAuthData as i32,
+    kStorageKeyTypeAddressAuthData = StorageKeyType::kStorageKeyTypeAddressAuthData as i32,
     // case kStorageKeyTypeAddressMetadata:
     //   void;
     kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata as i32,

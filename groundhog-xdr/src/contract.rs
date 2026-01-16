@@ -35,7 +35,26 @@ use ::serde_arrays;
 
 
 
+//==============================================================================
+// Contracts and Contract Deployment
+//
+// This module defines the contract abstraction in Groundhog. Contracts are
+// code that can be deployed to addresses and invoked to execute logic.
+//
+// Key concepts:
+// - Contracts can be WebAssembly blobs, native precompiled code, or test mocks
+// - Contract addresses are deterministically derived from deployment parameters
+// - Contract methods are identified by 8-byte entrypoint IDs
+// - Entrypoint IDs are derived from interface names and versions
+//==============================================================================
+
+//------------------------------------------------------------------------------
+// Contract Types and Code
+//------------------------------------------------------------------------------
+
 /// An opaque blob of WebAssembly code.
+///
+/// This is the raw WASM binary that will be executed by the Wasmi runtime.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -45,6 +64,7 @@ pub struct ContractBlob {
     pub wasm: BytesM,
 }
 
+/// The execution environment for a contract.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -52,8 +72,20 @@ pub struct ContractBlob {
 #[derive(Copy)]
 #[repr(i32)]
 pub enum ContractType {
+    /// WebAssembly contract executed in the Wasmi runtime.
+    ///
+    /// This is the standard contract type for user-deployed contracts.
     kWasmi = 0 as i32,
+
+    /// Precompiled native contract implemented directly in Rust.
+    ///
+    /// Used for system contracts like the native HogToken.
+    /// More efficient than WASM but cannot be deployed by users.
     kNative = 1 as i32,
+
+    /// Mock contract for local testing.
+    ///
+    /// Never deployed on-chain; exists only in the test harness.
     kMockTest = 2 as i32,
 }
 impl TryFrom<i32> for ContractType {
@@ -69,16 +101,16 @@ impl TryFrom<i32> for ContractType {
 }
 
 
-/// A `Contract` is something that can be deployed and invoked onchain.
-/// A contract can be deployed to a specific `ContractAddress`,
-/// and then invoked at that address.
+/// A contract that can be deployed to an address and invoked.
 ///
-/// Groundhog currently supports three types of contracts:
-/// - `kWasmi`: A contract that is implemented as a WASM blob.
-/// - `kNative`: A contract that is implemented as a precompiled native contract.   
-///   The primary example of a native contract is the one that implements the native token of the chain.
-/// - `kMockTest`: A `kMockTest` contract is is never deployed on chain, 
-///   but rather is created as part of the test harness when testing new contracts locally.
+/// Contracts are the fundamental unit of code execution in Groundhog.
+/// Once deployed to a `ContractAddress`, they can be invoked by transactions
+/// to execute their methods (entrypoints).
+///
+/// The three contract types serve different purposes:
+/// - `kWasmi`: User-deployed contracts (most common)
+/// - `kNative`: System contracts with privileged access
+/// - `kMockTest`: Test contracts for local development
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -89,52 +121,158 @@ pub enum Contract {
     //   ContractBlob wasmi_contract;
     kWasmi { wasmi_contract: ContractBlob } = ContractType::kWasmi as i32,
     // case kNative:
+    //   /// Identifier for which native contract this is.
+    //   ///
+    //   /// Native contracts are hard-coded in the runtime.
     //   i32 native_contract_id;
     kNative { native_contract_id: i32 } = ContractType::kNative as i32,
     // case kMockTest:
+    //   /// Identifier for the mock contract in the test harness.
     //   i32 mock_contract_id;
     kMockTest { mock_contract_id: i32 } = ContractType::kMockTest as i32,
     
 }
 
-/// When one contract deploys another, the address of the resulting contract is the hash of this struct.
-/// The nonce is an arbitrary value supplied by the calling contract.
-/// Informally, this is the groundhog analogue of the Ethereum virtual machine's `CREATE2` opcode.
+//------------------------------------------------------------------------------
+// Contract Deployment and Address Derivation
+//------------------------------------------------------------------------------
+
+/// Hash preimage for deriving deployed contract addresses.
+///
+/// When a contract deploys another contract, the new contract's address is
+/// deterministically computed as:
+///
+/// ```text
+/// ContractAddress = SHA256(ContractDeploymentHashPreimage)
+/// ```
+///
+/// Under XDR encoding, this struct serializes as the concatenation of its
+/// fields: `deployer_address || nonce || contract_hash`.
+///
+/// This is Groundhog's analogue of Ethereum's `CREATE2` opcode, allowing
+/// deterministic address derivation. The deployer controls the nonce to
+/// create addresses at will.
+///
+/// # Example
+///
+/// ```text
+/// Contract A address:  0x1234...
+/// Contract B hash:     0xabcd...
+/// Deployment nonce:    0x5678...
+/// Result: SHA256(0x1234... || 0x5678... || 0xabcd...) = Contract B address
+/// ```
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractDeploymentHashPreimage {
+    /// The address of the contract performing the deployment.
     pub deployer_address: ContractAddress,
+    /// Arbitrary 32-byte value chosen by the deployer.
+    ///
+    /// Allows creating multiple instances of the same contract code
+    /// at different addresses.
     pub nonce: SHA256Hash,
+    /// SHA-256 hash of the contract code being deployed.
+    ///
+    /// For WASM contracts, this is `SHA256(wasm_blob)`.
+    /// For native contracts, this is a predefined hash.
     pub contract_hash: SHA256Hash,
 }
 
-/// This type must be a valid "identifier" as defined in RFC 4506,
-/// Section 6.2: "An identifier is a letter followed by an optional sequence
-/// of letters, digits, or underbar ('_')."  It must also obey Section 6.4,
-/// which lists keywords that may not be used as identifiers.
+//------------------------------------------------------------------------------
+// Contract Interfaces and Entrypoint Derivation
+//------------------------------------------------------------------------------
+
+/// Valid identifier string following RFC 4506.
+///
+/// Must be a letter followed by an optional sequence of letters, digits,
+/// or underscores. Cannot be an XDR keyword (e.g., `"struct"`, `"union"`, `"enum"`).
+///
+/// # Examples
+///
+/// - `"transfer"`
+/// - `"approve"`
+/// - `"get_balance"`
 pub type Identifier = StringM;
 
-/// This type must be a valid version number as defined at
-/// <https://semver.org/>.  For example, "0.1.3" or "1.0.0-alpha+001".
+/// Semantic version string following semver.org specification.
+///
+/// Format: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
+///
+/// # Examples
+///
+/// - `"0.1.3"`
+/// - `"1.0.0"`
+/// - `"2.1.4-alpha"`
+/// - `"1.0.0-alpha+001"`
 pub type SemVer = StringM;
 
-/// The hash of this type is used to compute the first 6 bytes of contract interface method IDs.
+/// Hash preimage for deriving contract interface identifiers.
+///
+/// Contract entrypoints can be arbitrary 8 byte identifiers (the [`ContractEntrypointID`] type).
+///  By default, the SDK
+/// for Groundhog contracts follows the following scheme for allocating those 
+/// identifiers, although this scheme is not a strict requirement.
+///
+/// Contract interfaces define a set of methods (entrypoints) with a name
+/// and version. The first 6 bytes of `SHA256(ContractInterfaceIDPreimage)`
+/// serve as a namespace prefix for all methods in that interface.
+///
+/// This allows:
+/// - Interface versioning (same methods, different versions)
+/// - Collision resistance (different interfaces, same method names)
+/// - Stable method IDs across implementations
+///
+/// # Example
+///
+/// An interface `"ERC20"` version `"1.0.0"` will have a unique 6-byte
+/// prefix, and all methods (`transfer`, `approve`, etc.) will share that prefix.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractInterfaceIDPreimage {
+    /// Name of the contract interface.
+    ///
+    /// Should be descriptive and unique (e.g., `"ERC20"`, `"Governance"`, `"Oracle"`).
     pub name: Identifier,
+    /// Semantic version of the interface.
+    ///
+    /// Allows evolving interfaces while maintaining compatibility.
     pub vers: SemVer,
 }
 
-/// This is an 8-byte opaque type that is computed as SHA256(ContractInterfaceIDPreimage)[0..6],
-/// concatenated with a two-byte "method id" defined by the author of
-/// the contract interface
+/// 8-byte identifier for a contract method (entrypoint).
+///
+/// Entrypoint IDs uniquely identify which method to invoke on a contract.
+/// By default, the SDK computes these as follows.
+///
+/// ```text
+/// Bytes 0-5: SHA256(ContractInterfaceIDPreimage)[0..6]
+/// Bytes 6-7: Method-specific ID chosen by interface author
+/// ```
+///
+/// This two-level scheme provides:
+/// 1. Interface-level namespace (6 bytes) - prevents collisions between interfaces
+/// 2. Method-level identifier (2 bytes) - identifies specific method within interface
+///
+/// By default, the SDK lexicographically sorts method names and allocates the
+/// last 2 bytes based on that order (first method gets 0x0000, second gets 0x0001, etc.).
+///
+/// # Example
+///
+/// For `"ERC20"` v1.0.0 interface:
+///
+/// ```text
+/// SHA256("ERC20" || "1.0.0")[0..6] = 0xabcdef012345 (6-byte prefix)
+///
+/// Methods sorted lexicographically:
+/// approve  -> method ID = 0x0000 -> Full entrypoint = 0xabcdef0123450000
+/// transfer -> method ID = 0x0001 -> Full entrypoint = 0xabcdef0123450001
+/// ```
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -193,6 +331,49 @@ impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
     }
 }
 
+
+//------------------------------------------------------------------------------
+// Deployed Contract Metadata
+//------------------------------------------------------------------------------
+
+/// Hash and metadata for a contract deployed at an address.
+///
+/// This allows the system to locate and instantiate the contract code
+/// without loading the full contract from storage.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct DeployedContractHash {
+    /// SHA-256 hash of the deployed contract code.
+    pub hash: SHA256Hash,
+    /// Size of the contract in bytes.
+    ///
+    /// Optimization: allows computing and updating storage costs without
+    /// loading the full contract from storage.
+    pub contract_size: u32,
+    /// The type of contract (e.g., Wasm, native, etc.).
+    ///
+    /// Optimization: allows the executor to determine which runtime to
+    /// instantiate without a database lookup. When the contract module is
+    /// already cached, this avoids loading the contract bytecode entirely.
+    pub contract_type: ContractType,
+}
+
+/// Metadata associated with an address.
+///
+/// Currently only stores information about the deployed contract, if any.
+/// This is the type stored at storage key `kStorageKeyTypeAddressMetadata`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct AddressMetadata {
+    /// Information about the contract deployed at this address.
+    pub deployed_contract: DeployedContractHash,
+}
 
 
 

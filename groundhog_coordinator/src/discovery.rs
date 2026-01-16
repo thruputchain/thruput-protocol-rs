@@ -35,8 +35,6 @@ use ::serde_arrays;
 
 
 
-// clang-format on
-
 pub type ValidatorID = [u8; 32 as usize];
 
 pub type ValidatorPublicKey = Ed25519PublicKey;

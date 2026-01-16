@@ -22,6 +22,9 @@ Each module in `groundhog-xdr` can have a corresponding markdown file in this di
 ## Files
 
 - `types.md` - Documentation for the core types module
+- `contract.md` - Documentation for the contract deployment and execution module
+- `address_auth.md` - Documentation for the address authorization module
+- `auth_claim.md` - Documentation for the authentication claims module
 
 ## Notes
 
