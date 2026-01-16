@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 945426766165b74bc74075ecbe5703f7037b36af
+// Generated from xdrc commit: 8b242a5dc6ea5d82760cff0d3e5bc41a8c6aec6c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -54,8 +54,6 @@ pub enum UnitType {
     UNIT_DB = 4 as i32,
     UNIT_EVENT = 5 as i32,
 }
-pub use UnitType::*;
-
 impl TryFrom<i32> for UnitType {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
@@ -203,8 +201,6 @@ pub enum ProcessStatus {
     PROCESS_RUNNING = 1 as i32,
     PROCESS_EXITED = 2 as i32,
 }
-pub use ProcessStatus::*;
-
 impl TryFrom<i32> for ProcessStatus {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {

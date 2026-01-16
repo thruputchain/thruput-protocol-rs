@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 945426766165b74bc74075ecbe5703f7037b36af
+// Generated from xdrc commit: 8b242a5dc6ea5d82760cff0d3e5bc41a8c6aec6c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -87,8 +87,6 @@ pub enum InvokeErrorCode {
     // expected during normal system operation.
     kInvokeAbortTransaction = 5 as i32,
 }
-pub use InvokeErrorCode::*;
-
 impl TryFrom<i32> for InvokeErrorCode {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
@@ -173,8 +171,6 @@ pub enum HostFnErrorCode {
     // InvokeErrorCode::kAbortTransaction
     kHostAbortTransaction = 6 as i32,
 }
-pub use HostFnErrorCode::*;
-
 impl TryFrom<i32> for HostFnErrorCode {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
@@ -220,8 +216,6 @@ pub enum SystemErrorCode {
     // This converts to InvokeErrorCode::kInvokeValidationFailure or HostFnErrorCode::kHostValidationFailure.
     kSystemValidationFailure = 3 as i32,
 }
-pub use SystemErrorCode::*;
-
 impl TryFrom<i32> for SystemErrorCode {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {

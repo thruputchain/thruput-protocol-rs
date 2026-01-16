@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 945426766165b74bc74075ecbe5703f7037b36af
+// Generated from xdrc commit: 8b242a5dc6ea5d82760cff0d3e5bc41a8c6aec6c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -92,8 +92,6 @@ pub enum GenesisContractAddresses {
     // InitialTokenClaim contract, for managing genesis token/contract setup
     kAddressInitialTokenClaim = 2 as i32,
 }
-pub use GenesisContractAddresses::*;
-
 impl TryFrom<i32> for GenesisContractAddresses {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {

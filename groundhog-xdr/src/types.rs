@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 945426766165b74bc74075ecbe5703f7037b36af
+// Generated from xdrc commit: 8b242a5dc6ea5d82760cff0d3e5bc41a8c6aec6c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -260,8 +260,6 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 pub enum CryptographicScheme {
     Ed25519 = 0 as i32,
 }
-pub use CryptographicScheme::*;
-
 impl TryFrom<i32> for CryptographicScheme {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
@@ -473,8 +471,6 @@ pub enum StorageKeyType {
     kStorageKeyTypeAddressMetadata = 3 as i32,
     kStorageKeyTypeReplayCache = 4 as i32,
 }
-pub use StorageKeyType::*;
-
 impl TryFrom<i32> for StorageKeyType {
     type Error = ();
     fn try_from(value: i32) -> Result<Self, Self::Error> {
