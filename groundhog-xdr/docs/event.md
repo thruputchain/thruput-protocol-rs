@@ -4,18 +4,18 @@ This module defines the event system for Groundhog contracts. Events provide a m
 
 ## Emitting Events: The LogEvent Syscall
 
-Contracts emit events using the LogEvent syscall. The syscall signature is:
+Contracts emit events using the LogEvent syscall. The syscall signature is
 
 ```rust
-LogEvent(
+fn raw_LogEvent(
     topic0: Option<[u8; 32]>,
     topic1: Option<[u8; 32]>,
     topic2: Option<[u8; 32]>,
     data: &[u8]
-) -> Result<(), SyscallError>
+) -> SysErr
 ```
 
-In practice, contracts typically use SDK wrapper functions that handle event serialization and topic construction rather than calling LogEvent directly.
+In practice, contracts should use SDK wrapper functions that handle event serialization and topic construction rather than calling LogEvent directly.
 
 ### Example Usage
 
@@ -23,25 +23,25 @@ Here's a conceptual example of emitting a transfer event:
 
 ```rust
 // Define your event data (excluding topics)
-let amount_data = serialize_amount(transfer_amount);
+let event_data = b"some event data";
 
 // Calculate event signature
 let event_signature = sha256(b"Transfer");
 
 // Emit the event with topics
-// LogEvent will construct serialized_event as event_signature || sender || recipient || amount_data
-syscalls::LogEvent(
+// LogEvent will construct serialized_event as event_signature || sender || recipient || event_data
+raw_LogEvent(
     Some(event_signature),      // topic0: event type signature
-    Some(sender_address.bytes), // topic1: from address
-    Some(recipient_address.bytes), // topic2: to address
-    &amount_data                // remaining data after topics
-)?;
+    Some(sha256(b"alice")),     // topic1: from address
+    Some(sha256(b"bob")),        // topic2: to address
+    &event_data                 // remaining data after topics
+);
 ```
 
 The resulting `TxEmittedEvent` will have:
 - `contract_address`: Your contract's address (automatically set)
 - `num_topics`: 3
-- `serialized_event`: `event_signature || sender_address || recipient_address || amount_data`
+- `serialized_event`: `event_signature || sender_address || recipient_address || other_event_data`
 
 This event can then be efficiently queried by downstream indexers using:
 - Transaction hash (from the `TxEventLog` key)
