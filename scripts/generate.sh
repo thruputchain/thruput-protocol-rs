@@ -4,7 +4,6 @@
 protos=(
   types.x
   contract.x
-  contract_error.x
   exec_result.x
   event.x
   genesis.x

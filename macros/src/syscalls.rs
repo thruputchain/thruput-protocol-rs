@@ -878,6 +878,8 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         .map(|func| generate_syscall_no_line(&func));
 
     quote! {
+        /// Syscall numbers identifying each system call.
+        /// Generated from the syscalls.yaml specification.
         #[repr(i32)]
         #[derive(Eq,PartialEq,Copy,Debug,Clone)]
         pub enum SyscallNo {

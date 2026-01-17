@@ -36,6 +36,9 @@ use ::serde_arrays;
 
 // triple slash comments are added to the generated rust docs
 
+/// Error codes returned by system calls.
+/// Each syscall can return a specific subset of these error codes.
+/// Check the syscalls.yaml documentation for which errors each syscall can return.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]

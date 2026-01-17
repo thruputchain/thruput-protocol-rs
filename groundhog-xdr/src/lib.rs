@@ -14,6 +14,7 @@ extern crate alloc;
 pub mod types;
 use types::*;
 
+#[doc(hidden)]
 pub mod impls;
 use impls::*;
 
@@ -24,10 +25,6 @@ pub mod contract;
 use contract::*;
 
 #[rustfmt::skip]
-pub mod contract_error;
-use contract_error::*;
-
-#[rustfmt::skip]
 pub mod genesis;
 use genesis::*;
 
@@ -35,6 +32,7 @@ use genesis::*;
 pub mod retrocausal_queue;
 use retrocausal_queue::*;
 
+/// Syscall error codes returned by system calls.
 #[rustfmt::skip]
 pub mod syscall_error;
 use syscall_error::*;
@@ -53,6 +51,8 @@ use storage_delta_flags::*;
 pub mod transaction;
 use transaction::*;
 
+/// Event emission, indexing, and storage for contract-emitted logs.
+#[doc = include_str!("../docs/event.md")]
 #[rustfmt::skip]
 pub mod event;
 use event::*;
@@ -77,5 +77,6 @@ use exec_result::*;
 pub mod address_auth;
 use address_auth::*;
 
+/// System call bindings and syscall numbers (SyscallNo enum).
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
