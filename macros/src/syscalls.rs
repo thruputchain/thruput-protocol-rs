@@ -137,11 +137,7 @@ impl ArgMapped {
                         quote! { &#ty }
                     }
                 } else {
-                    //  if is_primitive {
-                    //      quote! { &mut #ty }
-                    //  } else {
                     quote! { &mut ::core::mem::MaybeUninit<#ty> }
-                    //  }
                 };
 
                 if is_optional {
@@ -378,7 +374,6 @@ impl Arg {
         let name = self.formatted_name();
 
         if is_input {
-            //|| self.is_primitive(type_map) {
             return quote! { #name };
         }
         if self.is_span_argument() {
