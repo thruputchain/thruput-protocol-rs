@@ -6,7 +6,7 @@ This module defines the event system for Groundhog contracts. Events provide a m
 
 Contracts emit events using the LogEvent syscall. The syscall signature is
 
-```rust
+```rust,ignore
 fn raw_LogEvent(
     topic0: Option<[u8; 32]>,
     topic1: Option<[u8; 32]>,
@@ -21,7 +21,7 @@ In practice, contracts should use SDK wrapper functions that handle event serial
 
 Here's a conceptual example of emitting a transfer event:
 
-```rust
+```rust,ignore
 // Define your event data (excluding topics)
 let event_data = b"some event data";
 
