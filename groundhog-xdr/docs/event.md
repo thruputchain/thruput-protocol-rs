@@ -7,12 +7,12 @@ This module defines the event system for Groundhog contracts. Events provide a m
 Contracts emit events using the LogEvent syscall. The syscall signature is
 
 ```rust,ignore
-fn raw_LogEvent(
-    topic0: Option<[u8; 32]>,
-    topic1: Option<[u8; 32]>,
-    topic2: Option<[u8; 32]>,
+fn LogEvent(
+    topic0: Option<&[u8; 32]>,
+    topic1: Option<&[u8; 32]>,
+    topic2: Option<&[u8; 32]>,
     data: &[u8]
-) -> SysErr
+) -> SyscallResult<()>;
 ```
 
 In practice, contracts should use SDK wrapper functions that handle event serialization and topic construction rather than calling LogEvent directly.
@@ -30,12 +30,12 @@ let event_signature = sha256(b"Transfer");
 
 // Emit the event with topics
 // LogEvent will construct serialized_event as event_signature || sender || recipient || event_data
-raw_LogEvent(
-    Some(event_signature),      // topic0: event type signature
-    Some(sha256(b"alice")),     // topic1: from address
-    Some(sha256(b"bob")),        // topic2: to address
-    &event_data                 // remaining data after topics
-);
+LogEvent(
+    Some(&event_signature),     // topic0: event type signature
+    Some(&sha256(b"alice")),    // topic1: from address
+    Some(&sha256(b"bob")),      // topic2: to address
+    event_data                  // remaining data after topics
+).unwrap();
 ```
 
 The resulting `TxEmittedEvent` will have:

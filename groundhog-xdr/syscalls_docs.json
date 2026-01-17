@@ -32,30 +32,15 @@
   },
   "ConsoleLog": {
     "description": [
-      "Logs the input buffer to the console. This is a no-op on release builds or when deployed on-chain.",
-      "This will not cause an error if",
-      "a contract inadvertently includes this syscall in a production contract deployment (if, for example",
-      "a contract built in debug mode is uploaded), but there is no reason to do so."
+      "Logs the input buffer to the console. This is a no-op on release builds or when deployed on-chain.\nThis will not cause an error if a contract inadvertently includes this syscall in a production contract deployment (if, for example, a contract built in debug mode is uploaded), but there is no reason to do so."
     ],
     "errors": []
   },
   "Invoke": {
     "description": [
-      "Invokes the specified method of the contract at the specified address, with the supplied parameters.",
-      "Creates a new callframe, which terminates upon conclusion of the Invoke() syscall.",
-      "The call frame will be limited to the minimum of gas_limit units of gas and",
-      "the remaining gas in the current call frame.",
-      "The SDK sets the default gas limit as UINT64_MAX",
-      "meaning i.e. all of the remaining gas in the current call frame.",
-      "Any unused gas will be returned to the caller.",
-      "Note that the entrypoint_id is passed as a u64",
-      "but that u64 is derived from a ContractEntrypointID ([u8, 8])",
-      "as the little-endian interpretation of the entrypoint id.",
-      "This is a minor optimization that lets the entrypoint id be passed to the syscall directly as one of the u64 arguments",
-      ", instead of as an offset into linear memory. (and",
-      "if the compiler is able to find this optimization",
-      "the entrypoint id can in principle be passed as a wasm stack argument",
-      "without an i64.store into linear memory)."
+      "Invokes the specified method of the contract at the specified\naddress, with the supplied parameters. Creates a new invocation\nframe, which terminates upon conclusion of the Invoke() syscall.",
+      "The frame will be limited to the minimum of gas_limit units\nof gas and the remaining gas in the current frame.\nThe SDK sets the default gas limit as UINT64_MAX, meaning i.e.\nall of the remaining gas in the current frame.\nAny unused gas will be returned to the caller.",
+      "Note that the entrypoint_id is passed as a u64,\nbut that u64 is derived from a ContractEntrypointID ([u8, 8]),\nas the little-endian interpretation of the entrypoint id.\nThis is a minor optimization that lets the entrypoint id be passed\nto the syscall directly as one of the u64 arguments, instead of\nas an offset into linear memory.\n(and, if the compiler is able to find this optimization,\nthe entrypoint id can in principle be passed as a wasm stack argument,\nwithout an i64.store into linear memory)."
     ],
     "errors": [
       {
@@ -67,8 +52,7 @@
       {
         "code": "kSyscallErrorCodeDeterministicWasm",
         "description": [
-          "The invoked contract terminated with an unspecified internal error (e.g. divide by zero).",
-          "This error will be returned if the invoked contract runs out of gas."
+          "The invoked contract terminated with an unspecified internal error (e.g. divide by zero). This error will be returned if the invoked contract runs out of gas."
         ]
       },
       {
@@ -81,11 +65,7 @@
   },
   "Return": {
     "description": [
-      "Returns data from the current call frame and optionally marks the frame for revert.",
-      "The return buffer will be available to the caller via GetReturnedBuffer.",
-      "Immediately terminates execution of the current wasm invocation.",
-      "If the supplied buffer is too large, the syscall does not return an error",
-      "but instead reverts the entire invocation with a deterministic error (equivalent to a wasm `unreachable` instruction)."
+      "Returns data from the current call frame and optionally marks the frame for revert. The return buffer will be available to the caller via GetReturnedBuffer. Immediately terminates execution of the current wasm invocation.\nIf the supplied buffer is too large, the syscall does not return an error, but instead reverts the entire invocation with a deterministic error (equivalent to a wasm `unreachable` instruction)."
     ],
     "errors": []
   },
@@ -97,53 +77,38 @@
       {
         "code": "kSyscallErrorCodeNoReturnBufferAvailable",
         "description": [
-          "No return buffer is available.",
-          "Either the most recent subcall failed, or there have been no subcalls within this call frame."
+          "No return buffer is available. Either the most recent subcall failed, or there have been no subcalls within this call frame."
         ]
       }
     ]
   },
   "Exit": {
     "description": [
-      "Terminates execution of the current call frame immediately.",
-      "The current call frame reverts",
-      "returning a deterministic error to the caller (with no return buffer available).",
-      "Equivalent to the `unreachable` instruction in wasm."
+      "Terminates execution of the current call frame immediately. The current call frame reverts, returning a deterministic error to the caller (with no return buffer available). Equivalent to the `unreachable` instruction in wasm."
     ],
     "errors": []
   },
   "GetDeployAddress": {
     "description": [
-      "Computes the address that would be deployed for a contract with the given deployer address, nonce",
-      "and contract hash.",
-      "This is a pure computation and does not actually deploy the contract."
+      "Computes the address that would be deployed for a contract with the given deployer address, nonce, and contract hash. This is a pure computation and does not actually deploy the contract."
     ],
     "errors": []
   },
   "DeployContract": {
     "description": [
-      "Deploys a contract with the specified nonce and contract hash to a computed address.",
-      "The contract must be provided in the transaction's contracts_to_deploy field."
+      "Deploys a contract with the specified nonce and contract hash to a computed address. The contract must be provided in the transaction's contracts_to_deploy field."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The requested contract was not available for deployment",
-          "or the contract is a special precompiled (native) contract that cannot be deployed (i.e. the native token contract).",
-          "To deploy a contract, that contract must either already exist on chain or",
-          "must be provided in the transaction's contracts_to_deploy field."
+          "The requested contract was not available for deployment, or the contract is a special precompiled (native) contract that cannot be deployed (i.e. the native token contract).\nTo deploy a contract, that contract must either already exist on chain or must be provided in the transaction's contracts_to_deploy field."
         ]
       },
       {
         "code": "kSyscallErrorCodeContractAlreadyDeployed",
         "description": [
-          "A contract with the same nonce and contract hash has already been deployed at the computed address",
-          "either in a previous block or earlier in this transaction.",
-          "A contract can be deployed multiple times concurrently in the same block.",
-          "If a contract must be initialized only once",
-          "then that contract should run some initialization process and",
-          "that initialization should acquire a semaphore."
+          "A contract with the same nonce and contract hash has already been deployed at the computed address, either in a previous block or earlier in this transaction.\nA contract can be deployed multiple times concurrently in the same block.  If a contract must be initialized only once, then that contract should run some initialization process and that initialization should acquire a semaphore."
         ]
       }
     ]
@@ -156,15 +121,13 @@
   },
   "VerifySignature": {
     "description": [
-      "Verifies a cryptographic signature against a public key and message.",
-      "Returns kSyscallErrorCodeNone if verification succeeds, otherwise returns an error."
+      "Verifies a cryptographic signature against a public key and message. Returns kSyscallErrorCodeNone if verification succeeds, otherwise returns an error."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The signature verification failed, or the input parameters are invalid (e.g.",
-          "incorrect key/signature size for the specified scheme, or unsupported scheme)."
+          "The signature verification failed, or the input parameters are invalid (e.g., incorrect key/signature size for the specified scheme, or unsupported scheme)."
         ]
       }
     ]
@@ -209,9 +172,7 @@
   },
   "BytestringSet": {
     "description": [
-      "Sets the bytestring value at the specified storage key.",
-      "Note that this will overwrite any existing value at that key",
-      "*even if* that value has a different type."
+      "Sets the bytestring value at the specified storage key. Note that this will overwrite any existing value at that key, *even if* that value has a different type."
     ],
     "errors": [
       {
@@ -224,46 +185,32 @@
   },
   "NonnegativeIntGet": {
     "description": [
-      "Retrieves the nonnegative integer value at the specified storage key.",
-      "If force_load_from_snapshot is true, then the current_set returned will never be nullopt.",
-      "If the snapshot value is not an NNInt, or the previous write on that key was not an NNInt",
-      "then we return a kInvalidSyscallInput error.",
-      "If the snapshot value does not exist, or has been deleted by the prior write",
-      "then we return a kStorageKeyNotExist error.",
-      "If force_load_from_snapshot is false",
-      "then we ignore everything about the prior state of the item unless the prior write on that key is an NNInt write (in which case we return the parameters of that write).",
-      "If the prior write is not an NNInt, or was a deletion, then we return (nullopt, 0)."
+      "Retrieves the nonnegative integer value at the specified storage key.\nIf force_load_from_snapshot is true, then the current_set returned will never be nullopt. If the snapshot value is not an NNInt, or the previous write on that key was not an NNInt, then we return a kInvalidSyscallInput error. If the snapshot value does not exist, or has been deleted by the prior write, then we return a kStorageKeyNotExist error.\nIf force_load_from_snapshot is false, then we ignore everything about the prior state of the item unless the prior write on that key is an NNInt write (in which case we return the parameters of that write). If the prior write is not an NNInt, or was a deletion, then we return (nullopt, 0)."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeStorageKeyNotExist",
         "description": [
-          "The storage key does not exist or has been deleted.",
-          "Only returned if force_load_from_snapshot is true."
+          "The storage key does not exist or has been deleted. Only returned if force_load_from_snapshot is true."
         ]
       },
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The storage key exists but contains a different type (e.g., bytestring instead of NNInt).",
-          "Only returned if force_load_from_snapshot is true."
+          "The storage key exists but contains a different type (e.g., bytestring instead of NNInt). Only returned if force_load_from_snapshot is true."
         ]
       }
     ]
   },
   "NonnegativeIntSetAdd": {
     "description": [
-      "Sets or modifies a nonnegative integer at the specified storage key.",
-      "The set_value (if provided) sets the base value, and add_value is added as a delta.",
-      "The final value must remain nonnegative.",
-      "Will overwrite any value of that key, *even if* that value has a different type."
+      "Sets or modifies a nonnegative integer at the specified storage key. The set_value (if provided) sets the base value, and add_value is added as a delta. The final value must remain nonnegative. Will overwrite any value of that key, *even if* that value has a different type."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The operation would always result in a negative value (i.e. set_add(1, -2))",
-          "or the storage flags are invalid."
+          "The operation would always result in a negative value (i.e. set_add(1, -2)), or the storage flags are invalid."
         ]
       }
     ]
@@ -295,16 +242,14 @@
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The storage key exists but contains a different type that cannot be converted to a retrocausal queue.",
-          "This error will also be returned if the queue entry is too large."
+          "The storage key exists but contains a different type that cannot be converted to a retrocausal queue. This error will also be returned if the queue entry is too large."
         ]
       }
     ]
   },
   "RetrocausalQueueConsume": {
     "description": [
-      "Consumes (or peeks at) the next entry from the retrocausal queue at the specified storage key.",
-      "If peek is true, the entry is not removed from the queue."
+      "Consumes (or peeks at) the next entry from the retrocausal queue at the specified storage key. If peek is true, the entry is not removed from the queue."
     ],
     "errors": [
       {
@@ -323,10 +268,7 @@
   },
   "GetTransactionStatistics": {
     "description": [
-      "Returns a transaction statistic value.",
-      "Note that statistics may be disabled in release builds or production execution",
-      "and may return nondeterministic values in test configurations.",
-      "Nondeterministic stats will be disabled in production settings."
+      "Returns a transaction statistic value. Note that statistics may be disabled in release builds or production execution, and may return nondeterministic values in test configurations. Nondeterministic stats will be disabled in production settings."
     ],
     "errors": [
       {
@@ -339,9 +281,7 @@
   },
   "ChangePublicKeyRegistration": {
     "description": [
-      "Changes the public key registration for the current contract address at the specified key index.",
-      "If key_scheme is None, the key is removed.",
-      "Otherwise, the key is set with the provided scheme, bytes, and weight."
+      "Changes the public key registration for the current contract address at the specified key index. If key_scheme is None, the key is removed. Otherwise, the key is set with the provided scheme, bytes, and weight."
     ],
     "errors": [
       {
@@ -354,20 +294,13 @@
   },
   "LogEvent": {
     "description": [
-      "Logs an event with up to 3 topics and additional data.",
-      "Constructs a TxEmittedEvent where the serialized_event field contains the topics prepended to the data: topic0 || topic1 || topic2 || data.",
-      "The num_topics field indicates how many leading 32-byte chunks are topics",
-      "enabling downstream indexers to efficiently filter events.",
-      "Events are stored in the transaction's event log and",
-      "accumulated into a per-block merkle-patricia trie."
+      "Logs an event with up to 3 topics and additional data. Constructs a TxEmittedEvent where the serialized_event field contains the topics prepended to the data: topic0 || topic1 || topic2 || data. The num_topics field indicates how many leading 32-byte chunks are topics, enabling downstream indexers to efficiently filter events. Events are stored in the transaction's event log and accumulated into a per-block merkle-patricia trie."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The event data exceeds the maximum allowed length (kMaxEventLength)",
-          "or topics are not supplied in a continuous sequence (e.g., topic0 and",
-          "topic2 provided without topic1)."
+          "The event data exceeds the maximum allowed length (kMaxEventLength), or topics are not supplied in a continuous sequence (e.g., topic0 and topic2 provided without topic1)."
         ]
       }
     ]
@@ -393,33 +326,26 @@
   },
   "SHA256Update": {
     "description": [
-      "Updates the SHA256 hash computation at the specified index with the provided buffer.",
-      "If reset is true, the hash input is reset before updating.",
-      "The buffer must exist if reset is false."
+      "Updates the SHA256 hash computation at the specified index with the provided buffer. If reset is true, the hash input is reset before updating. The buffer must exist if reset is false."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "This error will be returned if",
-          "any of the following conditions are met: - The queried hash buffer does not exist and",
-          "reset is false. - The buffer becomes too large. - There are too many active hash buffers."
+          "This error will be returned if any of the following conditions are met: - The queried hash buffer does not exist and reset is false. - The buffer becomes too large. - There are too many active hash buffers."
         ]
       }
     ]
   },
   "SHA256Finalize": {
     "description": [
-      "Finalizes the SHA256 hash computation at the specified index and returns the hash.",
-      "Removes the hash buffer after finalization."
+      "Finalizes the SHA256 hash computation at the specified index and returns the hash. Removes the hash buffer after finalization."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "Returns an error if the queried hash buffer does not exist.",
-          "For example, if finalize is called twice on the same buffer without an intervening reset",
-          "then the second call will return this error."
+          "Returns an error if the queried hash buffer does not exist. For example, if finalize is called twice on the same buffer without an intervening reset, then the second call will return this error."
         ]
       }
     ]
@@ -432,16 +358,13 @@
   },
   "WriteAddressGasPermissionConfigs": {
     "description": [
-      "Writes the gas permission configurations for the current contract address.",
-      "Up to 5 permission configurations can be set."
+      "Writes the gas permission configurations for the current contract address. Up to 5 permission configurations can be set."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The gas permission configurations are invalid, or if",
-          "permissions are not supplied in an initial segment of the submitted arguments (i.e. if",
-          "permission_1 is supplied, then permission_0 must also be supplied)."
+          "The gas permission configurations are invalid, or if permissions are not supplied in an initial segment of the submitted arguments (i.e. if permission_1 is supplied, then permission_0 must also be supplied)."
         ]
       }
     ]

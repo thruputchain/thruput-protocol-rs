@@ -137,11 +137,11 @@ impl ArgMapped {
                         quote! { &#ty }
                     }
                 } else {
-                    if is_primitive {
-                        quote! { &mut #ty }
-                    } else {
-                        quote! { &mut ::core::mem::MaybeUninit<#ty> }
-                    }
+                    //  if is_primitive {
+                    //      quote! { &mut #ty }
+                    //  } else {
+                    quote! { &mut ::core::mem::MaybeUninit<#ty> }
+                    //  }
                 };
 
                 if is_optional {
@@ -358,6 +358,16 @@ impl Arg {
         }
     }
 
+    pub fn rust_type(&self, type_map: &TypeMap) -> TokenStream2 {
+        if self.is_span_argument() {
+            quote! { () } // Spans don't have a simple return type
+        } else if let Some(ty) = self.fixed_size_type(type_map) {
+            ty
+        } else {
+            quote! { () }
+        }
+    }
+
     // raw_SYSCALL wraps uninit_SYSCALL, getting rid of the MaybeUninit usage.
     // These return the arguments forwarded to the uninit_SYSCALL call.
     pub fn to_raw_through_call(
@@ -367,7 +377,8 @@ impl Arg {
     ) -> TokenStream2 {
         let name = self.formatted_name();
 
-        if is_input || self.is_primitive(type_map) {
+        if is_input {
+            //|| self.is_primitive(type_map) {
             return quote! { #name };
         }
         if self.is_span_argument() {
@@ -537,92 +548,17 @@ fn generate_syscall_uninit_decl(
 
     // Generate documentation
     let mut doc_lines = Vec::new();
-    let has_outputs = !syscall.outputs.is_empty();
-    let has_inputs = !syscall.inputs.is_empty();
 
     if let Some(doc) = doc {
-        // Add main description
-        if !doc.description.is_empty() {
-            doc_lines.extend(doc.description.iter().cloned());
-            doc_lines.push(String::new());
-        }
-
-        // Add inputs/outputs lists
-        doc_lines.push("## Arguments".to_string());
-        doc_lines.push(String::new());
-
-        // Inputs
-        doc_lines.push("### Inputs".to_string());
-        if has_inputs {
-            for input in &syscall.inputs {
-                doc_lines.push(format!("- `{}`", input.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
-
-        // Outputs
-        doc_lines.push("### Outputs".to_string());
-        if has_outputs {
-            doc_lines.push("The following parameters use `MaybeUninit` types and will be initialized by the syscall if the error is `kNone`:".to_string());
-            for output in &syscall.outputs {
-                doc_lines.push(format!("- `{}`", output.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
-
-        // Add note about uninit variant only if there are outputs
-        if has_outputs {
-            doc_lines.push(format!("This is the `uninit_{}` variant that takes `MaybeUninit` parameters for outputs.", &syscall.name));
-            doc_lines.push(
-                "The syscall will initialize outputs if the error is `kNone`."
-                    .to_string(),
-            );
-            doc_lines.push(String::new());
-        }
-
-        // Add error documentation
-        if !doc.errors.is_empty() {
-            doc_lines.push("## Errors".to_string());
-            doc_lines.push(String::new());
-            for error in &doc.errors {
-                doc_lines.push(format!("- **{}**:", error.code));
-                doc_lines.extend(error.description.iter().cloned());
-                doc_lines.push(String::new());
-            }
-        }
+        add_description_section(&mut doc_lines, doc);
+        add_uninit_arguments_section(
+            &mut doc_lines,
+            &syscall.inputs,
+            &syscall.outputs,
+        );
+        add_error_section(&mut doc_lines, &doc.errors);
     } else {
-        // Fallback documentation if no doc available
-        // Add inputs/outputs lists
-        doc_lines.push("## Arguments".to_string());
-        doc_lines.push(String::new());
-
-        // Inputs
-        doc_lines.push("### Inputs".to_string());
-        if has_inputs {
-            for input in &syscall.inputs {
-                doc_lines.push(format!("- `{}`", input.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
-
-        // Outputs
-        doc_lines.push("### Outputs".to_string());
-        if has_outputs {
-            doc_lines.push("The following parameters use `MaybeUninit` types and will be initialized by the syscall if the error is `kNone`:".to_string());
-            for output in &syscall.outputs {
-                doc_lines.push(format!("- `{}`", output.name));
-            }
-            doc_lines.push(String::new());
-            doc_lines.push(format!("This is the `uninit_{}` variant that takes `MaybeUninit` parameters for outputs.", &syscall.name));
-        } else {
-            doc_lines.push("- None".to_string());
-        }
+        panic!("No documentation found for syscall {}", &syscall.name);
     }
 
     let doc_comment = generate_doc_comment(&doc_lines);
@@ -657,40 +593,14 @@ fn generate_syscall_raw_decl(
     // Generate documentation
     let mut doc_lines = Vec::new();
     let has_outputs = !syscall.outputs.is_empty();
-    let has_inputs = !syscall.inputs.is_empty();
 
     if let Some(doc) = doc {
-        // Add main description
-        if !doc.description.is_empty() {
-            doc_lines.extend(doc.description.iter().cloned());
-            doc_lines.push(String::new());
-        }
-
-        // Add inputs/outputs lists
-        doc_lines.push("## Arguments".to_string());
-        doc_lines.push(String::new());
-
-        // Inputs
-        doc_lines.push("### Inputs".to_string());
-        if has_inputs {
-            for input in &syscall.inputs {
-                doc_lines.push(format!("- `{}`", input.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
-
-        // Outputs
-        doc_lines.push("### Outputs".to_string());
-        if has_outputs {
-            for output in &syscall.outputs {
-                doc_lines.push(format!("- `{}`", output.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
+        add_description_section(&mut doc_lines, doc);
+        add_raw_arguments_section(
+            &mut doc_lines,
+            &syscall.inputs,
+            &syscall.outputs,
+        );
 
         // Add note about raw variant
         if has_outputs {
@@ -701,59 +611,15 @@ fn generate_syscall_raw_decl(
             doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls [`uninit_{}`](uninit_{}).", &syscall.name, &syscall.name));
         } else {
             doc_lines.push(format!(
-                "This is the a thin wrapper around [`uninit_{}`](uninit_{}).",
+                "This is a thin wrapper around [`uninit_{}`](uninit_{}).",
                 &syscall.name, &syscall.name
             ));
         }
         doc_lines.push(String::new());
 
-        // Add error documentation
-        if !doc.errors.is_empty() {
-            doc_lines.push("## Errors".to_string());
-            doc_lines.push(String::new());
-            for error in &doc.errors {
-                doc_lines.push(format!("- **{}**:", error.code));
-                doc_lines.extend(error.description.iter().cloned());
-                doc_lines.push(String::new());
-            }
-        }
+        add_error_section(&mut doc_lines, &doc.errors);
     } else {
-        // Fallback documentation if no doc available
-        // Add inputs/outputs lists
-        doc_lines.push("## Arguments".to_string());
-        doc_lines.push(String::new());
-
-        // Inputs
-        doc_lines.push("### Inputs".to_string());
-        if has_inputs {
-            for input in &syscall.inputs {
-                doc_lines.push(format!("- `{}`", input.name));
-            }
-        } else {
-            doc_lines.push("- None".to_string());
-        }
-        doc_lines.push(String::new());
-
-        // Outputs
-        doc_lines.push("### Outputs".to_string());
-        if has_outputs {
-            for output in &syscall.outputs {
-                doc_lines.push(format!("- `{}`", output.name));
-            }
-            doc_lines.push(String::new());
-            doc_lines.push(format!(
-                "This is the `raw_{}` variant that wraps `uninit_{}`.",
-                &syscall.name, &syscall.name
-            ));
-            doc_lines.push(format!("It converts regular output types to `MaybeUninit` and calls `uninit_{}`.", &syscall.name));
-        } else {
-            doc_lines.push("- None".to_string());
-            doc_lines.push(String::new());
-            doc_lines.push(format!(
-                "This is the `raw_{}` variant that wraps `uninit_{}`.",
-                &syscall.name, &syscall.name
-            ));
-        }
+        panic!("No documentation found for syscall {}", &syscall.name);
     }
 
     let doc_comment = generate_doc_comment(&doc_lines);
@@ -762,6 +628,143 @@ fn generate_syscall_raw_decl(
         #doc_comment
         pub fn #raw_ident(#(#raw_syscall_inputs,)*) -> #return_type {
             #uninit_ident(#(#forward_args,)*)
+        }
+    }
+}
+
+fn generate_syscall_result_decl(
+    syscall: &Syscall,
+    type_map: &TypeMap,
+    doc: Option<&SyscallDoc>,
+) -> TokenStream2 {
+    // Skip generation for syscalls with span outputs - these need pre-allocated buffers
+    if syscall.outputs.iter().any(|out| out.span_argument) {
+        return quote! {};
+    }
+
+    // Generate input parameters (no outputs in signature)
+    let input_params: Vec<_> = syscall
+        .inputs
+        .iter()
+        .map(|inp| inp.to_raw_param(true, type_map))
+        .collect();
+
+    // Collect output information
+    let output_types: Vec<_> = syscall
+        .outputs
+        .iter()
+        .map(|out| out.rust_type(type_map))
+        .collect();
+    let output_names: Vec<_> = syscall
+        .outputs
+        .iter()
+        .map(|out| out.formatted_name())
+        .collect();
+
+    let uninit_ident = format_ident!("uninit_{}", &syscall.name);
+    let result_ident = format_ident!("{}", &syscall.name);
+
+    // Build uninit call arguments
+    let uninit_call_args: Vec<_> = syscall
+        .inputs
+        .iter()
+        .map(|inp| {
+            let name = inp.formatted_name();
+            quote! { #name }
+        })
+        .chain(output_names.iter().map(|name| {
+            quote! { &mut #name }
+        }))
+        .collect();
+
+    // Handle non-returning syscalls separately
+    if !syscall.returns {
+        let function_body = quote! {
+            #uninit_ident(#(#uninit_call_args,)*);
+        };
+
+        let mut doc_lines = Vec::new();
+        if let Some(doc) = doc {
+            add_description_section(&mut doc_lines, doc);
+            add_arguments_section(&mut doc_lines, &syscall.inputs);
+            doc_lines.push(format!(
+                "This is a convenience wrapper around [`uninit_{}`](uninit_{}).",
+                &syscall.name, &syscall.name
+            ));
+        } else {
+            panic!("No documentation found for syscall {}", &syscall.name);
+        }
+        let doc_comment = generate_doc_comment(&doc_lines);
+
+        return quote! {
+            #doc_comment
+            pub fn #result_ident(#(#input_params,)*) -> ! {
+                #function_body
+            }
+        };
+    }
+
+    // Build return type
+    let return_type = if output_types.is_empty() {
+        quote! { SyscallResult<()> }
+    } else if output_types.len() == 1 {
+        let ty = &output_types[0];
+        quote! { SyscallResult<#ty> }
+    } else {
+        quote! { SyscallResult<(#(#output_types,)*)> }
+    };
+
+    // Build output declarations
+    let output_decls: Vec<_> = output_names
+        .iter()
+        .zip(output_types.iter())
+        .map(|(name, ty)| {
+            quote! { let mut #name = ::core::mem::MaybeUninit::<#ty>::uninit(); }
+        })
+        .collect();
+
+    // Build success value
+    let success_value = if output_names.is_empty() {
+        quote! { Ok(()) }
+    } else if output_names.len() == 1 {
+        let name = &output_names[0];
+        quote! { Ok(unsafe { #name.assume_init() }) }
+    } else {
+        quote! { Ok((#(unsafe { #output_names.assume_init() }),*)) }
+    };
+
+    let function_body = quote! {
+        #(#output_decls)*
+        #uninit_ident(#(#uninit_call_args,)*)?;
+        #success_value
+    };
+
+    // Generate documentation
+    let mut doc_lines = Vec::new();
+
+    if let Some(doc) = doc {
+        add_description_section(&mut doc_lines, doc);
+        add_arguments_section(&mut doc_lines, &syscall.inputs);
+        add_outputs_section(&mut doc_lines, &syscall.outputs);
+
+        // Add note about this being the convenient wrapper
+        doc_lines.push(format!(
+            "This is a convenience wrapper around [`uninit_{}`](uninit_{}) that returns the result as `SyscallResult<T>`.",
+            &syscall.name, &syscall.name
+        ));
+        doc_lines.push(String::new());
+
+        add_error_section(&mut doc_lines, &doc.errors);
+    } else {
+        panic!("No documentation found for syscall {}", &syscall.name);
+    }
+
+    let doc_comment = generate_doc_comment(&doc_lines);
+
+    quote! {
+        #doc_comment
+        pub fn #result_ident(#(#input_params,)*) -> #return_type {
+            #function_body
         }
     }
 }
@@ -816,10 +819,8 @@ fn generate_doc_comment(lines: &[String]) -> TokenStream2 {
     let doc_lines: Vec<TokenStream2> = lines
         .iter()
         .map(|line| {
-            let line_str = line.as_str();
-            // Format as /// doc comment - use #[doc = "..."] for proper escaping
             quote! {
-                #[doc = #line_str]
+                #[doc = #line]
             }
         })
         .collect();
@@ -827,6 +828,124 @@ fn generate_doc_comment(lines: &[String]) -> TokenStream2 {
     quote! {
         #(#doc_lines)*
     }
+}
+
+fn add_description_section(doc_lines: &mut Vec<String>, doc: &SyscallDoc) {
+    if !doc.description.is_empty() {
+        for (para_idx, paragraph) in doc.description.iter().enumerate() {
+            // Split each paragraph on newlines to get individual lines
+            for line in paragraph.split('\n') {
+                let trimmed = line.trim_end();
+                if !trimmed.is_empty() {
+                    doc_lines.push(trimmed.to_string());
+                }
+            }
+
+            // Add blank line between paragraphs (but not after the last one)
+            if para_idx < doc.description.len() - 1 {
+                doc_lines.push(String::new());
+            }
+        }
+        doc_lines.push(String::new());
+    }
+}
+
+fn add_arguments_section(doc_lines: &mut Vec<String>, inputs: &[Arg]) {
+    if !inputs.is_empty() {
+        doc_lines.push("## Arguments".to_string());
+        doc_lines.push(String::new());
+        for input in inputs {
+            doc_lines.push(format!("- `{}`", input.name));
+        }
+        doc_lines.push(String::new());
+    }
+}
+
+fn add_outputs_section(doc_lines: &mut Vec<String>, outputs: &[Arg]) {
+    if !outputs.is_empty() {
+        doc_lines.push("## Outputs".to_string());
+        doc_lines.push(String::new());
+        for output in outputs {
+            doc_lines.push(format!("- `{}`", output.name));
+        }
+        doc_lines.push(String::new());
+    }
+}
+
+fn add_error_section(doc_lines: &mut Vec<String>, errors: &[ErrorDoc]) {
+    if !errors.is_empty() {
+        doc_lines.push("## Errors".to_string());
+        doc_lines.push(String::new());
+        for error in errors {
+            doc_lines.push(format!("- **{}**:", error.code));
+            doc_lines.extend(error.description.iter().cloned());
+            doc_lines.push(String::new());
+        }
+    }
+}
+
+fn add_uninit_arguments_section(
+    doc_lines: &mut Vec<String>,
+    inputs: &[Arg],
+    outputs: &[Arg],
+) {
+    doc_lines.push("## Arguments".to_string());
+    doc_lines.push(String::new());
+
+    // Inputs subsection
+    doc_lines.push("### Inputs".to_string());
+    if !inputs.is_empty() {
+        for input in inputs {
+            doc_lines.push(format!("- `{}`", input.name));
+        }
+    } else {
+        doc_lines.push("- None".to_string());
+    }
+    doc_lines.push(String::new());
+
+    // Outputs subsection
+    doc_lines.push("### Outputs".to_string());
+    if !outputs.is_empty() {
+        doc_lines.push("The following parameters use `MaybeUninit` types and will be initialized by the syscall if the error is `kNone`:".to_string());
+        for output in outputs {
+            doc_lines.push(format!("- `{}`", output.name));
+        }
+    } else {
+        doc_lines.push("- None".to_string());
+    }
+    doc_lines.push(String::new());
+}
+
+fn add_raw_arguments_section(
+    doc_lines: &mut Vec<String>,
+    inputs: &[Arg],
+    outputs: &[Arg],
+) {
+    doc_lines.push("## Arguments".to_string());
+    doc_lines.push(String::new());
+
+    // Inputs subsection
+    doc_lines.push("### Inputs".to_string());
+    if !inputs.is_empty() {
+        for input in inputs {
+            doc_lines.push(format!("- `{}`", input.name));
+        }
+    } else {
+        doc_lines.push("- None".to_string());
+    }
+    doc_lines.push(String::new());
+
+    // Outputs subsection
+    doc_lines.push("### Outputs".to_string());
+    if !outputs.is_empty() {
+        doc_lines.push("The following parameters will be modified by the syscall syscall only if the error is `kNone`:".to_string());
+        for output in outputs {
+            doc_lines.push(format!("- `{}`", output.name));
+        }
+    } else {
+        doc_lines.push("- None".to_string());
+    }
+    doc_lines.push(String::new());
 }
 
 pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
@@ -848,9 +967,11 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
             doc,
         );
         let raw = generate_syscall_raw_decl(&func, &type_map, doc);
+        let result = generate_syscall_result_decl(&func, &type_map, doc);
         quote! {
             #uninit
             #raw
+            #result
         }
     });
 
