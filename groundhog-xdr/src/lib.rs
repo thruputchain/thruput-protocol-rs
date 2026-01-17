@@ -47,6 +47,8 @@ use storage_cost::*;
 pub mod storage_delta_flags;
 use storage_delta_flags::*;
 
+/// Transaction construction, signing, and parallel execution with nondeterministic replay.
+#[doc = include_str!("../docs/transaction.md")]
 #[rustfmt::skip]
 pub mod transaction;
 use transaction::*;
