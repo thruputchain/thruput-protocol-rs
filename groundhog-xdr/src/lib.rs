@@ -41,10 +41,6 @@ use syscall_error::*;
 pub mod storage_cost;
 use storage_cost::*;
 
-#[rustfmt::skip]
-pub mod storage_delta_flags;
-use storage_delta_flags::*;
-
 /// Transaction construction, signing, and parallel execution with nondeterministic replay.
 #[doc = include_str!("../docs/transaction.md")]
 #[rustfmt::skip]
@@ -80,3 +76,8 @@ use address_auth::*;
 /// System call bindings and syscall numbers (SyscallNo enum).
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
+
+#[doc = include_str!("../docs/storage_item.md")]
+#[rustfmt::skip]
+pub mod storage_item;
+use storage_item::*;
