@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b2a6e4e0e501d7921c5a048f18026f92d40f8acc
+// Generated from xdrc commit: 3ddf43ab83ba95c43ef165b83c029638034a0e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -120,14 +120,14 @@ pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
     kWasmi { wasmi_contract: ContractBlob } = ContractType::kWasmi as i32,
+    /// Identifier for which native contract this is.
+    ///
+    /// Native contracts are hard-coded in the runtime.
     // case kNative:
-    //   /// Identifier for which native contract this is.
-    //   ///
-    //   /// Native contracts are hard-coded in the runtime.
     //   i32 native_contract_id;
     kNative { native_contract_id: i32 } = ContractType::kNative as i32,
+    /// Identifier for the mock contract in the test harness.
     // case kMockTest:
-    //   /// Identifier for the mock contract in the test harness.
     //   i32 mock_contract_id;
     kMockTest { mock_contract_id: i32 } = ContractType::kMockTest as i32,
     

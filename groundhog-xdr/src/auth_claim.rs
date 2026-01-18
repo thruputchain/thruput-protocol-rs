@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b2a6e4e0e501d7921c5a048f18026f92d40f8acc
+// Generated from xdrc commit: 3ddf43ab83ba95c43ef165b83c029638034a0e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -216,8 +216,8 @@ pub struct AuthClaim_other_address_signed_weight {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum AuthClaim {
+    /// The ID of the key that must sign, from the invoked address's key set.
     // case kInvokedAddressSignature:
-    //   /// The ID of the key that must sign, from the invoked address's key set.
     //   KeyID invoked_address_signature_id;
     kInvokedAddressSignature { invoked_address_signature_id: KeyID } = AuthClaimType::kInvokedAddressSignature as i32,
     // case kInvokedAddressSignedWeight:

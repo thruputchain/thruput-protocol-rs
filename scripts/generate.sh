@@ -10,11 +10,11 @@ protos=(
   transaction.x
   retrocausal_queue.x
   storage_cost.x
-  storage_delta_flags.x
   syscall_error.x
   auth_claim.x
   standard_asset_events.x
   address_auth.x
+  storage_item.x
 )
 
 # XDR files for hogexec-internal
@@ -50,6 +50,8 @@ hogxs=(
 [[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"
 
 echo "-- Using XDRC=${XDRC} --" >&2
+
+set -e
 
 generate() {
   proto=${1:?}
