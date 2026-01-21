@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3ddf43ab83ba95c43ef165b83c029638034a0e5e
+// Generated from xdrc commit: 5bee6dc970fe45e481c12f19fa8c1ea7f649cb75
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -49,6 +49,11 @@ pub enum StorageItemType {
     kItemTypeReplayCacheData = 3 as i32,
     kItemTypeAuthData = 4 as i32,
     kItemTypeDeployedContractHash = 5 as i32,
+
+    // 
+    // This will be removed when we get rid of the old db interface.
+    
+    #[doc(hidden)]kItemTypeDeleted = -1 as i32,
 }
 impl TryFrom<i32> for StorageItemType {
     type Error = ();
@@ -60,6 +65,7 @@ impl TryFrom<i32> for StorageItemType {
             3 => Ok(Self::kItemTypeReplayCacheData),
             4 => Ok(Self::kItemTypeAuthData),
             5 => Ok(Self::kItemTypeDeployedContractHash),
+            -1 => Ok(Self::kItemTypeDeleted),
             _ => Err(()),
         }
     }

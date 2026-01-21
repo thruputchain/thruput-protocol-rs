@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3ddf43ab83ba95c43ef165b83c029638034a0e5e
+// Generated from xdrc commit: 5bee6dc970fe45e481c12f19fa8c1ea7f649cb75
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -34,6 +34,8 @@ use ::serde::{Serialize, Deserialize};
 use ::serde_arrays;
 
 
+
+// clang-format on
 
 // The event format puts the first N * 32 bytes of the data
 // as the topics.

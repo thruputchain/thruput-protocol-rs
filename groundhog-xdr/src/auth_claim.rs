@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3ddf43ab83ba95c43ef165b83c029638034a0e5e
+// Generated from xdrc commit: 5bee6dc970fe45e481c12f19fa8c1ea7f649cb75
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -237,6 +237,64 @@ pub enum AuthClaim {
 /// Each transaction must include at least one auth claim to be valid.
 /// The list is bounded by `kMaxAuthClaims` to limit verification complexity.
 pub type AuthClaimData = VecM::<AuthClaim, kMaxAuthClaims>;
+
+//------------------------------------------------------------------------------
+// Auth Verification Error Codes
+//------------------------------------------------------------------------------
+
+/// Error codes returned when verifying authorization on a SignedTransaction.
+///
+/// There are three levels of verification:
+/// 1. Well-formedness: basic structural checks (e.g., key IDs are in range)
+/// 2. Claims validity: signatures match claimed keys and weights are satisfied
+/// 3. Signature verification: cryptographic validation of all signatures
+///
+/// These error codes distinguish between different failure modes to enable
+/// appropriate handling at different stages of transaction processing.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum AuthVerifyErrorCode {
+    /// The transaction's auth claims are malformed.
+    ///
+    /// Transactions with this error should never be flooded over the network
+    /// as they are structurally invalid. Examples include:
+    /// - Public key IDs that are out of bounds
+    /// - Invalid bitmaps (bits set beyond kMaxSigners)
+    /// - Mismatched signature counts
+    kAuthMalformed = 1 as i32,
+
+    /// Cryptographic signature verification failed.
+    ///
+    /// This indicates that one or more signatures did not pass cryptographic
+    /// validation against the claimed public keys. The transaction structure
+    /// is valid but the signatures themselves are incorrect.
+    kSignatureVerificationFailed = 2 as i32,
+
+    /// Mismatch between auth claims and actual auth data on an account.
+    ///
+    /// This indicates that the transaction references keys or permissions
+    /// that do not exist or do not satisfy the requirements. Examples include:
+    /// - Referencing a public key ID that doesn't exist in the auth data
+    /// - Failing to meet required weight thresholds
+    /// - Insufficient gas permissions for the claimed sponsorship
+    kAuthDataMismatch = 3 as i32,
+}
+impl TryFrom<i32> for AuthVerifyErrorCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(Self::kAuthMalformed),
+            2 => Ok(Self::kSignatureVerificationFailed),
+            3 => Ok(Self::kAuthDataMismatch),
+            _ => Err(()),
+        }
+    }
+}
+
 
 
 //
