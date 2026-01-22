@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -15,6 +15,7 @@
 use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
+use core::fmt::{self, Debug};
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
@@ -76,7 +77,7 @@ pub type GasAmount = u64;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -110,6 +111,11 @@ impl DerefMut for Ed25519Signature {
         &mut self.inner
     }
 }
+impl Debug for Ed25519Signature {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
+    }
+}
 impl AsRef<[u8]> for Ed25519Signature {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
@@ -136,7 +142,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -170,6 +176,11 @@ impl DerefMut for Ed25519PublicKey {
         &mut self.inner
     }
 }
+impl Debug for Ed25519PublicKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
+    }
+}
 impl AsRef<[u8]> for Ed25519PublicKey {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
@@ -195,7 +206,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -227,6 +238,11 @@ impl Deref for Ed25519SecretKey {
 impl DerefMut for Ed25519SecretKey {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
+    }
+}
+impl Debug for Ed25519SecretKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
     }
 }
 impl AsRef<[u8]> for Ed25519SecretKey {
@@ -334,7 +350,7 @@ pub enum ExtensionPoint {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -368,6 +384,11 @@ impl DerefMut for SHA256Hash {
         &mut self.inner
     }
 }
+impl Debug for SHA256Hash {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
+    }
+}
 impl AsRef<[u8]> for SHA256Hash {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
@@ -396,7 +417,7 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -428,6 +449,11 @@ impl Deref for ContractAddress {
 impl DerefMut for ContractAddress {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
+    }
+}
+impl Debug for ContractAddress {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
     }
 }
 impl AsRef<[u8]> for ContractAddress {
@@ -516,7 +542,7 @@ impl TryFrom<i32> for StorageKeyType {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -548,6 +574,11 @@ impl Deref for StorageKeyContractData {
 impl DerefMut for StorageKeyContractData {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
+    }
+}
+impl Debug for StorageKeyContractData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
     }
 }
 impl AsRef<[u8]> for StorageKeyContractData {

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -15,6 +15,7 @@
 use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
+use core::fmt::{self, Debug};
 
 #[cfg(feature="std")]
 use std::io::{Read, Write};
@@ -54,7 +55,7 @@ pub const kMaxTopics : u32 = 3;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Default, Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -86,6 +87,11 @@ impl Deref for Topic {
 impl DerefMut for Topic {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
+    }
+}
+impl Debug for Topic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Debug::fmt(&hex_encode(&self.inner), f)
     }
 }
 impl AsRef<[u8]> for Topic {
