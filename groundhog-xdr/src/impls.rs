@@ -21,6 +21,40 @@ impl From<ContractAddress> for StorageKeyContractData {
     }
 }
 
+impl From<SHA256Hash> for ContractAddress {
+    fn from(hash: SHA256Hash) -> Self {
+        hash.into_inner().into()
+    }
+}
+
+impl BitXor for SHA256Hash {
+    type Output = Self;
+
+    fn bitxor(mut self, rhs: Self) -> Self::Output {
+        self ^= &rhs.into_inner();
+
+        self
+    }
+}
+
+impl BitXor<&Self> for SHA256Hash {
+    type Output = Self;
+
+    fn bitxor(mut self, rhs: &Self) -> Self::Output {
+        let rhs: &[u8; 32] = &*rhs;
+
+        self ^= rhs;
+
+        self
+    }
+}
+
+impl BitXorAssign<&[u8; 32]> for SHA256Hash {
+    fn bitxor_assign(&mut self, rhs: &[u8; 32]) {
+        bitxor_assign_bytes(&mut *self, rhs);
+    }
+}
+
 impl BitXor for StorageKeyContractData {
     type Output = Self;
 
@@ -45,21 +79,25 @@ impl BitXor<&Self> for StorageKeyContractData {
 
 impl BitXorAssign<&[u8; 32]> for StorageKeyContractData {
     fn bitxor_assign(&mut self, rhs: &[u8; 32]) {
-        let (lchunks, []) = (&mut *self).as_chunks_mut::<4>() else {
-            unreachable!()
-        };
-        let (rchunks, []) = rhs.as_chunks::<4>() else {
-            unreachable!()
-        };
-        lchunks
-            .iter_mut()
-            .zip(rchunks.iter())
-            .for_each(|(lbytes, rbytes)| {
-                let l = u32::from_le_bytes(lbytes.clone());
-                let r = u32::from_le_bytes(rbytes.clone());
-                *lbytes = (l ^ r).to_le_bytes();
-            });
+        bitxor_assign_bytes(&mut *self, rhs);
     }
+}
+
+fn bitxor_assign_bytes<const N: usize>(lhs: &mut [u8; N], rhs: &[u8; N]) {
+    let (lchunks, []) = lhs.as_chunks_mut::<4>() else {
+        unreachable!()
+    };
+    let (rchunks, []) = rhs.as_chunks::<4>() else {
+        unreachable!()
+    };
+    lchunks
+        .iter_mut()
+        .zip(rchunks.iter())
+        .for_each(|(lbytes, rbytes)| {
+            let l = u32::from_le_bytes(lbytes.clone());
+            let r = u32::from_le_bytes(rbytes.clone());
+            *lbytes = (l ^ r).to_le_bytes();
+        });
 }
 
 #[cfg(test)]
