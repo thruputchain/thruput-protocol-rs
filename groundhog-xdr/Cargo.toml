@@ -10,8 +10,8 @@ crate-type = ["rlib"]
 default = []
 alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
 std = ["alloc"]
-# Note that pulling in serde pulls in an allocator via xdr_common/serde->xdr_common/alloc
-serde = ["dep:serde", "dep:serde_arrays", "xdr_common/serde"]
+# Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
+serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
 syscalls = ["dep:groundhog_xdr_macros", "dep:thiserror"]
@@ -19,10 +19,7 @@ syscalls_mock = ["syscalls"] # required for native_exec integration
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "xdr_common"]
-
-[dependencies.xdr_common]
-workspace = true
+features = ["derive"]
 
 [dependencies.serde]
 optional = true
@@ -43,3 +40,6 @@ optional = true
 optional = true
 version = "2.0.16"
 default-features = false
+
+[dependencies.xdr-common]
+workspace = true

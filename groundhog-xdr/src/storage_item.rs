@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5bee6dc970fe45e481c12f19fa8c1ea7f649cb75
+// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -24,9 +24,6 @@ use xdrs::*;
 #[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
-
-#[cfg(not(feature="xdrs"))]
-use xdr_common::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};
@@ -358,6 +355,12 @@ pub enum StorageDelta {
     kDeltaTypeConsumeUniquifier { consume_uniquifier_args: ConsumeUniquifierArgs } = StorageDeltaType::kDeltaTypeConsumeUniquifier as i32,
     
 }
+
+/// Maximum heights with an unexpired consumed uniquifier in a cache.
+pub const kReplayCacheHeightsMaxLen : u32 = 4000;
+
+/// Maximum unexpired consumed uniquifiers allowed per height in a cache.
+pub const kReplayCacheNoncesMaxLen : u32 = 8000;
 // 
 // Information about the number of nonces stored at each height of a
 // ReplayCache. Tracked in the ReplayCacheMetadata so nonce GC can
@@ -386,7 +389,7 @@ pub struct ReplayCacheMetadata {
     // Total count of all nonces in this ReplayCache across all heights.
     pub size: i64,
     // Sorted list of heights with active nonces and count at each.
-    pub heights: VecM<ReplayCacheHeightCount>,
+    pub heights: VecM<ReplayCacheHeightCount, kReplayCacheNoncesMaxLen>,
 }
 // 
 
@@ -398,7 +401,7 @@ pub struct ReplayCacheMetadata {
 #[repr(C)]
 pub struct ReplayCacheData {
     // Sorted list of nonces for a particular height of a ReplayCache.
-    pub nonces: VecM<i64>,
+    pub nonces: VecM<i64, kReplayCacheNoncesMaxLen>,
 }
 
 /// Flags that can be set on a storage delta to modify its behavior.

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5bee6dc970fe45e481c12f19fa8c1ea7f649cb75
+// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -24,9 +24,6 @@ use xdrs::*;
 #[cfg(feature="spec")]
 use xdrs::xdr_repr::*;
 
-
-#[cfg(not(feature="xdrs"))]
-use xdr_common::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{Serialize, Deserialize};

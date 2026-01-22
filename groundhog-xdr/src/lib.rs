@@ -8,6 +8,9 @@ extern crate std;
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+#[cfg(not(feature = "xdrs"))]
+pub use xdr_common::*;
+
 /// Core type definitions for the Groundhog protocol.
 #[doc = include_str!("../docs/types.md")]
 #[rustfmt::skip]

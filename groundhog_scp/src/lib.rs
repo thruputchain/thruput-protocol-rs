@@ -3,6 +3,9 @@
 
 pub use groundhog_xdr::types::*;
 
+#[cfg(not(feature = "xdrs"))]
+use xdr_common::*;
+
 #[rustfmt::skip]
 pub mod scp;
 pub use scp::*;
