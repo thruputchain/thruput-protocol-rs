@@ -15,7 +15,7 @@ spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
     "dep:serde_arrays",
-    "xdr_common/serde",
+    "xdrs/serde",
     "groundhog-xdr/serde",
 ]
 
@@ -39,10 +39,7 @@ features = ["std", "xdrs"]
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "xdr_common", "extras", "int128_xdr", "ns", "alloc"]
-
-[dependencies.xdr_common]
-workspace = true
+features = ["derive", "extras", "int128_xdr", "ns", "alloc"]
 
 [dependencies.rpc_driver]
 workspace = true
