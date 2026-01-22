@@ -11,6 +11,9 @@ extern crate alloc;
 #[cfg(not(feature = "xdrs"))]
 pub use xdr_common::*;
 
+pub mod hex;
+use hex::*;
+
 /// Core type definitions for the Groundhog protocol.
 #[doc = include_str!("../docs/types.md")]
 #[rustfmt::skip]
