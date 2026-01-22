@@ -214,6 +214,7 @@ dependencies = [
  "serde",
  "serde_arrays",
  "thiserror",
+ "xdr-common",
  "xdrs",
 ]
 
@@ -252,6 +253,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "xdr-common",
  "xdrs",
 ]
 
@@ -264,6 +266,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "xdr-common",
  "xdrs",
 ]
 

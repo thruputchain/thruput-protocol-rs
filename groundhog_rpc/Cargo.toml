@@ -33,3 +33,6 @@ features = ["derive", "extras", "int128_xdr", "ns", "alloc"]
 
 [dependencies.rpc_driver]
 workspace = true
+
+[dependencies.xdr-common]
+workspace = true

@@ -40,3 +40,6 @@ optional = true
 optional = true
 version = "2.0.16"
 default-features = false
+
+[dependencies.xdr-common]
+workspace = true
