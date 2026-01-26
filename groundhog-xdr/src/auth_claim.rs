@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
+// Generated from xdrc commit: de7ce4b87ec12344245c214239ea2e2c33261e63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -142,6 +142,11 @@ pub enum AuthClaimType {
     ///
     /// Combines cross-contract auth with multi-signature requirements.
     kOtherAddressSignedWeight = 3 as i32,
+
+    /// Requires a signature from a specific key
+    ///
+    /// XXX
+    kPubkeySignature = 4 as i32,
 }
 impl TryFrom<i32> for AuthClaimType {
     type Error = ();
@@ -151,6 +156,7 @@ impl TryFrom<i32> for AuthClaimType {
             1 => Ok(Self::kInvokedAddressSignedWeight),
             2 => Ok(Self::kOtherAddressSignature),
             3 => Ok(Self::kOtherAddressSignedWeight),
+            4 => Ok(Self::kPubkeySignature),
             _ => Err(()),
         }
     }
@@ -226,7 +232,20 @@ pub enum AuthClaim {
     // case kOtherAddressSignedWeight:
     //   other_address_signed_weight other_address_signed_weight;
     kOtherAddressSignedWeight { other_address_signed_weight: AuthClaim_other_address_signed_weight } = AuthClaimType::kOtherAddressSignedWeight as i32,
+    // case kPubkeySignature:
+    //   PubkeyAccountPreimage pubkey_preimage;
+    kPubkeySignature { pubkey_preimage: PubkeyAccountPreimage } = AuthClaimType::kPubkeySignature as i32,
     
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct PubkeyAccountPreimage {
+    pub pubkey: PublicKey,
+    pub nonce: u64,
 }
 
 /// A list of auth claims for a transaction.

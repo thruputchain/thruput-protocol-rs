@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 98c0bc7253fa32253c7d4b8c722da75c3a5e0350
+// Generated from xdrc commit: de7ce4b87ec12344245c214239ea2e2c33261e63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -44,6 +44,7 @@ pub struct HostConfig {
     pub public_ip: StringM,
     // HOGX_PRIVATE_IP
     pub private_ip: StringM,
+    pub agent_port: u32,
     // HOGX_PKG_DIR
     pub pkg_dir: Path,
     // HOGX_APP_DIR; application lifetime: hog db, coordinator storage, event db
