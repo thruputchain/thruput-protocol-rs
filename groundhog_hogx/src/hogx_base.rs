@@ -34,6 +34,14 @@ use ::serde_arrays;
 
 // clang-format on
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct Void (
+);
+
 pub type Timestamp = i64;
 
 pub type Path = StringM;
