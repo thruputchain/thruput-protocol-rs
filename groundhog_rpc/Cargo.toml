@@ -29,7 +29,7 @@ default-features = false
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "extras", "int128_xdr", "ns", "alloc"]
+features = ["derive", "int128_xdr", "ns", "alloc"]
 
 [dependencies.rpc_driver]
 workspace = true
