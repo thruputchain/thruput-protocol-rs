@@ -213,6 +213,7 @@ dependencies = [
  "groundhog_xdr_macros",
  "serde",
  "serde_arrays",
+ "serde_with",
  "thiserror",
  "xdr-common",
  "xdrs",
@@ -228,6 +229,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "serde_with",
  "xdrs",
 ]
 
@@ -242,6 +244,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "serde_with",
  "xdrs",
 ]
 
@@ -253,6 +256,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "serde_with",
  "xdr-common",
  "xdrs",
 ]
@@ -266,6 +270,7 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_arrays",
+ "serde_with",
  "xdr-common",
  "xdrs",
 ]

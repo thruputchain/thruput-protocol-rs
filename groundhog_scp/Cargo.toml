@@ -15,6 +15,7 @@ spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
     "dep:serde_arrays",
+    "dep:serde_with",
     "xdrs/serde",
     "groundhog-xdr/serde",
 ]
@@ -32,6 +33,11 @@ features = ["derive"]
 optional = true
 git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
 default-features = false
+
+[dependencies.serde_with]
+workspace = true
+optional = true
+features = []
 
 [dependencies.groundhog-xdr]
 path = "../groundhog-xdr"

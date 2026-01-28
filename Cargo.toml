@@ -9,13 +9,18 @@ members = [
     "macros",
     "groundhog_xdr_syscall_tests",
     "hogexec-internal",
-    ]
+]
 resolver = "2"
 
 [workspace.dependencies]
-xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = ["int128_xdr", "derive", "ns"] }
+xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = [
+    "int128_xdr",
+    "derive",
+    "ns",
+] }
 rpc_driver = { git = "ssh://git@github.com/groundhogchain/xdr_rpc.git" }
 xdr-common = { git = "ssh://git@github.com/groundhogchain/xdrs.git" }
+serde_with = { version = "3.16.1" }
 
 [profile.dev]
 opt-level = 3

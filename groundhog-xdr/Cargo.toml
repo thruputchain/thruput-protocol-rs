@@ -11,11 +11,11 @@ default = []
 alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
 std = ["alloc"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
-serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde"]
+serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
 syscalls = ["dep:groundhog_xdr_macros", "dep:thiserror"]
-syscalls_mock = ["syscalls"] # required for native_exec integration
+syscalls_mock = ["syscalls"]                                              # required for native_exec integration
 
 [dependencies.xdrs]
 workspace = true
@@ -31,6 +31,11 @@ features = ["derive"]
 optional = true
 git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
 default-features = false
+
+[dependencies.serde_with]
+workspace = true
+optional = true
+features = []
 
 [dependencies.groundhog_xdr_macros]
 path = "../macros"
