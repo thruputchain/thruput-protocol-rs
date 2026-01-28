@@ -121,8 +121,8 @@ pub enum Contract {
     ///
     /// Native contracts are hard-coded in the runtime.
     // case kNative:
-    //   i32 native_contract_id;
-    kNative { native_contract_id: i32 } = ContractType::kNative as i32,
+    //   HogexecPrecompiledNativeContracts native_contract_id;
+    kNative { native_contract_id: HogexecPrecompiledNativeContracts } = ContractType::kNative as i32,
     /// Identifier for the mock contract in the test harness.
     // case kMockTest:
     //   i32 mock_contract_id;

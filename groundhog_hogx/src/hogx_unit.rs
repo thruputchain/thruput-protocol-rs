@@ -197,6 +197,7 @@ pub struct UnitDefLinked {
 pub enum ProcessStatus {
     PROCESS_RUNNING = 1 as i32,
     PROCESS_EXITED = 2 as i32,
+    PROCESS_INTERRUPTED = 3 as i32,
 }
 impl TryFrom<i32> for ProcessStatus {
     type Error = ();
@@ -204,6 +205,7 @@ impl TryFrom<i32> for ProcessStatus {
         match value {
             1 => Ok(Self::PROCESS_RUNNING),
             2 => Ok(Self::PROCESS_EXITED),
+            3 => Ok(Self::PROCESS_INTERRUPTED),
             _ => Err(()),
         }
     }
@@ -222,6 +224,9 @@ pub enum ProcessState {
     // case PROCESS_EXITED:
     //   i32 exit;
     PROCESS_EXITED { exit: i32 } = ProcessStatus::PROCESS_EXITED as i32,
+    // case PROCESS_INTERRUPTED:
+    //   void;
+    PROCESS_INTERRUPTED = ProcessStatus::PROCESS_INTERRUPTED as i32,
     
 }
 

@@ -163,6 +163,16 @@ impl TryFrom<i32> for AuthClaimType {
 }
 
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct PubkeyAccountPreimage {
+    pub pubkey: PublicKey,
+    pub nonce: u64,
+}
+
 /// An authorization claim specifying what signatures are needed to authorize
 /// a transaction.
 ///
@@ -236,16 +246,6 @@ pub enum AuthClaim {
     //   PubkeyAccountPreimage pubkey_preimage;
     kPubkeySignature { pubkey_preimage: PubkeyAccountPreimage } = AuthClaimType::kPubkeySignature as i32,
     
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct PubkeyAccountPreimage {
-    pub pubkey: PublicKey,
-    pub nonce: u64,
 }
 
 /// A list of auth claims for a transaction.

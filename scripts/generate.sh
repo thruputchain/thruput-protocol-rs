@@ -15,6 +15,7 @@ protos=(
   standard_asset_events.x
   address_auth.x
   storage_item.x
+  precompiles.x
 )
 
 # XDR files for hogexec-internal

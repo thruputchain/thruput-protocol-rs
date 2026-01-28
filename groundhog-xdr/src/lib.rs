@@ -28,6 +28,10 @@ pub mod contract;
 use contract::*;
 
 #[rustfmt::skip]
+pub mod precompiles;
+use precompiles::*;
+
+#[rustfmt::skip]
 pub mod genesis;
 use genesis::*;
 
