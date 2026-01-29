@@ -179,7 +179,7 @@ pub trait HogxAgent_HogxAgent1: Send + Sync {
     
     async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_clear(&self, arg0 : SystemID) -> Result<HogxUnitClearResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_clear(&self, arg0 : UnitID) -> Result<HogxUnitClearResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -252,7 +252,7 @@ impl ::rpc_driver::ServerDispatch for HogxAgent_HogxAgent1_Dispatcher {
             }
             // hogxagent_unit_clear
             240 => {
-                let args: (SystemID, ) =
+                let args: (UnitID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.hogxagent_unit_clear(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -310,7 +310,7 @@ impl HogxAgent_HogxAgent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 230, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_clear(&self, arg0 : &SystemID) -> Result<HogxUnitClearResult, ::rpc_driver::RpcError> {
+    pub async fn hogxagent_unit_clear(&self, arg0 : &UnitID) -> Result<HogxUnitClearResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 240, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
