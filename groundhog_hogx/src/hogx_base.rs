@@ -34,13 +34,16 @@ use ::serde_arrays;
 
 // clang-format on
 
+// TODO: x23c does not allow an empty struct, it requires "void;" inside, whereas
+// goxdr does not allow a "void;" field.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct Void (
-);
+pub struct Void {
+    pub xxx: Option<i32>,
+}
 
 pub type Timestamp = i64;
 
