@@ -47,6 +47,7 @@ pub struct HostDef {
     //
     pub ssh_user: StringM,
     pub ssh_address: StringM,
+    pub ssh_port: Option<u32>,
     pub ssh_private_key: StringM,
     //
     pub host_config: HostConfig,
