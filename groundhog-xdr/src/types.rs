@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c3c033fa8d0a0e017b73a0f38379c2491cd85e73
+// Generated from xdrc commit: e3ce81d1976cd44a691cfe08935ab26a198ef2ec
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -81,7 +81,7 @@ pub type GasAmount = u64;
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519Signature {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 64 as usize],
 }
 impl From<[u8; 64 as usize]> for Ed25519Signature {
@@ -141,7 +141,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519PublicKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for Ed25519PublicKey {
@@ -200,7 +200,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519SecretKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 64 as usize],
 }
 impl From<[u8; 64 as usize]> for Ed25519SecretKey {
@@ -339,7 +339,7 @@ pub enum ExtensionPoint {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct SHA256Hash {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for SHA256Hash {
@@ -401,7 +401,7 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct ContractAddress {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for ContractAddress {
@@ -521,7 +521,7 @@ impl TryFrom<i32> for StorageKeyType {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct StorageKeyContractData {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for StorageKeyContractData {
