@@ -215,8 +215,8 @@ dependencies = [
  "serde_arrays",
  "serde_with",
  "thiserror",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
@@ -230,7 +230,7 @@ dependencies = [
  "serde",
  "serde_arrays",
  "serde_with",
- "xdrs",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
@@ -245,7 +245,7 @@ dependencies = [
  "serde",
  "serde_arrays",
  "serde_with",
- "xdrs",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
@@ -257,8 +257,8 @@ dependencies = [
  "serde",
  "serde_arrays",
  "serde_with",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
@@ -271,8 +271,8 @@ dependencies = [
  "serde",
  "serde_arrays",
  "serde_with",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
@@ -317,14 +317,14 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 name = "hogexec-internal"
 version = "0.1.0"
 dependencies = [
- "xdrs",
+ "xdrs 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
 name = "iana-time-zone"
-version = "0.1.64"
+version = "0.1.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33e57f83510bb73707521ebaffa789ec8caf86f9657cad665b092b581d40e9fb"
+checksum = "e31bc9ad994ba00e440a8aa5c9ef0ec67d5cb5e5cb0cc7f8b744a35b389cc470"
 dependencies = [
  "android_system_properties",
  "core-foundation-sys",
@@ -532,13 +532,13 @@ dependencies = [
 
 [[package]]
 name = "rpc_driver"
-version = "0.1.0"
-source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#ab677b3f9bbdb8c2f51fe74ef18cc52f33554092"
+version = "0.1.1"
+source = "git+ssh://git@github.com/groundhogchain/xdr_rpc.git#5603025f044e273c0054a09e9fe22ed2e75acef6"
 dependencies = [
  "async-trait",
  "thiserror",
  "tokio",
- "xdrs",
+ "xdrs 0.2.1 (sparse+https://groundhog.dev/crates/api/v1/crates/)",
 ]
 
 [[package]]
@@ -606,7 +606,7 @@ dependencies = [
 [[package]]
 name = "serde_arrays"
 version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/serde_arrays.git#1ed5726fd5c62802d9943f8b4d853aa5087e78c2"
+source = "git+ssh://git@github.com/groundhogchain/serde_arrays.git#760a37400cd9aaccc89b84ad2798990e166897cf"
 dependencies = [
  "serde",
 ]
@@ -1023,8 +1023,18 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "xdr-common"
-version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git#c220eb359884ac75e021aec107c86ceeb2fc963d"
+version = "0.2.1"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "cbeff06f4971210e34756110aba7e8b261b27799c8bb33bcb1cbc13b73563e99"
+dependencies = [
+ "escape-bytes",
+ "hex",
+]
+
+[[package]]
+name = "xdr-common"
+version = "0.2.1"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git#1a21db8d2cd6f79394a6fda09fc7d7156d09a4e7"
 dependencies = [
  "escape-bytes",
  "hex",
@@ -1034,8 +1044,20 @@ dependencies = [
 
 [[package]]
 name = "xdr-derive"
-version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git#c220eb359884ac75e021aec107c86ceeb2fc963d"
+version = "0.2.1"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "36b411c53dd9f8938b2e84df8fb729f39b936dd1e33de7a1bd929c9d68bffbfe"
+dependencies = [
+ "darling 0.20.11",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "xdr-derive"
+version = "0.2.1"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git#1a21db8d2cd6f79394a6fda09fc7d7156d09a4e7"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2",
@@ -1045,21 +1067,42 @@ dependencies = [
 
 [[package]]
 name = "xdr-repr"
-version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git#c220eb359884ac75e021aec107c86ceeb2fc963d"
+version = "0.2.1"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "edcc1d13ea92478a6e48db96761ba75904d5810f3eef57f1ce45eddd6e07f383"
 dependencies = [
- "xdr-common",
+ "xdr-common 0.2.1 (sparse+https://groundhog.dev/crates/api/v1/crates/)",
+]
+
+[[package]]
+name = "xdr-repr"
+version = "0.2.1"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git#1a21db8d2cd6f79394a6fda09fc7d7156d09a4e7"
+dependencies = [
+ "xdr-common 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
 name = "xdrs"
-version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/xdrs.git#c220eb359884ac75e021aec107c86ceeb2fc963d"
+version = "0.2.1"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "e58819771a620299e381e6ed041ed9cdfd53ad559ec5618dab24eca440dc125e"
 dependencies = [
  "thiserror",
- "xdr-common",
- "xdr-derive",
- "xdr-repr",
+ "xdr-common 0.2.1 (sparse+https://groundhog.dev/crates/api/v1/crates/)",
+ "xdr-derive 0.2.1 (sparse+https://groundhog.dev/crates/api/v1/crates/)",
+ "xdr-repr 0.2.1 (sparse+https://groundhog.dev/crates/api/v1/crates/)",
+]
+
+[[package]]
+name = "xdrs"
+version = "0.2.1"
+source = "git+ssh://git@github.com/groundhogchain/xdrs.git#1a21db8d2cd6f79394a6fda09fc7d7156d09a4e7"
+dependencies = [
+ "thiserror",
+ "xdr-common 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
+ "xdr-derive 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
+ "xdr-repr 0.2.1 (git+ssh://git@github.com/groundhogchain/xdrs.git)",
 ]
 
 [[package]]
