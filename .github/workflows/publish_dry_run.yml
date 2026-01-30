@@ -19,7 +19,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: |
-            ${{ secrets.XDRS_TO_ACTIONS_KEY }}
+            ${{ secrets.ACTIONS_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v4
