@@ -9,7 +9,6 @@ crate-type = ["rlib"]
 [features]
 default = []
 std = []
-spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
     "dep:serde_arrays",

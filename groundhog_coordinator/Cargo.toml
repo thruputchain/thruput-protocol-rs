@@ -10,7 +10,6 @@ crate-type = ["rlib"]
 default = ["alloc", "std", ]
 alloc = ["xdrs/alloc"]
 std = ["alloc"]
-spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
     "dep:serde_arrays",

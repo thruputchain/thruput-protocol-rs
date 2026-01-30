@@ -11,7 +11,6 @@ default = ["alloc", "std", "xdrs"]
 alloc = ["xdrs", "xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
-spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
     "dep:serde_arrays",
