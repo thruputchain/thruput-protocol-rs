@@ -45,6 +45,9 @@ xdr-common = { version = "0.3.0", registry = "groundhog" }
 xdr-repr = { version = "0.3.0", registry = "groundhog" }
 xdr-derive = { version = "0.3.0", registry = "groundhog" }
 serde_with = { version = "3.16.1" }
+serde_arrays = { package = "groundhog-serde_arrays", version = "0.2.0", registry = "groundhog", default-features = false }
+
+
 
 [profile.dev]
 opt-level = 3

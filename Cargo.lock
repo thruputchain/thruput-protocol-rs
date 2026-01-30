@@ -207,12 +207,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "groundhog-serde_arrays"
+version = "0.2.0"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "5f38492b48f71b7723c02af35531586816c22057e25c3acf173ef8a9b878ecbf"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "groundhog-xdr"
 version = "0.1.0"
 dependencies = [
+ "groundhog-serde_arrays",
  "groundhog-xdr-macros",
  "serde",
- "serde_arrays",
  "serde_with",
  "thiserror",
  "xdr-common",
