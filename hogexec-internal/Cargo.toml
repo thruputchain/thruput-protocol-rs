@@ -10,6 +10,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
+description =  "FFI enums for use inside hogexec and test bindings"
 
 [lib]
 crate-type = ["rlib"]

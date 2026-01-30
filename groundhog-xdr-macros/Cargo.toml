@@ -10,6 +10,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
+description =  "Macros for generating groundhog syscall bindings"
 
 [lib]
 proc-macro = true
