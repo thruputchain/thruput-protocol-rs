@@ -60,4 +60,4 @@ jobs:
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: groundhog
-          registry-token: ${{ secrets.CARGO_PUBLISH_TOKEN }}
+          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
