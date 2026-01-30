@@ -5,12 +5,18 @@ edition = "2024"
 authors = ["Groundhog Team"]
 license = "Apache-2.0"  
 publish = ["groundhog"]
-description = "Async ONC-RPC (RFC 5531) client/server library built on tokio."
-repository = "https://github.com/groundhogchain/rpc_rs"
-homepage = "https://github.com/groundhogchain/rpc_rs"
+description = "Bindings for groundhog protocol structures"
+repository = "https://github.com/groundhogchain/protocol_rs"
+homepage = "https://github.com/groundhogchain/protocol_rs"
 readme = "../README.md"
-keywords = ["xdr", "rpc"]
-categories = ["rpc"]
+keywords = ["xdr", "blockchain", "groundhog"]
+categories = ["blockchain"]
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+    "docs/**/*.md",
+    "../protocol/syscalls.yaml",
+]
 
 [lib]
 crate-type = ["rlib"]
