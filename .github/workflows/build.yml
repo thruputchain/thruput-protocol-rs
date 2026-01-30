@@ -13,6 +13,7 @@ jobs:
     env:
       CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
       CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
       
     steps:
       - name: Clean up .gitconfig
@@ -35,38 +36,40 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
       - name: cargo build default
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr
+        run: cargo build -p groundhog-xdr
       - name: cargo build alloc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=alloc
+        run: cargo build -p groundhog-xdr --features=alloc
       - name: cargo build std
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=std
+        run: cargo build -p groundhog-xdr --features=std
       - name: cargo build xdrs
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=xdrs
+        run: cargo build -p groundhog-xdr --features=xdrs
       - name: cargo build syscalls
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=xdrs,syscalls
+        run: cargo build -p groundhog-xdr --features=xdrs,syscalls
       - name: cargo doc
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
       - name: cargo build syscalls mock
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
+        run: cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
       - name: cargo build serde
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=serde
+        run: cargo build -p groundhog-xdr --features=serde
       - name: cargo build serde xdrs
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=serde,xdrs
+        run: cargo build -p groundhog-xdr --features=serde,xdrs
       - name: cargo build serde alloc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --features=serde,alloc
+        run: cargo build -p groundhog-xdr --features=serde,alloc
       - name: cargo build wasm
         run: |
           rustup target add wasm32-unknown-unknown
-          CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
+          cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
       - name: cargo build wasm xdrs
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
+        run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
       - name: cargo build wasm alloc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
+        run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
       - name: run tests
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo test --features=std
+        run: cargo test --features=std
       - name: build rpc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_rpc
+        run: cargo build -p groundhog_rpc
       - name: build scp
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo build -p groundhog_scp
+        run: cargo build -p groundhog_scp
       - name: format checks
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo fmt --check
+        run: cargo fmt --check
+      - name: clippy macros
+        run: cargo clippy -p groundhog-xdr-macros -- -D warnings
