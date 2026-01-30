@@ -16,6 +16,7 @@ include = [
     "Cargo.toml",
     "docs/**/*.md",
     "src/syscalls.yaml",
+    "syscall_docs.json"
 ]
 
 [lib]
