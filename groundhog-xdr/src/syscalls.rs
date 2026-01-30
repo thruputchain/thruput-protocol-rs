@@ -153,4 +153,4 @@ fn syscall_wrapper(
     }
 }
 
-groundhog_xdr_macros::generate_syscall_decls!("../protocol/syscalls.yaml");
+groundhog_xdr_macros::generate_syscall_decls!("src/syscalls.yaml");
