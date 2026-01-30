@@ -19,3 +19,6 @@ target/
 # Added by cargo
 
 /target
+
+#can be cleaned up once the actions repo can be public
+actions/

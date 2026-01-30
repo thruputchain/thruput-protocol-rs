@@ -88,3 +88,5 @@ done
 # Generate syscall documentation
 echo "-- Generating syscall documentation --" >&2
 python3 protocol/generate_syscalls_doc.py --json-output groundhog-xdr/syscalls_docs.json
+echo "-- Copying syscall.yaml to groundhog-xdr/src/syscalls.yaml --" >&2
+cp protocol/syscalls.yaml groundhog-xdr/src/syscalls.yaml
