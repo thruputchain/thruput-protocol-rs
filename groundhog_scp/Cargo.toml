@@ -31,7 +31,7 @@ features = ["derive"]
 
 [dependencies.serde_arrays]
 optional = true
-git = "ssh://git@github.com/groundhogchain/serde_arrays.git"
+workspace = true
 default-features = false
 
 [dependencies.serde_with]

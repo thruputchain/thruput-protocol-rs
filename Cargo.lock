@@ -246,11 +246,11 @@ name = "groundhog_coordinator"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-serde_arrays",
  "groundhog-xdr",
  "groundhog_scp",
  "rpc_driver",
  "serde",
- "serde_arrays",
  "serde_with",
  "xdrs",
 ]
@@ -260,12 +260,12 @@ name = "groundhog_hogx"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-serde_arrays",
  "groundhog-xdr",
  "groundhog_coordinator",
  "groundhog_scp",
  "rpc_driver",
  "serde",
- "serde_arrays",
  "serde_with",
  "xdrs",
 ]
@@ -275,9 +275,9 @@ name = "groundhog_rpc"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-serde_arrays",
  "rpc_driver",
  "serde",
- "serde_arrays",
  "serde_with",
  "xdr-common",
  "xdrs",
@@ -288,10 +288,10 @@ name = "groundhog_scp"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "groundhog-serde_arrays",
  "groundhog-xdr",
  "rpc_driver",
  "serde",
- "serde_arrays",
  "serde_with",
  "xdr-common",
  "xdrs",
@@ -611,14 +611,6 @@ checksum = "9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e"
 dependencies = [
  "serde_core",
  "serde_derive",
-]
-
-[[package]]
-name = "serde_arrays"
-version = "0.2.0"
-source = "git+ssh://git@github.com/groundhogchain/serde_arrays.git#760a37400cd9aaccc89b84ad2798990e166897cf"
-dependencies = [
- "serde",
 ]
 
 [[package]]
