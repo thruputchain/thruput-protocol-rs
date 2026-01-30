@@ -43,7 +43,7 @@ features = []
 
 [dependencies.groundhog_scp]
 workspace = true
-features = ["std", "xdrs"]
+features = ["std"]
 
 [dependencies.groundhog-xdr]
 workspace = true
@@ -51,7 +51,7 @@ features = ["std", "xdrs"]
 
 [dependencies.groundhog_coordinator]
 workspace = true
-features = ["std", "xdrs"]
+features = ["std"]
 
 [dependencies.xdrs]
 workspace = true

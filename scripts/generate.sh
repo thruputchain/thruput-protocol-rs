@@ -52,13 +52,20 @@ hogxs=(
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
-set -e
+set -ex
 
 generate() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
   $XDRC --rust -o "${package}/src/${name}.rs" "${proto}"
+}
+
+generate_rpc() {
+  proto=${1:?}
+  package=${2:?}
+  name=$(basename "${proto}" .x)
+  $XDRC --rust --rust-feature xdrs -o "${package}/src/${name}.rs" "${proto}"
 }
 
 for proto in "${protos[@]}"; do
@@ -70,19 +77,19 @@ for ffi_enum in "${hogexec_internal[@]}"; do
 done
 
 for rpc in "${rpcs[@]}"; do
-  generate "protocol/${rpc}" "groundhog_rpc"
+  generate_rpc "protocol/${rpc}" "groundhog_rpc"
 done
 
 for scp in "${scps[@]}"; do
-  generate "protocol/${scp}" "groundhog_scp"
+  generate_rpc "protocol/${scp}" "groundhog_scp"
 done
 
 for coordinator in "${coordinators[@]}"; do
-  generate "protocol/${coordinator}" "groundhog_coordinator"
+  generate_rpc "protocol/${coordinator}" "groundhog_coordinator"
 done
 
 for hogx in "${hogxs[@]}"; do
-  generate "protocol/${hogx}" "groundhog_hogx"
+  generate_rpc "protocol/${hogx}" "groundhog_hogx"
 done
 
 # Generate syscall documentation

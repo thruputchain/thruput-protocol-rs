@@ -7,10 +7,9 @@ edition = "2021"
 crate-type = ["rlib"]
 
 [features]
-default = ["alloc", "std", "xdrs"]
-alloc = ["xdrs", "xdrs/alloc"]
+default = ["alloc", "std", ]
+alloc = ["xdrs/alloc"]
 std = ["alloc"]
-xdrs = []
 spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
@@ -42,7 +41,7 @@ features = []
 
 [dependencies.groundhog_scp]
 workspace = true
-features = ["std", "xdrs"]
+features = ["std"]
 
 [dependencies.groundhog-xdr]
 workspace = true

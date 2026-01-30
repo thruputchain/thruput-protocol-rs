@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3ce81d1976cd44a691cfe08935ab26a198ef2ec
+// Generated from xdrc commit: b22981ff9f87f13bd011689674dc789af2bddf57
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -16,12 +16,12 @@ use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
 
-#[cfg(feature="std")]
+#[cfg(feature = "std")]
 use std::io::{Read, Write};
 
-#[cfg(feature="xdrs")]
+
 use xdrs::*;
-#[cfg(feature="spec")]
+#[cfg(feature = "spec")]
 use xdrs::xdr_repr::*;
 
 
@@ -37,7 +37,7 @@ use ::serde_arrays;
 // -- host def
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -57,7 +57,7 @@ pub struct HostDef {
 
 // LayoutUnit maps a unit_type:unit_shard to a cluster host.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -68,7 +68,7 @@ pub struct LayoutUnit {
 
 // LayoutDef maps all system units to cluster hosts.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -80,7 +80,7 @@ pub struct LayoutDef {
 // -- cluster config
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]

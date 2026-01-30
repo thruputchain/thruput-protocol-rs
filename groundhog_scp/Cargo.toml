@@ -7,10 +7,8 @@ edition = "2021"
 crate-type = ["rlib"]
 
 [features]
-default = ["alloc", "std", "xdrs"]
-alloc = ["xdrs", "xdrs/alloc"]
-std = ["alloc"]
-xdrs = []
+default = []
+std = []
 spec = [] # enable dump of XDR specs
 serde = [
     "dep:serde",
