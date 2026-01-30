@@ -534,9 +534,9 @@ fn generate_syscall_uninit_decl(
     };
 
     let u64_args =
-        generate_u64_syscall_args(&syscall, type_map, syscall_input_count);
+        generate_u64_syscall_args(syscall, type_map, syscall_input_count);
     let uninit_syscall_inputs =
-        generate_uninit_syscall_inputs(&syscall, type_map);
+        generate_uninit_syscall_inputs(syscall, type_map);
 
     let uninit_ident = format_ident!("uninit_{}", &syscall.name);
     let syscall_no = format_ident!("k{}", &syscall.name);
@@ -577,8 +577,8 @@ fn generate_syscall_raw_decl(
     type_map: &TypeMap,
     doc: Option<&SyscallDoc>,
 ) -> TokenStream2 {
-    let raw_syscall_inputs = generate_raw_syscall_args(&syscall, type_map);
-    let forward_args = generate_raw_through_calls(&syscall, type_map);
+    let raw_syscall_inputs = generate_raw_syscall_args(syscall, type_map);
+    let forward_args = generate_raw_through_calls(syscall, type_map);
 
     let uninit_ident = format_ident!("uninit_{}", &syscall.name);
     let raw_ident = format_ident!("raw_{}", &syscall.name);
@@ -956,13 +956,13 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     let decls = spec.syscalls.iter().map(|func| {
         let doc = docs.get(&func.name);
         let uninit = generate_syscall_uninit_decl(
-            &func,
+            func,
             &type_map,
             spec.syscall_input_count,
             doc,
         );
-        let raw = generate_syscall_raw_decl(&func, &type_map, doc);
-        let result = generate_syscall_result_decl(&func, &type_map, doc);
+        let raw = generate_syscall_raw_decl(func, &type_map, doc);
+        let result = generate_syscall_result_decl(func, &type_map, doc);
         quote! {
             #uninit
             #raw
@@ -988,10 +988,7 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path);
 
-    let lines = spec
-        .syscalls
-        .iter()
-        .map(|func| generate_syscall_no_line(&func));
+    let lines = spec.syscalls.iter().map(generate_syscall_no_line);
 
     quote! {
         /// Syscall numbers identifying each system call.
