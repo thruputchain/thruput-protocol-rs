@@ -1,25 +1,49 @@
 [workspace]
 members = [
+    "groundhog-xdr-macros",
     "groundhog-xdr",
     "groundhog_rpc",
     "groundhog_scp",
     "groundhog_coordinator",
     "groundhog_hogx",
     "bin/rpcthroughput_server",
-    "macros",
     "groundhog_xdr_syscall_tests",
     "hogexec-internal",
 ]
 resolver = "2"
 
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Groundhog Team"]
+license = "Apache-2.0"  
+publish = ["groundhog"]
+description = "Groundhog Protocol"
+repository = "https://github.com/groundhogchain/protocol_rs.git"
+homepage = "https://github.com/groundhogchain/protocol_rs.git"
+keywords = ["groundhog"]
+categories = ["blockchain"]
+
+# These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-xdrs = { git = "ssh://git@github.com/groundhogchain/xdrs.git", features = [
-    "int128_xdr",
+groundhog-xdr = {path = "groundhog-xdr", version = "=0.1.0", registry = "groundhog"}
+groundhog-xdr-macros = {path = "groundhog-xdr-macros", version = "=0.1.0", registry = "groundhog"}
+groundhog_scp = {path = "groundhog_scp", version = "=0.1.0", registry = "groundhog"}
+groundhog_coordinator = {path = "groundhog_coordinator", version = "=0.1.0", registry = "groundhog"}
+groundhog_hogx = {path = "groundhog_hogx", version = "=0.1.0", registry = "groundhog"}
+groundhog_rpc = {path = "groundhog_rpc", version = "=0.1.0", registry = "groundhog"}
+hogexec-internal = {path = "hogexec-internal", version = "=0.1.0", registry = "groundhog"}
+macros = {path = "macros", version = "=0.1.0", registry = "groundhog"}
+
+xdrs = { registry = "groundhog", version = "0.3.0", features = [
+    "int128",
     "derive",
     "ns",
 ] }
-rpc_driver = { git = "ssh://git@github.com/groundhogchain/xdr_rpc.git" }
-xdr-common = { git = "ssh://git@github.com/groundhogchain/xdrs.git" }
+rpc_driver = { version = "0.1.3", registry = "groundhog" }
+xdr-common = { version = "0.3.0", registry = "groundhog" }
+xdr-repr = { version = "0.3.0", registry = "groundhog" }
+xdr-derive = { version = "0.3.0", registry = "groundhog" }
 serde_with = { version = "3.16.1" }
 
 [profile.dev]

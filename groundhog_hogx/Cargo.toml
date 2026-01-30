@@ -42,20 +42,20 @@ optional = true
 features = []
 
 [dependencies.groundhog_scp]
-path = "../groundhog_scp"
+workspace = true
 features = ["std", "xdrs"]
 
 [dependencies.groundhog-xdr]
-path = "../groundhog-xdr"
+workspace = true
 features = ["std", "xdrs"]
 
 [dependencies.groundhog_coordinator]
-path = "../groundhog_coordinator"
+workspace = true
 features = ["std", "xdrs"]
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "int128_xdr", "ns", "alloc"]
+features = ["derive", "alloc"]
 
 [dependencies.rpc_driver]
 workspace = true

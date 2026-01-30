@@ -40,12 +40,12 @@ optional = true
 features = []
 
 [dependencies.groundhog-xdr]
-path = "../groundhog-xdr"
+workspace = true
 features = ["std", "xdrs"]
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "int128_xdr", "ns", "alloc"]
+features = ["derive", "int128", "ns", "alloc"]
 
 [dependencies.rpc_driver]
 workspace = true

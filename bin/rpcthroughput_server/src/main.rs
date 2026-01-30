@@ -22,13 +22,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let server = rpc_driver::RpcServer::new(service_map, listener);
 
-    tokio::spawn(async move {
-        server
-            .run()
-            .await
-            .map_err(|e| eprintln!("Error running RPC server: {}", e))
-            .unwrap();
-    });
+    let _ = server.start().await;
 
     println!(
         "RPC Throughput Server running with blank_rpc implementation. Press Ctrl+C to stop."

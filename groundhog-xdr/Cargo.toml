@@ -1,7 +1,16 @@
 [package]
 name = "groundhog-xdr"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+authors = ["Groundhog Team"]
+license = "Apache-2.0"  
+publish = ["groundhog"]
+description = "Async ONC-RPC (RFC 5531) client/server library built on tokio."
+repository = "https://github.com/groundhogchain/rpc_rs"
+homepage = "https://github.com/groundhogchain/rpc_rs"
+readme = "../README.md"
+keywords = ["xdr", "rpc"]
+categories = ["rpc"]
 
 [lib]
 crate-type = ["rlib"]
@@ -11,10 +20,11 @@ default = []
 alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
 std = ["alloc"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
-serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde"]
+# Additionally, the serde_arrays::hex feature requires an allocator
+serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde", "serde_arrays/alloc"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
-syscalls = ["dep:groundhog_xdr_macros", "dep:thiserror"]
+syscalls = ["dep:groundhog-xdr-macros", "dep:thiserror"]
 syscalls_mock = ["syscalls"]                                              # required for native_exec integration
 
 [dependencies.xdrs]
@@ -37,8 +47,8 @@ workspace = true
 optional = true
 features = []
 
-[dependencies.groundhog_xdr_macros]
-path = "../macros"
+[dependencies.groundhog-xdr-macros]
+workspace = true
 optional = true
 
 [dependencies.thiserror]
