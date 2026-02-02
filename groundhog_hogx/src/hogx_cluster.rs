@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b22981ff9f87f13bd011689674dc789af2bddf57
+// Generated from xdrc commit: 4cdeb628f95f47a7054bbf893ab281e195473e83
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -66,6 +66,35 @@ pub struct LayoutUnit {
     pub host_id: StringM,
 }
 
+// LayoutPorts specifies service ports.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct LayoutPorts {
+    // coordinator
+    pub coordinator_public_validator_port: u32,
+    pub coordinator_public_wallet_port: u32,
+    pub coordinator_private_scheduler_port: u32,
+    pub coordinator_private_metrics_port: u32,
+    pub coordinator_scpd_local_port: u32,
+    pub scpd_coordinator_local_port: u32,
+    // mempool
+    pub mempool_coordinator_private_port: u32,
+    pub mempool_exec_private_port: u32,
+    pub mempool_db_private_port: u32,
+    pub mempool_event_private_port: u32,
+    // exec
+    pub exec_mempool_private_port: u32,
+    pub exec_db_private_port: u32,
+    // db
+    pub db_exec_private_port: u32,
+    // event
+    pub event_mempool_private_port: u32,
+    pub event_exec_private_port: u32,
+}
+
 // LayoutDef maps all system units to cluster hosts.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -75,6 +104,7 @@ pub struct LayoutUnit {
 pub struct LayoutDef {
     pub layout_id: StringM,
     pub layout_units: VecM<LayoutUnit>,
+    pub layout_ports: LayoutPorts,
 }
 
 // -- cluster config
