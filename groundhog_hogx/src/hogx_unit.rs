@@ -105,50 +105,6 @@ pub struct UnitBuild {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitAgreement {
-    // can use link variables
-    pub meta: StringMap,
-    // can use link variables
-    pub endpoint: StringMap,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct UnitCommand {
-    // can use link variables
-    pub binary: Path,
-    // can use link variables
-    pub flag: VecM<Flag>,
-    // can use link variables
-    pub env: StringMap,
-    // config files land in var_dir; can use link variables
-    pub files: Files,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct UnitDef {
-    pub id: UnitID,
-    pub build: UnitBuild,
-    // can use link variables
-    pub agreement: UnitAgreement,
-    // can use link variables
-    pub command: UnitCommand,
-}
-
-// output: linked definitions
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct UnitAgreementLinked {
     pub meta: StringMap,
     pub endpoint: SocketAddressMap,
 }
@@ -158,7 +114,7 @@ pub struct UnitAgreementLinked {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct UnitCommandLinked {
+pub struct UnitCommand {
     pub binary_file: Path,
     // holds persistent application data; does not depend on system_id
     pub app_dir: Path,
@@ -181,11 +137,13 @@ pub struct UnitCommandLinked {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct UnitDefLinked {
+pub struct UnitDef {
     pub id: UnitID,
     pub build: UnitBuild,
-    pub agreement: UnitAgreementLinked,
-    pub command: UnitCommandLinked,
+    // can use link variables
+    pub agreement: UnitAgreement,
+    // can use link variables
+    pub command: UnitCommand,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -238,7 +196,6 @@ pub enum ProcessState {
 pub struct UnitState {
     pub time: Timestamp,
     pub def: UnitDef,
-    pub def_linked: UnitDefLinked,
     pub started: Timestamp,
     pub process_state: ProcessState,
 }
