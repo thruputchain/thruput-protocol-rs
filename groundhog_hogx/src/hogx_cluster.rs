@@ -75,7 +75,7 @@ pub struct LayoutUnit {
 pub struct LayoutPorts {
     // coordinator
     pub coordinator_public_validator_port: u32,
-    pub coordinator_public_wallet_port: u32,
+    pub coordinator_private_wallet_port: u32,
     pub coordinator_private_scheduler_port: u32,
     pub coordinator_private_metrics_port: u32,
     pub coordinator_scpd_local_port: u32,
