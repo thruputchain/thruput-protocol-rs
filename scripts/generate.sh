@@ -37,6 +37,9 @@ rpcs=(
 
 coordinators=(
   discovery.x
+  config.x
+  wallet_kit.x
+  dogwood_kit.x
 )
 
 hogxs=(
