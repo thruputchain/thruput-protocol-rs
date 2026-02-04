@@ -108,6 +108,7 @@ pub struct LayoutPorts {
 #[repr(C)]
 pub struct LayoutConfig {
     pub exec_num_threads: u32,
+    pub db_ram_bytes: u64,
 }
 
 // LayoutDef maps all system units to cluster hosts.
