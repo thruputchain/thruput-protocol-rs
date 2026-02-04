@@ -85,14 +85,19 @@ pub struct LayoutPorts {
     pub mempool_exec_private_port: u32,
     pub mempool_db_private_port: u32,
     pub mempool_event_private_port: u32,
+    pub mempool_auth_private_port: u32,
     // exec
     pub exec_mempool_private_port: u32,
-    pub exec_db_private_port: u32,
     // db
     pub db_exec_private_port: u32,
+    pub db_mempool_private_port: u32,
+    pub db_auth_private_port: u32,
     // event
     pub event_mempool_private_port: u32,
     pub event_exec_private_port: u32,
+    // auth
+    pub auth_db_private_port: u32,
+    pub auth_mempool_private_port: u32,
 }
 
 // LayoutDef maps all system units to cluster hosts.
