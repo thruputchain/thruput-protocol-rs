@@ -36,7 +36,27 @@ use ::serde_arrays;
 
 // input
 
-pub type SystemID = StringM;
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum SystemType {
+    SYSTEM_VALIDATOR = 1 as i32,
+    SYSTEM_LOADGEN = 2 as i32,
+}
+impl TryFrom<i32> for SystemType {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(Self::SYSTEM_VALIDATOR),
+            2 => Ok(Self::SYSTEM_LOADGEN),
+            _ => Err(()),
+        }
+    }
+}
+
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -45,11 +65,16 @@ pub type SystemID = StringM;
 #[derive(Copy)]
 #[repr(i32)]
 pub enum UnitType {
+    // validator
     UNIT_COORDINATOR = 1 as i32,
+
     UNIT_MEMPOOL = 2 as i32,
     UNIT_EXEC = 3 as i32,
     UNIT_DB = 4 as i32,
     UNIT_EVENT = 5 as i32,
+
+    // loadgen
+    UNIT_LOADGEN = 100 as i32,
 }
 impl TryFrom<i32> for UnitType {
     type Error = ();
@@ -60,6 +85,7 @@ impl TryFrom<i32> for UnitType {
             3 => Ok(Self::UNIT_EXEC),
             4 => Ok(Self::UNIT_DB),
             5 => Ok(Self::UNIT_EVENT),
+            100 => Ok(Self::UNIT_LOADGEN),
             _ => Err(()),
         }
     }
@@ -71,10 +97,20 @@ impl TryFrom<i32> for UnitType {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
+pub struct SystemID {
+    pub system_type: SystemType,
+    // an identifier for a sequence of executions of a system instance
+    pub succession: StringM,
+    pub session: StringM,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
 pub struct UnitRole {
-    // sets HOGX_UNIT_TYPE
     pub unit_type: UnitType,
-    // sets HOGX_UNIT_SHARD
     pub unit_shard: StringM,
 }
 
@@ -84,7 +120,6 @@ pub struct UnitRole {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitID {
-    // sets HOGX_UNIT_SYSTEM_ID; identifies a set of unit instances comprising a system deployment
     pub system_id: SystemID,
     pub unit_role: UnitRole,
 }
@@ -95,7 +130,6 @@ pub struct UnitID {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitBuild {
-    // sets HOGX_UNIT_PKG
     pub pkg: StringM,
 }
 
@@ -116,19 +150,19 @@ pub struct UnitAgreement {
 #[repr(C)]
 pub struct UnitCommand {
     pub binary_file: Path,
-    // holds persistent application data; does not depend on system_id
+    // for persistent application data; APP_ROOT/system_id/unit_type/unit_shard
     pub app_dir: Path,
-    // holds configs, logs and core dumps; mounted as /var; depends on system_id
+    // for configs, logs and core dumps; VAR_ROOT/system_id/session_id/unit_type/unit_shard
     pub var_dir: Path,
-    // mounted as /tmp; depends on system_id
+    // for scratch; TMP_ROOT/system_id/session_id/unit_type/unit_shard
     pub tmp_dir: Path,
-    // resides in var_dir
+    // var_dir/unit_type-unit_shard.stdout
     pub stdout_file: Path,
-    // resides in var_dir
+    // var_dir/unit_type-unit_shard.stderr
     pub stderr_file: Path,
     pub flag: VecM<Flag>,
     pub env: StringMap,
-    // config files placed in var_dir
+    // supporting files are placed in var_dir
     pub files: Files,
 }
 
