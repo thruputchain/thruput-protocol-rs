@@ -100,6 +100,16 @@ pub struct LayoutPorts {
     pub auth_mempool_private_port: u32,
 }
 
+// LayoutConfig provides services operational parameters.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct LayoutConfig {
+    pub exec_num_threads: u32,
+}
+
 // LayoutDef maps all system units to cluster hosts.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -110,6 +120,7 @@ pub struct LayoutDef {
     pub layout_id: StringM,
     pub layout_units: VecM<LayoutUnit>,
     pub layout_ports: LayoutPorts,
+    pub layout_config: LayoutConfig,
 }
 
 // -- cluster config
