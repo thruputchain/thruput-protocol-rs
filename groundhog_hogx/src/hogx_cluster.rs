@@ -119,6 +119,7 @@ pub struct LayoutConfig {
 #[repr(C)]
 pub struct LayoutDef {
     pub layout_id: StringM,
+    pub system_type: SystemType,
     pub layout_units: VecM<LayoutUnit>,
     pub layout_ports: LayoutPorts,
     pub layout_config: LayoutConfig,
