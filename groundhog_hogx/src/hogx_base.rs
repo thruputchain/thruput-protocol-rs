@@ -65,6 +65,8 @@ pub struct KeyString {
 
 pub type StringMap = VecM::<KeyString>;
 
+pub type SocketAddress = StringM;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
