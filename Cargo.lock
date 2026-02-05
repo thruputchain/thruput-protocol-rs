@@ -299,7 +299,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_xdr_syscall_tests"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "groundhog-xdr",
 ]
@@ -553,7 +553,7 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "groundhog_rpc",
