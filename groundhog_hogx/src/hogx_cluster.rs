@@ -53,26 +53,15 @@ pub struct HostDef {
     pub host_config: HostConfig,
 }
 
-// -- system layouts
+// -- system definition and layouts
 
-// LayoutUnit maps a unit_type:unit_shard to a cluster host.
+// SystemPorts specifies service ports.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct LayoutUnit {
-    pub unit_role: UnitRole,
-    pub host_id: StringM,
-}
-
-// LayoutPorts specifies service ports.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct LayoutPorts {
+pub struct SystemPorts {
     // coordinator
     pub coordinator_public_port: u32,
     pub coordinator_public_wallet_port: u32,
@@ -100,29 +89,68 @@ pub struct LayoutPorts {
     pub auth_mempool_private_port: u32,
 }
 
-// LayoutConfig provides services operational parameters.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct LayoutConfig {
+pub struct ValidatorSystemConfig {
+    pub ports: SystemPorts,
     pub exec_num_threads: u32,
     pub db_ram_bytes: u64,
 }
 
-// LayoutDef maps all system units to cluster hosts.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct LayoutDef {
-    pub layout_id: StringM,
-    pub system_type: SystemType,
-    pub layout_units: VecM<LayoutUnit>,
-    pub layout_ports: LayoutPorts,
-    pub layout_config: LayoutConfig,
+pub struct LoadgenSystemConfig {
+    pub validator_config: ValidatorSystemConfig,
+    //
+    pub coordinator_private_debug_port: u32,
+    pub loadgen_private_port: u32,
+    //
+    pub num_accounts: u64,
+    pub txs_per_block: u64,
+    pub num_blocks: u64,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[repr(i32)]
+pub enum SystemConfig {
+    // case SYSTEM_VALIDATOR:
+    //   ValidatorSystemConfig validator_config;
+    SYSTEM_VALIDATOR { validator_config: ValidatorSystemConfig } = SystemType::SYSTEM_VALIDATOR as i32,
+    // case SYSTEM_LOADGEN:
+    //   LoadgenSystemConfig loadgen_config;
+    SYSTEM_LOADGEN { loadgen_config: LoadgenSystemConfig } = SystemType::SYSTEM_LOADGEN as i32,
+    
+}
+
+// LayoutUnit maps (unit_type, unit_shard) to a host.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct LayoutUnit {
+    pub unit_role: UnitRole,
+    pub host_id: StringM,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SystemDef {
+    pub id: StringM,
+    pub config: SystemConfig,
+    pub layout: VecM<LayoutUnit>,
 }
 
 // -- cluster config
@@ -134,12 +162,21 @@ pub struct LayoutDef {
 #[repr(C)]
 pub struct ClusterConfig {
     pub host_defs: VecM<HostDef>,
-    pub layout_defs: VecM<LayoutDef>,
+    pub system_defs: VecM<SystemDef>,
 }
 
 
 //
 // XDR internals below this point
 //
+
+impl SystemConfig {
+    pub fn system_type(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
+        }
+    }
+}
 
 
