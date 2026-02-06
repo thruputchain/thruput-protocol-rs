@@ -146,13 +146,15 @@ pub struct LayoutUnit {
 
 pub type SystemLayout = VecM::<LayoutUnit>;
 
+pub type AssemblyID = StringM;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SystemDef {
-    pub id: SystemID,
+    pub id: AssemblyID,
     pub config: SystemConfig,
     pub layout: SystemLayout,
 }

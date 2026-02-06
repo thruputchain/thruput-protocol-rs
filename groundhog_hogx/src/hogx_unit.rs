@@ -97,9 +97,9 @@ impl TryFrom<i32> for UnitType {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SystemID {
+pub struct Context {
+    // XXX: => assembly id
     pub system_type: SystemType,
-    // an identifier for a sequence of executions of a system instance
     pub chain: StringM,
     pub session: StringM,
 }
@@ -120,7 +120,7 @@ pub struct UnitRole {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct UnitID {
-    pub system_id: SystemID,
+    pub ctx: Context,
     pub host_id: HostID,
     pub unit_role: UnitRole,
 }
