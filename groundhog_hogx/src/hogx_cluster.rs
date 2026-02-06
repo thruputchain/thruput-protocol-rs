@@ -153,7 +153,7 @@ pub type AssemblyID = StringM;
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SystemDef {
+pub struct AssemblyDef {
     pub id: AssemblyID,
     pub config: SystemConfig,
     pub layout: SystemLayout,
@@ -168,7 +168,7 @@ pub struct SystemDef {
 #[repr(C)]
 pub struct ClusterConfig {
     pub host_defs: VecM<HostDef>,
-    pub system_defs: VecM<SystemDef>,
+    pub assembly_defs: VecM<AssemblyDef>,
 }
 
 
