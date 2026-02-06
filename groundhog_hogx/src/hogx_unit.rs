@@ -100,7 +100,7 @@ impl TryFrom<i32> for UnitType {
 pub struct Context {
     pub assembly_id: AssemblyID,
     pub chain: StringM,
-    pub session: StringM,
+    pub uniquifier: StringM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
