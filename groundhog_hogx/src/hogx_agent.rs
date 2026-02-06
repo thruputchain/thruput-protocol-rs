@@ -366,6 +366,7 @@ impl HogxAgent_HogxAgent1_Client {
 pub struct HogxTailChunk {
     pub tail_id: StringM,
     pub unit_id: UnitID,
+    pub index: u64,
     pub chunk: BytesM,
 }
 
