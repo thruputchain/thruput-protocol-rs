@@ -1,14 +1,13 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4cdeb628f95f47a7054bbf893ab281e195473e83
+// Generated from xdrc commit: 8afc1e2714d6876f31ee25c4344341aefc1b9c5f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
-#![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 #![allow(clippy::unnecessary_cast)]
 
@@ -18,15 +17,12 @@ use core::ops::{Deref, DerefMut};
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
-
-
 use xdrs::*;
-#[cfg(feature = "spec")]
-use xdrs::xdr_repr::*;
+
 
 
 #[cfg(feature = "serde")]
-use ::serde::{Serialize, Deserialize};
+use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
@@ -38,7 +34,7 @@ pub type Seconds = i64;
 // ValidatorConfig holds the network configuration of a validator.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorConfig {
@@ -48,7 +44,7 @@ pub struct ValidatorConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct WalletConfig {
@@ -58,7 +54,7 @@ pub struct WalletConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DiscoveryConfig {
@@ -69,7 +65,7 @@ pub struct DiscoveryConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct RouterConfig {
@@ -78,7 +74,7 @@ pub struct RouterConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DogwoodConfig {
@@ -106,7 +102,7 @@ pub struct DogwoodConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct MempoolConfig {
@@ -117,7 +113,7 @@ pub struct MempoolConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct CatchupConfig {
@@ -127,7 +123,7 @@ pub struct CatchupConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct BatonConfig {
@@ -139,7 +135,7 @@ pub struct BatonConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct RepairConfig {
@@ -151,7 +147,7 @@ pub struct RepairConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct StorageConfig {
@@ -162,7 +158,7 @@ pub struct StorageConfig {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Config {

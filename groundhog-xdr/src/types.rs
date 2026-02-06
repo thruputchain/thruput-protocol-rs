@@ -1,14 +1,13 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4cdeb628f95f47a7054bbf893ab281e195473e83
+// Generated from xdrc commit: 8afc1e2714d6876f31ee25c4344341aefc1b9c5f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
-#![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 #![allow(clippy::unnecessary_cast)]
 
@@ -18,7 +17,6 @@ use core::ops::{Deref, DerefMut};
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
-
 #[cfg(feature = "xdrs")]
 use xdrs::*;
 #[cfg(feature = "spec")]
@@ -26,7 +24,7 @@ use xdrs::xdr_repr::*;
 
 
 #[cfg(feature = "serde")]
-use ::serde::{Serialize, Deserialize};
+use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
@@ -122,13 +120,15 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 64] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 64] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 // 
@@ -182,13 +182,15 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 // 
@@ -241,13 +243,15 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 64] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 64] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 /// Represents the cryptographic scheme used for a signature or public key.
@@ -380,13 +384,15 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r SHA256Hash {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 /// Represents a 256-bit contract address.
@@ -442,13 +448,15 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r ContractAddress {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 /// Each ContractAddress owns a namespace of storage keys.
@@ -562,13 +570,15 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
     }
 }
 #[cfg(feature = "xdrs")]
+
 impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
-    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
-        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
-        let val = Self::from(arr);
-        Ok(val)
-    }
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
 }
+
 
 
 /// Union of a StorageKey type over the various storage key types.

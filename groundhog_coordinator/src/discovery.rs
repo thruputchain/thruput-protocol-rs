@@ -1,14 +1,13 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4cdeb628f95f47a7054bbf893ab281e195473e83
+// Generated from xdrc commit: 8afc1e2714d6876f31ee25c4344341aefc1b9c5f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
-#![allow(unexpected_cfgs)]
 #![allow(unused_variables)]
 #![allow(clippy::unnecessary_cast)]
 
@@ -18,15 +17,12 @@ use core::ops::{Deref, DerefMut};
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
-
-
 use xdrs::*;
-#[cfg(feature = "spec")]
-use xdrs::xdr_repr::*;
+
 
 
 #[cfg(feature = "serde")]
-use ::serde::{Serialize, Deserialize};
+use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
@@ -40,7 +36,7 @@ pub type ValidatorSecretKey = Ed25519SecretKey;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorPublicInfo {
@@ -50,7 +46,7 @@ pub struct ValidatorPublicInfo {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorPrivateInfo {
@@ -60,7 +56,7 @@ pub struct ValidatorPrivateInfo {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct QuorumSetSnapshot {
@@ -70,7 +66,7 @@ pub struct QuorumSetSnapshot {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SignedQuorumSetSnapshot {
@@ -81,7 +77,7 @@ pub struct SignedQuorumSetSnapshot {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorInfoSnapshot {
@@ -91,7 +87,7 @@ pub struct ValidatorInfoSnapshot {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SignedValidatorInfoSnapshot {
@@ -102,7 +98,7 @@ pub struct SignedValidatorInfoSnapshot {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-#[cfg_attr(feature = "spec", derive(XDR))]
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct KnownQuorumSets {
