@@ -144,15 +144,17 @@ pub struct LayoutUnit {
     pub host_id: HostID,
 }
 
+pub type SystemLayout = VecM::<LayoutUnit>;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SystemDef {
-    pub id: StringM,
+    pub id: VecM<SystemID>,
     pub config: SystemConfig,
-    pub layout: VecM<LayoutUnit>,
+    pub layout: VecM<SystemLayout>,
 }
 
 // -- cluster config
