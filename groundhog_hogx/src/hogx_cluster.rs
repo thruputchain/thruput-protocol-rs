@@ -152,7 +152,7 @@ pub type SystemLayout = VecM::<LayoutUnit>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SystemDef {
-    pub id: VecM<SystemID>,
+    pub id: SystemID,
     pub config: SystemConfig,
     pub layout: VecM<SystemLayout>,
 }
