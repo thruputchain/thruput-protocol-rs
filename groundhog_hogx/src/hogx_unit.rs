@@ -98,8 +98,7 @@ impl TryFrom<i32> for UnitType {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Context {
-    // XXX: => assembly id
-    pub system_type: SystemType,
+    pub assembly_id: AssemblyID,
     pub chain: StringM,
     pub session: StringM,
 }
