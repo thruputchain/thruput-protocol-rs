@@ -100,7 +100,7 @@ impl TryFrom<i32> for UnitType {
 pub struct SystemID {
     pub system_type: SystemType,
     // an identifier for a sequence of executions of a system instance
-    pub succession: StringM,
+    pub chain: StringM,
     pub session: StringM,
 }
 
