@@ -121,6 +121,7 @@ pub struct UnitRole {
 #[repr(C)]
 pub struct UnitID {
     pub system_id: SystemID,
+    pub host_id: HostID,
     pub unit_role: UnitRole,
 }
 

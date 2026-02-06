@@ -36,13 +36,15 @@ use ::serde_arrays;
 
 // -- host def
 
+pub type HostID = StringM;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct HostDef {
-    pub host_id: StringM,
+    pub host_id: HostID,
     pub host_tags: VecM<Tag>,
     //
     pub ssh_user: StringM,
@@ -139,7 +141,7 @@ pub enum SystemConfig {
 #[repr(C)]
 pub struct LayoutUnit {
     pub unit_role: UnitRole,
-    pub host_id: StringM,
+    pub host_id: HostID,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
