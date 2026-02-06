@@ -154,7 +154,7 @@ pub type SystemLayout = VecM::<LayoutUnit>;
 pub struct SystemDef {
     pub id: SystemID,
     pub config: SystemConfig,
-    pub layout: VecM<SystemLayout>,
+    pub layout: SystemLayout,
 }
 
 // -- cluster config
