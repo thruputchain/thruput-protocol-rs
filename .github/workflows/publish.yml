@@ -52,7 +52,24 @@ jobs:
       - name: push tag
         run: |
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
-          git push origin ${{ steps.publish-tag.outputs.tag }}
+          TAG="${{ steps.publish-tag.outputs.tag }}"
+          LOCAL_COMMIT=$(git rev-parse "$TAG")
+          # Check if tag exists on remote and get its commit SHA
+          REMOTE_TAG_REF=$(git ls-remote origin "refs/tags/$TAG" | cut -f1)
+          if [ -n "$REMOTE_TAG_REF" ]; then
+            # Tag exists on remote, verify it points to the same commit
+            if [ "$REMOTE_TAG_REF" = "$LOCAL_COMMIT" ]; then
+              echo "Tag $TAG already exists on remote and points to the same commit ($LOCAL_COMMIT). Skipping push."
+            else
+              echo "Error: Tag $TAG exists on remote but points to different commit!"
+              echo "Remote: $REMOTE_TAG_REF"
+              echo "Local: $LOCAL_COMMIT"
+              exit 1
+            fi
+          else
+            # Tag doesn't exist on remote, push it
+            git push origin "$TAG"
+          fi
           git remote set-url origin git@github.com:${{ github.repository }}.git
 
       - name: publish
