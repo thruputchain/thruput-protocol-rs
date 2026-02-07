@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 8afc1e2714d6876f31ee25c4344341aefc1b9c5f
+// Generated from xdrc commit: 293ce06095d8b948e6769226de74c901ea535229
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -156,6 +156,8 @@ pub struct UnitCommand {
     pub stdout_file: Path,
     // var_dir/unit_type-unit_shard.stderr
     pub stderr_file: Path,
+    // var_dir/unit_type-unit_shard.combined
+    pub combined_file: Path,
     pub flag: VecM<Flag>,
     pub env: StringMap,
     // supporting files are placed in var_dir
