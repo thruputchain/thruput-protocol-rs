@@ -43,6 +43,7 @@ coordinators=(
 )
 
 hogxs=(
+    port.x
     hogx_agent.x
     hogx_base.x
     hogx_cluster.x
