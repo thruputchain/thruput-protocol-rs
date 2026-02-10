@@ -152,8 +152,8 @@ pub enum WireStorageItem {
     //   AddressAuthData auth_data;
     kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData as i32,
     // case kItemTypeRetrocausalQueue:
-    //   void;
-    kItemTypeRetrocausalQueue = StorageItemType::kItemTypeRetrocausalQueue as i32,
+    //   RetrocausalQueueMetadata metadata;
+    kItemTypeRetrocausalQueue { metadata: RetrocausalQueueMetadata } = StorageItemType::kItemTypeRetrocausalQueue as i32,
     // case kItemTypeReplayCacheData:
     //   void;
     kItemTypeReplayCacheData = StorageItemType::kItemTypeReplayCacheData as i32,

@@ -100,6 +100,24 @@ pub struct RetrocausalQueuePastBlockConsumeDelta {
     pub partial_consumed_number: u64,
 }
 
+// Root metadata for a Retrocausal Queue, stored at the item key.
+// Tracks both head (consume state) and tail (production state).
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct RetrocausalQueueMetadata {
+    // Current consume state - where consumption left off.
+    pub consume_state: RetrocausalQueuePastBlockConsumeDelta,
+    // The highest block number currently live (written and not fully consumed).
+    // New blocks will be numbered max_live_block_num + 1.
+    // 0 if no blocks have been produced yet.
+    pub max_live_block_num: u64,
+    // Total number of entries currently live in the queue (for cost calculation).
+    pub live_entries: u64,
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]

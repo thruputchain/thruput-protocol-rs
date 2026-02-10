@@ -42,6 +42,8 @@ pub struct StorageCostModelXdr {
     pub base_contract_deployment_cost: int128_xdr,
     pub contract_deployment_cost_per_byte: int128_xdr,
     pub auth_per_key_cost: int128_xdr,
+    pub rcq_cost_per_entry: int128_xdr,
+    pub rcq_cost_per_block: int128_xdr,
     pub replay_cache_cost_per_entry: int128_xdr,
     pub balance_cost: int128_xdr,
 }

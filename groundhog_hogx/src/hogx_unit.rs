@@ -90,6 +90,8 @@ impl TryFrom<i32> for UnitType {
 }
 
 
+pub type ChainID = StringM;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -97,7 +99,7 @@ impl TryFrom<i32> for UnitType {
 #[repr(C)]
 pub struct Context {
     pub assembly_id: AssemblyID,
-    pub chain: StringM,
+    pub chain_id: VecM<ChainID>,
     pub uniquifier: StringM,
 }
 
