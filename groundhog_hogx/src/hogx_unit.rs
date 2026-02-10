@@ -99,7 +99,7 @@ pub type ChainID = StringM;
 #[repr(C)]
 pub struct Context {
     pub assembly_id: AssemblyID,
-    pub chain_id: VecM<ChainID>,
+    pub chain_id: ChainID,
     pub uniquifier: StringM,
 }
 
