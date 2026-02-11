@@ -229,7 +229,7 @@ pub enum ProcessState {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct UnitTcpInfo {
+pub struct ProcessTcpInfo {
     pub listening: VecM<SocketAddress>,
     pub connections: VecM<SocketConnection>,
 }
@@ -246,7 +246,7 @@ pub struct UnitState {
     pub started: Timestamp,
     pub died: Option<Timestamp>,
     pub process_state: ProcessState,
-    pub tcp_info: UnitTcpInfo,
+    pub tcp_info: Option<ProcessTcpInfo>,
 }
 
 
