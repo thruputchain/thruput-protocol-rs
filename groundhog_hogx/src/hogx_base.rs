@@ -68,6 +68,16 @@ pub type SocketAddress = StringM;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
+pub struct SocketConnection {
+    pub local: SocketAddress,
+    pub remote: SocketAddress,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
 pub struct KeySocketAddress {
     pub key: StringM,
     // ip4 or ip6 + port

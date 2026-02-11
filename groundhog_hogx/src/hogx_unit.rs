@@ -229,6 +229,16 @@ pub enum ProcessState {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
+pub struct UnitTcpInfo {
+    pub listening: VecM<SocketAddress>,
+    pub connections: VecM<SocketConnection>,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
 pub struct UnitState {
     pub time: Timestamp,
     pub def: UnitDef,
