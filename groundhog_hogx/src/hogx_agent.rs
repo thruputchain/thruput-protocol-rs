@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 84fabf8ff739fc6a8d0917c073b267be05fe3db9
+// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -187,23 +187,23 @@ pub struct HogxTailKick {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait HogxAgent_HogxAgent1: Send + Sync {    
-    async fn hogxagent_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn hogxagent_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_host_configure(&self, arg0 : HostConfig) -> Result<HogxHostConfigureResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_host_configure(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : HostConfig) -> Result<HogxHostConfigureResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_host_query(&self) -> Result<HogxHostQueryResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_host_query(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<HogxHostQueryResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_start(&self, arg0 : UnitDef) -> Result<HogxUnitStartResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_start(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : UnitDef) -> Result<HogxUnitStartResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_stop(&self, arg0 : UnitID) -> Result<HogxUnitStopResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_stop(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : UnitID) -> Result<HogxUnitStopResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_query(&self, arg0 : UnitID) -> Result<HogxUnitQueryResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_query(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : UnitID) -> Result<HogxUnitQueryResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_list(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<HogxUnitListResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_clear(&self, arg0 : UnitID) -> Result<HogxUnitClearResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_clear(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : UnitID) -> Result<HogxUnitClearResult, ::rpc_driver::ProgramError>;
     
-    async fn hogxagent_unit_tail(&self, arg0 : HogxTailKick) -> Result<HogxUnitTailResult, ::rpc_driver::ProgramError>;
+    async fn hogxagent_unit_tail(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : HogxTailKick) -> Result<HogxUnitTailResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -223,69 +223,69 @@ impl ::rpc_driver::ServerDispatch for HogxAgent_HogxAgent1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x20011004, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // hogxagent_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_host_configure
             100 => {
                 let args: (HostConfig, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_host_configure(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_host_configure(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_host_query
             110 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_host_query().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_host_query(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_start
             200 => {
                 let args: (UnitDef, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_start(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_start(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_stop
             210 => {
                 let args: (UnitID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_stop(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_stop(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_query
             220 => {
                 let args: (UnitID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_query(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_query(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_list
             230 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_list().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_list(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_clear
             240 => {
                 let args: (UnitID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_clear(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_clear(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxagent_unit_tail
             300 => {
                 let args: (HogxTailKick, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxagent_unit_tail(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxagent_unit_tail(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -370,9 +370,9 @@ pub struct HogxTailChunk {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait HogxTail_HogxTail1: Send + Sync {    
-    async fn hogxtail_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn hogxtail_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn hogxtail_deliver(&self, arg0 : HogxTailChunk) -> Result<bool, ::rpc_driver::ProgramError>;
+    async fn hogxtail_deliver(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : HogxTailChunk) -> Result<bool, ::rpc_driver::ProgramError>;
 }
 
 
@@ -392,20 +392,20 @@ impl ::rpc_driver::ServerDispatch for HogxTail_HogxTail1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x20015004, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // hogxtail_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxtail_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxtail_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // hogxtail_deliver
             100 => {
                 let args: (HogxTailChunk, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.hogxtail_deliver(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.hogxtail_deliver(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),

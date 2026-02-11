@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 84fabf8ff739fc6a8d0917c073b267be05fe3db9
+// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -12,17 +12,15 @@
 #![allow(clippy::unnecessary_cast)]
 
 use crate::*;
-use core::option::Option;
 use core::ops::{Deref, DerefMut};
+use core::option::Option;
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
 use xdrs::*;
 
-
-
 #[cfg(feature = "serde")]
-use ::serde::{{Serialize, Deserialize}};
+use ::serde::{Deserialize, Serialize};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
 
@@ -31,25 +29,30 @@ use ::serde_arrays;
 
 pub type Data = BytesM;
 
-
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait blank_rpc_blank_rpc_v1: Send + Sync {    
-    async fn null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-    
-    async fn echo(&self, arg0 : Data) -> Result<Data, ::rpc_driver::ProgramError>;
-}
+pub trait blank_rpc_blank_rpc_v1: Send + Sync {
+    async fn null(
+        &self,
+        client: &::std::sync::Arc<::rpc_driver::ClientHandle>,
+    ) -> Result<(), ::rpc_driver::ProgramError>;
 
+    async fn echo(
+        &self,
+        client: &::std::sync::Arc<::rpc_driver::ClientHandle>,
+        arg0: Data,
+    ) -> Result<Data, ::rpc_driver::ProgramError>;
+}
 
 #[allow(non_camel_case_types)]
 pub struct blank_rpc_blank_rpc_v1_Dispatcher {
-  inner: Box<dyn blank_rpc_blank_rpc_v1>,
+    inner: Box<dyn blank_rpc_blank_rpc_v1>,
 }
 
 impl blank_rpc_blank_rpc_v1_Dispatcher {
-  pub fn new(inner: Box<dyn blank_rpc_blank_rpc_v1>) -> Self {
-    Self { inner }
-  }
+    pub fn new(inner: Box<dyn blank_rpc_blank_rpc_v1>) -> Self {
+        Self { inner }
+    }
 }
 
 #[async_trait::async_trait]
@@ -57,21 +60,36 @@ impl ::rpc_driver::ServerDispatch for blank_rpc_blank_rpc_v1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(3123124, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(
+        &self,
+        proc: u32,
+        data: &[u8],
+        client: &::std::sync::Arc<::rpc_driver::ClientHandle>,
+    ) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // null
             0 => {
-                let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+                let args: () = xdrs::txs::decode(data)
+                    .map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self
+                    .inner
+                    .null(client)
+                    .await
+                    .map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res)
+                    .map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // echo
             1 => {
-                let args: (Data, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.echo(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+                let args: (Data,) = xdrs::txs::decode(data)
+                    .map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self
+                    .inner
+                    .echo(client, args.0)
+                    .await
+                    .map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res)
+                    .map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
@@ -92,20 +110,24 @@ impl blank_rpc_blank_rpc_v1_Client {
         ::rpc_driver::ProgVers::new(3123124, 1)
     }
     pub async fn null(&self) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+        let data = xdrs::txs::encode(&())
+            .map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+        let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+        xdrs::txs::decode(&buf)
+            .map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn echo(&self, arg0 : &Data) -> Result<Data, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    pub async fn echo(
+        &self,
+        arg0: &Data,
+    ) -> Result<Data, ::rpc_driver::RpcError> {
+        let data = xdrs::txs::encode(&(&arg0))
+            .map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+        let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
+        xdrs::txs::decode(&buf)
+            .map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
-
 
 //
 // XDR internals below this point
 //
-
-

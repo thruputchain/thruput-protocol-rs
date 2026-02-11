@@ -217,20 +217,20 @@ dependencies = [
 
 [[package]]
 name = "groundhog-xdr"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr-macros",
  "serde",
  "serde_with",
  "thiserror",
- "xdr-common 0.4.0",
- "xdrs 0.4.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog-xdr-macros"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2",
@@ -243,7 +243,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_coordinator"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -252,12 +252,12 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdrs 0.4.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_hogx"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -267,25 +267,25 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdrs 0.4.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_rpc"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
  "rpc_driver",
  "serde",
  "serde_with",
- "xdr-common 0.4.0",
- "xdrs 0.4.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_scp"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -293,13 +293,13 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdr-common 0.4.0",
- "xdrs 0.4.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_xdr_syscall_tests"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "groundhog-xdr",
 ]
@@ -324,9 +324,9 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hogexec-internal"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
- "xdrs 0.4.0",
+ "xdrs",
 ]
 
 [[package]]
@@ -541,19 +541,19 @@ dependencies = [
 
 [[package]]
 name = "rpc_driver"
-version = "0.1.3"
+version = "0.3.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "904e1c69dba82c55ef35b04457f0ecb5447628a01d154d13b44e08c9814d5afe"
+checksum = "e1a21ae51cdc53128bc16fac70a07fed80e011f5ed8cf0a6ff1fa0be3b8113f7"
 dependencies = [
  "async-trait",
  "thiserror",
  "tokio",
- "xdrs 0.3.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "async-trait",
  "groundhog_rpc",
@@ -1025,16 +1025,6 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "xdr-common"
-version = "0.3.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "b62c5aaf538c354ea0f8a9b5fe1d07eb2c613e685329b0378c8763a38c12e4e2"
-dependencies = [
- "escape-bytes",
- "hex",
-]
-
-[[package]]
-name = "xdr-common"
 version = "0.4.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "13589a02c1c2081bcd0dea281ddb5f5acc92f83c9c7c339fde54689160bd3f89"
@@ -1043,18 +1033,6 @@ dependencies = [
  "hex",
  "serde",
  "serde_with",
-]
-
-[[package]]
-name = "xdr-derive"
-version = "0.3.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "1e670790cdf36b9eb15e382ca509ad24e3975a8129da3fda73eeefd5f6b77f3a"
-dependencies = [
- "darling 0.20.11",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -1075,18 +1053,7 @@ version = "0.4.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "db68a82d361ca9ad49b6ad4b473f92786b3e8431e1719f19b45c351709bbf5ed"
 dependencies = [
- "xdr-common 0.4.0",
-]
-
-[[package]]
-name = "xdrs"
-version = "0.3.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "d0f1a17575db948aaa375c199ffe62fa2e8f3361643827cab3a19e5a043eb173"
-dependencies = [
- "thiserror",
- "xdr-common 0.3.0",
- "xdr-derive 0.3.0",
+ "xdr-common",
 ]
 
 [[package]]
@@ -1096,8 +1063,8 @@ source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "e15cec8a548a8842bec9f95894bcc2d08b7cfbf47cdef10fcf3bc936c515175e"
 dependencies = [
  "thiserror",
- "xdr-common 0.4.0",
- "xdr-derive 0.4.0",
+ "xdr-common",
+ "xdr-derive",
  "xdr-repr",
 ]
 

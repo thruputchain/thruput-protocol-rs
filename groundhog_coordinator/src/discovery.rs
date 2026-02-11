@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 84fabf8ff739fc6a8d0917c073b267be05fe3db9
+// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -110,9 +110,9 @@ pub struct KnownQuorumSets {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait Discovery_Discovery1: Send + Sync {    
-    async fn discovery_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn discovery_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn discovery_update_quorums(&self, arg0 : KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_driver::ProgramError>;
+    async fn discovery_update_quorums(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_driver::ProgramError>;
 }
 
 
@@ -132,20 +132,20 @@ impl ::rpc_driver::ServerDispatch for Discovery_Discovery1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x3eef0505, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // discovery_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.discovery_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.discovery_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // discovery_update_quorums
             10 => {
                 let args: (KnownQuorumSets, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.discovery_update_quorums(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.discovery_update_quorums(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),

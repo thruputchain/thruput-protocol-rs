@@ -20,7 +20,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let addr = listener.local_addr().unwrap();
     println!("RPC Throughput Server listening on {}", addr);
 
-    let server = rpc_driver::RpcServer::new(service_map, listener);
+    let server = rpc_driver::RpcServer::new(listener, service_map);
 
     let _ = server.start().await;
 
