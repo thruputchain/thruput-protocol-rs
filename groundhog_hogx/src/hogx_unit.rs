@@ -246,6 +246,7 @@ pub struct UnitState {
     pub started: Timestamp,
     pub died: Option<Timestamp>,
     pub process_state: ProcessState,
+    pub tcp_info: UnitTcpInfo,
 }
 
 
