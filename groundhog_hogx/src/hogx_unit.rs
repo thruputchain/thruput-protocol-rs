@@ -232,7 +232,9 @@ pub enum ProcessState {
 pub struct UnitState {
     pub time: Timestamp,
     pub def: UnitDef,
+    pub user: StringM,
     pub started: Timestamp,
+    pub died: Option<Timestamp>,
     pub process_state: ProcessState,
 }
 
