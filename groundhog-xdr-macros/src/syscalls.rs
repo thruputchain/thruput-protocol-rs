@@ -993,8 +993,10 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     quote! {
         /// Syscall numbers identifying each system call.
         /// Generated from the syscalls.yaml specification.
-        #[repr(i32)]
+        #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
+        #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
         #[derive(Eq,PartialEq,Copy,Debug,Clone)]
+        #[repr(i32)]
         pub enum SyscallNo {
             #(#lines,)*
         }
