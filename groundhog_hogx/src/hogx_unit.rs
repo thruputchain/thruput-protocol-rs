@@ -69,6 +69,7 @@ pub enum UnitType {
     UNIT_DB = 4 as i32,
     UNIT_EVENT = 5 as i32,
     UNIT_INDEXER = 6 as i32,
+    UNIT_AUTH = 7 as i32,
 
     // loadgen
     UNIT_LOADGEN = 100 as i32,
@@ -83,6 +84,7 @@ impl TryFrom<i32> for UnitType {
             4 => Ok(Self::UNIT_DB),
             5 => Ok(Self::UNIT_EVENT),
             6 => Ok(Self::UNIT_INDEXER),
+            7 => Ok(Self::UNIT_AUTH),
             100 => Ok(Self::UNIT_LOADGEN),
             _ => Err(()),
         }
