@@ -1,0 +1,58 @@
+[package]
+name = "groundhog-trace"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description =  "Groundhog transaction traces"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = []
+std = []
+serde = [
+    "dep:serde",
+    "dep:serde_arrays",
+    "dep:serde_with",
+    "xdrs/serde",
+    "groundhog-xdr/serde",
+]
+
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.serde_arrays]
+optional = true
+workspace = true
+default-features = false
+
+[dependencies.serde_with]
+workspace = true
+optional = true
+features = []
+
+[dependencies.groundhog-xdr]
+workspace = true
+features = ["xdrs", "alloc", "syscalls"]
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "int128", "ns", "alloc"]
+
+[dependencies.hogexec-internal]
+workspace = true
+
+[dependencies.xdr-common]
+workspace = true

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
+// Generated from xdrc commit: 3a6c032b7e60f6306f2d9ddf20916b59acba429b
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -431,6 +431,23 @@ impl TryFrom<i32> for StorageDeltaFlags {
 
 /// A bitset of StorageDeltaFlags values.
 pub type StorageDeltaFlagSet = i32;
+
+/// The combined unit of storage modification sent to the database from the executor.
+/// A delta with a set of flags, applied to a specific entry in the database.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct FlaggedStorageDelta {
+    // TODO(geoff): The addrkey field is likely repetitive when sending 
+    // many deltas to the database.
+    // possibly we can readjust this data structure, if raw bandwidth becomes
+    // important.
+    pub addrkey: AddressAndKey,
+    pub delta: StorageDelta,
+    pub flags: StorageDeltaFlagSet,
+}
 
 
 //

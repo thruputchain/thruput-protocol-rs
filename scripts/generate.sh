@@ -18,6 +18,10 @@ protos=(
   precompiles.x
 )
 
+traces=(
+  transaction_trace.x
+)
+
 # XDR files for hogexec-internal
 hogexec_internal=(
   ffi_enums.x
@@ -72,8 +76,20 @@ generate_rpc() {
   $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature serde-arrays -o "${package}/src/${name}.rs" "${proto}"
 }
 
+
+generate_trace() {
+  proto=${1:?}
+  package=${2:?}
+  name=$(basename "${proto}" .x)
+  $XDRC --rust --rust-feature xdrs --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+}
+
 for proto in "${protos[@]}"; do
   generate "protocol/${proto}" "groundhog-xdr"
+done
+
+for trace in "${traces[@]}"; do
+  generate_trace "protocol/${trace}" "groundhog-trace"
 done
 
 for ffi_enum in "${hogexec_internal[@]}"; do

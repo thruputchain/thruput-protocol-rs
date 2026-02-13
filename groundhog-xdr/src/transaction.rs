@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
+// Generated from xdrc commit: 3a6c032b7e60f6306f2d9ddf20916b59acba429b
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -136,6 +136,48 @@ pub struct Invocation {
     pub gas_limit: GasAmount,
     /// Encoded arguments to pass to the contract method.
     pub calldata: Calldata,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(i32)]
+pub enum InvocationFrameStatusCode {
+    kInvocationFrameStatusCodeReturn = 0 as i32,
+    kInvocationFrameStatusCodeFault = 1 as i32,
+    kInvocationFrameStatusCodeAbort = 2 as i32,
+}
+impl TryFrom<i32> for InvocationFrameStatusCode {
+    type Error = ();
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::kInvocationFrameStatusCodeReturn),
+            1 => Ok(Self::kInvocationFrameStatusCodeFault),
+            2 => Ok(Self::kInvocationFrameStatusCodeAbort),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[repr(i32)]
+pub enum InvocationFrameOutput {
+    // case kInvocationFrameStatusCodeReturn:
+    //   ReturnBuffer return_buffer;
+    kInvocationFrameStatusCodeReturn { return_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeReturn as i32,
+    // case kInvocationFrameStatusCodeAbort:
+    //   ReturnBuffer abort_buffer;
+    kInvocationFrameStatusCodeAbort { abort_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeAbort as i32,
+    // case kInvocationFrameStatusCodeFault:
+    //   void;
+    kInvocationFrameStatusCodeFault = InvocationFrameStatusCode::kInvocationFrameStatusCodeFault as i32,
+    
 }
 
 /// Flags that modify the behavior of a contract invocation.
@@ -481,5 +523,14 @@ impl TryFrom<i32> for TransactionStatistic {
 //
 // XDR internals below this point
 //
+
+impl InvocationFrameOutput {
+    pub fn status_code(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
+        }
+    }
+}
 
 
