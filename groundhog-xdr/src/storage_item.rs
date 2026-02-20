@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 3a6c032b7e60f6306f2d9ddf20916b59acba429b
+// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -359,6 +359,10 @@ pub const kReplayCacheHeightsMaxLen : u32 = 4000;
 
 /// Maximum unexpired consumed uniquifiers allowed per height in a cache.
 pub const kReplayCacheNoncesMaxLen : u32 = 8000;
+
+/// Maximum number of entries in a single RetrocausalQueue block.
+/// Each entry is at most 256 bytes, so 1000 entries is ~256KB.
+pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 1000;
 // 
 // Information about the number of nonces stored at each height of a
 // ReplayCache. Tracked in the ReplayCacheMetadata so nonce GC can
