@@ -100,15 +100,9 @@ impl From<SysErr> for i32 {
 }
 
 // Note: On MacOS accidentally building with this link_name silently links against
-// some system "syscall" symbol and gives garbage results.
-#[cfg(all(
-    not(feature = "syscalls_mock"),
-    not(target_family = "wasm"),
-    not(docsrs)
-))]
-compile_error!("do not link wasm syscall binding on non-wasm targets!");
-
-#[cfg(not(feature = "syscalls_mock"))]
+// some system "syscall" symbol and gives garbage results.  Guard the extern block
+// to wasm-only so it is never linked on native targets.
+#[cfg(all(not(feature = "syscalls_mock"), target_family = "wasm"))]
 #[link(wasm_import_module = "marmot")]
 unsafe extern "C" {
     #[link_name = "syscall"]
