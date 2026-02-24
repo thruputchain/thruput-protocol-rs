@@ -44,7 +44,7 @@ jobs:
         uses: ./actions/cargo-publish-dry-run
         with:
           skip-clippy: true
-          cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock'
+          cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
 
       - name: tag commit with version
         id: publish-tag
