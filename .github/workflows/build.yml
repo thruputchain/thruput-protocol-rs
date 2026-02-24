@@ -47,8 +47,6 @@ jobs:
         run: cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
       - name: cargo doc
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
-      - name: cargo build syscalls mock
-        run: cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
       - name: cargo build serde
         run: cargo build -p groundhog-xdr --features=serde
       - name: cargo build serde xdrs
