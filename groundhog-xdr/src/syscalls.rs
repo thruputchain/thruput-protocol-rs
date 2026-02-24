@@ -40,8 +40,6 @@ use crate::*;
 use core::fmt;
 use thiserror::Error;
 
-groundhog_xdr_macros::generate_syscall_numbers!("src/syscalls.yaml");
-
 #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
 #[derive(Error, Copy, Clone, PartialEq, Eq)]

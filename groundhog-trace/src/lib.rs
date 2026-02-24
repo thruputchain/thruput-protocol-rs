@@ -6,7 +6,7 @@ use groundhog_xdr::event::*;
 use groundhog_xdr::retrocausal_queue::*;
 use groundhog_xdr::storage_item::*;
 use groundhog_xdr::syscall_error::*;
-use groundhog_xdr::syscalls::*;
+use groundhog_xdr::SyscallNo;
 use groundhog_xdr::transaction::*;
 use groundhog_xdr::types::*;
 use hogexec_internal::ffi_enums::*;

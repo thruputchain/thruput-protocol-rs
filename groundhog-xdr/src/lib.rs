@@ -83,6 +83,10 @@ use exec_result::*;
 pub mod address_auth;
 use address_auth::*;
 
+#[rustfmt::skip]
+mod syscall_numbers;
+pub use syscall_numbers::*;
+
 /// System call bindings and syscall numbers (SyscallNo enum).
 #[cfg(feature = "syscalls")]
 pub mod syscalls;

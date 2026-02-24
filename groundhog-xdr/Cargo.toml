@@ -31,7 +31,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde", "serde_arrays/alloc"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
-syscalls = ["dep:groundhog-xdr-macros", "dep:thiserror"]
+syscalls = ["dep:thiserror"]
 syscalls_mock = ["syscalls"]                                              # required for native_exec integration
 
 [dependencies.xdrs]
@@ -56,7 +56,6 @@ features = []
 
 [dependencies.groundhog-xdr-macros]
 workspace = true
-optional = true
 
 [dependencies.thiserror]
 optional = true

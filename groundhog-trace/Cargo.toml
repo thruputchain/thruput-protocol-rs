@@ -45,7 +45,7 @@ features = []
 
 [dependencies.groundhog-xdr]
 workspace = true
-features = ["xdrs", "alloc", "syscalls"]
+features = ["xdrs", "alloc"]
 
 [dependencies.xdrs]
 workspace = true

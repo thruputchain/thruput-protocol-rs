@@ -1,6 +1,7 @@
 // Tests for primitive parameter types (u32, u64, bool, i32, etc.)
 
 use groundhog_xdr::syscalls::*;
+use groundhog_xdr::SyscallNo;
 use groundhog_xdr::transaction::*;
 use groundhog_xdr::types::*;
 use groundhog_xdr_syscall_tests::{MockSyscallHandler, set_mock_handler};
