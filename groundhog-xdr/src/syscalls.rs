@@ -40,8 +40,6 @@ use crate::*;
 use core::fmt;
 use thiserror::Error;
 
-groundhog_xdr_macros::generate_syscall_numbers!("src/syscalls.yaml");
-
 #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
 #[derive(Error, Copy, Clone, PartialEq, Eq)]
@@ -98,6 +96,15 @@ impl From<SysErr> for i32 {
         err.0
     }
 }
+
+// Note: On MacOS accidentally building with this link_name silently links against
+// some system "syscall" symbol and gives garbage results.
+#[cfg(all(
+    not(feature = "syscalls_mock"),
+    not(target_family = "wasm"),
+    not(docsrs)
+))]
+compile_error!("do not link wasm syscall binding on non-wasm targets!");
 
 #[cfg(not(feature = "syscalls_mock"))]
 #[link(wasm_import_module = "marmot")]
