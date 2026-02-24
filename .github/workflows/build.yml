@@ -43,8 +43,8 @@ jobs:
         run: cargo build -p groundhog-xdr --features=std
       - name: cargo build xdrs
         run: cargo build -p groundhog-xdr --features=xdrs
-      - name: cargo build syscalls
-        run: cargo build -p groundhog-xdr --features=xdrs,syscalls
+      - name: cargo build syscalls mock
+        run: cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
       - name: cargo doc
         run: CARGO_NET_GIT_FETCH_WITH_CLI=true RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
       - name: cargo build syscalls mock
@@ -59,6 +59,8 @@ jobs:
         run: |
           rustup target add wasm32-unknown-unknown
           cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
+      - name: cargo build syscalls
+        run: cargo build -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
       - name: cargo build wasm xdrs
         run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
       - name: cargo build wasm alloc
