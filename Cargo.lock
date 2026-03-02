@@ -209,8 +209,6 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 [[package]]
 name = "groundhog-serde_arrays"
 version = "0.2.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "5f38492b48f71b7723c02af35531586816c22057e25c3acf173ef8a9b878ecbf"
 dependencies = [
  "serde",
 ]
@@ -293,6 +291,20 @@ dependencies = [
  "serde",
  "serde_with",
  "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "groundhog_scheduler"
+version = "0.3.2"
+dependencies = [
+ "async-trait",
+ "groundhog-serde_arrays",
+ "groundhog-xdr",
+ "groundhog_coordinator",
+ "rpc_driver",
+ "serde",
+ "serde_with",
  "xdrs",
 ]
 
@@ -555,8 +567,6 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.3.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "e1a21ae51cdc53128bc16fac70a07fed80e011f5ed8cf0a6ff1fa0be3b8113f7"
 dependencies = [
  "async-trait",
  "thiserror",
@@ -1038,9 +1048,7 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "xdr-common"
-version = "0.4.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "13589a02c1c2081bcd0dea281ddb5f5acc92f83c9c7c339fde54689160bd3f89"
+version = "0.4.5"
 dependencies = [
  "escape-bytes",
  "hex",
@@ -1050,9 +1058,7 @@ dependencies = [
 
 [[package]]
 name = "xdr-derive"
-version = "0.4.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "868f2b21a1ed814300131ce81906d0b2463294ab0f87dc7c1133207de1ed06e6"
+version = "0.4.5"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2",
@@ -1062,18 +1068,14 @@ dependencies = [
 
 [[package]]
 name = "xdr-repr"
-version = "0.4.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "db68a82d361ca9ad49b6ad4b473f92786b3e8431e1719f19b45c351709bbf5ed"
+version = "0.4.5"
 dependencies = [
  "xdr-common",
 ]
 
 [[package]]
 name = "xdrs"
-version = "0.4.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "e15cec8a548a8842bec9f95894bcc2d08b7cfbf47cdef10fcf3bc936c515175e"
+version = "0.4.5"
 dependencies = [
  "thiserror",
  "xdr-common",

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
+// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -43,7 +43,6 @@ pub struct StorageCostModelXdr {
     pub contract_deployment_cost_per_byte: int128_xdr,
     pub auth_per_key_cost: int128_xdr,
     pub rcq_cost_per_entry: int128_xdr,
-    pub rcq_cost_per_block: int128_xdr,
     pub replay_cache_cost_per_entry: int128_xdr,
     pub balance_cost: int128_xdr,
 }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 708ebf9bf535633eea730b810b2fb07494dca14e
+// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -339,6 +339,9 @@ pub struct Transaction {
 
 /// A cryptographic signature paired with its key identifier.
 ///
+/// The auth_claim_idx indicates which auth claim from a signed transaction's
+/// list of claims produced this signature.
+///
 /// The public_key_id indicates which key from an address's key set produced
 /// this signature, allowing the signature to be matched against the transaction's
 /// auth claims.
@@ -348,6 +351,9 @@ pub struct Transaction {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DecoratedSignature {
+    // The index in [SignedTransaction::auth_claims] for the address that
+    // generated this signature.
+    pub auth_claim_idx: u32,
     /// The KeyID of the public key that created this signature.
     ///
     /// This is matched against the auth claims to determine if the signature
@@ -365,19 +371,6 @@ pub struct DecoratedSignature {
 ///
 /// This is the SHA-256 hash of the XDR-encoded SignedTransaction.
 pub type SignedTransactionHash = SHA256Hash;
-
-/// A list of decorated signatures.
-///
-/// This is a simple wrapper around a variable-length array to allow
-/// multiple signature lists per signed transaction.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct DecoratedSignatureList {
-    pub list: VecM<DecoratedSignature>,
-}
 
 /// A transaction with cryptographic signatures.
 ///
@@ -397,10 +390,7 @@ pub struct SignedTransaction {
     ///
     /// These signatures must satisfy the auth_claims in the transaction.
     /// The signatures are over the [`Transaction`] object.
-    ///
-    /// The outer variable-length array allows grouping signatures by claim,
-    /// though the exact matching algorithm is implementation-defined.
-    pub signatures: VecM<DecoratedSignatureList>,
+    pub signatures: VecM<DecoratedSignature>,
 }
 
 //------------------------------------------------------------------------------

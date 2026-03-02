@@ -354,7 +354,14 @@
     "description": [
       "Writes the nonce configuration for the current contract address."
     ],
-    "errors": []
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "Returns an error if `nonce_config.accepted_keys` has a bit set beyond `kMaxSigners` in the configured signer bitmap."
+        ]
+      }
+    ]
   },
   "WriteAddressGasPermissionConfigs": {
     "description": [
