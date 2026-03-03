@@ -28,28 +28,28 @@ categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-groundhog-xdr = { path = "groundhog-xdr" }
-groundhog-xdr-macros = { path = "groundhog-xdr-macros" }
-groundhog-trace = { path = "groundhog-trace" }
-groundhog_scp = { path = "groundhog_scp" }
-groundhog_coordinator = { path = "groundhog_coordinator" }
-groundhog_hogx = { path = "groundhog_hogx" }
-groundhog_rpc = { path = "groundhog_rpc" }
+groundhog-xdr = { path = "groundhog-xdr", version = "=0.3.2", registry = "groundhog" }
+groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.3.2", registry = "groundhog" }
+groundhog-trace = { path = "groundhog-trace", version = "=0.3.2", registry = "groundhog" }
+groundhog_scp = { path = "groundhog_scp", version = "=0.3.2", registry = "groundhog" }
+groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.3.2", registry = "groundhog" }
+groundhog_hogx = { path = "groundhog_hogx", version = "=0.3.2", registry = "groundhog" }
+groundhog_rpc = { path = "groundhog_rpc", version = "=0.3.2", registry = "groundhog" }
 groundhog_scheduler = { path = "groundhog_scheduler" }
-hogexec-internal = { path = "hogexec-internal" }
-macros = { path = "macros" }
+hogexec-internal = { path = "hogexec-internal", version = "=0.3.2", registry = "groundhog" }
+macros = { path = "macros", version = "=0.3.2", registry = "groundhog" }
 
-xdrs = { path = "../xdrs", features = [
+xdrs = { registry = "groundhog", version = "0.4.0", features = [
     "int128",
     "derive",
     "ns",
 ] }
-rpc_driver = { path = "../xdr_rpc/rpc_driver" }
-xdr-common = { path = "../xdrs/xdr-common" }
-xdr-repr = { path = "../xdrs/xdr-repr" }
-xdr-derive = { path = "../xdrs/xdr-derive" }
+rpc_driver = { version = "0.3.0", registry = "groundhog" }
+xdr-common = { version = "0.4.0", registry = "groundhog" }
+xdr-repr = { version = "0.4.0", registry = "groundhog" }
+xdr-derive = { version = "0.4.0", registry = "groundhog" }
 serde_with = { version = "3.16.1" }
-serde_arrays = { package = "groundhog-serde_arrays", path = "../serde_arrays", default-features = false }
+serde_arrays = { package = "groundhog-serde_arrays", version = "0.2.0", registry = "groundhog", default-features = false }
 
 
 [profile.dev]
