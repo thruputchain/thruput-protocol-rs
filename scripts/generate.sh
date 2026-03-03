@@ -112,6 +112,27 @@ for hogx in "${hogxs[@]}"; do
   generate_rpc "protocol/${hogx}" "groundhog_hogx"
 done
 
+scheduler_deps=(
+  rpc_types.x
+  parallel.x
+  nomination.x
+  db_sched.x
+  exec_sched.x
+)
+
+schedulers=(
+  sched_coord.x
+  coord_sched.x
+)
+
+for dep in "${scheduler_deps[@]}"; do
+  generate_rpc "protocol/${dep}" "groundhog_scheduler"
+done
+
+for sched in "${schedulers[@]}"; do
+  generate_rpc "protocol/${sched}" "groundhog_scheduler"
+done
+
 # Generate syscall documentation
 echo "-- Generating syscall documentation --" >&2
 python3 protocol/generate_syscalls_doc.py --json-output groundhog-xdr/syscalls_docs.json

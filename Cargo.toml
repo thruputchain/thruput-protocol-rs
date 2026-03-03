@@ -6,6 +6,7 @@ members = [
     "groundhog_scp",
     "groundhog_coordinator",
     "groundhog_hogx",
+    "groundhog_scheduler",
     "bin/rpcthroughput_server",
     "groundhog_xdr_syscall_tests",
     "hogexec-internal",
@@ -34,6 +35,7 @@ groundhog_scp = { path = "groundhog_scp", version = "=0.3.2", registry = "ground
 groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.3.2", registry = "groundhog" }
 groundhog_hogx = { path = "groundhog_hogx", version = "=0.3.2", registry = "groundhog" }
 groundhog_rpc = { path = "groundhog_rpc", version = "=0.3.2", registry = "groundhog" }
+groundhog_scheduler = { path = "groundhog_scheduler" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.3.2", registry = "groundhog" }
 macros = { path = "macros", version = "=0.3.2", registry = "groundhog" }
 
