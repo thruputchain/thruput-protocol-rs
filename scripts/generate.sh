@@ -118,11 +118,13 @@ scheduler_deps=(
   nomination.x
   db_sched.x
   exec_sched.x
+  consensus.x
 )
 
 schedulers=(
   sched_coord.x
   coord_sched.x
+  catchup.x
 )
 
 for dep in "${scheduler_deps[@]}"; do

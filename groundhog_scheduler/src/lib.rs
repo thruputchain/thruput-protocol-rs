@@ -32,6 +32,14 @@ pub mod exec_sched;
 pub use exec_sched::*;
 
 #[rustfmt::skip]
+pub mod consensus;
+pub use consensus::*;
+
+#[rustfmt::skip]
+pub mod catchup;
+pub use catchup::*;
+
+#[rustfmt::skip]
 pub mod sched_coord;
 pub use sched_coord::*;
 

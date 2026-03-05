@@ -1,0 +1,70 @@
+// -*-Rust-*-
+// Generated Code: DO NOT CHECK IN
+
+// Generated from xdrc commit: c95abcc628bcb7818be237c2f2081a6b45f156b4
+
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(non_upper_case_globals)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(clippy::unnecessary_cast)]
+
+use crate::*;
+use core::option::Option;
+use core::ops::{Deref, DerefMut};
+
+#[cfg(feature = "std")]
+use std::io::{Read, Write};
+use xdrs::*;
+
+
+
+#[cfg(feature = "serde")]
+use ::serde::{{Serialize, Deserialize}};
+#[cfg(feature = "serde")]
+use ::serde_arrays;
+
+
+
+// clang-format on
+
+pub type Upgrade = BytesM::<128>;
+
+pub type ConsensusValueHash = SHA256Hash;
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ConsensusValue {
+    pub timestamp: TimePoint,
+    pub nomination: Nomination,
+    pub upgrades: VecM<Upgrade, 6>,
+    pub prev_cv_hash: ConsensusValueHash,
+}
+
+pub type OptConsensusValue = Option::<ConsensusValue>;
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ConsensusValueCue {
+    pub proposer: ValidatorPublicInfo,
+    pub cv_hash: ConsensusValueHash,
+    pub prev_cv_hash: ConsensusValueHash,
+    pub block_height: BlockHeight,
+    pub block_hash: BlockHash,
+    pub prev_block_hash: BlockHash,
+}
+
+
+//
+// XDR internals below this point
+//
+
+
