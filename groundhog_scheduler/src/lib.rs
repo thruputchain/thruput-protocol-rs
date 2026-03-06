@@ -46,3 +46,7 @@ pub use sched_coord::*;
 #[rustfmt::skip]
 pub mod coord_sched;
 pub use coord_sched::*;
+
+#[rustfmt::skip]
+pub mod loadgen;
+pub use loadgen::*;
