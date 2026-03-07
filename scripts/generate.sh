@@ -125,6 +125,7 @@ schedulers=(
   sched_coord.x
   coord_sched.x
   catchup.x
+  repair.x
 )
 
 for dep in "${scheduler_deps[@]}"; do

@@ -48,5 +48,9 @@ pub mod coord_sched;
 pub use coord_sched::*;
 
 #[rustfmt::skip]
+pub mod repair;
+pub use repair::*;
+
+#[rustfmt::skip]
 pub mod loadgen;
 pub use loadgen::*;
