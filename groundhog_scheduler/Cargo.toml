@@ -22,7 +22,9 @@ serde = [
     "dep:serde",
     "dep:serde_arrays",
     "dep:serde_with",
+    "xdrs/serde",
     "groundhog-xdr/serde",
+    "groundhog_coordinator/serde",
 ]
 
 [dependencies]
