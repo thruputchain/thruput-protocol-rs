@@ -19,3 +19,7 @@ pub use wallet_kit::*;
 #[rustfmt::skip]
 pub mod dogwood_kit;
 pub use dogwood_kit::*;
+
+#[rustfmt::skip]
+pub mod dogwood;
+pub use dogwood::*;

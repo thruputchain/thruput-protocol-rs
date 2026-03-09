@@ -44,6 +44,7 @@ coordinators=(
   config.x
   wallet_kit.x
   dogwood_kit.x
+  dogwood.x
 )
 
 hogxs=(
