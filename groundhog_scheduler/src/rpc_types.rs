@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
+// Generated from xdrc commit: c95abcc628bcb7818be237c2f2081a6b45f156b4
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -35,7 +35,7 @@ pub type BlockID = u64;
 
 pub type BlockHash = SHA256Hash;
 
-pub type DbHash = SHA256Hash;
+pub type DbHash = [u8; 2048 as usize];
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
+// Generated from xdrc commit: c95abcc628bcb7818be237c2f2081a6b45f156b4
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -108,8 +108,8 @@ pub enum DbAddressAuthDataBatchResult {
 #[repr(i32)]
 pub enum DbBlockResult {
     // case DbSchedResultOK:
-    //   BlockHash db_hash;
-    DbSchedResultOK { db_hash: BlockHash } = DbSchedResult::DbSchedResultOK as i32,
+    //   DbHash db_hash;
+    DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK as i32,
     // default:
     //   void;
     Default { result: i32 },
@@ -199,11 +199,16 @@ pub trait DbSched_DbSched1: Send + Sync {
         // Call to abandon a block.
 
     async fn dbsched_abandon_snapshot(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-        // Load genesis configuration data into storage
-    // This calculates storage keys and stores allocation amounts as
-    // bytestrings
+        // Load genesis configuration data into storage. The second argument is the
+    // network ID. The third argument is the txset hash and the third argument
+    // is the events hash. Since the genesis block does not contain any
+    // transactions, both of these hashes will generally be the root hash of an
+    // empty Merkle trie.
+    //
+    // This RPC calculates storage keys and stores allocation amounts as
+    // bytestrings.
 
-    async fn dbsched_load_genesis_configuration(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : GenesisConfiguration, arg1 : BlockHash) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_load_genesis_configuration(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : GenesisConfiguration, arg1 : u64, arg2 : SHA256Hash, arg3 : SHA256Hash) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
     
     async fn dbsched_get_tip(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<DbTipResult, ::rpc_driver::ProgramError>;
 }
@@ -285,9 +290,9 @@ impl ::rpc_driver::ServerDispatch for DbSched_DbSched1_Dispatcher {
             }
             // dbsched_load_genesis_configuration
             9 => {
-                let args: (GenesisConfiguration, BlockHash, ) =
+                let args: (GenesisConfiguration, u64, SHA256Hash, SHA256Hash, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_load_genesis_configuration(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_load_genesis_configuration(client, args.0, args.1, args.2, args.3).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_get_tip
@@ -355,8 +360,8 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 8, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn dbsched_load_genesis_configuration(&self, arg0 : &GenesisConfiguration, arg1 : &BlockHash) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn dbsched_load_genesis_configuration(&self, arg0 : &GenesisConfiguration, arg1 : u64, arg2 : &SHA256Hash, arg3 : &SHA256Hash) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, arg1, &arg2, &arg3)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 9, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
