@@ -35,7 +35,7 @@ groundhog_scp = { path = "groundhog_scp", version = "=0.3.4", registry = "ground
 groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.3.4", registry = "groundhog" }
 groundhog_hogx = { path = "groundhog_hogx", version = "=0.3.4", registry = "groundhog" }
 groundhog_rpc = { path = "groundhog_rpc", version = "=0.3.4", registry = "groundhog" }
-groundhog_scheduler = { path = "groundhog_scheduler" }
+groundhog_scheduler = { path = "groundhog_scheduler", version = "=0.3.4", registry = "groundhog" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.3.4", registry = "groundhog" }
 macros = { path = "macros", version = "=0.3.4", registry = "groundhog" }
 
