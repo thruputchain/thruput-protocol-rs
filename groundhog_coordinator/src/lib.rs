@@ -46,7 +46,8 @@ mod tests {
                 pkg: DogwoodPackage {
                     transmission: DogwoodTransmission {
                         transmission_id: 7,
-                        type_: DogwoodTransmissionType::DogwoodTransmissionPayload,
+                        type_:
+                            DogwoodTransmissionType::DogwoodTransmissionPayload,
                         num_payload_bytes: 1024,
                         num_payload_sheaves: 4,
                         num_parity_sheaves: 2,
@@ -56,7 +57,9 @@ mod tests {
                     chunk: DogwoodChunk {
                         sheaf_index: 1,
                         chunk_index: 3,
-                        chunk: vec![0xDEu8, 0xAD, 0xBE, 0xEF].try_into().unwrap(),
+                        chunk: vec![0xDEu8, 0xAD, 0xBE, 0xEF]
+                            .try_into()
+                            .unwrap(),
                     },
                 },
             },
