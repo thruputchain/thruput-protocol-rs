@@ -625,7 +625,7 @@ pub struct AddressAndKey {
 }
 
 /// BlockHeight is the height of a block, measured as the number of blocks since the genesis of the chain.
-/// The first block of transactions is at height 1.
+/// The first block of transactions is at height 0.
 /// It is signed to prevent overflows in
 /// calculations.
 pub type BlockHeight = i64;

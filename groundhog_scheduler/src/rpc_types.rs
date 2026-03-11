@@ -35,7 +35,7 @@ pub type BlockID = u64;
 
 pub type BlockHash = SHA256Hash;
 
-pub type DbHash = SHA256Hash;
+pub type DbHash = [u8; 2048 as usize];
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]

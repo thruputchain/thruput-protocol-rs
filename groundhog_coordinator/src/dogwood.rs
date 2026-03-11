@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c95abcc628bcb7818be237c2f2081a6b45f156b4
+// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -235,51 +235,6 @@ impl Dogwood_Dogwood1_Client {
 }
 
 
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn dogwood_delivery_envelope_round_trip() {
-        let envelope = DogwoodDeliveryEnvelope {
-            signature: Signature::Ed25519 {
-                ed25519: Ed25519Signature::from([0u8; 64]),
-            },
-            delivery: DogwoodDelivery {
-                stream: DogwoodStream {
-                    source_id: [0xAB; 32],
-                    stream_id: 42,
-                },
-                route: DogwoodRoute {
-                    route_hash: Some([0xCD; 32].into()),
-                    route_nodes: None,
-                },
-                pkg: DogwoodPackage {
-                    transmission: DogwoodTransmission {
-                        transmission_id: 7,
-                        type_: DogwoodTransmissionType::DogwoodTransmissionPayload,
-                        num_payload_bytes: 1024,
-                        num_payload_sheaves: 4,
-                        num_parity_sheaves: 2,
-                        max_bytes_per_chunk: 256,
-                        shuffle_seed: 99,
-                    },
-                    chunk: DogwoodChunk {
-                        sheaf_index: 1,
-                        chunk_index: 3,
-                        chunk: vec![0xDEu8, 0xAD, 0xBE, 0xEF].try_into().unwrap(),
-                    },
-                },
-            },
-        };
-
-        let encoded = xdrs::txs::encode(&envelope).expect("encode failed");
-        let decoded: DogwoodDeliveryEnvelope =
-            xdrs::txs::decode(&encoded).expect("decode failed");
-        assert_eq!(envelope, decoded);
-    }
-}
 
 //
 // XDR internals below this point
