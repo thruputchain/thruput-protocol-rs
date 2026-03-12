@@ -45,6 +45,7 @@ pub type DbHash = [u8; 2048 as usize];
 pub struct DbTip {
     pub height: BlockHeight,
     pub block_hash: BlockHash,
+    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     pub db_hash: DbHash,
     pub id: BlockID,
 }

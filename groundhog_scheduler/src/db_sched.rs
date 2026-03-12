@@ -109,7 +109,10 @@ pub enum DbAddressAuthDataBatchResult {
 pub enum DbBlockResult {
     // case DbSchedResultOK:
     //   DbHash db_hash;
-    DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK {
+        #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
+        db_hash: DbHash,
+    } = DbSchedResult::DbSchedResultOK as i32,
     // default:
     //   void;
     Default { result: i32 },
