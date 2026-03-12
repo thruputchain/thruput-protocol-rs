@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
+// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -394,6 +394,13 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
 }
 
 
+
+/// Hash of the groundhog database contents.
+/// Format is a 2048-bit LtHash16 hash.
+pub type DbHash = [u8; 2048 as usize];
+
+/// Hash of a groundhog block of transactions
+pub type BlockHash = SHA256Hash;
 
 /// Represents a 256-bit contract address.
 /// In the groundhog storage model, each contract is deployed at a 

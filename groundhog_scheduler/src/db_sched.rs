@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
+// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -109,10 +109,7 @@ pub enum DbAddressAuthDataBatchResult {
 pub enum DbBlockResult {
     // case DbSchedResultOK:
     //   DbHash db_hash;
-    DbSchedResultOK {
-        #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
-        db_hash: DbHash,
-    } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK as i32,
     // default:
     //   void;
     Default { result: i32 },

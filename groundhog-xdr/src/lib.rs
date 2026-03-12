@@ -95,3 +95,9 @@ pub mod syscalls;
 #[rustfmt::skip]
 pub mod storage_item;
 use storage_item::*;
+
+/// The BlockHeader struct, which defines commitments to 
+/// all other elements of the chain state.
+#[rustfmt::skip]
+pub mod block;
+use block::*;

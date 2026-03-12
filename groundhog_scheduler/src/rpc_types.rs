@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0045f3f59b643b1d543cb618c1c14185fab73435
+// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -33,10 +33,6 @@ use ::serde_arrays;
 // An internal unique ID describing a block.
 pub type BlockID = u64;
 
-pub type BlockHash = SHA256Hash;
-
-pub type DbHash = [u8; 2048 as usize];
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -45,7 +41,6 @@ pub type DbHash = [u8; 2048 as usize];
 pub struct DbTip {
     pub height: BlockHeight,
     pub block_hash: BlockHash,
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays"))]
     pub db_hash: DbHash,
     pub id: BlockID,
 }
