@@ -217,33 +217,33 @@ dependencies = [
 
 [[package]]
 name = "groundhog-trace"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
  "hogexec-internal",
  "serde",
  "serde_with",
- "xdr-common 0.5.0",
- "xdrs 0.5.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog-xdr"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr-macros",
  "serde",
  "serde_with",
  "thiserror",
- "xdr-common 0.5.0",
- "xdrs 0.5.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog-xdr-macros"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2",
@@ -256,7 +256,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_coordinator"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -265,12 +265,12 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdrs 0.5.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_hogx"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -280,25 +280,25 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdrs 0.5.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_rpc"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
  "rpc_driver",
  "serde",
  "serde_with",
- "xdr-common 0.5.0",
- "xdrs 0.5.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_scheduler"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -307,12 +307,12 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdrs 0.5.0",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_scp"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -320,13 +320,13 @@ dependencies = [
  "rpc_driver",
  "serde",
  "serde_with",
- "xdr-common 0.5.0",
- "xdrs 0.5.0",
+ "xdr-common",
+ "xdrs",
 ]
 
 [[package]]
 name = "groundhog_xdr_syscall_tests"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "groundhog-xdr",
 ]
@@ -351,9 +351,9 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hogexec-internal"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
- "xdrs 0.5.0",
+ "xdrs",
 ]
 
 [[package]]
@@ -568,19 +568,19 @@ dependencies = [
 
 [[package]]
 name = "rpc_driver"
-version = "0.3.0"
+version = "0.4.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "e1a21ae51cdc53128bc16fac70a07fed80e011f5ed8cf0a6ff1fa0be3b8113f7"
+checksum = "40af664113a1ca60b86d0f6d89c26726b0e349c95a2daff7ae9d98ae7eddf498"
 dependencies = [
  "async-trait",
  "thiserror",
  "tokio",
- "xdrs 0.4.5",
+ "xdrs",
 ]
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.3.5"
+version = "0.4.0"
 dependencies = [
  "async-trait",
  "groundhog_rpc",
@@ -1052,16 +1052,6 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "xdr-common"
-version = "0.4.5"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "5310b61a1f54f1fc0eb8a2da30f4de50b06c56d1f430955f59d4e515bb2f1ae3"
-dependencies = [
- "escape-bytes",
- "hex",
-]
-
-[[package]]
-name = "xdr-common"
 version = "0.5.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "5f37325215270fa9b7a3aa00b09d6aa5c9d23e520a89e0f5ebddb07eecb032af"
@@ -1070,18 +1060,6 @@ dependencies = [
  "hex",
  "serde",
  "serde_with",
-]
-
-[[package]]
-name = "xdr-derive"
-version = "0.4.5"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "0353c78ebd44685b7e3e5440cf404291e03f7596b1e64e86a563f6563992950e"
-dependencies = [
- "darling 0.20.11",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -1102,18 +1080,7 @@ version = "0.5.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "b6bac715ccc7daced76441e4801e79960360cdaf1e1956b37447c455b33e95c8"
 dependencies = [
- "xdr-common 0.5.0",
-]
-
-[[package]]
-name = "xdrs"
-version = "0.4.5"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "09ae213c959380812c06c92e37404fe3a1c9ec78d45c59b7df3c34cb1feb885e"
-dependencies = [
- "thiserror",
- "xdr-common 0.4.5",
- "xdr-derive 0.4.5",
+ "xdr-common",
 ]
 
 [[package]]
@@ -1123,8 +1090,8 @@ source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
 checksum = "d84dbebd0fbc1229f3daef973bdc0bafca67fe8f7ed9597b6ec53cbc0028748f"
 dependencies = [
  "thiserror",
- "xdr-common 0.5.0",
- "xdr-derive 0.5.0",
+ "xdr-common",
+ "xdr-derive",
  "xdr-repr",
 ]
 

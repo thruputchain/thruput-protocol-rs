@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c95abcc628bcb7818be237c2f2081a6b45f156b4
+// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -155,13 +155,13 @@ pub enum LoadgenExtensionResult {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {    
-    async fn generate_experiment(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::ProgramError>;
+    async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::ProgramError>;
         // arguments:
     // LoadgenContextID context_id (a handle returned by generate_experiment)
     // unsigned hyper num_txs (the number of transactions to return)
     // BlockHeight expiry_height (the height at which the transactions will expire)
 
-    async fn extend_experiment(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_driver::ProgramError>;
+    async fn extend_experiment(&self, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -177,24 +177,24 @@ impl LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(12341234, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // generate_experiment
             0 => {
                 let args: (ExperimentConfig, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.generate_experiment(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.generate_experiment(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // extend_experiment
             1 => {
                 let args: (LoadgenContextID, u64, BlockHeight, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.extend_experiment(client, args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.extend_experiment(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -202,13 +202,13 @@ impl ::rpc_driver::ServerDispatch for LoadgenInterface_LoadgenInterfaceV1_Dispat
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct LoadgenInterface_LoadgenInterfaceV1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl LoadgenInterface_LoadgenInterfaceV1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

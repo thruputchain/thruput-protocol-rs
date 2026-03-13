@@ -153,13 +153,13 @@ pub enum DbTipResult {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait DbSched_DbSched1: Send + Sync {    
-    async fn dbsched_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn dbsched_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn dbsched_get_address_auth_data(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_driver::ProgramError>;
     
-    async fn dbsched_get_hog_ages(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : ContractAddressBatch) -> Result<HogAgeResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_get_hog_ages(&self, arg0 : ContractAddressBatch) -> Result<HogAgeResult, ::rpc_driver::ProgramError>;
     
-    async fn dbsched_write_hog_ages(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : HogAgeBatch) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_write_hog_ages(&self, arg0 : HogAgeBatch) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
         // Examples of valid call sequences to the db:
     //
     // dbsched_create_snapshot | dbsched_open_snapshot
@@ -180,14 +180,14 @@ pub trait DbSched_DbSched1: Send + Sync {
     // that would be created if the parent block commits.
     // Parent block must be closed.
 
-    async fn dbsched_create_snapshot(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
         // Commits the block with the specified block ID to disk. Should only be
     // called for e.g. finalized blocks. At a minimum, the block must be closed
     // before being committed. Any BlockID that is not a descendant of this
     // block will return an error if accessed. This BlockID must be the
     // immediate descendant of the most recently committed block.
 
-    async fn dbsched_commit_snapshot(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : BlockHash) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : BlockHash) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
         // Call to close a block. This indicates that no more transactions
     // will be added to this block. The block must have been previously opened
     // with open_database_snapshot().
@@ -195,10 +195,10 @@ pub trait DbSched_DbSched1: Send + Sync {
     // Error if the block has been pruned or contains an item in an invalid
     // state (due to e.g. a block validation failure).
 
-    async fn dbsched_close_snapshot(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_close_snapshot(&self, arg0 : BlockID) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
         // Call to abandon a block.
 
-    async fn dbsched_abandon_snapshot(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
         // Load genesis configuration data into storage. The second argument is the
     // network ID. The third argument is the txset hash and the third argument
     // is the events hash. Since the genesis block does not contain any
@@ -208,9 +208,9 @@ pub trait DbSched_DbSched1: Send + Sync {
     // This RPC calculates storage keys and stores allocation amounts as
     // bytestrings.
 
-    async fn dbsched_load_genesis_configuration(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : GenesisConfiguration, arg1 : u64, arg2 : SHA256Hash, arg3 : SHA256Hash) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : u64, arg2 : SHA256Hash, arg3 : SHA256Hash) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
     
-    async fn dbsched_get_tip(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<DbTipResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -226,80 +226,80 @@ impl DbSched_DbSched1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for DbSched_DbSched1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for DbSched_DbSched1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x88887ee7, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // dbsched_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_get_address_auth_data
             1 => {
                 let args: (BlockID, ContractAddressBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_get_address_auth_data(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_get_address_auth_data(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_get_hog_ages
             2 => {
                 let args: (ContractAddressBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_get_hog_ages(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_get_hog_ages(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_write_hog_ages
             3 => {
                 let args: (HogAgeBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_write_hog_ages(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_write_hog_ages(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_create_snapshot
             5 => {
                 let args: (BlockID, BlockID, BlockExecutionMode, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_create_snapshot(client, args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_create_snapshot(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_commit_snapshot
             6 => {
                 let args: (BlockID, BlockHash, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_commit_snapshot(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_commit_snapshot(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_close_snapshot
             7 => {
                 let args: (BlockID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_close_snapshot(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_close_snapshot(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_abandon_snapshot
             8 => {
                 let args: (BlockID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_abandon_snapshot(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_abandon_snapshot(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_load_genesis_configuration
             9 => {
                 let args: (GenesisConfiguration, u64, SHA256Hash, SHA256Hash, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_load_genesis_configuration(client, args.0, args.1, args.2, args.3).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_load_genesis_configuration(args.0, args.1, args.2, args.3).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_get_tip
             10 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_get_tip(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_get_tip().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -307,13 +307,13 @@ impl ::rpc_driver::ServerDispatch for DbSched_DbSched1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct DbSched_DbSched1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl DbSched_DbSched1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

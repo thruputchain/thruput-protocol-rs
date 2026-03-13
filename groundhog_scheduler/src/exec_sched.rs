@@ -58,33 +58,33 @@ pub type ExecValidateBatchResult = VecM::<ExecResult>;
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait ExecutorSched_ExecutorSched1: Send + Sync {    
-    async fn executorsched_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn executorsched_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn executorsched_ready(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<ExecResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_ready(&self) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_propose_transaction(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : SignedTransaction) -> Result<ExecProposeResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : SignedTransaction) -> Result<ExecProposeResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_validate_transaction(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : ProposedTransaction) -> Result<ExecResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_validate_transaction(&self, arg0 : BlockID, arg1 : ProposedTransaction) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_propose_batch(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_validate_batch(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_validate_batch(&self, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_driver::ProgramError>;
         // Executor can be in one of three states: None, Proposing, Validating
     // open_xyz_block() methods set the executor state, or return an error
     // if executor has already opened a block.
     // finish_block() blocks until all running executor threads are finished,
     // and stops the executor from accepting new transactions.
 
-    async fn executorsched_open_proposal_block(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_open_proposal_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_open_validation_block(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_open_validation_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_finish_block(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_finish_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
         // Scheduler should call this to shutdown the executor.
     // Shutdown will not occur until all pending transactions complete.
     // No new transactions or blocks can be opened after shutdown.
 
-    async fn executorsched_shutdown(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn executorsched_shutdown(&self) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
 
@@ -100,80 +100,80 @@ impl ExecutorSched_ExecutorSched1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for ExecutorSched_ExecutorSched1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for ExecutorSched_ExecutorSched1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x7ee79999, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // executorsched_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_ready
             1 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_ready(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_ready().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_propose_transaction
             10 => {
                 let args: (BlockID, SignedTransaction, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_propose_transaction(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_propose_transaction(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_validate_transaction
             20 => {
                 let args: (BlockID, ProposedTransaction, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_validate_transaction(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_validate_transaction(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_propose_batch
             11 => {
                 let args: (BlockID, SignedTransactionBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_propose_batch(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_propose_batch(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_validate_batch
             21 => {
                 let args: (BlockID, ProposedTransactionBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_validate_batch(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_validate_batch(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_open_proposal_block
             30 => {
                 let args: (BlockID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_open_proposal_block(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_open_proposal_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_open_validation_block
             40 => {
                 let args: (BlockID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_open_validation_block(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_open_validation_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_finish_block
             50 => {
                 let args: (BlockID, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_finish_block(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_finish_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // executorsched_shutdown
             60 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_shutdown(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.executorsched_shutdown().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -181,13 +181,13 @@ impl ::rpc_driver::ServerDispatch for ExecutorSched_ExecutorSched1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct ExecutorSched_ExecutorSched1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl ExecutorSched_ExecutorSched1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

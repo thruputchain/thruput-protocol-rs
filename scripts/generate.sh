@@ -128,6 +128,7 @@ schedulers=(
   coord_sched.x
   catchup.x
   repair.x
+  loadgen.x
 )
 
 for dep in "${scheduler_deps[@]}"; do

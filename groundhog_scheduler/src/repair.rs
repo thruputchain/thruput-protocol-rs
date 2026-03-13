@@ -64,13 +64,13 @@ pub struct RepairedTransactions {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait Repair_Repair1: Send + Sync {    
-    async fn repair_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn repair_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_txs(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : MissingTransactionsEnvelope) -> Result<RepairedTransactions, ::rpc_driver::ProgramError>;
+    async fn repair_missing_txs(&self, arg0 : MissingTransactionsEnvelope) -> Result<RepairedTransactions, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_cv(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : ConsensusValueHash, arg1 : BlockHeight) -> Result<OptConsensusValue, ::rpc_driver::ProgramError>;
+    async fn repair_missing_cv(&self, arg0 : ConsensusValueHash, arg1 : BlockHeight) -> Result<OptConsensusValue, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_scp_envelopes(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : SCPSlotIndex) -> Result<SCPEnvelopes, ::rpc_driver::ProgramError>;
+    async fn repair_missing_scp_envelopes(&self, arg0 : SCPSlotIndex) -> Result<SCPEnvelopes, ::rpc_driver::ProgramError>;
 }
 
 
@@ -86,38 +86,38 @@ impl Repair_Repair1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for Repair_Repair1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for Repair_Repair1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x2233cccc, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // repair_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_txs
             10 => {
                 let args: (MissingTransactionsEnvelope, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_txs(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_txs(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_cv
             20 => {
                 let args: (ConsensusValueHash, BlockHeight, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_cv(client, args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_cv(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_scp_envelopes
             30 => {
                 let args: (SCPSlotIndex, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_scp_envelopes(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_scp_envelopes(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -125,13 +125,13 @@ impl ::rpc_driver::ServerDispatch for Repair_Repair1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Repair_Repair1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl Repair_Repair1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

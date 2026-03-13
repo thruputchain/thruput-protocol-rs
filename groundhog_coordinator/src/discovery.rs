@@ -110,9 +110,9 @@ pub struct KnownQuorumSets {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait Discovery_Discovery1: Send + Sync {    
-    async fn discovery_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn discovery_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn discovery_update_quorums(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_driver::ProgramError>;
+    async fn discovery_update_quorums(&self, arg0 : KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_driver::ProgramError>;
 }
 
 
@@ -128,24 +128,24 @@ impl Discovery_Discovery1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for Discovery_Discovery1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for Discovery_Discovery1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x3eef0505, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // discovery_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.discovery_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.discovery_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // discovery_update_quorums
             10 => {
                 let args: (KnownQuorumSets, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.discovery_update_quorums(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.discovery_update_quorums(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -153,13 +153,13 @@ impl ::rpc_driver::ServerDispatch for Discovery_Discovery1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Discovery_Discovery1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl Discovery_Discovery1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

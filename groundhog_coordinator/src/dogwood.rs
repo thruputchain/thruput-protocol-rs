@@ -166,9 +166,9 @@ pub struct DogwoodDeliveryEnvelope {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait Dogwood_Dogwood1: Send + Sync {    
-    async fn dogwood_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn dogwood_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn dogwood_deliver(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : DogwoodDeliveryEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn dogwood_deliver(&self, arg0 : DogwoodDeliveryEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
 
@@ -184,24 +184,24 @@ impl Dogwood_Dogwood1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for Dogwood_Dogwood1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for Dogwood_Dogwood1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x8ee82002, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // dogwood_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dogwood_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dogwood_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dogwood_deliver
             10 => {
                 let args: (DogwoodDeliveryEnvelope, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dogwood_deliver(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dogwood_deliver(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -209,13 +209,13 @@ impl ::rpc_driver::ServerDispatch for Dogwood_Dogwood1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Dogwood_Dogwood1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl Dogwood_Dogwood1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 

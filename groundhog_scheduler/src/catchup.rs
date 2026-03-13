@@ -95,9 +95,9 @@ pub struct SignedCatchupBlocksResult {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait Catchup_Catchup1: Send + Sync {    
-    async fn catchup_null(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn catchup_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn catchup_solicit(&self, client: &::std::sync::Arc<::rpc_driver::ClientHandle>, arg0 : SignedCatchupBlocksRequest) -> Result<SignedCatchupBlocksResult, ::rpc_driver::ProgramError>;
+    async fn catchup_solicit(&self, arg0 : SignedCatchupBlocksRequest) -> Result<SignedCatchupBlocksResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -113,24 +113,24 @@ impl Catchup_Catchup1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::ServerDispatch for Catchup_Catchup1_Dispatcher {
+impl ::rpc_driver::handler::RpcHandler for Catchup_Catchup1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321abcd, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8], client: &::std::sync::Arc<::rpc_driver::ClientHandle>) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
             // catchup_null
             0 => {
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.catchup_null(client).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.catchup_null().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // catchup_solicit
             10 => {
                 let args: (SignedCatchupBlocksRequest, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.catchup_solicit(client, args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.catchup_solicit(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -138,13 +138,13 @@ impl ::rpc_driver::ServerDispatch for Catchup_Catchup1_Dispatcher {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Catchup_Catchup1_Client {
-    handle: ::std::sync::Arc<::rpc_driver::ClientHandle>,
+    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
 impl Catchup_Catchup1_Client {
-    pub fn new(handle: ::std::sync::Arc<::rpc_driver::ClientHandle>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 
