@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
+// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -41,11 +41,116 @@ pub struct ParallelBatch {
     pub xdr: BytesM,
 }
 
-pub type ParallelSignedTransactionBatch = ParallelBatch;
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
 
-pub type ParallelSignedTransactionHashBatch = ParallelBatch;
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ParallelSignedTransactionBatch {
+    inner: ParallelBatch,
+}
+impl From<ParallelBatch> for ParallelSignedTransactionBatch {
+    fn from(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ParallelSignedTransactionBatch {
+    pub fn into_inner(self) -> ParallelBatch {
+        self.inner
+    }
+    pub const fn new(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
 
-pub type ParallelNondeterministicProposalDataBatch = ParallelBatch;
+impl Deref for ParallelSignedTransactionBatch {
+    type Target = ParallelBatch;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ParallelSignedTransactionBatch {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ParallelSignedTransactionHashBatch {
+    inner: ParallelBatch,
+}
+impl From<ParallelBatch> for ParallelSignedTransactionHashBatch {
+    fn from(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ParallelSignedTransactionHashBatch {
+    pub fn into_inner(self) -> ParallelBatch {
+        self.inner
+    }
+    pub const fn new(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ParallelSignedTransactionHashBatch {
+    type Target = ParallelBatch;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ParallelSignedTransactionHashBatch {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ParallelNondeterministicProposalDataBatch {
+    inner: ParallelBatch,
+}
+impl From<ParallelBatch> for ParallelNondeterministicProposalDataBatch {
+    fn from(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ParallelNondeterministicProposalDataBatch {
+    pub fn into_inner(self) -> ParallelBatch {
+        self.inner
+    }
+    pub const fn new(_inner: ParallelBatch) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ParallelNondeterministicProposalDataBatch {
+    type Target = ParallelBatch;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ParallelNondeterministicProposalDataBatch {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 
 //

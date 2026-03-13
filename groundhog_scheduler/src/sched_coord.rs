@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7c72a5c64359279353bd0bdc336ae3445bb71e5e
+// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -104,9 +104,10 @@ pub enum SchedulerNominationResult {
     // case SchedulerNominationOK:
     //   SchedulerNominatedBlock nominated_block;
     SchedulerNominationOK { nominated_block: SchedulerNominatedBlock } = SchedulerNominationOutcome::SchedulerNominationOK as i32,
-    // default:
+    // case SchedulerNominationError:
     //   void;
-    Default { outcome: i32 },
+    SchedulerNominationError = SchedulerNominationOutcome::SchedulerNominationError as i32,
+    
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -149,9 +150,14 @@ pub enum SchedulerValidationResult {
     // case SchedulerValidationMissingTxs:
     //   VecM<SignedTransactionHash> missing_tx_hashes;
     SchedulerValidationMissingTxs { missing_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs as i32,
-    // default:
+    // case SchedulerValidationDbFailed:
+    // case SchedulerValidationExecutorFailed:
+    // case SchedulerValidationInvalid:
     //   void;
-    Default { outcome: i32 },
+    SchedulerValidationDbFailed = SchedulerValidationOutcome::SchedulerValidationDbFailed as i32,
+    SchedulerValidationExecutorFailed = SchedulerValidationOutcome::SchedulerValidationExecutorFailed as i32,
+    SchedulerValidationInvalid = SchedulerValidationOutcome::SchedulerValidationInvalid as i32,
+    
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -212,9 +218,7 @@ pub enum SchedulerGetTipResult {
     // case SchedulerGetTipNoGenesisBlock:
     //   void;
     SchedulerGetTipNoGenesisBlock = SchedulerGetTipOutcome::SchedulerGetTipNoGenesisBlock as i32,
-    // default:
-    //   void;
-    Default { outcome: i32 },
+    
 }
 
 
@@ -427,8 +431,7 @@ impl SchedulerCoord_SchedulerCoord1_Client {
 impl SchedulerNominationResult {
     pub fn outcome(&self) -> i32 {
         match self {
-            SchedulerNominationResult::Default{ outcome } => *outcome ,
-
+            
             _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
@@ -437,8 +440,7 @@ impl SchedulerNominationResult {
 impl SchedulerValidationResult {
     pub fn outcome(&self) -> i32 {
         match self {
-            SchedulerValidationResult::Default{ outcome } => *outcome ,
-
+            
             _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
@@ -447,8 +449,7 @@ impl SchedulerValidationResult {
 impl SchedulerGetTipResult {
     pub fn outcome(&self) -> i32 {
         match self {
-            SchedulerGetTipResult::Default{ outcome } => *outcome ,
-
+            
             _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
