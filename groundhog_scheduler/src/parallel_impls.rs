@@ -17,8 +17,11 @@ impl ParallelBatch {
     }
 
     /// Number of segments in this batch.
+    ///
+    /// Uses the minimum of `segment_tokens` and `segment_bytes` lengths
+    /// so the result is always consistent with [`segment()`](Self::segment).
     pub fn segments(&self) -> usize {
-        self.segment_tokens.len()
+        self.segment_tokens.len().min(self.segment_bytes.len())
     }
 
     /// True if the batch contains no items.
@@ -49,7 +52,7 @@ impl ParallelBatch {
     /// Byte slice for segment `i`. Returns None if out of bounds
     /// or if the offset falls outside xdr.
     pub fn segment(&self, i: usize) -> Option<&[u8]> {
-        if i >= self.segment_bytes.len() {
+        if i >= self.segments() {
             return None;
         }
         let offset: usize =
@@ -84,5 +87,306 @@ impl std::fmt::Display for BatchValidationError {
                 )
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        ParallelNondeterministicProposalDataBatch,
+        ParallelSignedTransactionBatch, ParallelSignedTransactionHashBatch,
+    };
+    use xdr_common::{BytesM, VecM};
+
+    /// Helper: build a batch with the given segments.
+    /// Each segment is a `(token_count, payload)` pair.
+    fn make_batch(segments: &[(u32, &[u8])]) -> ParallelBatch {
+        let mut segment_tokens = Vec::new();
+        let mut segment_bytes = Vec::new();
+        let mut xdr = Vec::new();
+        for &(tokens, payload) in segments {
+            segment_tokens.push(tokens);
+            segment_bytes.push(payload.len() as u32);
+            xdr.extend_from_slice(payload);
+        }
+        ParallelBatch {
+            segment_tokens: VecM(segment_tokens),
+            segment_bytes: VecM(segment_bytes),
+            xdr: BytesM(xdr),
+        }
+    }
+
+    // ── Validation ──────────────────────────────────────────────────
+
+    #[test]
+    fn validate_empty_batch() {
+        let batch = ParallelBatch::empty();
+        assert!(batch.validate().is_ok());
+    }
+
+    #[test]
+    fn validate_single_segment() {
+        let batch = make_batch(&[(3, &[0xAA; 10])]);
+        assert!(batch.validate().is_ok());
+    }
+
+    #[test]
+    fn validate_multi_segment() {
+        let batch = make_batch(&[(1, &[1, 2, 3]), (2, &[4, 5]), (5, &[6])]);
+        assert!(batch.validate().is_ok());
+    }
+
+    #[test]
+    fn validate_segment_count_mismatch() {
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1, 2]),
+            segment_bytes: VecM(vec![4]),
+            xdr: BytesM(vec![0; 4]),
+        };
+        assert_eq!(
+            batch.validate(),
+            Err(BatchValidationError::SegmentCountMismatch {
+                tokens: 2,
+                bytes: 1,
+            })
+        );
+    }
+
+    #[test]
+    fn segments_and_segment_consistent_on_mismatched_vecs() {
+        // segment_tokens longer than segment_bytes
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1, 2, 3]),
+            segment_bytes: VecM(vec![4, 5]),
+            xdr: BytesM(vec![0; 9]),
+        };
+        assert!(batch.validate().is_err());
+        // segments() should be capped to the shorter vec
+        assert_eq!(batch.segments(), 2);
+        assert!(batch.segment(0).is_some());
+        assert!(batch.segment(1).is_some());
+        assert_eq!(batch.segment(2), None);
+
+        // segment_bytes longer than segment_tokens
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1]),
+            segment_bytes: VecM(vec![3, 4]),
+            xdr: BytesM(vec![0; 7]),
+        };
+        assert!(batch.validate().is_err());
+        assert_eq!(batch.segments(), 1);
+        assert!(batch.segment(0).is_some());
+        assert_eq!(batch.segment(1), None);
+    }
+
+    #[test]
+    fn validate_byte_length_too_short() {
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1]),
+            segment_bytes: VecM(vec![10]),
+            xdr: BytesM(vec![0; 5]), // only 5, expected 10
+        };
+        assert_eq!(
+            batch.validate(),
+            Err(BatchValidationError::ByteLengthMismatch {
+                expected: 10,
+                actual: 5,
+            })
+        );
+    }
+
+    #[test]
+    fn validate_byte_length_too_long() {
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1]),
+            segment_bytes: VecM(vec![3]),
+            xdr: BytesM(vec![0; 8]), // 8 > 3
+        };
+        assert_eq!(
+            batch.validate(),
+            Err(BatchValidationError::ByteLengthMismatch {
+                expected: 3,
+                actual: 8,
+            })
+        );
+    }
+
+    // ── Utility methods ─────────────────────────────────────────────
+
+    #[test]
+    fn empty_batch_properties() {
+        let batch = ParallelBatch::empty();
+        assert_eq!(batch.items(), 0);
+        assert_eq!(batch.segments(), 0);
+        assert!(batch.is_empty());
+        assert_eq!(batch.segment(0), None);
+    }
+
+    #[test]
+    fn items_sums_across_segments() {
+        let batch = make_batch(&[(3, &[0; 2]), (7, &[0; 4]), (1, &[0; 1])]);
+        assert_eq!(batch.items(), 11);
+        assert_eq!(batch.segments(), 3);
+        assert!(!batch.is_empty());
+    }
+
+    #[test]
+    fn segment_returns_correct_slices() {
+        let batch = make_batch(&[
+            (1, &[0xAA, 0xBB]),
+            (1, &[0xCC]),
+            (1, &[0xDD, 0xEE, 0xFF]),
+        ]);
+        assert_eq!(batch.segment(0), Some([0xAA, 0xBB].as_slice()));
+        assert_eq!(batch.segment(1), Some([0xCC].as_slice()));
+        assert_eq!(batch.segment(2), Some([0xDD, 0xEE, 0xFF].as_slice()));
+        assert_eq!(batch.segment(3), None);
+    }
+
+    #[test]
+    fn segment_out_of_bounds() {
+        let batch = make_batch(&[(1, &[0x01])]);
+        assert_eq!(batch.segment(1), None);
+        assert_eq!(batch.segment(100), None);
+    }
+
+    // ── XDR round-trip (CXS) ───────────────────────────────────────
+
+    #[test]
+    fn xdr_cxs_roundtrip_empty() {
+        let batch = ParallelBatch::empty();
+        let encoded = xdrs::cxs::encode(&batch).unwrap();
+        let decoded: ParallelBatch = xdrs::cxs::decode(&encoded).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    #[test]
+    fn xdr_cxs_roundtrip_populated() {
+        let batch = make_batch(&[(3, &[1, 2, 3, 4, 5]), (2, &[6, 7, 8])]);
+        let encoded = xdrs::cxs::encode(&batch).unwrap();
+        let decoded: ParallelBatch = xdrs::cxs::decode(&encoded).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    #[test]
+    fn xdr_txs_roundtrip_empty() {
+        let batch = ParallelBatch::empty();
+        let encoded = xdrs::txs::encode(&batch).unwrap();
+        let decoded: ParallelBatch = xdrs::txs::decode(&encoded).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    #[test]
+    fn xdr_txs_roundtrip_populated() {
+        let batch = make_batch(&[(10, &[0xFF; 32]), (5, &[0x42; 16])]);
+        let encoded = xdrs::txs::encode(&batch).unwrap();
+        let decoded: ParallelBatch = xdrs::txs::decode(&encoded).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    // ── XDR round-trip for newtype wrappers ─────────────────────────
+
+    #[test]
+    fn xdr_roundtrip_signed_transaction_batch() {
+        let inner = make_batch(&[(2, &[0xAA, 0xBB, 0xCC])]);
+        let batch = ParallelSignedTransactionBatch::from(inner.clone());
+        let encoded = xdrs::cxs::encode(&batch).unwrap();
+        let decoded: ParallelSignedTransactionBatch =
+            xdrs::cxs::decode(&encoded).unwrap();
+        assert_eq!(*decoded, inner);
+    }
+
+    #[test]
+    fn xdr_roundtrip_signed_transaction_hash_batch() {
+        let inner = make_batch(&[(1, &[0xDE, 0xAD])]);
+        let batch = ParallelSignedTransactionHashBatch::from(inner.clone());
+        let encoded = xdrs::txs::encode(&batch).unwrap();
+        let decoded: ParallelSignedTransactionHashBatch =
+            xdrs::txs::decode(&encoded).unwrap();
+        assert_eq!(*decoded, inner);
+    }
+
+    #[test]
+    fn xdr_roundtrip_nondeterministic_proposal_data_batch() {
+        let inner = make_batch(&[(4, &[1; 8]), (3, &[2; 6])]);
+        let batch =
+            ParallelNondeterministicProposalDataBatch::from(inner.clone());
+        let encoded = xdrs::cxs::encode(&batch).unwrap();
+        let decoded: ParallelNondeterministicProposalDataBatch =
+            xdrs::cxs::decode(&encoded).unwrap();
+        assert_eq!(*decoded, inner);
+    }
+
+    // ── Serde JSON round-trip ───────────────────────────────────────
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn serde_json_roundtrip_empty() {
+        let batch = ParallelBatch::empty();
+        let json = serde_json::to_string(&batch).unwrap();
+        let decoded: ParallelBatch = serde_json::from_str(&json).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn serde_json_roundtrip_populated() {
+        let batch = make_batch(&[(3, &[1, 2, 3, 4, 5]), (2, &[6, 7, 8])]);
+        let json = serde_json::to_string(&batch).unwrap();
+        let decoded: ParallelBatch = serde_json::from_str(&json).unwrap();
+        assert_eq!(batch, decoded);
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn serde_json_roundtrip_newtypes() {
+        let inner = make_batch(&[(1, &[0xFF; 4])]);
+
+        let tx = ParallelSignedTransactionBatch::from(inner.clone());
+        let json = serde_json::to_string(&tx).unwrap();
+        let decoded: ParallelSignedTransactionBatch =
+            serde_json::from_str(&json).unwrap();
+        assert_eq!(*decoded, inner);
+
+        let hash = ParallelSignedTransactionHashBatch::from(inner.clone());
+        let json = serde_json::to_string(&hash).unwrap();
+        let decoded: ParallelSignedTransactionHashBatch =
+            serde_json::from_str(&json).unwrap();
+        assert_eq!(*decoded, inner);
+
+        let nd =
+            ParallelNondeterministicProposalDataBatch::from(inner.clone());
+        let json = serde_json::to_string(&nd).unwrap();
+        let decoded: ParallelNondeterministicProposalDataBatch =
+            serde_json::from_str(&json).unwrap();
+        assert_eq!(*decoded, inner);
+    }
+
+    // ── Newtype conversions ─────────────────────────────────────────
+
+    #[test]
+    fn newtype_from_and_into_inner() {
+        let inner = make_batch(&[(5, &[0x01; 10])]);
+        let tx = ParallelSignedTransactionBatch::from(inner.clone());
+        assert_eq!(tx.into_inner(), inner);
+
+        let hash = ParallelSignedTransactionHashBatch::new(inner.clone());
+        assert_eq!(hash.into_inner(), inner);
+
+        let nd =
+            ParallelNondeterministicProposalDataBatch::from(inner.clone());
+        assert_eq!(nd.into_inner(), inner);
+    }
+
+    #[test]
+    fn newtype_deref_provides_validation() {
+        let inner = make_batch(&[(2, &[0xAB; 6])]);
+        let tx = ParallelSignedTransactionBatch::from(inner);
+        // Deref allows calling ParallelBatch methods directly
+        assert!(tx.validate().is_ok());
+        assert_eq!(tx.items(), 2);
+        assert_eq!(tx.segments(), 1);
+        assert_eq!(tx.segment(0), Some([0xAB; 6].as_slice()));
     }
 }

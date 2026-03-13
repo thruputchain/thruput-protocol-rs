@@ -38,3 +38,6 @@ rpc_driver = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }
 serde_with = { workspace = true, optional = true }
 serde_arrays = { workspace = true, optional = true }
+
+[dev-dependencies]
+serde_json = "1"

@@ -306,6 +306,7 @@ dependencies = [
  "groundhog_coordinator",
  "rpc_driver",
  "serde",
+ "serde_json",
  "serde_with",
  "xdr-common",
  "xdrs",
