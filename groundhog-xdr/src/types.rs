@@ -459,7 +459,42 @@ impl<'r> ReadXDR<'r> for &'r DbHash {
 
 
 /// Hash of a groundhog block of transactions
-pub type BlockHash = SHA256Hash;
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct BlockHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for BlockHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl BlockHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for BlockHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for BlockHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 /// Represents a 256-bit contract address.
 /// In the groundhog storage model, each contract is deployed at a 
