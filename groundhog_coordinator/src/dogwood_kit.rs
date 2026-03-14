@@ -27,9 +27,9 @@ use ::serde::{{Serialize, Deserialize}};
 use ::serde_arrays;
 
 
-pub type DogwoodInt64 = i64;
+pub type DogwoodInt64 = u64;
 
-pub type DogwoodInt32 = i32;
+pub type DogwoodInt32 = u32;
 
 
 //
