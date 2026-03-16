@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,23 +31,21 @@ use ::serde_arrays;
 
 // These define the native contract IDs within the Contract struct.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum HogexecPrecompiledNativeContracts {
-    kNativeContractHogToken = 0 as i32,
-    kNativeContractInitialTokenClaim = 1 as i32,
+#[repr(transparent)]
+pub struct HogexecPrecompiledNativeContracts(pub i32);
+
+impl HogexecPrecompiledNativeContracts {
+    pub const kNativeContractHogToken: Self = Self(0);
+    pub const kNativeContractInitialTokenClaim: Self = Self(1);
 }
-impl TryFrom<i32> for HogexecPrecompiledNativeContracts {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kNativeContractHogToken),
-            1 => Ok(Self::kNativeContractInitialTokenClaim),
-            _ => Err(()),
-        }
+impl From<i32> for HogexecPrecompiledNativeContracts {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

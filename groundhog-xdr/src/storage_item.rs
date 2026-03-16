@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -32,37 +32,30 @@ use ::serde_arrays;
 
 /// The type of a storage item.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum StorageItemType {
-    kItemTypeBytestring = 0 as i32,
-    kItemTypeNonnegativeInt = 1 as i32,
-    kItemTypeRetrocausalQueue = 2 as i32,
-    kItemTypeReplayCacheData = 3 as i32,
-    kItemTypeAuthData = 4 as i32,
-    kItemTypeDeployedContractHash = 5 as i32,
+#[repr(transparent)]
+pub struct StorageItemType(pub i32);
+
+impl StorageItemType {
+    pub const kItemTypeBytestring: Self = Self(0);
+    pub const kItemTypeNonnegativeInt: Self = Self(1);
+    pub const kItemTypeRetrocausalQueue: Self = Self(2);
+    pub const kItemTypeReplayCacheData: Self = Self(3);
+    pub const kItemTypeAuthData: Self = Self(4);
+    pub const kItemTypeDeployedContractHash: Self = Self(5);
 
     // 
     // This will be removed when we get rid of the old db interface.
     
-    #[doc(hidden)]kItemTypeDeleted = -1 as i32,
+    #[doc(hidden)]pub const kItemTypeDeleted: Self = Self(-1);
 }
-impl TryFrom<i32> for StorageItemType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kItemTypeBytestring),
-            1 => Ok(Self::kItemTypeNonnegativeInt),
-            2 => Ok(Self::kItemTypeRetrocausalQueue),
-            3 => Ok(Self::kItemTypeReplayCacheData),
-            4 => Ok(Self::kItemTypeAuthData),
-            5 => Ok(Self::kItemTypeDeployedContractHash),
-            -1 => Ok(Self::kItemTypeDeleted),
-            _ => Err(()),
-        }
+impl From<i32> for StorageItemType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -89,7 +82,7 @@ pub enum StorageItem {
     /// An arbitrary value, stored as an opaque string of bytes.
     // case kItemTypeBytestring:
     //   Bytestring bytestring;
-    kItemTypeBytestring { bytestring: Bytestring } = StorageItemType::kItemTypeBytestring as i32,
+    kItemTypeBytestring { bytestring: Bytestring } = StorageItemType::kItemTypeBytestring.0 as i32,
     /// A nonnegative integer, stored as a 128-bit value.
     ///
     /// This can be stored at any [`StorageKey`] of type `kStorageKeyTypeContractData`.
@@ -97,13 +90,13 @@ pub enum StorageItem {
     /// storage key `kStorageKeyTypeFreeNativeTokenBalance`.
     // case kItemTypeNonnegativeInt:
     //   int128_xdr nnint;
-    kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt as i32,
+    kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt.0 as i32,
     /// A retrocausal multi-producer, single-consumer queue.
     /// Tranactions can only insert entries into the queue or consume entries one by one
     /// from the queue, so the whole queue is generally not loaded all at once.
     // case kItemTypeRetrocausalQueue:
     //   VecM<QueueEntry> queue_entries;
-    kItemTypeRetrocausalQueue { queue_entries: VecM<QueueEntry> } = StorageItemType::kItemTypeRetrocausalQueue as i32,
+    kItemTypeRetrocausalQueue { queue_entries: VecM<QueueEntry> } = StorageItemType::kItemTypeRetrocausalQueue.0 as i32,
     /// A set of [`Uniquifier`]s that have been used by the current address.
     /// Transactions can only insert a Uniquifier, not read the whole set.
     /// 
@@ -111,21 +104,21 @@ pub enum StorageItem {
     /// It cannot be stored at any other storage key.
     // case kItemTypeReplayCacheData:
     //   VecM<Uniquifier> active_uniquifiers;
-    kItemTypeReplayCacheData { active_uniquifiers: VecM<Uniquifier> } = StorageItemType::kItemTypeReplayCacheData as i32,
+    kItemTypeReplayCacheData { active_uniquifiers: VecM<Uniquifier> } = StorageItemType::kItemTypeReplayCacheData.0 as i32,
     /// The authorization data for the current address.
     ///
     /// This is the type stored at storage key `kStorageKeyTypeAddressAuthData`.
     /// It cannot be stored at any other storage key.
     // case kItemTypeAuthData:
     //   AddressAuthData auth_data;
-    kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData as i32,
+    kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData.0 as i32,
     /// The hash of the deployed contract for the current address.
     ///
     /// This is the type stored at storage key `kStorageKeyTypeAddressMetadata`.
     /// It cannot be stored at any other storage key.
     // case kItemTypeDeployedContractHash:
     //   DeployedContractHash deployed_contract_hash;
-    kItemTypeDeployedContractHash { deployed_contract_hash: DeployedContractHash } = StorageItemType::kItemTypeDeployedContractHash as i32,
+    kItemTypeDeployedContractHash { deployed_contract_hash: DeployedContractHash } = StorageItemType::kItemTypeDeployedContractHash.0 as i32,
     
 }
 // 
@@ -144,57 +137,49 @@ pub enum StorageItem {
 pub enum WireStorageItem {
     // case kItemTypeBytestring:
     //   Bytestring bytestring;
-    kItemTypeBytestring { bytestring: Bytestring } = StorageItemType::kItemTypeBytestring as i32,
+    kItemTypeBytestring { bytestring: Bytestring } = StorageItemType::kItemTypeBytestring.0 as i32,
     // case kItemTypeNonnegativeInt:
     //   int128_xdr nnint;
-    kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt as i32,
+    kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt.0 as i32,
     // case kItemTypeAuthData:
     //   AddressAuthData auth_data;
-    kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData as i32,
+    kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData.0 as i32,
     // case kItemTypeRetrocausalQueue:
     //   RetrocausalQueueMetadata metadata;
-    kItemTypeRetrocausalQueue { metadata: RetrocausalQueueMetadata } = StorageItemType::kItemTypeRetrocausalQueue as i32,
+    kItemTypeRetrocausalQueue { metadata: RetrocausalQueueMetadata } = StorageItemType::kItemTypeRetrocausalQueue.0 as i32,
     // case kItemTypeReplayCacheData:
     //   void;
-    kItemTypeReplayCacheData = StorageItemType::kItemTypeReplayCacheData as i32,
+    kItemTypeReplayCacheData = StorageItemType::kItemTypeReplayCacheData.0 as i32,
     // case kItemTypeDeployedContractHash:
     //   DeployedContractHash deployed_contract_hash;
-    kItemTypeDeployedContractHash { deployed_contract_hash: DeployedContractHash } = StorageItemType::kItemTypeDeployedContractHash as i32,
+    kItemTypeDeployedContractHash { deployed_contract_hash: DeployedContractHash } = StorageItemType::kItemTypeDeployedContractHash.0 as i32,
     
 }
 
 /// The types of changes accumulated by a transaction that will be applied to the database
 /// if the transaction commits.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum StorageDeltaType {
-    kDeltaTypeBytestringSet = 0 as i32,
-    kDeltaTypeNonnegativeIntSetAdd = 1 as i32,
-    kDeltaTypeDelete = 2 as i32,
-    kDeltaTypeRetrocausalQueue = 3 as i32,
-    kDeltaTypeNonnegativeIntAdd = 5 as i32,
-    kDeltaTypeAuthDataChange = 6 as i32,
-    kDeltaTypeDeployContract = 7 as i32,
-    kDeltaTypeConsumeUniquifier = 8 as i32,
+#[repr(transparent)]
+pub struct StorageDeltaType(pub i32);
+
+impl StorageDeltaType {
+    pub const kDeltaTypeBytestringSet: Self = Self(0);
+    pub const kDeltaTypeNonnegativeIntSetAdd: Self = Self(1);
+    pub const kDeltaTypeDelete: Self = Self(2);
+    pub const kDeltaTypeRetrocausalQueue: Self = Self(3);
+    pub const kDeltaTypeNonnegativeIntAdd: Self = Self(5);
+    pub const kDeltaTypeAuthDataChange: Self = Self(6);
+    pub const kDeltaTypeDeployContract: Self = Self(7);
+    pub const kDeltaTypeConsumeUniquifier: Self = Self(8);
 }
-impl TryFrom<i32> for StorageDeltaType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kDeltaTypeBytestringSet),
-            1 => Ok(Self::kDeltaTypeNonnegativeIntSetAdd),
-            2 => Ok(Self::kDeltaTypeDelete),
-            3 => Ok(Self::kDeltaTypeRetrocausalQueue),
-            5 => Ok(Self::kDeltaTypeNonnegativeIntAdd),
-            6 => Ok(Self::kDeltaTypeAuthDataChange),
-            7 => Ok(Self::kDeltaTypeDeployContract),
-            8 => Ok(Self::kDeltaTypeConsumeUniquifier),
-            _ => Err(()),
-        }
+impl From<i32> for StorageDeltaType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -272,7 +257,7 @@ pub enum StorageDelta {
     ///   - Will conflict with any other delta that creates a *different* item at the same storage key.
     // case kDeltaTypeBytestringSet:
     //   Bytestring bytestring;
-    kDeltaTypeBytestringSet { bytestring: Bytestring } = StorageDeltaType::kDeltaTypeBytestringSet as i32,
+    kDeltaTypeBytestringSet { bytestring: Bytestring } = StorageDeltaType::kDeltaTypeBytestringSet.0 as i32,
     /// Creates a nonnegative integer item.
     /// The value of the int will be equal to the `set_value`, plus the sum of all the `add_value`s supplied
     /// by this delta and all NonnegativeInt128SetAdd and NonnegativeInt128Add deltas in the same block.
@@ -289,7 +274,7 @@ pub enum StorageDelta {
     ///     does not overflow a 128-bit integer, and that that value is always at least `min(set_value, 0)`.
     // case kDeltaTypeNonnegativeIntSetAdd:
     //   NonnegativeInt128SetAddArgs nnint;
-    kDeltaTypeNonnegativeIntSetAdd { nnint: NonnegativeInt128SetAddArgs } = StorageDeltaType::kDeltaTypeNonnegativeIntSetAdd as i32,
+    kDeltaTypeNonnegativeIntSetAdd { nnint: NonnegativeInt128SetAddArgs } = StorageDeltaType::kDeltaTypeNonnegativeIntSetAdd.0 as i32,
     /// Adds the supplied value to the nonnegative integer item at the storage key.
     /// This type is equivalent to a NonnegativeIntSetAdd delta with a `set_value` 
     /// equal to the value of the item at the start of the block (if it is a nonnegative integer) or 0 otherwise.
@@ -301,7 +286,7 @@ pub enum StorageDelta {
     ///   - Same as NonnegativeIntSetAdd deltas.
     // case kDeltaTypeNonnegativeIntAdd:
     //   int128_xdr nnint_add;
-    kDeltaTypeNonnegativeIntAdd { nnint_add: int128_xdr } = StorageDeltaType::kDeltaTypeNonnegativeIntAdd as i32,
+    kDeltaTypeNonnegativeIntAdd { nnint_add: int128_xdr } = StorageDeltaType::kDeltaTypeNonnegativeIntAdd.0 as i32,
     /// Deletes the item at the storage key.
     ///
     /// Item Type: None (deletes the item at the storage key)
@@ -310,7 +295,7 @@ pub enum StorageDelta {
     ///   - Will conflict with any other delta that creates a *different* item at the same storage key.
     // case kDeltaTypeDelete:
     //   void;
-    kDeltaTypeDelete = StorageDeltaType::kDeltaTypeDelete as i32,
+    kDeltaTypeDelete = StorageDeltaType::kDeltaTypeDelete.0 as i32,
     /// Consumes or inserts entries into the retrocausal queue.
     ///
     /// Item Type: `kItemTypeRetrocausalQueue`
@@ -321,7 +306,7 @@ pub enum StorageDelta {
     ///   - Consuming entries conflicts with other consumption deltas in the same block.
     // case kDeltaTypeRetrocausalQueue:
     //   RetrocausalQueueDelta retrocausal_queue;
-    kDeltaTypeRetrocausalQueue { retrocausal_queue: RetrocausalQueueDelta } = StorageDeltaType::kDeltaTypeRetrocausalQueue as i32,
+    kDeltaTypeRetrocausalQueue { retrocausal_queue: RetrocausalQueueDelta } = StorageDeltaType::kDeltaTypeRetrocausalQueue.0 as i32,
     /// Changes the authorization data for the current address.
     ///
     /// Item Type: `kItemTypeAuthData`
@@ -330,7 +315,7 @@ pub enum StorageDelta {
     ///   - Will conflict with any other auth change delta in the same block.
     // case kDeltaTypeAuthDataChange:
     //   AuthDataChangeArgs auth_data_change;
-    kDeltaTypeAuthDataChange { auth_data_change: AuthDataChangeArgs } = StorageDeltaType::kDeltaTypeAuthDataChange as i32,
+    kDeltaTypeAuthDataChange { auth_data_change: AuthDataChangeArgs } = StorageDeltaType::kDeltaTypeAuthDataChange.0 as i32,
     /// Deploys a new contract for the current address.
     /// 
     /// Item Type: `kItemTypeDeployedContractHash`
@@ -341,7 +326,7 @@ pub enum StorageDelta {
     ///     then both transactions are deploying the exact same contract.
     // case kDeltaTypeDeployContract:
     //   DeployedContractHash deployed_contract_hash;
-    kDeltaTypeDeployContract { deployed_contract_hash: DeployedContractHash } = StorageDeltaType::kDeltaTypeDeployContract as i32,
+    kDeltaTypeDeployContract { deployed_contract_hash: DeployedContractHash } = StorageDeltaType::kDeltaTypeDeployContract.0 as i32,
     /// Add a [`Uniquifier`] to the replay cache.
     ///
     /// Item Type: kItemTypeReplayCacheData 
@@ -350,7 +335,7 @@ pub enum StorageDelta {
     ///   - Will conflict with any other attempt to consume the same [`Uniquifier`].
     // case kDeltaTypeConsumeUniquifier:
     //   ConsumeUniquifierArgs consume_uniquifier_args;
-    kDeltaTypeConsumeUniquifier { consume_uniquifier_args: ConsumeUniquifierArgs } = StorageDeltaType::kDeltaTypeConsumeUniquifier as i32,
+    kDeltaTypeConsumeUniquifier { consume_uniquifier_args: ConsumeUniquifierArgs } = StorageDeltaType::kDeltaTypeConsumeUniquifier.0 as i32,
     
 }
 
@@ -409,26 +394,24 @@ pub struct ReplayCacheData {
 /// Flags that can be set on a storage delta to modify its behavior.
 /// Multiple flags can be combined using bitwise OR.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum StorageDeltaFlags {
-    kStorageDeltaFlagNone = 0 as i32,
+#[repr(transparent)]
+pub struct StorageDeltaFlags(pub i32);
+
+impl StorageDeltaFlags {
+    pub const kStorageDeltaFlagNone: Self = Self(0);
 
     /// Forces the delta to acquire an exclusive lock on the item at the storage key,
     /// regardless of any other conflict resolution rules.
-    kStorageDeltaFlagExclusiveLock = 0x00000001 as i32,
+    pub const kStorageDeltaFlagExclusiveLock: Self = Self(0x00000001);
 }
-impl TryFrom<i32> for StorageDeltaFlags {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kStorageDeltaFlagNone),
-            0x00000001 => Ok(Self::kStorageDeltaFlagExclusiveLock),
-            _ => Err(()),
-        }
+impl From<i32> for StorageDeltaFlags {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

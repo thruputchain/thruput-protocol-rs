@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -40,9 +40,9 @@ pub enum ExecProposeResult {
     // case ExecResultTxDeterministicError:
     // case ExecResultTxRootFrameReverted:
     //   NondeterministicProposalData proposal_data;
-    ExecResultOK { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultOK as i32,
-    ExecResultTxDeterministicError { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultTxDeterministicError as i32,
-    ExecResultTxRootFrameReverted { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultTxRootFrameReverted as i32,
+    ExecResultOK { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultOK.0 as i32,
+    ExecResultTxDeterministicError { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultTxDeterministicError.0 as i32,
+    ExecResultTxRootFrameReverted { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultTxRootFrameReverted.0 as i32,
     // default:
     //   void;
     Default { result: i32 },

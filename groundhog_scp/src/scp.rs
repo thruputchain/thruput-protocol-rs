@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -57,27 +57,23 @@ pub struct SCPBallot {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SCPStatementType {
-    SCP_ST_PREPARE = 0 as i32,
-    SCP_ST_CONFIRM = 1 as i32,
-    SCP_ST_EXTERNALIZE = 2 as i32,
-    SCP_ST_NOMINATE = 3 as i32,
+#[repr(transparent)]
+pub struct SCPStatementType(pub i32);
+
+impl SCPStatementType {
+    pub const SCP_ST_PREPARE: Self = Self(0);
+    pub const SCP_ST_CONFIRM: Self = Self(1);
+    pub const SCP_ST_EXTERNALIZE: Self = Self(2);
+    pub const SCP_ST_NOMINATE: Self = Self(3);
 }
-impl TryFrom<i32> for SCPStatementType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::SCP_ST_PREPARE),
-            1 => Ok(Self::SCP_ST_CONFIRM),
-            2 => Ok(Self::SCP_ST_EXTERNALIZE),
-            3 => Ok(Self::SCP_ST_NOMINATE),
-            _ => Err(()),
-        }
+impl From<i32> for SCPStatementType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -156,16 +152,16 @@ pub struct SCPStatementExternalize {
 pub enum SCPStatement_pledges {
     // case SCP_ST_PREPARE:
     //   SCPStatementPrepare prepare;
-    SCP_ST_PREPARE { prepare: SCPStatementPrepare } = SCPStatementType::SCP_ST_PREPARE as i32,
+    SCP_ST_PREPARE { prepare: SCPStatementPrepare } = SCPStatementType::SCP_ST_PREPARE.0 as i32,
     // case SCP_ST_CONFIRM:
     //   SCPStatementConfirm confirm;
-    SCP_ST_CONFIRM { confirm: SCPStatementConfirm } = SCPStatementType::SCP_ST_CONFIRM as i32,
+    SCP_ST_CONFIRM { confirm: SCPStatementConfirm } = SCPStatementType::SCP_ST_CONFIRM.0 as i32,
     // case SCP_ST_EXTERNALIZE:
     //   SCPStatementExternalize externalize;
-    SCP_ST_EXTERNALIZE { externalize: SCPStatementExternalize } = SCPStatementType::SCP_ST_EXTERNALIZE as i32,
+    SCP_ST_EXTERNALIZE { externalize: SCPStatementExternalize } = SCPStatementType::SCP_ST_EXTERNALIZE.0 as i32,
     // case SCP_ST_NOMINATE:
     //   SCPStatementNominate nominate;
-    SCP_ST_NOMINATE { nominate: SCPStatementNominate } = SCPStatementType::SCP_ST_NOMINATE as i32,
+    SCP_ST_NOMINATE { nominate: SCPStatementNominate } = SCPStatementType::SCP_ST_NOMINATE.0 as i32,
     
 }
 

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,23 +31,21 @@ use ::serde_arrays;
 // clang-format on
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum DbSchedResult {
-    DbSchedResultOK = 0 as i32,
-    DbSchedResultError = 1 as i32,
+#[repr(transparent)]
+pub struct DbSchedResult(pub i32);
+
+impl DbSchedResult {
+    pub const DbSchedResultOK: Self = Self(0);
+    pub const DbSchedResultError: Self = Self(1);
 }
-impl TryFrom<i32> for DbSchedResult {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::DbSchedResultOK),
-            1 => Ok(Self::DbSchedResultError),
-            _ => Err(()),
-        }
+impl From<i32> for DbSchedResult {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -81,7 +79,7 @@ pub type HogAgeBatch = VecM::<HogAge>;
 pub enum HogAgeResult {
     // case DbSchedResultOK:
     //   HogAgeBatch hog_age_batch;
-    DbSchedResultOK { hog_age_batch: HogAgeBatch } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK { hog_age_batch: HogAgeBatch } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     Default { result: i32 },
@@ -95,7 +93,7 @@ pub enum HogAgeResult {
 pub enum DbAddressAuthDataBatchResult {
     // case DbSchedResultOK:
     //   VecM<AddressAuthData> address_auth_data_batch;
-    DbSchedResultOK { address_auth_data_batch: VecM<AddressAuthData> } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK { address_auth_data_batch: VecM<AddressAuthData> } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     Default { result: i32 },
@@ -109,28 +107,27 @@ pub enum DbAddressAuthDataBatchResult {
 pub enum DbBlockResult {
     // case DbSchedResultOK:
     //   DbHash db_hash;
-    DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     Default { result: i32 },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum DbShardResult {
-    ShardOK = 0 as i32,
+#[repr(transparent)]
+pub struct DbShardResult(pub i32);
+
+impl DbShardResult {
+    pub const ShardOK: Self = Self(0);
 }
-impl TryFrom<i32> for DbShardResult {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::ShardOK),
-            _ => Err(()),
-        }
+impl From<i32> for DbShardResult {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -143,7 +140,7 @@ impl TryFrom<i32> for DbShardResult {
 pub enum DbTipResult {
     // case DbSchedResultOK:
     //   DbTip db_tip;
-    DbSchedResultOK { db_tip: DbTip } = DbSchedResult::DbSchedResultOK as i32,
+    DbSchedResultOK { db_tip: DbTip } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     Default { result: i32 },

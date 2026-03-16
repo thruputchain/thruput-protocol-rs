@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -61,37 +61,34 @@ pub struct ContractBlob {
 
 /// The execution environment for a contract.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum ContractType {
+#[repr(transparent)]
+pub struct ContractType(pub i32);
+
+impl ContractType {
     /// WebAssembly contract executed in the Wasmi runtime.
     ///
     /// This is the standard contract type for user-deployed contracts.
-    kWasmi = 0 as i32,
+    pub const kWasmi: Self = Self(0);
 
     /// Precompiled native contract implemented directly in Rust.
     ///
     /// Used for system contracts like the native HogToken.
     /// More efficient than WASM but cannot be deployed by users.
-    kNative = 1 as i32,
+    pub const kNative: Self = Self(1);
 
     /// Mock contract for local testing.
     ///
     /// Never deployed on-chain; exists only in the test harness.
-    kMockTest = 2 as i32,
+    pub const kMockTest: Self = Self(2);
 }
-impl TryFrom<i32> for ContractType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kWasmi),
-            1 => Ok(Self::kNative),
-            2 => Ok(Self::kMockTest),
-            _ => Err(()),
-        }
+impl From<i32> for ContractType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -114,17 +111,17 @@ impl TryFrom<i32> for ContractType {
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
-    kWasmi { wasmi_contract: ContractBlob } = ContractType::kWasmi as i32,
+    kWasmi { wasmi_contract: ContractBlob } = ContractType::kWasmi.0 as i32,
     /// Identifier for which native contract this is.
     ///
     /// Native contracts are hard-coded in the runtime.
     // case kNative:
     //   HogexecPrecompiledNativeContracts native_contract_id;
-    kNative { native_contract_id: HogexecPrecompiledNativeContracts } = ContractType::kNative as i32,
+    kNative { native_contract_id: HogexecPrecompiledNativeContracts } = ContractType::kNative.0 as i32,
     /// Identifier for the mock contract in the test harness.
     // case kMockTest:
     //   i32 mock_contract_id;
-    kMockTest { mock_contract_id: i32 } = ContractType::kMockTest as i32,
+    kMockTest { mock_contract_id: i32 } = ContractType::kMockTest.0 as i32,
     
 }
 

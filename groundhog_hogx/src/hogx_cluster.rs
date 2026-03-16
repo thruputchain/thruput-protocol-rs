@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -88,10 +88,10 @@ pub struct LoadgenSystemConfig {
 pub enum SystemConfig {
     // case SYSTEM_VALIDATOR:
     //   ValidatorSystemConfig validator_config;
-    SYSTEM_VALIDATOR { validator_config: ValidatorSystemConfig } = SystemType::SYSTEM_VALIDATOR as i32,
+    SYSTEM_VALIDATOR { validator_config: ValidatorSystemConfig } = SystemType::SYSTEM_VALIDATOR.0 as i32,
     // case SYSTEM_LOADGEN:
     //   LoadgenSystemConfig loadgen_config;
-    SYSTEM_LOADGEN { loadgen_config: LoadgenSystemConfig } = SystemType::SYSTEM_LOADGEN as i32,
+    SYSTEM_LOADGEN { loadgen_config: LoadgenSystemConfig } = SystemType::SYSTEM_LOADGEN.0 as i32,
     
 }
 

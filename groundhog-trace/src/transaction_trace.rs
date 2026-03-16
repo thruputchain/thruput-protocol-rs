@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -948,100 +948,100 @@ pub struct SyscallGetBlockHeightTrace {
 pub enum SyscallTraceBody {
     // case kSHA256:
     //   SyscallSHA256Trace sha256;
-    kSHA256 { sha256: SyscallSHA256Trace } = SyscallNo::kSHA256 as i32,
+    kSHA256 { sha256: SyscallSHA256Trace } = SyscallNo::kSHA256.0 as i32,
     // case kGetMsgSender:
     //   SyscallGetMsgSenderTrace get_msg_sender;
-    kGetMsgSender { get_msg_sender: SyscallGetMsgSenderTrace } = SyscallNo::kGetMsgSender as i32,
+    kGetMsgSender { get_msg_sender: SyscallGetMsgSenderTrace } = SyscallNo::kGetMsgSender.0 as i32,
     // case kGetCalldataLen:
     //   SyscallGetCalldataLenTrace get_calldata_len;
-    kGetCalldataLen { get_calldata_len: SyscallGetCalldataLenTrace } = SyscallNo::kGetCalldataLen as i32,
+    kGetCalldataLen { get_calldata_len: SyscallGetCalldataLenTrace } = SyscallNo::kGetCalldataLen.0 as i32,
     // case kGetCalldata:
     //   SyscallGetCalldataTrace get_calldata;
-    kGetCalldata { get_calldata: SyscallGetCalldataTrace } = SyscallNo::kGetCalldata as i32,
+    kGetCalldata { get_calldata: SyscallGetCalldataTrace } = SyscallNo::kGetCalldata.0 as i32,
     // case kConsoleLog:
     //   SyscallConsoleLogTrace console_log;
-    kConsoleLog { console_log: SyscallConsoleLogTrace } = SyscallNo::kConsoleLog as i32,
+    kConsoleLog { console_log: SyscallConsoleLogTrace } = SyscallNo::kConsoleLog.0 as i32,
     // case kInvoke:
     //   SyscallInvokeTrace invoke;
-    kInvoke { invoke: SyscallInvokeTrace } = SyscallNo::kInvoke as i32,
+    kInvoke { invoke: SyscallInvokeTrace } = SyscallNo::kInvoke.0 as i32,
     // case kReturn:
     //   SyscallReturnTrace return_trace;
-    kReturn { return_trace: SyscallReturnTrace } = SyscallNo::kReturn as i32,
+    kReturn { return_trace: SyscallReturnTrace } = SyscallNo::kReturn.0 as i32,
     // case kGetReturnedBuffer:
     //   SyscallGetReturnedBufferTrace get_returned_buffer;
-    kGetReturnedBuffer { get_returned_buffer: SyscallGetReturnedBufferTrace } = SyscallNo::kGetReturnedBuffer as i32,
+    kGetReturnedBuffer { get_returned_buffer: SyscallGetReturnedBufferTrace } = SyscallNo::kGetReturnedBuffer.0 as i32,
     // case kExit:
     //   SyscallExitTrace exit_trace;
-    kExit { exit_trace: SyscallExitTrace } = SyscallNo::kExit as i32,
+    kExit { exit_trace: SyscallExitTrace } = SyscallNo::kExit.0 as i32,
     // case kGetDeployAddress:
     //   SyscallGetDeployAddressTrace get_deploy_address;
-    kGetDeployAddress { get_deploy_address: SyscallGetDeployAddressTrace } = SyscallNo::kGetDeployAddress as i32,
+    kGetDeployAddress { get_deploy_address: SyscallGetDeployAddressTrace } = SyscallNo::kGetDeployAddress.0 as i32,
     // case kDeployContract:
     //   SyscallDeployContractTrace deploy_contract;
-    kDeployContract { deploy_contract: SyscallDeployContractTrace } = SyscallNo::kDeployContract as i32,
+    kDeployContract { deploy_contract: SyscallDeployContractTrace } = SyscallNo::kDeployContract.0 as i32,
     // case kGetSourceTransactionHash:
     //   SyscallGetSourceTransactionHashTrace get_source_transaction_hash;
-    kGetSourceTransactionHash { get_source_transaction_hash: SyscallGetSourceTransactionHashTrace } = SyscallNo::kGetSourceTransactionHash as i32,
+    kGetSourceTransactionHash { get_source_transaction_hash: SyscallGetSourceTransactionHashTrace } = SyscallNo::kGetSourceTransactionHash.0 as i32,
     // case kVerifySignature:
     //   SyscallVerifySignatureTrace verify_signature;
-    kVerifySignature { verify_signature: SyscallVerifySignatureTrace } = SyscallNo::kVerifySignature as i32,
+    kVerifySignature { verify_signature: SyscallVerifySignatureTrace } = SyscallNo::kVerifySignature.0 as i32,
     // case kBytestringGetLen:
     //   SyscallBytestringGetLenTrace bytestring_get_len;
-    kBytestringGetLen { bytestring_get_len: SyscallBytestringGetLenTrace } = SyscallNo::kBytestringGetLen as i32,
+    kBytestringGetLen { bytestring_get_len: SyscallBytestringGetLenTrace } = SyscallNo::kBytestringGetLen.0 as i32,
     // case kBytestringGet:
     //   SyscallBytestringGetTrace bytestring_get;
-    kBytestringGet { bytestring_get: SyscallBytestringGetTrace } = SyscallNo::kBytestringGet as i32,
+    kBytestringGet { bytestring_get: SyscallBytestringGetTrace } = SyscallNo::kBytestringGet.0 as i32,
     // case kBytestringSet:
     //   SyscallBytestringSetTrace bytestring_set;
-    kBytestringSet { bytestring_set: SyscallBytestringSetTrace } = SyscallNo::kBytestringSet as i32,
+    kBytestringSet { bytestring_set: SyscallBytestringSetTrace } = SyscallNo::kBytestringSet.0 as i32,
     // case kNonnegativeIntGet:
     //   SyscallNonnegativeIntGetTrace nonnegative_int_get;
-    kNonnegativeIntGet { nonnegative_int_get: SyscallNonnegativeIntGetTrace } = SyscallNo::kNonnegativeIntGet as i32,
+    kNonnegativeIntGet { nonnegative_int_get: SyscallNonnegativeIntGetTrace } = SyscallNo::kNonnegativeIntGet.0 as i32,
     // case kNonnegativeIntSetAdd:
     //   SyscallNonnegativeIntSetAddTrace nonnegative_int_set_add;
-    kNonnegativeIntSetAdd { nonnegative_int_set_add: SyscallNonnegativeIntSetAddTrace } = SyscallNo::kNonnegativeIntSetAdd as i32,
+    kNonnegativeIntSetAdd { nonnegative_int_set_add: SyscallNonnegativeIntSetAddTrace } = SyscallNo::kNonnegativeIntSetAdd.0 as i32,
     // case kDeleteObject:
     //   SyscallDeleteObjectTrace delete_object;
-    kDeleteObject { delete_object: SyscallDeleteObjectTrace } = SyscallNo::kDeleteObject as i32,
+    kDeleteObject { delete_object: SyscallDeleteObjectTrace } = SyscallNo::kDeleteObject.0 as i32,
     // case kGetCurrentAddress:
     //   SyscallGetCurrentAddressTrace get_current_address;
-    kGetCurrentAddress { get_current_address: SyscallGetCurrentAddressTrace } = SyscallNo::kGetCurrentAddress as i32,
+    kGetCurrentAddress { get_current_address: SyscallGetCurrentAddressTrace } = SyscallNo::kGetCurrentAddress.0 as i32,
     // case kRetrocausalQueueInsert:
     //   SyscallRetrocausalQueueInsertTrace retrocausal_queue_insert;
-    kRetrocausalQueueInsert { retrocausal_queue_insert: SyscallRetrocausalQueueInsertTrace } = SyscallNo::kRetrocausalQueueInsert as i32,
+    kRetrocausalQueueInsert { retrocausal_queue_insert: SyscallRetrocausalQueueInsertTrace } = SyscallNo::kRetrocausalQueueInsert.0 as i32,
     // case kRetrocausalQueueConsume:
     //   SyscallRetrocausalQueueConsumeTrace retrocausal_queue_consume;
-    kRetrocausalQueueConsume { retrocausal_queue_consume: SyscallRetrocausalQueueConsumeTrace } = SyscallNo::kRetrocausalQueueConsume as i32,
+    kRetrocausalQueueConsume { retrocausal_queue_consume: SyscallRetrocausalQueueConsumeTrace } = SyscallNo::kRetrocausalQueueConsume.0 as i32,
     // case kGetTransactionStatistics:
     //   SyscallGetTransactionStatisticsTrace get_transaction_statistics;
-    kGetTransactionStatistics { get_transaction_statistics: SyscallGetTransactionStatisticsTrace } = SyscallNo::kGetTransactionStatistics as i32,
+    kGetTransactionStatistics { get_transaction_statistics: SyscallGetTransactionStatisticsTrace } = SyscallNo::kGetTransactionStatistics.0 as i32,
     // case kChangePublicKeyRegistration:
     //   SyscallChangePublicKeyRegistrationTrace change_public_key_registration;
-    kChangePublicKeyRegistration { change_public_key_registration: SyscallChangePublicKeyRegistrationTrace } = SyscallNo::kChangePublicKeyRegistration as i32,
+    kChangePublicKeyRegistration { change_public_key_registration: SyscallChangePublicKeyRegistrationTrace } = SyscallNo::kChangePublicKeyRegistration.0 as i32,
     // case kLogEvent:
     //   SyscallLogEventTrace log_event;
-    kLogEvent { log_event: SyscallLogEventTrace } = SyscallNo::kLogEvent as i32,
+    kLogEvent { log_event: SyscallLogEventTrace } = SyscallNo::kLogEvent.0 as i32,
     // case kGetAuthClaimCount:
     //   SyscallGetAuthClaimCountTrace get_auth_claim_count;
-    kGetAuthClaimCount { get_auth_claim_count: SyscallGetAuthClaimCountTrace } = SyscallNo::kGetAuthClaimCount as i32,
+    kGetAuthClaimCount { get_auth_claim_count: SyscallGetAuthClaimCountTrace } = SyscallNo::kGetAuthClaimCount.0 as i32,
     // case kGetAuthClaim:
     //   SyscallGetAuthClaimTrace get_auth_claim;
-    kGetAuthClaim { get_auth_claim: SyscallGetAuthClaimTrace } = SyscallNo::kGetAuthClaim as i32,
+    kGetAuthClaim { get_auth_claim: SyscallGetAuthClaimTrace } = SyscallNo::kGetAuthClaim.0 as i32,
     // case kSHA256Update:
     //   SyscallSHA256UpdateTrace sha256_update;
-    kSHA256Update { sha256_update: SyscallSHA256UpdateTrace } = SyscallNo::kSHA256Update as i32,
+    kSHA256Update { sha256_update: SyscallSHA256UpdateTrace } = SyscallNo::kSHA256Update.0 as i32,
     // case kSHA256Finalize:
     //   SyscallSHA256FinalizeTrace sha256_finalize;
-    kSHA256Finalize { sha256_finalize: SyscallSHA256FinalizeTrace } = SyscallNo::kSHA256Finalize as i32,
+    kSHA256Finalize { sha256_finalize: SyscallSHA256FinalizeTrace } = SyscallNo::kSHA256Finalize.0 as i32,
     // case kWriteAddressNonceConfig:
     //   SyscallWriteAddressNonceConfigTrace write_address_nonce_config;
-    kWriteAddressNonceConfig { write_address_nonce_config: SyscallWriteAddressNonceConfigTrace } = SyscallNo::kWriteAddressNonceConfig as i32,
+    kWriteAddressNonceConfig { write_address_nonce_config: SyscallWriteAddressNonceConfigTrace } = SyscallNo::kWriteAddressNonceConfig.0 as i32,
     // case kWriteAddressGasPermissionConfigs:
     //   SyscallWriteAddressGasPermissionConfigsTrace write_address_gas_permission_configs;
-    kWriteAddressGasPermissionConfigs { write_address_gas_permission_configs: SyscallWriteAddressGasPermissionConfigsTrace } = SyscallNo::kWriteAddressGasPermissionConfigs as i32,
+    kWriteAddressGasPermissionConfigs { write_address_gas_permission_configs: SyscallWriteAddressGasPermissionConfigsTrace } = SyscallNo::kWriteAddressGasPermissionConfigs.0 as i32,
     // case kGetBlockHeight:
     //   SyscallGetBlockHeightTrace get_block_height;
-    kGetBlockHeight { get_block_height: SyscallGetBlockHeightTrace } = SyscallNo::kGetBlockHeight as i32,
+    kGetBlockHeight { get_block_height: SyscallGetBlockHeightTrace } = SyscallNo::kGetBlockHeight.0 as i32,
     // default:
     //   void;
     Default { syscall_number: i32 },
@@ -1055,7 +1055,7 @@ pub enum SyscallTraceBody {
 pub enum HostFunctionStatusXdr {
     // case kHostNoneOrRecoverable:
     //   SyscallErrorCode syscall_return_code;
-    kHostNoneOrRecoverable { syscall_return_code: SyscallErrorCode } = HostFnErrorCode::kHostNoneOrRecoverable as i32,
+    kHostNoneOrRecoverable { syscall_return_code: SyscallErrorCode } = HostFnErrorCode::kHostNoneOrRecoverable.0 as i32,
     // default:
     //   void;
     Default { error: i32 },

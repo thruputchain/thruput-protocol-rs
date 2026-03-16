@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -139,25 +139,22 @@ pub struct Invocation {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum InvocationFrameStatusCode {
-    kInvocationFrameStatusCodeReturn = 0 as i32,
-    kInvocationFrameStatusCodeFault = 1 as i32,
-    kInvocationFrameStatusCodeAbort = 2 as i32,
+#[repr(transparent)]
+pub struct InvocationFrameStatusCode(pub i32);
+
+impl InvocationFrameStatusCode {
+    pub const kInvocationFrameStatusCodeReturn: Self = Self(0);
+    pub const kInvocationFrameStatusCodeFault: Self = Self(1);
+    pub const kInvocationFrameStatusCodeAbort: Self = Self(2);
 }
-impl TryFrom<i32> for InvocationFrameStatusCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kInvocationFrameStatusCodeReturn),
-            1 => Ok(Self::kInvocationFrameStatusCodeFault),
-            2 => Ok(Self::kInvocationFrameStatusCodeAbort),
-            _ => Err(()),
-        }
+impl From<i32> for InvocationFrameStatusCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -170,13 +167,13 @@ impl TryFrom<i32> for InvocationFrameStatusCode {
 pub enum InvocationFrameOutput {
     // case kInvocationFrameStatusCodeReturn:
     //   ReturnBuffer return_buffer;
-    kInvocationFrameStatusCodeReturn { return_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeReturn as i32,
+    kInvocationFrameStatusCodeReturn { return_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeReturn.0 as i32,
     // case kInvocationFrameStatusCodeAbort:
     //   ReturnBuffer abort_buffer;
-    kInvocationFrameStatusCodeAbort { abort_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeAbort as i32,
+    kInvocationFrameStatusCodeAbort { abort_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeAbort.0 as i32,
     // case kInvocationFrameStatusCodeFault:
     //   void;
-    kInvocationFrameStatusCodeFault = InvocationFrameStatusCode::kInvocationFrameStatusCodeFault as i32,
+    kInvocationFrameStatusCodeFault = InvocationFrameStatusCode::kInvocationFrameStatusCodeFault.0 as i32,
     
 }
 
@@ -189,14 +186,17 @@ pub enum InvocationFrameOutput {
 /// instead a parameter to the Invoke syscall. The root transaction invocation
 /// always has no flags set (equivalent to kInvokeFlagNone).
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum InvokeFlag {
+#[repr(transparent)]
+pub struct InvokeFlag(pub i32);
+
+impl InvokeFlag {
     /// No special behavior (default).
-    kInvokeFlagNone = 0 as i32,
+    pub const kInvokeFlagNone: Self = Self(0);
 
     /// Enable early conflict detection for parallel execution.
     ///
@@ -211,13 +211,13 @@ pub enum InvokeFlag {
     /// This is nondeterministic, so the two-phase commit result (a boolean) is appended to
     /// the nondeterministic_bits in [`NondeterministicProposalData`] for deterministic
     /// re-execution by validators.
-    kInvokeFlagTryInvoke = 0x00000001 as i32,
+    pub const kInvokeFlagTryInvoke: Self = Self(0x00000001);
 
     /// Prevent all state modifications in the subinvocation.
     ///
     /// The subinvocation can read storage but cannot write, deploy contracts,
     /// or perform any other state-modifying operations.
-    kInvokeFlagReadOnly = 0x00000002 as i32,
+    pub const kInvokeFlagReadOnly: Self = Self(0x00000002);
 
     /// Execute the target contract's code in the caller's context.
     ///
@@ -230,18 +230,11 @@ pub enum InvokeFlag {
     /// should NOT change (they return the original caller and current address),
     /// but storage operations should operate on the caller's storage. Document
     /// the behavior of all syscalls in a delegatecall context.
-    kInvokeFlagDelegateCall = 0x00000004 as i32,
+    pub const kInvokeFlagDelegateCall: Self = Self(0x00000004);
 }
-impl TryFrom<i32> for InvokeFlag {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kInvokeFlagNone),
-            0x00000001 => Ok(Self::kInvokeFlagTryInvoke),
-            0x00000002 => Ok(Self::kInvokeFlagReadOnly),
-            0x00000004 => Ok(Self::kInvokeFlagDelegateCall),
-            _ => Err(()),
-        }
+impl From<i32> for InvokeFlag {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -488,26 +481,25 @@ pub struct ProposedTransaction {
 /// primarily for debugging and monitoring. Some statistics may be disabled
 /// in production builds.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum TransactionStatistic {
+#[repr(transparent)]
+pub struct TransactionStatistic(pub i32);
+
+impl TransactionStatistic {
     /// The amount of gas remaining in the current call frame.
     ///
     /// This can be queried to monitor gas consumption during execution.
     /// Note that this statistic may be disabled or return nondeterministic
     /// values in test configurations (see syscalls.yaml for details).
-    kTxStatGasRemaining = 0 as i32,
+    pub const kTxStatGasRemaining: Self = Self(0);
 }
-impl TryFrom<i32> for TransactionStatistic {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kTxStatGasRemaining),
-            _ => Err(()),
-        }
+impl From<i32> for TransactionStatistic {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

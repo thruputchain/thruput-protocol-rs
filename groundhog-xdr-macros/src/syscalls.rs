@@ -40,6 +40,11 @@ struct TypeMapping {
     rust_uses_as_ptr: bool,
     #[serde(default = "default_false")]
     primitive_type: bool,
+    /// True if this type is a newtype struct (e.g. `Foo(i32)`) rather than
+    /// a bare primitive or type alias. Newtype primitives use `.0 as u64`
+    /// instead of `as u64` when passed by value.
+    #[serde(default = "default_false")]
+    newtype: bool,
 }
 
 #[derive(Debug)]
@@ -47,6 +52,7 @@ struct TypeInfo {
     rust_name: String,
     rust_uses_as_ptr: bool,
     primitive_type: bool,
+    newtype: bool,
 }
 
 type TypeMap = HashMap<String, TypeInfo>;
@@ -61,6 +67,7 @@ impl SyscallSpec {
                     rust_name: elt.rust_name.clone(),
                     rust_uses_as_ptr: elt.rust_uses_as_ptr,
                     primitive_type: elt.primitive_type,
+                    newtype: elt.newtype,
                 },
             );
         }
@@ -241,6 +248,16 @@ impl Arg {
         }
     }
 
+    /// Returns true if this arg's type is a newtype struct (e.g. `Foo(i32)`)
+    /// that needs `.0 as u64` instead of `as u64`.
+    fn is_newtype(&self, type_map: &TypeMap) -> bool {
+        if let Some(type_details) = self.get_type_details(type_map) {
+            type_details.newtype
+        } else {
+            false
+        }
+    }
+
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.rust_uses_as_ptr
@@ -303,7 +320,11 @@ impl Arg {
                 }
             } else if self.is_primitive(type_map) {
                 if is_input {
-                    quote! { #name as u64 }
+                    if self.is_newtype(type_map) {
+                        quote! { #name.0 as u64 }
+                    } else {
+                        quote! { #name as u64 }
+                    }
                 } else {
                     quote! { #name as *mut _ as u64 }
                 }
@@ -980,7 +1001,7 @@ fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
     let name = format_ident!("k{}", &syscall.name);
     let num = syscall.number;
     quote! {
-        #name = #num as i32
+        pub const #name: Self = Self(#num as u64);
     }
 }
 
@@ -993,12 +1014,16 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     quote! {
         /// Syscall numbers identifying each system call.
         /// Generated from the syscalls.yaml specification.
+        #[cfg_attr(feature = "serde", derive(::serde::Serialize, ::serde::Deserialize))]
+        #[cfg_attr(feature = "serde", serde(transparent))]
         #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
         #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
-        #[derive(Eq,PartialEq,Copy,Debug,Clone)]
-        #[repr(i32)]
-        pub enum SyscallNo {
-            #(#lines,)*
+        #[derive(Eq,PartialEq,Copy,Debug,Clone,Hash)]
+        #[repr(transparent)]
+        pub struct SyscallNo(pub u64);
+
+        impl SyscallNo {
+            #(#lines)*
         }
     }
     .into()

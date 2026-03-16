@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -55,69 +55,60 @@ pub type TransactionID = u64;
 //
 // TODO(geoff): This probably should get moved to a different file?
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum RPCError {
-    kRPCNone = 0 as i32,
+#[repr(transparent)]
+pub struct RPCError(pub i32);
+
+impl RPCError {
+    pub const kRPCNone: Self = Self(0);
 
     // Lookup on an item in the database that does not exist.
     // Used by any database lookup RPC, not just for one type.
-    kRPCNotFound = 1 as i32,
+    pub const kRPCNotFound: Self = Self(1);
 
     // BlockID does not exist, or is not in correct state
-    kRPCBadBlockID = 3 as i32,
+    pub const kRPCBadBlockID: Self = Self(3);
 
     // bad storage modification
-    kRPCStorageWriteFailed = 4 as i32,
+    pub const kRPCStorageWriteFailed: Self = Self(4);
 
     // tx validation or proposal failed
-    kRPCTransactionFailed = 5 as i32,
+    pub const kRPCTransactionFailed: Self = Self(5);
 
     // Unimplemented RPC
-    kRPCUnimplemented = 6 as i32,
+    pub const kRPCUnimplemented: Self = Self(6);
 
     // Unrecoverable error in the server (i.e. OOM, DB corruption)
-    kRPCUnrecoverable = 7 as i32,
+    pub const kRPCUnrecoverable: Self = Self(7);
 }
-impl TryFrom<i32> for RPCError {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kRPCNone),
-            1 => Ok(Self::kRPCNotFound),
-            3 => Ok(Self::kRPCBadBlockID),
-            4 => Ok(Self::kRPCStorageWriteFailed),
-            5 => Ok(Self::kRPCTransactionFailed),
-            6 => Ok(Self::kRPCUnimplemented),
-            7 => Ok(Self::kRPCUnrecoverable),
-            _ => Err(()),
-        }
+impl From<i32> for RPCError {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
 
 // The mode in which a block executes.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum BlockExecutionMode {
-    kBlockExecutionModeValidation = 0 as i32,
-    kBlockExecutionModeProposal = 1 as i32,
+#[repr(transparent)]
+pub struct BlockExecutionMode(pub i32);
+
+impl BlockExecutionMode {
+    pub const kBlockExecutionModeValidation: Self = Self(0);
+    pub const kBlockExecutionModeProposal: Self = Self(1);
 }
-impl TryFrom<i32> for BlockExecutionMode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kBlockExecutionModeValidation),
-            1 => Ok(Self::kBlockExecutionModeProposal),
-            _ => Err(()),
-        }
+impl From<i32> for BlockExecutionMode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -132,7 +123,7 @@ pub type StorageCost = int128_xdr;
 pub enum ExpectedStorageCost {
     // case kRPCNone:
     //   StorageCost storage_cost;
-    kRPCNone { storage_cost: StorageCost } = RPCError::kRPCNone as i32,
+    kRPCNone { storage_cost: StorageCost } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -147,7 +138,7 @@ pub enum ExpectedStorageCost {
 pub enum ExpectedContract {
     // case kRPCNone:
     //   Contract contract;
-    kRPCNone { contract: Contract } = RPCError::kRPCNone as i32,
+    kRPCNone { contract: Contract } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -161,7 +152,7 @@ pub enum ExpectedContract {
 pub enum ExpectedDeployment {
     // case kRPCNone:
     //   DeployedContractHash deployed_hash;
-    kRPCNone { deployed_hash: DeployedContractHash } = RPCError::kRPCNone as i32,
+    kRPCNone { deployed_hash: DeployedContractHash } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -175,7 +166,7 @@ pub enum ExpectedDeployment {
 pub enum ExpectedProposalData {
     // case kRPCNone:
     //   NondeterministicProposalData proposal_data;
-    kRPCNone { proposal_data: NondeterministicProposalData } = RPCError::kRPCNone as i32,
+    kRPCNone { proposal_data: NondeterministicProposalData } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -189,7 +180,7 @@ pub enum ExpectedProposalData {
 pub enum ExpectedStorageItem {
     // case kRPCNone:
     //   WireStorageItem item;
-    kRPCNone { item: WireStorageItem } = RPCError::kRPCNone as i32,
+    kRPCNone { item: WireStorageItem } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -203,7 +194,7 @@ pub enum ExpectedStorageItem {
 pub enum ExpectedRetrocausalQueueBlock {
     // case kRPCNone:
     //   RetrocausalQueueBlock queue_block;
-    kRPCNone { queue_block: RetrocausalQueueBlock } = RPCError::kRPCNone as i32,
+    kRPCNone { queue_block: RetrocausalQueueBlock } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -217,7 +208,7 @@ pub enum ExpectedRetrocausalQueueBlock {
 pub enum ExpectedQueueEntry {
     // case kRPCNone:
     //   QueueEntry queue_entry;
-    kRPCNone { queue_entry: QueueEntry } = RPCError::kRPCNone as i32,
+    kRPCNone { queue_entry: QueueEntry } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -231,7 +222,7 @@ pub enum ExpectedQueueEntry {
 pub enum ExpectedDBTip {
     // case kRPCNone:
     //   DbTip db_tip;
-    kRPCNone { db_tip: DbTip } = RPCError::kRPCNone as i32,
+    kRPCNone { db_tip: DbTip } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     Default { error: i32 },

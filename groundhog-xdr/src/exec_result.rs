@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -30,64 +30,56 @@ use ::serde_arrays;
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum ExecResult {
-    ExecResultOK = 0 as i32,
+#[repr(transparent)]
+pub struct ExecResult(pub i32);
+
+impl ExecResult {
+    pub const ExecResultOK: Self = Self(0);
 
     // Transaction execution (during proposal or validation) failed.
     // Specifically, the root frame returned kInvokeDeterministic.
     // the error is deterministic and can be replayed in validation.
     // Transactions with this error code can be included in the block.
-    ExecResultTxDeterministicError = 1 as i32,
+    pub const ExecResultTxDeterministicError: Self = Self(1);
 
     // The root frame of the transaction chose to revert.
     // This error is deterministic and can be included in a block.
     // However, any changes within contract state are reverted.
-    ExecResultTxRootFrameReverted = 2 as i32,
+    pub const ExecResultTxRootFrameReverted: Self = Self(2);
 
     // Transaction execution (during proposal or validation) failed,
     // due to nondeterminism during the post-execution 2-phase commit.
     // Transactions with this error code should not be included in a proposal,
     // and indicate a block validation failure.
-    ExecResultTxNonDeterministicError = 3 as i32,
+    pub const ExecResultTxNonDeterministicError: Self = Self(3);
 
     // One or more [GasClaim]s in the transaction were not validated with a
     // corresponding [sponsor_gas()] system call in a contract.
-    ExecResultFailedGasSponsorship = 100 as i32,
+    pub const ExecResultFailedGasSponsorship: Self = Self(100);
 
     // Validation on the transaction has failed because the attached validation
     // data is bad. E.g. missing data or unused data. This error code is only
     // returned during validation. This is determininistic, but signals a bad
     // block from a malicious proposer.
-    ExecResultTxValidationFailure = 200 as i32,
+    pub const ExecResultTxValidationFailure: Self = Self(200);
 
     // System error; network connection broke, etc.
     // Executor can recover from this error to continue execution of other
     // transactions.
-    ExecResultSystemError = 300 as i32,
+    pub const ExecResultSystemError: Self = Self(300);
 
     // Critical failure in the executor, which cannot be recovered from.
     // E.g. OOM or critical logic error.
-    ExecResultUnrecoverable = 400 as i32,
+    pub const ExecResultUnrecoverable: Self = Self(400);
 }
-impl TryFrom<i32> for ExecResult {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::ExecResultOK),
-            1 => Ok(Self::ExecResultTxDeterministicError),
-            2 => Ok(Self::ExecResultTxRootFrameReverted),
-            3 => Ok(Self::ExecResultTxNonDeterministicError),
-            100 => Ok(Self::ExecResultFailedGasSponsorship),
-            200 => Ok(Self::ExecResultTxValidationFailure),
-            300 => Ok(Self::ExecResultSystemError),
-            400 => Ok(Self::ExecResultUnrecoverable),
-            _ => Err(()),
-        }
+impl From<i32> for ExecResult {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

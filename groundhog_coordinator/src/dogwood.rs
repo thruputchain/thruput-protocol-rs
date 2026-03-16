@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -70,23 +70,21 @@ pub struct DogwoodRoute {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum DogwoodTransmissionType {
-    DogwoodTransmissionPayload = 0 as i32,
-    DogwoodTransmissionRoute = 1 as i32,
+#[repr(transparent)]
+pub struct DogwoodTransmissionType(pub i32);
+
+impl DogwoodTransmissionType {
+    pub const DogwoodTransmissionPayload: Self = Self(0);
+    pub const DogwoodTransmissionRoute: Self = Self(1);
 }
-impl TryFrom<i32> for DogwoodTransmissionType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::DogwoodTransmissionPayload),
-            1 => Ok(Self::DogwoodTransmissionRoute),
-            _ => Err(()),
-        }
+impl From<i32> for DogwoodTransmissionType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
