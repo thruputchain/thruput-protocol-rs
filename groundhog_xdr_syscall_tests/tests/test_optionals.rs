@@ -37,10 +37,7 @@ fn test_get_deploy_address_optional_input() {
     assert_eq!(invocations.len(), 1);
 
     // first invocation should be syscall number
-    assert_eq!(
-        invocations[0].syscall_no,
-        SyscallNo::kGetDeployAddress.0
-    );
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetDeployAddress.0);
 
     // arg1: caller_address pointer (Some value)
     assert_eq!(invocations[0].args[0], caller_addr.as_ptr() as u64);
@@ -79,10 +76,7 @@ fn test_get_deploy_address_optional_none() {
     assert_eq!(invocations.len(), 1);
 
     // first invocation should be syscall number
-    assert_eq!(
-        invocations[0].syscall_no,
-        SyscallNo::kGetDeployAddress.0
-    );
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetDeployAddress.0);
 
     // arg1: caller_address should be u64::MAX when None
     assert_eq!(invocations[0].args[0], u64::MAX);

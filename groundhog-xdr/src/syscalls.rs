@@ -79,17 +79,39 @@ impl fmt::Debug for SysErr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let code = SyscallErrorCode(self.0);
         match code {
-            SyscallErrorCode::kSyscallErrorCodeNone => write!(f, "SysErr<None>"),
-            SyscallErrorCode::kSyscallErrorCodeFault => write!(f, "SysErr<Fault>"),
-            SyscallErrorCode::kSyscallErrorCodeNoSyscall => write!(f, "SysErr<NoSyscall>"),
-            SyscallErrorCode::kSyscallErrorCodeIsRootTransaction => write!(f, "SysErr<IsRootTransaction>"),
-            SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed => write!(f, "SysErr<ContractAlreadyDeployed>"),
-            SyscallErrorCode::kSyscallErrorCodeNoReturnBufferAvailable => write!(f, "SysErr<NoReturnBufferAvailable>"),
-            SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput => write!(f, "SysErr<InvalidSyscallInput>"),
-            SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist => write!(f, "SysErr<StorageKeyNotExist>"),
-            SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry => write!(f, "SysErr<NoRetrocausalQueueEntry>"),
-            SyscallErrorCode::kSyscallErrorCodeDeterministicWasm => write!(f, "SysErr<DeterministicWasm>"),
-            SyscallErrorCode::kSyscallErrorCodeFrameReverted => write!(f, "SysErr<FrameReverted>"),
+            SyscallErrorCode::kSyscallErrorCodeNone => {
+                write!(f, "SysErr<None>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeFault => {
+                write!(f, "SysErr<Fault>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeNoSyscall => {
+                write!(f, "SysErr<NoSyscall>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeIsRootTransaction => {
+                write!(f, "SysErr<IsRootTransaction>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed => {
+                write!(f, "SysErr<ContractAlreadyDeployed>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeNoReturnBufferAvailable => {
+                write!(f, "SysErr<NoReturnBufferAvailable>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput => {
+                write!(f, "SysErr<InvalidSyscallInput>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist => {
+                write!(f, "SysErr<StorageKeyNotExist>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry => {
+                write!(f, "SysErr<NoRetrocausalQueueEntry>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeDeterministicWasm => {
+                write!(f, "SysErr<DeterministicWasm>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeFrameReverted => {
+                write!(f, "SysErr<FrameReverted>")
+            }
             _ => write!(f, "SysErr({})", self.0),
         }
     }

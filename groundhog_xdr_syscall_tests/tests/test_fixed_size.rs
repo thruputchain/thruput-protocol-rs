@@ -120,10 +120,7 @@ fn test_bytestring_get_len_fixed_size_input() {
     assert_eq!(invocations.len(), 1);
 
     // BytestringGetLen syscall number
-    assert_eq!(
-        invocations[0].syscall_no,
-        SyscallNo::kBytestringGetLen.0
-    );
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kBytestringGetLen.0);
 
     // arg1: key pointer
     assert_eq!(invocations[0].args[0], key.as_ptr() as u64);
@@ -187,10 +184,7 @@ fn test_get_current_address_fixed_size_output() {
     assert_eq!(invocations.len(), 1);
 
     // GetCurrentAddress syscall number
-    assert_eq!(
-        invocations[0].syscall_no,
-        SyscallNo::kGetCurrentAddress.0
-    );
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetCurrentAddress.0);
 
     // arg1: address pointer
     assert_eq!(invocations[0].args[0], address.as_mut_ptr() as u64);

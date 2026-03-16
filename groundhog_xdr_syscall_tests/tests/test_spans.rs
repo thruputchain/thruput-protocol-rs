@@ -93,10 +93,7 @@ fn test_get_returned_buffer_span_output() {
     assert_eq!(invocations.len(), 1);
 
     // GetReturnedBuffer syscall number
-    assert_eq!(
-        invocations[0].syscall_no,
-        SyscallNo::kGetReturnedBuffer.0
-    );
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetReturnedBuffer.0);
 
     // arg1: output buffer pointer
     assert_eq!(invocations[0].args[0], buffer.as_mut_ptr() as u64);
