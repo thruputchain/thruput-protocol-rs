@@ -1014,7 +1014,7 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     quote! {
         /// Syscall numbers identifying each system call.
         /// Generated from the syscalls.yaml specification.
-        #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+        #[cfg_attr(feature = "serde", derive(::serde::Serialize, ::serde::Deserialize))]
         #[cfg_attr(feature = "serde", serde(transparent))]
         #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
         #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
