@@ -51,7 +51,7 @@ pub type SyscallResult<T> = core::result::Result<T, SysErr>;
 
 impl SysErr {
     pub fn is_code(&self, code: SyscallErrorCode) -> bool {
-        self.0 == code as i32
+        self.0 == code.0
     }
 
     pub fn is_none(&self) -> bool {
@@ -77,17 +77,27 @@ impl SysErr {
 
 impl fmt::Debug for SysErr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if let Ok(code) = TryInto::<SyscallErrorCode>::try_into(self.0) {
-            write!(f, "SysErr<{:?}>", code)
-        } else {
-            write!(f, "SysErr({})", self.0)
+        let code = SyscallErrorCode(self.0);
+        match code {
+            SyscallErrorCode::kSyscallErrorCodeNone => write!(f, "SysErr<None>"),
+            SyscallErrorCode::kSyscallErrorCodeFault => write!(f, "SysErr<Fault>"),
+            SyscallErrorCode::kSyscallErrorCodeNoSyscall => write!(f, "SysErr<NoSyscall>"),
+            SyscallErrorCode::kSyscallErrorCodeIsRootTransaction => write!(f, "SysErr<IsRootTransaction>"),
+            SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed => write!(f, "SysErr<ContractAlreadyDeployed>"),
+            SyscallErrorCode::kSyscallErrorCodeNoReturnBufferAvailable => write!(f, "SysErr<NoReturnBufferAvailable>"),
+            SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput => write!(f, "SysErr<InvalidSyscallInput>"),
+            SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist => write!(f, "SysErr<StorageKeyNotExist>"),
+            SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry => write!(f, "SysErr<NoRetrocausalQueueEntry>"),
+            SyscallErrorCode::kSyscallErrorCodeDeterministicWasm => write!(f, "SysErr<DeterministicWasm>"),
+            SyscallErrorCode::kSyscallErrorCodeFrameReverted => write!(f, "SysErr<FrameReverted>"),
+            _ => write!(f, "SysErr({})", self.0),
         }
     }
 }
 
 impl From<SyscallErrorCode> for SysErr {
     fn from(code: SyscallErrorCode) -> Self {
-        SysErr(code as i32)
+        SysErr(code.0)
     }
 }
 
@@ -148,7 +158,7 @@ fn syscall_wrapper(
 ) -> SysErr {
     unsafe {
         SysErr(syscall_wrapper_impl(
-            syscall_no as u64,
+            syscall_no.0,
             arg1,
             arg2,
             arg3,

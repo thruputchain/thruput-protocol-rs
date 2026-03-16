@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,23 +31,21 @@ use ::serde_arrays;
 // clang-format on
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum CoordinatorRegistrationOutcome {
-    CoordinatorRegistrationOK = 0 as i32,
-    CoordinatorRegistrationInvalidProtocol = 1 as i32,
+#[repr(transparent)]
+pub struct CoordinatorRegistrationOutcome(pub i32);
+
+impl CoordinatorRegistrationOutcome {
+    pub const CoordinatorRegistrationOK: Self = Self(0);
+    pub const CoordinatorRegistrationInvalidProtocol: Self = Self(1);
 }
-impl TryFrom<i32> for CoordinatorRegistrationOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::CoordinatorRegistrationOK),
-            1 => Ok(Self::CoordinatorRegistrationInvalidProtocol),
-            _ => Err(()),
-        }
+impl From<i32> for CoordinatorRegistrationOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -63,23 +61,21 @@ pub struct CoordCard {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SchedulerNominationOutcome {
-    SchedulerNominationOK = 0 as i32,
-    SchedulerNominationError = 1 as i32,
+#[repr(transparent)]
+pub struct SchedulerNominationOutcome(pub i32);
+
+impl SchedulerNominationOutcome {
+    pub const SchedulerNominationOK: Self = Self(0);
+    pub const SchedulerNominationError: Self = Self(1);
 }
-impl TryFrom<i32> for SchedulerNominationOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::SchedulerNominationOK),
-            1 => Ok(Self::SchedulerNominationError),
-            _ => Err(()),
-        }
+impl From<i32> for SchedulerNominationOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -103,37 +99,32 @@ pub struct SchedulerNominatedBlock {
 pub enum SchedulerNominationResult {
     // case SchedulerNominationOK:
     //   SchedulerNominatedBlock nominated_block;
-    SchedulerNominationOK { nominated_block: SchedulerNominatedBlock } = SchedulerNominationOutcome::SchedulerNominationOK as i32,
+    SchedulerNominationOK { nominated_block: SchedulerNominatedBlock } = SchedulerNominationOutcome::SchedulerNominationOK.0 as i32,
     // case SchedulerNominationError:
     //   void;
-    SchedulerNominationError = SchedulerNominationOutcome::SchedulerNominationError as i32,
+    SchedulerNominationError = SchedulerNominationOutcome::SchedulerNominationError.0 as i32,
     
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SchedulerValidationOutcome {
-    SchedulerValidationOK = 0 as i32,
-    SchedulerValidationInvalid = 1 as i32,
-    SchedulerValidationMissingTxs = 2 as i32,
-    SchedulerValidationDbFailed = 3 as i32,
-    SchedulerValidationExecutorFailed = 4 as i32,
+#[repr(transparent)]
+pub struct SchedulerValidationOutcome(pub i32);
+
+impl SchedulerValidationOutcome {
+    pub const SchedulerValidationOK: Self = Self(0);
+    pub const SchedulerValidationInvalid: Self = Self(1);
+    pub const SchedulerValidationMissingTxs: Self = Self(2);
+    pub const SchedulerValidationDbFailed: Self = Self(3);
+    pub const SchedulerValidationExecutorFailed: Self = Self(4);
 }
-impl TryFrom<i32> for SchedulerValidationOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::SchedulerValidationOK),
-            1 => Ok(Self::SchedulerValidationInvalid),
-            2 => Ok(Self::SchedulerValidationMissingTxs),
-            3 => Ok(Self::SchedulerValidationDbFailed),
-            4 => Ok(Self::SchedulerValidationExecutorFailed),
-            _ => Err(()),
-        }
+impl From<i32> for SchedulerValidationOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -146,62 +137,57 @@ impl TryFrom<i32> for SchedulerValidationOutcome {
 pub enum SchedulerValidationResult {
     // case SchedulerValidationOK:
     //   DbTip db_tip;
-    SchedulerValidationOK { db_tip: DbTip } = SchedulerValidationOutcome::SchedulerValidationOK as i32,
+    SchedulerValidationOK { db_tip: DbTip } = SchedulerValidationOutcome::SchedulerValidationOK.0 as i32,
     // case SchedulerValidationMissingTxs:
     //   VecM<SignedTransactionHash> missing_tx_hashes;
-    SchedulerValidationMissingTxs { missing_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs as i32,
+    SchedulerValidationMissingTxs { missing_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
     // case SchedulerValidationDbFailed:
     // case SchedulerValidationExecutorFailed:
     // case SchedulerValidationInvalid:
     //   void;
-    SchedulerValidationDbFailed = SchedulerValidationOutcome::SchedulerValidationDbFailed as i32,
-    SchedulerValidationExecutorFailed = SchedulerValidationOutcome::SchedulerValidationExecutorFailed as i32,
-    SchedulerValidationInvalid = SchedulerValidationOutcome::SchedulerValidationInvalid as i32,
+    SchedulerValidationDbFailed = SchedulerValidationOutcome::SchedulerValidationDbFailed.0 as i32,
+    SchedulerValidationExecutorFailed = SchedulerValidationOutcome::SchedulerValidationExecutorFailed.0 as i32,
+    SchedulerValidationInvalid = SchedulerValidationOutcome::SchedulerValidationInvalid.0 as i32,
     
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SchedulerCommitOutcome {
-    SchedulerCommitOK = 0 as i32,
-    SchedulerCommitBlockNotFound = 1 as i32,
-    SchedulerCommitRace = 2 as i32,
+#[repr(transparent)]
+pub struct SchedulerCommitOutcome(pub i32);
+
+impl SchedulerCommitOutcome {
+    pub const SchedulerCommitOK: Self = Self(0);
+    pub const SchedulerCommitBlockNotFound: Self = Self(1);
+    pub const SchedulerCommitRace: Self = Self(2);
 }
-impl TryFrom<i32> for SchedulerCommitOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::SchedulerCommitOK),
-            1 => Ok(Self::SchedulerCommitBlockNotFound),
-            2 => Ok(Self::SchedulerCommitRace),
-            _ => Err(()),
-        }
+impl From<i32> for SchedulerCommitOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SchedulerGetTipOutcome {
-    SchedulerGetTipOK = 0 as i32,
-    SchedulerGetTipNoGenesisBlock = 1 as i32,
+#[repr(transparent)]
+pub struct SchedulerGetTipOutcome(pub i32);
+
+impl SchedulerGetTipOutcome {
+    pub const SchedulerGetTipOK: Self = Self(0);
+    pub const SchedulerGetTipNoGenesisBlock: Self = Self(1);
 }
-impl TryFrom<i32> for SchedulerGetTipOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::SchedulerGetTipOK),
-            1 => Ok(Self::SchedulerGetTipNoGenesisBlock),
-            _ => Err(()),
-        }
+impl From<i32> for SchedulerGetTipOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -214,10 +200,10 @@ impl TryFrom<i32> for SchedulerGetTipOutcome {
 pub enum SchedulerGetTipResult {
     // case SchedulerGetTipOK:
     //   DbTip db_tip;
-    SchedulerGetTipOK { db_tip: DbTip } = SchedulerGetTipOutcome::SchedulerGetTipOK as i32,
+    SchedulerGetTipOK { db_tip: DbTip } = SchedulerGetTipOutcome::SchedulerGetTipOK.0 as i32,
     // case SchedulerGetTipNoGenesisBlock:
     //   void;
-    SchedulerGetTipNoGenesisBlock = SchedulerGetTipOutcome::SchedulerGetTipNoGenesisBlock as i32,
+    SchedulerGetTipNoGenesisBlock = SchedulerGetTipOutcome::SchedulerGetTipNoGenesisBlock.0 as i32,
     
 }
 

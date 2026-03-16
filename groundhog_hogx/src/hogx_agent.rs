@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,23 +31,21 @@ use ::serde_arrays;
 // clang-format on
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum HogxOutcome {
-    HOGX_OK = 0 as i32,
-    HOGX_ERROR = 1 as i32,
+#[repr(transparent)]
+pub struct HogxOutcome(pub i32);
+
+impl HogxOutcome {
+    pub const HOGX_OK: Self = Self(0);
+    pub const HOGX_ERROR: Self = Self(1);
 }
-impl TryFrom<i32> for HogxOutcome {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::HOGX_OK),
-            1 => Ok(Self::HOGX_ERROR),
-            _ => Err(()),
-        }
+impl From<i32> for HogxOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -60,10 +58,10 @@ impl TryFrom<i32> for HogxOutcome {
 pub enum HogxHostConfigureResult {
     // case HOGX_OK:
     //   void;
-    HOGX_OK = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -75,10 +73,10 @@ pub enum HogxHostConfigureResult {
 pub enum HogxHostQueryResult {
     // case HOGX_OK:
     //   HostState host_state;
-    HOGX_OK { host_state: HostState } = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK { host_state: HostState } = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -90,10 +88,10 @@ pub enum HogxHostQueryResult {
 pub enum HogxUnitStartResult {
     // case HOGX_OK:
     //   void;
-    HOGX_OK = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -105,10 +103,10 @@ pub enum HogxUnitStartResult {
 pub enum HogxUnitStopResult {
     // case HOGX_OK:
     //   void;
-    HOGX_OK = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -120,10 +118,10 @@ pub enum HogxUnitStopResult {
 pub enum HogxUnitQueryResult {
     // case HOGX_OK:
     //   UnitState unit_state;
-    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK { unit_state: UnitState } = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -135,10 +133,10 @@ pub enum HogxUnitQueryResult {
 pub enum HogxUnitListResult {
     // case HOGX_OK:
     //   VecM<UnitState> unit_state;
-    HOGX_OK { unit_state: VecM<UnitState> } = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK { unit_state: VecM<UnitState> } = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -150,10 +148,10 @@ pub enum HogxUnitListResult {
 pub enum HogxUnitClearResult {
     // case HOGX_OK:
     //   void;
-    HOGX_OK = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 
@@ -165,10 +163,10 @@ pub enum HogxUnitClearResult {
 pub enum HogxUnitTailResult {
     // case HOGX_OK:
     //   void;
-    HOGX_OK = HogxOutcome::HOGX_OK as i32,
+    HOGX_OK = HogxOutcome::HOGX_OK.0 as i32,
     // case HOGX_ERROR:
     //   StringM error;
-    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR as i32,
+    HOGX_ERROR { error: StringM } = HogxOutcome::HOGX_ERROR.0 as i32,
     
 }
 

@@ -12,6 +12,7 @@ impl From<SystemErrorCode> for HostFnErrorCode {
             SystemErrorCode::kSystemValidationFailure => {
                 HostFnErrorCode::kHostValidationFailure
             }
+            _ => HostFnErrorCode::kHostUnrecoverable,
         }
     }
 }
@@ -28,6 +29,7 @@ impl From<SystemErrorCode> for InvokeErrorCode {
             SystemErrorCode::kSystemValidationFailure => {
                 InvokeErrorCode::kInvokeValidationFailure
             }
+            _ => InvokeErrorCode::kInvokeUnrecoverable,
         }
     }
 }

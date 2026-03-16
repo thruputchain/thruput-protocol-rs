@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -113,50 +113,45 @@ pub const kMaxAuthClaims : u32 = 10;
 /// 1. Whether they reference the invoked contract or another contract
 /// 2. Whether they require a single signature or weighted multi-sig
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum AuthClaimType {
+#[repr(transparent)]
+pub struct AuthClaimType(pub i32);
+
+impl AuthClaimType {
     /// Requires a signature from a specific key on the invoked contract address.
     ///
     /// This is the simplest and most common authorization pattern.
-    kInvokedAddressSignature = 0 as i32,
+    pub const kInvokedAddressSignature: Self = Self(0);
 
     /// Requires a weighted threshold of signatures from the invoked contract.
     ///
     /// The bitmap specifies which keys are acceptable, and signatures are
     /// accumulated until the `required_weight` threshold is met.
-    kInvokedAddressSignedWeight = 1 as i32,
+    pub const kInvokedAddressSignedWeight: Self = Self(1);
 
     /// Requires a signature from a specific key on a different contract address.
     ///
     /// Used for cross-contract authorization (e.g., a contract authorizing
     /// operations on behalf of another contract).
-    kOtherAddressSignature = 2 as i32,
+    pub const kOtherAddressSignature: Self = Self(2);
 
     /// Requires a weighted threshold of signatures from a different contract.
     ///
     /// Combines cross-contract auth with multi-signature requirements.
-    kOtherAddressSignedWeight = 3 as i32,
+    pub const kOtherAddressSignedWeight: Self = Self(3);
 
     /// Requires a signature from a specific key
     ///
     /// XXX
-    kPubkeySignature = 4 as i32,
+    pub const kPubkeySignature: Self = Self(4);
 }
-impl TryFrom<i32> for AuthClaimType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kInvokedAddressSignature),
-            1 => Ok(Self::kInvokedAddressSignedWeight),
-            2 => Ok(Self::kOtherAddressSignature),
-            3 => Ok(Self::kOtherAddressSignedWeight),
-            4 => Ok(Self::kPubkeySignature),
-            _ => Err(()),
-        }
+impl From<i32> for AuthClaimType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -230,19 +225,19 @@ pub enum AuthClaim {
     /// The ID of the key that must sign, from the invoked address's key set.
     // case kInvokedAddressSignature:
     //   KeyID invoked_address_signature_id;
-    kInvokedAddressSignature { invoked_address_signature_id: KeyID } = AuthClaimType::kInvokedAddressSignature as i32,
+    kInvokedAddressSignature { invoked_address_signature_id: KeyID } = AuthClaimType::kInvokedAddressSignature.0 as i32,
     // case kInvokedAddressSignedWeight:
     //   invoked_address_signed_weight invoked_address_signed_weight;
-    kInvokedAddressSignedWeight { invoked_address_signed_weight: AuthClaim_invoked_address_signed_weight } = AuthClaimType::kInvokedAddressSignedWeight as i32,
+    kInvokedAddressSignedWeight { invoked_address_signed_weight: AuthClaim_invoked_address_signed_weight } = AuthClaimType::kInvokedAddressSignedWeight.0 as i32,
     // case kOtherAddressSignature:
     //   other_address_signature_id other_address_signature_id;
-    kOtherAddressSignature { other_address_signature_id: AuthClaim_other_address_signature_id } = AuthClaimType::kOtherAddressSignature as i32,
+    kOtherAddressSignature { other_address_signature_id: AuthClaim_other_address_signature_id } = AuthClaimType::kOtherAddressSignature.0 as i32,
     // case kOtherAddressSignedWeight:
     //   other_address_signed_weight other_address_signed_weight;
-    kOtherAddressSignedWeight { other_address_signed_weight: AuthClaim_other_address_signed_weight } = AuthClaimType::kOtherAddressSignedWeight as i32,
+    kOtherAddressSignedWeight { other_address_signed_weight: AuthClaim_other_address_signed_weight } = AuthClaimType::kOtherAddressSignedWeight.0 as i32,
     // case kPubkeySignature:
     //   PubkeyAccountPreimage pubkey_preimage;
-    kPubkeySignature { pubkey_preimage: PubkeyAccountPreimage } = AuthClaimType::kPubkeySignature as i32,
+    kPubkeySignature { pubkey_preimage: PubkeyAccountPreimage } = AuthClaimType::kPubkeySignature.0 as i32,
     
 }
 
@@ -266,12 +261,15 @@ pub type AuthClaimData = VecM::<AuthClaim, kMaxAuthClaims>;
 /// These error codes distinguish between different failure modes to enable
 /// appropriate handling at different stages of transaction processing.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum AuthVerifyErrorCode {
+#[repr(transparent)]
+pub struct AuthVerifyErrorCode(pub i32);
+
+impl AuthVerifyErrorCode {
     /// The transaction's auth claims are malformed.
     ///
     /// Transactions with this error should never be flooded over the network
@@ -279,14 +277,14 @@ pub enum AuthVerifyErrorCode {
     /// - Public key IDs that are out of bounds
     /// - Invalid bitmaps (bits set beyond kMaxSigners)
     /// - Mismatched signature counts
-    kAuthMalformed = 1 as i32,
+    pub const kAuthMalformed: Self = Self(1);
 
     /// Cryptographic signature verification failed.
     ///
     /// This indicates that one or more signatures did not pass cryptographic
     /// validation against the claimed public keys. The transaction structure
     /// is valid but the signatures themselves are incorrect.
-    kSignatureVerificationFailed = 2 as i32,
+    pub const kSignatureVerificationFailed: Self = Self(2);
 
     /// Mismatch between auth claims and actual auth data on an account.
     ///
@@ -295,17 +293,11 @@ pub enum AuthVerifyErrorCode {
     /// - Referencing a public key ID that doesn't exist in the auth data
     /// - Failing to meet required weight thresholds
     /// - Insufficient gas permissions for the claimed sponsorship
-    kAuthDataMismatch = 3 as i32,
+    pub const kAuthDataMismatch: Self = Self(3);
 }
-impl TryFrom<i32> for AuthVerifyErrorCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            1 => Ok(Self::kAuthMalformed),
-            2 => Ok(Self::kSignatureVerificationFailed),
-            3 => Ok(Self::kAuthDataMismatch),
-            _ => Err(()),
-        }
+impl From<i32> for AuthVerifyErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

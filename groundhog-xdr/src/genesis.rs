@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -72,30 +72,27 @@ pub struct GenesisConfiguration {
 // The addresses (32 bytes) are all zeros, with the last 4 bytes equal
 // to the enum value.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum GenesisContractAddresses {
+#[repr(transparent)]
+pub struct GenesisContractAddresses(pub i32);
+
+impl GenesisContractAddresses {
     // Null address (reserved)
-    kAddressNull = 0 as i32,
+    pub const kAddressNull: Self = Self(0);
 
     // Precompiled native contract for the HogToken contract
-    kAddressPrecompiledHogToken = 1 as i32,
+    pub const kAddressPrecompiledHogToken: Self = Self(1);
 
     // InitialTokenClaim contract, for managing genesis token/contract setup
-    kAddressInitialTokenClaim = 2 as i32,
+    pub const kAddressInitialTokenClaim: Self = Self(2);
 }
-impl TryFrom<i32> for GenesisContractAddresses {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kAddressNull),
-            1 => Ok(Self::kAddressPrecompiledHogToken),
-            2 => Ok(Self::kAddressInitialTokenClaim),
-            _ => Err(()),
-        }
+impl From<i32> for GenesisContractAddresses {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

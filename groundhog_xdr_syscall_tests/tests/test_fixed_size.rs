@@ -25,7 +25,7 @@ fn test_get_msg_sender_fixed_size_output() {
     assert_eq!(invocations.len(), 1);
 
     // GetMsgSender syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetMsgSender as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetMsgSender.0);
 
     // arg1: sender pointer
     assert_eq!(invocations[0].args[0], sender.as_mut_ptr() as u64);
@@ -54,7 +54,7 @@ fn test_get_source_transaction_hash_fixed_size_output() {
     // GetSourceTransactionHash syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kGetSourceTransactionHash as u64
+        SyscallNo::kGetSourceTransactionHash.0
     );
 
     // arg1: source_tx_hash pointer
@@ -87,7 +87,7 @@ fn test_deploy_contract_fixed_size_input_output() {
     assert_eq!(invocations.len(), 1);
 
     // DeployContract syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kDeployContract as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kDeployContract.0);
 
     // arg1: nonce pointer
     assert_eq!(invocations[0].args[0], nonce.as_ptr() as u64);
@@ -122,7 +122,7 @@ fn test_bytestring_get_len_fixed_size_input() {
     // BytestringGetLen syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kBytestringGetLen as u64
+        SyscallNo::kBytestringGetLen.0
     );
 
     // arg1: key pointer
@@ -154,7 +154,7 @@ fn test_bytestring_set_fixed_size_input() {
     assert_eq!(invocations.len(), 1);
 
     // BytestringSet syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kBytestringSet as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kBytestringSet.0);
 
     // arg1: key pointer
     assert_eq!(invocations[0].args[0], key.as_ptr() as u64);
@@ -189,7 +189,7 @@ fn test_get_current_address_fixed_size_output() {
     // GetCurrentAddress syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kGetCurrentAddress as u64
+        SyscallNo::kGetCurrentAddress.0
     );
 
     // arg1: address pointer

@@ -39,7 +39,7 @@ fn test_get_deploy_address_optional_input() {
     // first invocation should be syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kGetDeployAddress as u64
+        SyscallNo::kGetDeployAddress.0
     );
 
     // arg1: caller_address pointer (Some value)
@@ -81,7 +81,7 @@ fn test_get_deploy_address_optional_none() {
     // first invocation should be syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kGetDeployAddress as u64
+        SyscallNo::kGetDeployAddress.0
     );
 
     // arg1: caller_address should be u64::MAX when None
@@ -123,7 +123,7 @@ fn test_log_event_optional_topics() {
     assert_eq!(invocations.len(), 1);
 
     // LogEvent syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kLogEvent as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kLogEvent.0);
 
     // arg1: topic0 pointer (Some value)
     assert_eq!(invocations[0].args[0], topic0_arr.as_ptr() as u64);
@@ -170,7 +170,7 @@ fn test_change_public_key_registration_optional_params() {
     // ChangePublicKeyRegistration syscall number
     assert_eq!(
         invocations[0].syscall_no,
-        SyscallNo::kChangePublicKeyRegistration as u64
+        SyscallNo::kChangePublicKeyRegistration.0
     );
 
     // arg1: key_index (u32 primitive, passed by value)

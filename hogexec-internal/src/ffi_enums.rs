@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -45,26 +45,29 @@ use ::serde_arrays;
 // function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
 // host function returns HostFnErrorCode::kReturn.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum InvokeErrorCode {
+#[repr(transparent)]
+pub struct InvokeErrorCode(pub i32);
+
+impl InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
     // All others revert the call frame.
-    kInvokeNone = 0 as i32,
+    pub const kInvokeNone: Self = Self(0);
 
     // An unspecified deterministic error.
-    kInvokeDeterministic = 1 as i32,
+    pub const kInvokeDeterministic: Self = Self(1);
 
     // Runtime exceeded its gas budget.
-    kInvokeOutOfGas = 2 as i32,
+    pub const kInvokeOutOfGas: Self = Self(2);
 
     // Nondeterministic error during invocation (e.g. malloc error)
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    kInvokeUnrecoverable = 3 as i32,
+    pub const kInvokeUnrecoverable: Self = Self(3);
 
     // Discovered during validation that proposer submitted bad data.
     // If a block contains a transaction with this error, the block does not need
@@ -77,26 +80,17 @@ pub enum InvokeErrorCode {
     // those errors are discovered _after_ executing the transactions in a block,
     // and require
     // discarding the entire block.
-    kInvokeValidationFailure = 4 as i32,
+    pub const kInvokeValidationFailure: Self = Self(4);
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded),
     // but this is not the result of a totally unrecoverable error. This is to be
     // expected during normal system operation.
-    kInvokeAbortTransaction = 5 as i32,
+    pub const kInvokeAbortTransaction: Self = Self(5);
 }
-impl TryFrom<i32> for InvokeErrorCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kInvokeNone),
-            1 => Ok(Self::kInvokeDeterministic),
-            2 => Ok(Self::kInvokeOutOfGas),
-            3 => Ok(Self::kInvokeUnrecoverable),
-            4 => Ok(Self::kInvokeValidationFailure),
-            5 => Ok(Self::kInvokeAbortTransaction),
-            _ => Err(()),
-        }
+impl From<i32> for InvokeErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -116,19 +110,22 @@ impl TryFrom<i32> for InvokeErrorCode {
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
 // (returning to the caller), and are handled by the WebAssembly runtime.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum HostFnErrorCode {
-    kHostNoneOrRecoverable = 0 as i32,
+#[repr(transparent)]
+pub struct HostFnErrorCode(pub i32);
+
+impl HostFnErrorCode {
+    pub const kHostNoneOrRecoverable: Self = Self(0);
 
     // Insufficient gas to continue WebAssembly execution.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kHostOutOfGas.
-    kHostOutOfGas = 1 as i32,
+    pub const kHostOutOfGas: Self = Self(1);
 
     // Unrecoverable (nondeterministic) error, such as a malloc error.
     // The only course of action is to abort the entire transaction.
@@ -137,13 +134,13 @@ pub enum HostFnErrorCode {
     // InvokeErrorCode::kUnrecoverable
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    kHostUnrecoverable = 2 as i32,
+    pub const kHostUnrecoverable: Self = Self(2);
 
     // Return from a WebAssembly invocation to the caller.  Registers a byte
     // buffer to be passed back to the caller.
     //
     // Result: Runtime immediately returns an {InvokeErrorCode::kNone, 0}.
-    kHostReturn = 3 as i32,
+    pub const kHostReturn: Self = Self(3);
 
     // Return from a WebAssembly invocation to the caller, with some (int32_t)
     // error code.
@@ -152,14 +149,14 @@ pub enum HostFnErrorCode {
     //
     // On a root smart contract invocation, a nonzero code is converted to a
     // InvokeErrorCode::kDeterministic.
-    kHostExit = 4 as i32,
+    pub const kHostExit: Self = Self(4);
 
     // Validation fails because a proposer submitted bad nondeterministic
     // proposal data.
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kValidationFailure
-    kHostValidationFailure = 5 as i32,
+    pub const kHostValidationFailure: Self = Self(5);
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded), but this is not the result of a totally
@@ -167,21 +164,11 @@ pub enum HostFnErrorCode {
     //
     // Result: the WebAssembly runtime immediately returns an
     // InvokeErrorCode::kAbortTransaction
-    kHostAbortTransaction = 6 as i32,
+    pub const kHostAbortTransaction: Self = Self(6);
 }
-impl TryFrom<i32> for HostFnErrorCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kHostNoneOrRecoverable),
-            1 => Ok(Self::kHostOutOfGas),
-            2 => Ok(Self::kHostUnrecoverable),
-            3 => Ok(Self::kHostReturn),
-            4 => Ok(Self::kHostExit),
-            5 => Ok(Self::kHostValidationFailure),
-            6 => Ok(Self::kHostAbortTransaction),
-            _ => Err(()),
-        }
+impl From<i32> for HostFnErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -190,39 +177,36 @@ impl TryFrom<i32> for HostFnErrorCode {
 // These can be mapped into either InvokeErrorCode or HostFnErrorCode, depending on the context in which the
 // error occurs.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SystemErrorCode {
+#[repr(transparent)]
+pub struct SystemErrorCode(pub i32);
+
+impl SystemErrorCode {
     // Unrecoverable error (e.g. out of memory, or critical logic error).
     // Only recourse is to abort entire transaction and possibly crash binary.
     // Signals serious error, which we should investigate.
     // This converts to InvokeErrorCode::kInvokeUnrecoverable or HostFnErrorCode::kHostUnrecoverable.
-    kSystemUnrecoverable = 1 as i32,
+    pub const kSystemUnrecoverable: Self = Self(1);
 
     // Nondeterministic error that occurs during normal course of operation.
     // E.g. a transaction is being executed concurrently with the whole block
     // getting cancelled.
     // Only recourse is to abort the entire transaction.
     // This converts to InvokeErrorCode::kInvokeAbortTransaction or HostFnErrorCode::kHostAbortTransaction.
-    kSystemAbortTransaction = 2 as i32,
+    pub const kSystemAbortTransaction: Self = Self(2);
 
     // Failure during validation of a transaction.  Signals that the whole
     // block must be aborted.
     // This converts to InvokeErrorCode::kInvokeValidationFailure or HostFnErrorCode::kHostValidationFailure.
-    kSystemValidationFailure = 3 as i32,
+    pub const kSystemValidationFailure: Self = Self(3);
 }
-impl TryFrom<i32> for SystemErrorCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            1 => Ok(Self::kSystemUnrecoverable),
-            2 => Ok(Self::kSystemAbortTransaction),
-            3 => Ok(Self::kSystemValidationFailure),
-            _ => Err(()),
-        }
+impl From<i32> for SystemErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 

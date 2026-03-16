@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -256,21 +256,20 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 
 /// Represents the cryptographic scheme used for a signature or public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum CryptographicScheme {
-    Ed25519 = 0 as i32,
+#[repr(transparent)]
+pub struct CryptographicScheme(pub i32);
+
+impl CryptographicScheme {
+    pub const Ed25519: Self = Self(0);
 }
-impl TryFrom<i32> for CryptographicScheme {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::Ed25519),
-            _ => Err(()),
-        }
+impl From<i32> for CryptographicScheme {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -284,7 +283,7 @@ impl TryFrom<i32> for CryptographicScheme {
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
-    Ed25519 { ed25519: Ed25519Signature } = CryptographicScheme::Ed25519 as i32,
+    Ed25519 { ed25519: Ed25519Signature } = CryptographicScheme::Ed25519.0 as i32,
     
 }
 
@@ -297,7 +296,7 @@ pub enum Signature {
 pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
-    Ed25519 { ed25519: Ed25519PublicKey } = CryptographicScheme::Ed25519 as i32,
+    Ed25519 { ed25519: Ed25519PublicKey } = CryptographicScheme::Ed25519.0 as i32,
     
 }
 
@@ -310,7 +309,7 @@ pub enum PublicKey {
 pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
-    Ed25519 { ed25519: Ed25519SecretKey } = CryptographicScheme::Ed25519 as i32,
+    Ed25519 { ed25519: Ed25519SecretKey } = CryptographicScheme::Ed25519.0 as i32,
     
 }
 
@@ -570,51 +569,46 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 /// Contracts are free to set their own conventions for indexing data within
 /// the StorageKeyContractData subspace.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum StorageKeyType {
+#[repr(transparent)]
+pub struct StorageKeyType(pub i32);
+
+impl StorageKeyType {
     /// Contract-controlled data.
     ///
     /// Stores arbitrary data managed by the contract at this address.
-    kStorageKeyTypeContractData = 0 as i32,
+    pub const kStorageKeyTypeContractData: Self = Self(0);
 
     /// Native token balance.
     ///
     /// Stores the free balance of the native HOG token for this address.
-    kStorageKeyTypeFreeNativeTokenBalance = 1 as i32,
+    pub const kStorageKeyTypeFreeNativeTokenBalance: Self = Self(1);
 
     /// Address authorization data.
     ///
     /// Stores [`AddressAuthData`] - the authorization configuration including
     /// public keys, weights, gas permissions, and nonce rules.
-    kStorageKeyTypeAddressAuthData = 2 as i32,
+    pub const kStorageKeyTypeAddressAuthData: Self = Self(2);
 
     /// Address metadata.
     ///
     /// Stores [`AddressMetadata`] - metadata about the contract deployed at
     /// this address (hash, size, type).
-    kStorageKeyTypeAddressMetadata = 3 as i32,
+    pub const kStorageKeyTypeAddressMetadata: Self = Self(3);
 
     /// Replay cache for nonce tracking.
     ///
     /// Stores a set of active [`Uniquifier`] objects
     /// to prevent transaction replay attacks.
-    kStorageKeyTypeReplayCache = 4 as i32,
+    pub const kStorageKeyTypeReplayCache: Self = Self(4);
 }
-impl TryFrom<i32> for StorageKeyType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kStorageKeyTypeContractData),
-            1 => Ok(Self::kStorageKeyTypeFreeNativeTokenBalance),
-            2 => Ok(Self::kStorageKeyTypeAddressAuthData),
-            3 => Ok(Self::kStorageKeyTypeAddressMetadata),
-            4 => Ok(Self::kStorageKeyTypeReplayCache),
-            _ => Err(()),
-        }
+impl From<i32> for StorageKeyType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -691,19 +685,19 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 pub enum StorageKey {
     // case kStorageKeyTypeContractData:
     //   StorageKeyContractData contract_data_key;
-    kStorageKeyTypeContractData { contract_data_key: StorageKeyContractData } = StorageKeyType::kStorageKeyTypeContractData as i32,
+    kStorageKeyTypeContractData { contract_data_key: StorageKeyContractData } = StorageKeyType::kStorageKeyTypeContractData.0 as i32,
     // case kStorageKeyTypeFreeNativeTokenBalance:
     //   void;
-    kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance as i32,
+    kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance.0 as i32,
     // case kStorageKeyTypeAddressAuthData:
     //   void;
-    kStorageKeyTypeAddressAuthData = StorageKeyType::kStorageKeyTypeAddressAuthData as i32,
+    kStorageKeyTypeAddressAuthData = StorageKeyType::kStorageKeyTypeAddressAuthData.0 as i32,
     // case kStorageKeyTypeAddressMetadata:
     //   void;
-    kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata as i32,
+    kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata.0 as i32,
     // case kStorageKeyTypeReplayCache:
     //   void;
-    kStorageKeyTypeReplayCache = StorageKeyType::kStorageKeyTypeReplayCache as i32,
+    kStorageKeyTypeReplayCache = StorageKeyType::kStorageKeyTypeReplayCache.0 as i32,
     
 }
 

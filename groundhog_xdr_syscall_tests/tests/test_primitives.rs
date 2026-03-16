@@ -27,7 +27,7 @@ fn test_get_calldata_len_primitive_output() {
     assert_eq!(invocations.len(), 1);
 
     // GetCalldataLen syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetCalldataLen as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kGetCalldataLen.0);
     // Output parameter should be passed as a pointer
     // The first arg should be the pointer to len
     assert_eq!(invocations[0].args[0], &len as *const _ as u64);
@@ -51,7 +51,7 @@ fn test_console_log_span_input() {
     assert_eq!(invocations.len(), 1);
 
     // ConsoleLog syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kConsoleLog as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kConsoleLog.0);
     // Span argument: first arg is pointer, second is length
     assert_eq!(invocations[0].args[0], buffer.as_ptr() as u64);
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
@@ -95,7 +95,7 @@ fn test_invoke_primitive_inputs() {
     assert_eq!(invocations.len(), 1);
 
     // Invoke syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kInvoke as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kInvoke.0);
 
     // Check arguments:
     // arg1: address pointer
@@ -144,7 +144,7 @@ fn test_sha256_update_bool_primitive() {
     assert_eq!(invocations.len(), 1);
 
     // SHA256Update syscall number
-    assert_eq!(invocations[0].syscall_no, SyscallNo::kSHA256Update as u64);
+    assert_eq!(invocations[0].syscall_no, SyscallNo::kSHA256Update.0);
 
     // arg1: index (u32 primitive, passed by value)
     assert_eq!(invocations[0].args[0], index as u64);

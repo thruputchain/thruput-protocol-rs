@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -33,61 +33,51 @@ use ::serde_arrays;
 // input
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SystemType {
-    SYSTEM_VALIDATOR = 1 as i32,
-    SYSTEM_LOADGEN = 2 as i32,
+#[repr(transparent)]
+pub struct SystemType(pub i32);
+
+impl SystemType {
+    pub const SYSTEM_VALIDATOR: Self = Self(1);
+    pub const SYSTEM_LOADGEN: Self = Self(2);
 }
-impl TryFrom<i32> for SystemType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            1 => Ok(Self::SYSTEM_VALIDATOR),
-            2 => Ok(Self::SYSTEM_LOADGEN),
-            _ => Err(()),
-        }
+impl From<i32> for SystemType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum UnitType {
-    // validator
-    UNIT_COORDINATOR = 1 as i32,
+#[repr(transparent)]
+pub struct UnitType(pub i32);
 
-    UNIT_MEMPOOL = 2 as i32,
-    UNIT_EXEC = 3 as i32,
-    UNIT_DB = 4 as i32,
-    UNIT_EVENT = 5 as i32,
-    UNIT_INDEXER = 6 as i32,
-    UNIT_AUTH = 7 as i32,
+impl UnitType {
+    // validator
+    pub const UNIT_COORDINATOR: Self = Self(1);
+
+    pub const UNIT_MEMPOOL: Self = Self(2);
+    pub const UNIT_EXEC: Self = Self(3);
+    pub const UNIT_DB: Self = Self(4);
+    pub const UNIT_EVENT: Self = Self(5);
+    pub const UNIT_INDEXER: Self = Self(6);
+    pub const UNIT_AUTH: Self = Self(7);
 
     // loadgen
-    UNIT_LOADGEN = 100 as i32,
+    pub const UNIT_LOADGEN: Self = Self(100);
 }
-impl TryFrom<i32> for UnitType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            1 => Ok(Self::UNIT_COORDINATOR),
-            2 => Ok(Self::UNIT_MEMPOOL),
-            3 => Ok(Self::UNIT_EXEC),
-            4 => Ok(Self::UNIT_DB),
-            5 => Ok(Self::UNIT_EVENT),
-            6 => Ok(Self::UNIT_INDEXER),
-            7 => Ok(Self::UNIT_AUTH),
-            100 => Ok(Self::UNIT_LOADGEN),
-            _ => Err(()),
-        }
+impl From<i32> for UnitType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -185,25 +175,22 @@ pub struct UnitDef {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum ProcessStatus {
-    PROCESS_RUNNING = 1 as i32,
-    PROCESS_EXITED = 2 as i32,
-    PROCESS_INTERRUPTED = 3 as i32,
+#[repr(transparent)]
+pub struct ProcessStatus(pub i32);
+
+impl ProcessStatus {
+    pub const PROCESS_RUNNING: Self = Self(1);
+    pub const PROCESS_EXITED: Self = Self(2);
+    pub const PROCESS_INTERRUPTED: Self = Self(3);
 }
-impl TryFrom<i32> for ProcessStatus {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            1 => Ok(Self::PROCESS_RUNNING),
-            2 => Ok(Self::PROCESS_EXITED),
-            3 => Ok(Self::PROCESS_INTERRUPTED),
-            _ => Err(()),
-        }
+impl From<i32> for ProcessStatus {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -216,13 +203,13 @@ impl TryFrom<i32> for ProcessStatus {
 pub enum ProcessState {
     // case PROCESS_RUNNING:
     //   u32 pid;
-    PROCESS_RUNNING { pid: u32 } = ProcessStatus::PROCESS_RUNNING as i32,
+    PROCESS_RUNNING { pid: u32 } = ProcessStatus::PROCESS_RUNNING.0 as i32,
     // case PROCESS_EXITED:
     //   i32 exit;
-    PROCESS_EXITED { exit: i32 } = ProcessStatus::PROCESS_EXITED as i32,
+    PROCESS_EXITED { exit: i32 } = ProcessStatus::PROCESS_EXITED.0 as i32,
     // case PROCESS_INTERRUPTED:
     //   void;
-    PROCESS_INTERRUPTED = ProcessStatus::PROCESS_INTERRUPTED as i32,
+    PROCESS_INTERRUPTED = ProcessStatus::PROCESS_INTERRUPTED.0 as i32,
     
 }
 

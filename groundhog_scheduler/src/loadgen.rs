@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,23 +31,21 @@ use ::serde_arrays;
 // clang-format on
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum ExperimentType {
-    kExperimentTypeERC20Payments = 0 as i32,
-    kExperimentTypeERC20BasicAuthPayments = 1 as i32,
+#[repr(transparent)]
+pub struct ExperimentType(pub i32);
+
+impl ExperimentType {
+    pub const kExperimentTypeERC20Payments: Self = Self(0);
+    pub const kExperimentTypeERC20BasicAuthPayments: Self = Self(1);
 }
-impl TryFrom<i32> for ExperimentType {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kExperimentTypeERC20Payments),
-            1 => Ok(Self::kExperimentTypeERC20BasicAuthPayments),
-            _ => Err(()),
-        }
+impl From<i32> for ExperimentType {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -70,8 +68,8 @@ pub enum ExperimentConfig {
     // case kExperimentTypeERC20Payments:
     // case kExperimentTypeERC20BasicAuthPayments:
     //   ERC20PaymentsConfig erc20_payments;
-    kExperimentTypeERC20Payments { erc20_payments: ERC20PaymentsConfig } = ExperimentType::kExperimentTypeERC20Payments as i32,
-    kExperimentTypeERC20BasicAuthPayments { erc20_payments: ERC20PaymentsConfig } = ExperimentType::kExperimentTypeERC20BasicAuthPayments as i32,
+    kExperimentTypeERC20Payments { erc20_payments: ERC20PaymentsConfig } = ExperimentType::kExperimentTypeERC20Payments.0 as i32,
+    kExperimentTypeERC20BasicAuthPayments { erc20_payments: ERC20PaymentsConfig } = ExperimentType::kExperimentTypeERC20BasicAuthPayments.0 as i32,
     
 }
 
@@ -100,25 +98,22 @@ pub struct LoadgenExtension {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum LoadgenRPCError {
-    kLoadgenRPCErrorOK = 0 as i32,
-    kLoadgenRPCErrorInvalidConfig = 1 as i32,
-    kLoadgenRPCErrorInvalidContext = 2 as i32,
+#[repr(transparent)]
+pub struct LoadgenRPCError(pub i32);
+
+impl LoadgenRPCError {
+    pub const kLoadgenRPCErrorOK: Self = Self(0);
+    pub const kLoadgenRPCErrorInvalidConfig: Self = Self(1);
+    pub const kLoadgenRPCErrorInvalidContext: Self = Self(2);
 }
-impl TryFrom<i32> for LoadgenRPCError {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kLoadgenRPCErrorOK),
-            1 => Ok(Self::kLoadgenRPCErrorInvalidConfig),
-            2 => Ok(Self::kLoadgenRPCErrorInvalidContext),
-            _ => Err(()),
-        }
+impl From<i32> for LoadgenRPCError {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
@@ -131,7 +126,7 @@ impl TryFrom<i32> for LoadgenRPCError {
 pub enum LoadgenResult {
     // case kLoadgenRPCErrorOK:
     //   LoadgenSuccessResult success;
-    kLoadgenRPCErrorOK { success: LoadgenSuccessResult } = LoadgenRPCError::kLoadgenRPCErrorOK as i32,
+    kLoadgenRPCErrorOK { success: LoadgenSuccessResult } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
     Default { error: i32 },
@@ -145,7 +140,7 @@ pub enum LoadgenResult {
 pub enum LoadgenExtensionResult {
     // case kLoadgenRPCErrorOK:
     //   LoadgenExtension success;
-    kLoadgenRPCErrorOK { success: LoadgenExtension } = LoadgenRPCError::kLoadgenRPCErrorOK as i32,
+    kLoadgenRPCErrorOK { success: LoadgenExtension } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
     Default { error: i32 },

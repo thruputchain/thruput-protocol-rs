@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c558edbdff40439f4554bfea09e9443e1f7c5dea
+// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -38,67 +38,56 @@ use ::serde_arrays;
 /// Each syscall can return a specific subset of these error codes.
 /// Check the syscalls.yaml documentation for which errors each syscall can return.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
-#[repr(i32)]
-pub enum SyscallErrorCode {
+#[repr(transparent)]
+pub struct SyscallErrorCode(pub i32);
+
+impl SyscallErrorCode {
     /// No error
-    kSyscallErrorCodeNone = 0 as i32,
+    pub const kSyscallErrorCodeNone: Self = Self(0);
 
     /// Out of bounds pointer to wasm memory passed to syscall
-    kSyscallErrorCodeFault = 1 as i32,
+    pub const kSyscallErrorCodeFault: Self = Self(1);
 
     /// System call for supplied number is not supported
-    kSyscallErrorCodeNoSyscall = 2 as i32,
+    pub const kSyscallErrorCodeNoSyscall: Self = Self(2);
 
     /// Cannot call get_msg_sender on root invocation
-    kSyscallErrorCodeIsRootTransaction = 3 as i32,
+    pub const kSyscallErrorCodeIsRootTransaction: Self = Self(3);
 
     /// Attempt made to deploy a contract twice (same nonce and contract hash, from
     /// same address)
-    kSyscallErrorCodeContractAlreadyDeployed = 5 as i32,
+    pub const kSyscallErrorCodeContractAlreadyDeployed: Self = Self(5);
 
     /// No return buffer is available.  Either the most recent subcall failed, or
     /// there have been no subcalls within this call frame.
-    kSyscallErrorCodeNoReturnBufferAvailable = 6 as i32,
+    pub const kSyscallErrorCodeNoReturnBufferAvailable: Self = Self(6);
 
     /// Invalid input to a syscall, such as subtracting below 0 on an nnint64
     /// or a bytestring that is too long
-    kSyscallErrorCodeInvalidSyscallInput = 7 as i32,
+    pub const kSyscallErrorCodeInvalidSyscallInput: Self = Self(7);
 
     /// Accessing a storage key that does not exist in the current view
-    kSyscallErrorCodeStorageKeyNotExist = 8 as i32,
+    pub const kSyscallErrorCodeStorageKeyNotExist: Self = Self(8);
 
     /// No entry in the retrocausal queue to consume
-    kSyscallErrorCodeNoRetrocausalQueueEntry = 9 as i32,
+    pub const kSyscallErrorCodeNoRetrocausalQueueEntry: Self = Self(9);
 
     // ===== Error codes that signal the called frame reverted =====
     
     /// Deterministic error within called wasm (i.e. trap)
-    kSyscallErrorCodeDeterministicWasm = -1 as i32,
+    pub const kSyscallErrorCodeDeterministicWasm: Self = Self(-1);
 
     /// Child call frame manually reverted
-    kSyscallErrorCodeFrameReverted = -2 as i32,
+    pub const kSyscallErrorCodeFrameReverted: Self = Self(-2);
 }
-impl TryFrom<i32> for SyscallErrorCode {
-    type Error = ();
-    fn try_from(value: i32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::kSyscallErrorCodeNone),
-            1 => Ok(Self::kSyscallErrorCodeFault),
-            2 => Ok(Self::kSyscallErrorCodeNoSyscall),
-            3 => Ok(Self::kSyscallErrorCodeIsRootTransaction),
-            5 => Ok(Self::kSyscallErrorCodeContractAlreadyDeployed),
-            6 => Ok(Self::kSyscallErrorCodeNoReturnBufferAvailable),
-            7 => Ok(Self::kSyscallErrorCodeInvalidSyscallInput),
-            8 => Ok(Self::kSyscallErrorCodeStorageKeyNotExist),
-            9 => Ok(Self::kSyscallErrorCodeNoRetrocausalQueueEntry),
-            -1 => Ok(Self::kSyscallErrorCodeDeterministicWasm),
-            -2 => Ok(Self::kSyscallErrorCodeFrameReverted),
-            _ => Err(()),
-        }
+impl From<i32> for SyscallErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
     }
 }
 
