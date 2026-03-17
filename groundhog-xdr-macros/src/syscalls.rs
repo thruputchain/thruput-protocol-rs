@@ -581,6 +581,7 @@ fn generate_syscall_uninit_decl(
 
     quote! {
         #doc_comment
+        #[inline(always)]
         pub fn #uninit_ident(#(#uninit_syscall_inputs,)*) -> #return_type {
 
             // syscall will initialize outputs, if error is kNone
@@ -642,6 +643,7 @@ fn generate_syscall_raw_decl(
 
     quote! {
         #doc_comment
+        #[inline(always)]
         pub fn #raw_ident(#(#raw_syscall_inputs,)*) -> #return_type {
             #uninit_ident(#(#forward_args,)*)
         }

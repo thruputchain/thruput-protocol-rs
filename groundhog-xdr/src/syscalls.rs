@@ -168,6 +168,7 @@ unsafe extern "C-unwind" {
     ) -> i32;
 }
 
+#[inline(always)]
 fn syscall_wrapper(
     syscall_no: SyscallNo,
     arg1: u64,
