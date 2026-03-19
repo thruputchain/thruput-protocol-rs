@@ -11,6 +11,9 @@ extern crate alloc;
 #[cfg(not(feature = "xdrs"))]
 pub use xdr_common::*;
 
+mod protocol_version;
+pub use protocol_version::PROTOCOL_VERSION;
+
 pub mod hex;
 use hex::*;
 
