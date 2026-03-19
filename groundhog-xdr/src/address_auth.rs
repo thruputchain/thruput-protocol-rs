@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
+// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -190,7 +190,7 @@ pub const kDefaultNewAddressKeyID : u32 = 0;
 /// When a transaction is submitted, its `AuthClaims` are verified against
 /// this data to determine if the transaction is properly authorized.
 ///
-/// This is the type stored at storage key `kStorageKeyTypeAddressAuthData`.
+/// This is the type stored at storage key `AddressAuthData`.
 ///
 /// # TODO
 ///

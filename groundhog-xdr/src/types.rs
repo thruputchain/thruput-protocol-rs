@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
+// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -581,30 +581,30 @@ impl StorageKeyType {
     /// Contract-controlled data.
     ///
     /// Stores arbitrary data managed by the contract at this address.
-    pub const kStorageKeyTypeContractData: Self = Self(0);
+    pub const ContractData: Self = Self(0);
 
     /// Native token balance.
     ///
     /// Stores the free balance of the native HOG token for this address.
-    pub const kStorageKeyTypeFreeNativeTokenBalance: Self = Self(1);
+    pub const FreeNativeTokenBalance: Self = Self(1);
 
     /// Address authorization data.
     ///
     /// Stores [`AddressAuthData`] - the authorization configuration including
     /// public keys, weights, gas permissions, and nonce rules.
-    pub const kStorageKeyTypeAddressAuthData: Self = Self(2);
+    pub const AuthData: Self = Self(2);
 
     /// Address metadata.
     ///
     /// Stores [`AddressMetadata`] - metadata about the contract deployed at
     /// this address (hash, size, type).
-    pub const kStorageKeyTypeAddressMetadata: Self = Self(3);
+    pub const Metadata: Self = Self(3);
 
     /// Replay cache for nonce tracking.
     ///
     /// Stores a set of active [`Uniquifier`] objects
     /// to prevent transaction replay attacks.
-    pub const kStorageKeyTypeReplayCache: Self = Self(4);
+    pub const ReplayCache: Self = Self(4);
 }
 impl From<i32> for StorageKeyType {
     fn from(v: i32) -> Self {
@@ -683,21 +683,21 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum StorageKey {
-    // case kStorageKeyTypeContractData:
+    // case ContractData:
     //   StorageKeyContractData contract_data_key;
-    kStorageKeyTypeContractData { contract_data_key: StorageKeyContractData } = StorageKeyType::kStorageKeyTypeContractData.0 as i32,
-    // case kStorageKeyTypeFreeNativeTokenBalance:
+    ContractData { contract_data_key: StorageKeyContractData } = StorageKeyType::ContractData.0 as i32,
+    // case FreeNativeTokenBalance:
     //   void;
-    kStorageKeyTypeFreeNativeTokenBalance = StorageKeyType::kStorageKeyTypeFreeNativeTokenBalance.0 as i32,
-    // case kStorageKeyTypeAddressAuthData:
+    FreeNativeTokenBalance = StorageKeyType::FreeNativeTokenBalance.0 as i32,
+    // case AuthData:
     //   void;
-    kStorageKeyTypeAddressAuthData = StorageKeyType::kStorageKeyTypeAddressAuthData.0 as i32,
-    // case kStorageKeyTypeAddressMetadata:
+    AuthData = StorageKeyType::AuthData.0 as i32,
+    // case Metadata:
     //   void;
-    kStorageKeyTypeAddressMetadata = StorageKeyType::kStorageKeyTypeAddressMetadata.0 as i32,
-    // case kStorageKeyTypeReplayCache:
+    Metadata = StorageKeyType::Metadata.0 as i32,
+    // case ReplayCache:
     //   void;
-    kStorageKeyTypeReplayCache = StorageKeyType::kStorageKeyTypeReplayCache.0 as i32,
+    ReplayCache = StorageKeyType::ReplayCache.0 as i32,
     
 }
 

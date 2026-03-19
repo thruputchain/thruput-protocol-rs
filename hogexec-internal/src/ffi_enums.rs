@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
+// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -34,16 +34,16 @@ use ::serde_arrays;
 // InvokeStatus<int32_t> (a std::expected).
 //
 // When InvokeStatus<int32_t> has an int32_t value (and an
-// InvokeErrorCode::kNone), the int32_t value represents a handleable
+// InvokeErrorCode::None), the int32_t value represents a handleable
 // (deterministic) result from the invocation. (Specifically, the invoke()
 // syscall in a nested smart contract invocation passes an
-// {InvokeErrorCode::kNone, code} back as a
-// {HostFnErrorCode::kNoneOrRecoverable, code}).
+// {InvokeErrorCode::None, code} back as a
+// {HostFnErrorCode::NoneOrRecoverable, code}).
 //
 // This value is generated as either the returned value from the selected
 // WebAssembly exported function that was run, the code caused by a host
-// function returning HostFnErrorCode::kExit, or 0, if invocation ends because a
-// host function returns HostFnErrorCode::kReturn.
+// function returning HostFnErrorCode::Exit, or 0, if invocation ends because a
+// host function returns HostFnErrorCode::Return.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -56,18 +56,18 @@ pub struct InvokeErrorCode(pub i32);
 impl InvokeErrorCode {
     // A call frame can only succeed if this code is returned.
     // All others revert the call frame.
-    pub const kInvokeNone: Self = Self(0);
+    pub const None: Self = Self(0);
 
     // An unspecified deterministic error.
-    pub const kInvokeDeterministic: Self = Self(1);
+    pub const Deterministic: Self = Self(1);
 
     // Runtime exceeded its gas budget.
-    pub const kInvokeOutOfGas: Self = Self(2);
+    pub const OutOfGas: Self = Self(2);
 
     // Nondeterministic error during invocation (e.g. malloc error)
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    pub const kInvokeUnrecoverable: Self = Self(3);
+    pub const Unrecoverable: Self = Self(3);
 
     // Discovered during validation that proposer submitted bad data.
     // If a block contains a transaction with this error, the block does not need
@@ -80,13 +80,13 @@ impl InvokeErrorCode {
     // those errors are discovered _after_ executing the transactions in a block,
     // and require
     // discarding the entire block.
-    pub const kInvokeValidationFailure: Self = Self(4);
+    pub const ValidationFailure: Self = Self(4);
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded),
     // but this is not the result of a totally unrecoverable error. This is to be
     // expected during normal system operation.
-    pub const kInvokeAbortTransaction: Self = Self(5);
+    pub const Abandon: Self = Self(5);
 }
 impl From<i32> for InvokeErrorCode {
     fn from(v: i32) -> Self {
@@ -104,7 +104,7 @@ impl From<i32> for InvokeErrorCode {
 // access to our table of system call handlers.
 //
 // When a HostFnStatus<int32_t> (a wrapper around std::expected) has an int32_t
-// value, (and a HostFnErrorCode::kNoneOrRecoverable), that int32_t is passed to
+// value, (and a HostFnErrorCode::NoneOrRecoverable), that int32_t is passed to
 // WebAssembly as a handleable error code, as the return result from the host
 // function. The WebAssembly bytecode (the smart contract) itself never sees the
 // HostFnErrorCode. Other HostFnErrorCodes terminate the WebAssembly runtime
@@ -119,52 +119,52 @@ impl From<i32> for InvokeErrorCode {
 pub struct HostFnErrorCode(pub i32);
 
 impl HostFnErrorCode {
-    pub const kHostNoneOrRecoverable: Self = Self(0);
+    pub const NoneOrRecoverable: Self = Self(0);
 
     // Insufficient gas to continue WebAssembly execution.
     //
     // Result: the WebAssembly runtime immediately returns an
-    // InvokeErrorCode::kHostOutOfGas.
-    pub const kHostOutOfGas: Self = Self(1);
+    // InvokeErrorCode::OutOfGas.
+    pub const OutOfGas: Self = Self(1);
 
     // Unrecoverable (nondeterministic) error, such as a malloc error.
     // The only course of action is to abort the entire transaction.
     //
     // Result: the WebAssembly runtime immediately returns an
-    // InvokeErrorCode::kUnrecoverable
+    // InvokeErrorCode::Unrecoverable
     // Signals a serious system issue or a serious bug in our code and should be
     // diagnosed ASAP.
-    pub const kHostUnrecoverable: Self = Self(2);
+    pub const Unrecoverable: Self = Self(2);
 
     // Return from a WebAssembly invocation to the caller.  Registers a byte
     // buffer to be passed back to the caller.
     //
-    // Result: Runtime immediately returns an {InvokeErrorCode::kNone, 0}.
-    pub const kHostReturn: Self = Self(3);
+    // Result: Runtime immediately returns an {InvokeErrorCode::None, 0}.
+    pub const Return: Self = Self(3);
 
     // Return from a WebAssembly invocation to the caller, with some (int32_t)
     // error code.
     //
-    // Result: Runtime immediately returns an {InvokeErrorCode::kNone, code}.
+    // Result: Runtime immediately returns an {InvokeErrorCode::None, code}.
     //
     // On a root smart contract invocation, a nonzero code is converted to a
-    // InvokeErrorCode::kDeterministic.
-    pub const kHostExit: Self = Self(4);
+    // InvokeErrorCode::Deterministic.
+    pub const Exit: Self = Self(4);
 
     // Validation fails because a proposer submitted bad nondeterministic
     // proposal data.
     //
     // Result: the WebAssembly runtime immediately returns an
-    // InvokeErrorCode::kValidationFailure
-    pub const kHostValidationFailure: Self = Self(5);
+    // InvokeErrorCode::ValidationFailure
+    pub const ValidationFailure: Self = Self(5);
 
     // The transaction was aborted due to an external reason (such as the current
     // block being discarded), but this is not the result of a totally
     // unrecoverable error. This is to be expected during normal system operation.
     //
     // Result: the WebAssembly runtime immediately returns an
-    // InvokeErrorCode::kAbortTransaction
-    pub const kHostAbortTransaction: Self = Self(6);
+    // InvokeErrorCode::Abandon
+    pub const Abandon: Self = Self(6);
 }
 impl From<i32> for HostFnErrorCode {
     fn from(v: i32) -> Self {
@@ -189,20 +189,20 @@ impl SystemErrorCode {
     // Unrecoverable error (e.g. out of memory, or critical logic error).
     // Only recourse is to abort entire transaction and possibly crash binary.
     // Signals serious error, which we should investigate.
-    // This converts to InvokeErrorCode::kInvokeUnrecoverable or HostFnErrorCode::kHostUnrecoverable.
-    pub const kSystemUnrecoverable: Self = Self(1);
+    // This converts to InvokeErrorCode::Unrecoverable or HostFnErrorCode::Unrecoverable.
+    pub const Unrecoverable: Self = Self(1);
 
     // Nondeterministic error that occurs during normal course of operation.
     // E.g. a transaction is being executed concurrently with the whole block
     // getting cancelled.
     // Only recourse is to abort the entire transaction.
-    // This converts to InvokeErrorCode::kInvokeAbortTransaction or HostFnErrorCode::kHostAbortTransaction.
-    pub const kSystemAbortTransaction: Self = Self(2);
+    // This converts to InvokeErrorCode::Abandon or HostFnErrorCode::Abandon.
+    pub const Abandon: Self = Self(2);
 
     // Failure during validation of a transaction.  Signals that the whole
     // block must be aborted.
-    // This converts to InvokeErrorCode::kInvokeValidationFailure or HostFnErrorCode::kHostValidationFailure.
-    pub const kSystemValidationFailure: Self = Self(3);
+    // This converts to InvokeErrorCode::ValidationFailure or HostFnErrorCode::ValidationFailure.
+    pub const ValidationFailure: Self = Self(3);
 }
 impl From<i32> for SystemErrorCode {
     fn from(v: i32) -> Self {

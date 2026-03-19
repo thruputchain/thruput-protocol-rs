@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
+// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -358,7 +358,7 @@ pub struct DeployedContractHash {
 /// Metadata associated with an address.
 ///
 /// Currently only stores information about the deployed contract, if any.
-/// This is the type stored at storage key `kStorageKeyTypeAddressMetadata`.
+/// This is the type stored at storage key `AddressMetadata`.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]

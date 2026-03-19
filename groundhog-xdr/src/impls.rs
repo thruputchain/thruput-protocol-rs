@@ -3,7 +3,7 @@ use core::ops::*;
 
 impl From<SHA256Hash> for StorageKey {
     fn from(hash: SHA256Hash) -> Self {
-        Self::kStorageKeyTypeContractData {
+        Self::ContractData {
             contract_data_key: hash.into_inner().into(),
         }
     }
@@ -154,7 +154,7 @@ impl Default for Signature {
 
 impl Default for StorageKey {
     fn default() -> Self {
-        Self::kStorageKeyTypeContractData {
+        Self::ContractData {
             contract_data_key: StorageKeyContractData::default(),
         }
     }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 443aa4e97f3a0684c47b4f27fa9b4cd32b74f7fb
+// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -148,9 +148,9 @@ pub struct Invocation {
 pub struct InvocationFrameStatusCode(pub i32);
 
 impl InvocationFrameStatusCode {
-    pub const kInvocationFrameStatusCodeReturn: Self = Self(0);
-    pub const kInvocationFrameStatusCodeFault: Self = Self(1);
-    pub const kInvocationFrameStatusCodeAbort: Self = Self(2);
+    pub const Return: Self = Self(0);
+    pub const Fault: Self = Self(1);
+    pub const Abort: Self = Self(2);
 }
 impl From<i32> for InvocationFrameStatusCode {
     fn from(v: i32) -> Self {
@@ -165,15 +165,15 @@ impl From<i32> for InvocationFrameStatusCode {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
 pub enum InvocationFrameOutput {
-    // case kInvocationFrameStatusCodeReturn:
+    // case Return:
     //   ReturnBuffer return_buffer;
-    kInvocationFrameStatusCodeReturn { return_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeReturn.0 as i32,
-    // case kInvocationFrameStatusCodeAbort:
+    Return { return_buffer: ReturnBuffer } = InvocationFrameStatusCode::Return.0 as i32,
+    // case Abort:
     //   ReturnBuffer abort_buffer;
-    kInvocationFrameStatusCodeAbort { abort_buffer: ReturnBuffer } = InvocationFrameStatusCode::kInvocationFrameStatusCodeAbort.0 as i32,
-    // case kInvocationFrameStatusCodeFault:
+    Abort { abort_buffer: ReturnBuffer } = InvocationFrameStatusCode::Abort.0 as i32,
+    // case Fault:
     //   void;
-    kInvocationFrameStatusCodeFault = InvocationFrameStatusCode::kInvocationFrameStatusCodeFault.0 as i32,
+    Fault = InvocationFrameStatusCode::Fault.0 as i32,
     
 }
 
@@ -184,7 +184,7 @@ pub enum InvocationFrameOutput {
 ///
 /// Note: InvokeFlagSet is NOT part of the Invocation struct itself, but is
 /// instead a parameter to the Invoke syscall. The root transaction invocation
-/// always has no flags set (equivalent to kInvokeFlagNone).
+/// always has no flags set (equivalent to None).
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -196,7 +196,7 @@ pub struct InvokeFlag(pub i32);
 
 impl InvokeFlag {
     /// No special behavior (default).
-    pub const kInvokeFlagNone: Self = Self(0);
+    pub const None: Self = Self(0);
 
     /// Enable early conflict detection for parallel execution.
     ///
@@ -211,13 +211,13 @@ impl InvokeFlag {
     /// This is nondeterministic, so the two-phase commit result (a boolean) is appended to
     /// the nondeterministic_bits in [`NondeterministicProposalData`] for deterministic
     /// re-execution by validators.
-    pub const kInvokeFlagTryInvoke: Self = Self(0x00000001);
+    pub const TryInvoke: Self = Self(0x00000001);
 
     /// Prevent all state modifications in the subinvocation.
     ///
     /// The subinvocation can read storage but cannot write, deploy contracts,
     /// or perform any other state-modifying operations.
-    pub const kInvokeFlagReadOnly: Self = Self(0x00000002);
+    pub const ReadOnly: Self = Self(0x00000002);
 
     /// Execute the target contract's code in the caller's context.
     ///
@@ -230,7 +230,7 @@ impl InvokeFlag {
     /// should NOT change (they return the original caller and current address),
     /// but storage operations should operate on the caller's storage. Document
     /// the behavior of all syscalls in a delegatecall context.
-    pub const kInvokeFlagDelegateCall: Self = Self(0x00000004);
+    pub const DelegateCall: Self = Self(0x00000004);
 }
 impl From<i32> for InvokeFlag {
     fn from(v: i32) -> Self {
@@ -242,7 +242,7 @@ impl From<i32> for InvokeFlag {
 /// A bitset of InvokeFlag values.
 ///
 /// Multiple flags can be combined using bitwise OR. For example:
-/// `kInvokeFlagReadOnly | kInvokeFlagTryInvoke`
+/// `ReadOnly | TryInvoke`
 pub type InvokeFlagSet = i32;
 
 //------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ pub type InvokeFlagSet = i32;
 /// 1. An expiry height - the transaction becomes invalid after this block
 /// 2. A nonce - ensures uniqueness even if the same operation is repeated
 ///
-/// The uniquifier is stored in the replay cache (see [`StorageKeyType::kStorageKeyTypeReplayCache`]
+/// The uniquifier is stored in the replay cache (see [`StorageKeyType::ReplayCache`]
 /// in types.x) at the invoked contract's address to prevent replays.
 ///
 /// Important: The replay cache considers the (nonce, block_expiry_height) pair as the
@@ -495,7 +495,7 @@ impl TransactionStatistic {
     /// This can be queried to monitor gas consumption during execution.
     /// Note that this statistic may be disabled or return nondeterministic
     /// values in test configurations (see syscalls.yaml for details).
-    pub const kTxStatGasRemaining: Self = Self(0);
+    pub const GasRemaining: Self = Self(0);
 }
 impl From<i32> for TransactionStatistic {
     fn from(v: i32) -> Self {

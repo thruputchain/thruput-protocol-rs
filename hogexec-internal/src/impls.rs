@@ -3,16 +3,16 @@ use crate::ffi_enums::{HostFnErrorCode, InvokeErrorCode, SystemErrorCode};
 impl From<SystemErrorCode> for HostFnErrorCode {
     fn from(error_code: SystemErrorCode) -> Self {
         match error_code {
-            SystemErrorCode::kSystemUnrecoverable => {
-                HostFnErrorCode::kHostUnrecoverable
+            SystemErrorCode::Unrecoverable => {
+                HostFnErrorCode::Unrecoverable
             }
-            SystemErrorCode::kSystemAbortTransaction => {
-                HostFnErrorCode::kHostAbortTransaction
+            SystemErrorCode::Abandon => {
+                HostFnErrorCode::Abandon
             }
-            SystemErrorCode::kSystemValidationFailure => {
-                HostFnErrorCode::kHostValidationFailure
+            SystemErrorCode::ValidationFailure => {
+                HostFnErrorCode::ValidationFailure
             }
-            _ => HostFnErrorCode::kHostUnrecoverable,
+            _ => HostFnErrorCode::Unrecoverable,
         }
     }
 }
@@ -20,16 +20,16 @@ impl From<SystemErrorCode> for HostFnErrorCode {
 impl From<SystemErrorCode> for InvokeErrorCode {
     fn from(error_code: SystemErrorCode) -> Self {
         match error_code {
-            SystemErrorCode::kSystemUnrecoverable => {
-                InvokeErrorCode::kInvokeUnrecoverable
+            SystemErrorCode::Unrecoverable => {
+                InvokeErrorCode::Unrecoverable
             }
-            SystemErrorCode::kSystemAbortTransaction => {
-                InvokeErrorCode::kInvokeAbortTransaction
+            SystemErrorCode::Abandon => {
+                InvokeErrorCode::Abandon
             }
-            SystemErrorCode::kSystemValidationFailure => {
-                InvokeErrorCode::kInvokeValidationFailure
+            SystemErrorCode::ValidationFailure => {
+                InvokeErrorCode::ValidationFailure
             }
-            _ => InvokeErrorCode::kInvokeUnrecoverable,
+            _ => InvokeErrorCode::Unrecoverable,
         }
     }
 }
