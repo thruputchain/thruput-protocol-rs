@@ -32,7 +32,7 @@ serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde", "serde
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
 syscalls = ["dep:thiserror"]
-syscalls_mock = ["syscalls"]                                              # required for native_exec integration
+syscalls_mock = ["syscalls", "std"]                             # required for native_exec integration
 
 [dependencies.xdrs]
 workspace = true
