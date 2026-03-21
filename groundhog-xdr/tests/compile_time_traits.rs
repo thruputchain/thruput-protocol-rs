@@ -25,18 +25,18 @@ mod format_tests {
 
     #[test]
     fn test_display() {
-        let x : groundhog_xdr::storage_item::StorageItemType = 0.into();
+        let x: groundhog_xdr::storage_item::StorageItemType = 0.into();
         std::println!("value: {}", x);
     }
 
     #[test]
     fn to_string_test() {
-        let x : groundhog_xdr::transaction::InvocationFrameStatusCode = 0.into();
+        let x: groundhog_xdr::transaction::InvocationFrameStatusCode =
+            0.into();
         assert_eq!(x.to_string(), "InvocationFrameStatusCode::Return");
 
-        let y : groundhog_xdr::transaction::InvocationFrameStatusCode = 100.into();
+        let y: groundhog_xdr::transaction::InvocationFrameStatusCode =
+            100.into();
         assert_eq!(y.to_string(), "InvocationFrameStatusCode(100)");
     }
 }
-
-
