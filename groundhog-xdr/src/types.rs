@@ -120,7 +120,6 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -182,7 +181,6 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -243,7 +241,6 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
@@ -272,6 +269,19 @@ impl From<i32> for CryptographicScheme {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for CryptographicScheme {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::Ed25519.0 => {
+                write!(f, "CryptographicScheme::Ed25519")
+            },
+            _ => {
+                write!(f, "CryptographicScheme({})", self.0)
+            }
+        }
+    }
+}
 
 
 /// Union of a Signature type over the various cryptographic schemes.
@@ -280,6 +290,7 @@ impl From<i32> for CryptographicScheme {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
@@ -293,6 +304,7 @@ pub enum Signature {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
@@ -306,6 +318,7 @@ pub enum PublicKey {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
@@ -325,6 +338,7 @@ pub enum SecretKey {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExtensionPoint {
     // case 0:
     //   void;
@@ -383,7 +397,6 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r SHA256Hash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -446,7 +459,6 @@ impl<'a> From<&'a [u8; 2048]> for &'a DbHash {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r DbHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 2048] = xdrs::read_xdr(r)?;
@@ -548,7 +560,6 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r ContractAddress {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -611,6 +622,31 @@ impl From<i32> for StorageKeyType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for StorageKeyType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::ContractData.0 => {
+                write!(f, "StorageKeyType::ContractData")
+            },
+            x if x == Self::FreeNativeTokenBalance.0 => {
+                write!(f, "StorageKeyType::FreeNativeTokenBalance")
+            },
+            x if x == Self::AuthData.0 => {
+                write!(f, "StorageKeyType::AuthData")
+            },
+            x if x == Self::Metadata.0 => {
+                write!(f, "StorageKeyType::Metadata")
+            },
+            x if x == Self::ReplayCache.0 => {
+                write!(f, "StorageKeyType::ReplayCache")
+            },
+            _ => {
+                write!(f, "StorageKeyType({})", self.0)
+            }
+        }
+    }
+}
 
 
 /// Represents an arbitrary 32-byte key into contract storage.
@@ -665,7 +701,6 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
@@ -682,6 +717,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum StorageKey {
     // case ContractData:
     //   StorageKeyContractData contract_data_key;
@@ -731,28 +767,28 @@ pub type BlockHeight = i64;
 //
 
 impl Signature {
-    pub fn scheme(&self) -> i32 {
+    pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl PublicKey {
-    pub fn scheme(&self) -> i32 {
+    pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl SecretKey {
-    pub fn scheme(&self) -> i32 {
+    pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -767,10 +803,10 @@ impl ExtensionPoint {
 }
 
 impl StorageKey {
-    pub fn key_type(&self) -> i32 {
+    pub fn key_type(&self) -> StorageKeyType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

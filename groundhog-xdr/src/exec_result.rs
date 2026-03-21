@@ -82,6 +82,40 @@ impl From<i32> for ExecResult {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for ExecResult {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::ExecResultOK.0 => {
+                write!(f, "ExecResult::ExecResultOK")
+            },
+            x if x == Self::ExecResultTxDeterministicError.0 => {
+                write!(f, "ExecResult::ExecResultTxDeterministicError")
+            },
+            x if x == Self::ExecResultTxRootFrameReverted.0 => {
+                write!(f, "ExecResult::ExecResultTxRootFrameReverted")
+            },
+            x if x == Self::ExecResultTxNonDeterministicError.0 => {
+                write!(f, "ExecResult::ExecResultTxNonDeterministicError")
+            },
+            x if x == Self::ExecResultFailedGasSponsorship.0 => {
+                write!(f, "ExecResult::ExecResultFailedGasSponsorship")
+            },
+            x if x == Self::ExecResultTxValidationFailure.0 => {
+                write!(f, "ExecResult::ExecResultTxValidationFailure")
+            },
+            x if x == Self::ExecResultSystemError.0 => {
+                write!(f, "ExecResult::ExecResultSystemError")
+            },
+            x if x == Self::ExecResultUnrecoverable.0 => {
+                write!(f, "ExecResult::ExecResultUnrecoverable")
+            },
+            _ => {
+                write!(f, "ExecResult({})", self.0)
+            }
+        }
+    }
+}
 
 
 

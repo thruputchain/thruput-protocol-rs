@@ -93,6 +93,34 @@ impl From<i32> for InvokeErrorCode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for InvokeErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::None.0 => {
+                write!(f, "InvokeErrorCode::None")
+            },
+            x if x == Self::Deterministic.0 => {
+                write!(f, "InvokeErrorCode::Deterministic")
+            },
+            x if x == Self::OutOfGas.0 => {
+                write!(f, "InvokeErrorCode::OutOfGas")
+            },
+            x if x == Self::Unrecoverable.0 => {
+                write!(f, "InvokeErrorCode::Unrecoverable")
+            },
+            x if x == Self::ValidationFailure.0 => {
+                write!(f, "InvokeErrorCode::ValidationFailure")
+            },
+            x if x == Self::Abandon.0 => {
+                write!(f, "InvokeErrorCode::Abandon")
+            },
+            _ => {
+                write!(f, "InvokeErrorCode({})", self.0)
+            }
+        }
+    }
+}
 
 
 // HostFunctionErrorCode categorizes errors returned from system calls. The
@@ -171,6 +199,37 @@ impl From<i32> for HostFnErrorCode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for HostFnErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::NoneOrRecoverable.0 => {
+                write!(f, "HostFnErrorCode::NoneOrRecoverable")
+            },
+            x if x == Self::OutOfGas.0 => {
+                write!(f, "HostFnErrorCode::OutOfGas")
+            },
+            x if x == Self::Unrecoverable.0 => {
+                write!(f, "HostFnErrorCode::Unrecoverable")
+            },
+            x if x == Self::Return.0 => {
+                write!(f, "HostFnErrorCode::Return")
+            },
+            x if x == Self::Exit.0 => {
+                write!(f, "HostFnErrorCode::Exit")
+            },
+            x if x == Self::ValidationFailure.0 => {
+                write!(f, "HostFnErrorCode::ValidationFailure")
+            },
+            x if x == Self::Abandon.0 => {
+                write!(f, "HostFnErrorCode::Abandon")
+            },
+            _ => {
+                write!(f, "HostFnErrorCode({})", self.0)
+            }
+        }
+    }
+}
 
 
 // General-purpose system error codes returned from within various executor operations.
@@ -207,6 +266,25 @@ impl SystemErrorCode {
 impl From<i32> for SystemErrorCode {
     fn from(v: i32) -> Self {
         Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for SystemErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::Unrecoverable.0 => {
+                write!(f, "SystemErrorCode::Unrecoverable")
+            },
+            x if x == Self::Abandon.0 => {
+                write!(f, "SystemErrorCode::Abandon")
+            },
+            x if x == Self::ValidationFailure.0 => {
+                write!(f, "SystemErrorCode::ValidationFailure")
+            },
+            _ => {
+                write!(f, "SystemErrorCode({})", self.0)
+            }
+        }
     }
 }
 

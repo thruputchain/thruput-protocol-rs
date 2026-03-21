@@ -90,6 +90,37 @@ impl From<i32> for RPCError {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for RPCError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kRPCNone.0 => {
+                write!(f, "RPCError::kRPCNone")
+            },
+            x if x == Self::kRPCNotFound.0 => {
+                write!(f, "RPCError::kRPCNotFound")
+            },
+            x if x == Self::kRPCBadBlockID.0 => {
+                write!(f, "RPCError::kRPCBadBlockID")
+            },
+            x if x == Self::kRPCStorageWriteFailed.0 => {
+                write!(f, "RPCError::kRPCStorageWriteFailed")
+            },
+            x if x == Self::kRPCTransactionFailed.0 => {
+                write!(f, "RPCError::kRPCTransactionFailed")
+            },
+            x if x == Self::kRPCUnimplemented.0 => {
+                write!(f, "RPCError::kRPCUnimplemented")
+            },
+            x if x == Self::kRPCUnrecoverable.0 => {
+                write!(f, "RPCError::kRPCUnrecoverable")
+            },
+            _ => {
+                write!(f, "RPCError({})", self.0)
+            }
+        }
+    }
+}
 
 
 // The mode in which a block executes.
@@ -111,6 +142,22 @@ impl From<i32> for BlockExecutionMode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for BlockExecutionMode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kBlockExecutionModeValidation.0 => {
+                write!(f, "BlockExecutionMode::kBlockExecutionModeValidation")
+            },
+            x if x == Self::kBlockExecutionModeProposal.0 => {
+                write!(f, "BlockExecutionMode::kBlockExecutionModeProposal")
+            },
+            _ => {
+                write!(f, "BlockExecutionMode({})", self.0)
+            }
+        }
+    }
+}
 
 
 pub type StorageCost = int128_xdr;
@@ -120,6 +167,7 @@ pub type StorageCost = int128_xdr;
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedStorageCost {
     // case kRPCNone:
     //   StorageCost storage_cost;
@@ -135,6 +183,7 @@ pub enum ExpectedStorageCost {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedContract {
     // case kRPCNone:
     //   Contract contract;
@@ -149,6 +198,7 @@ pub enum ExpectedContract {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedDeployment {
     // case kRPCNone:
     //   DeployedContractHash deployed_hash;
@@ -163,6 +213,7 @@ pub enum ExpectedDeployment {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedProposalData {
     // case kRPCNone:
     //   NondeterministicProposalData proposal_data;
@@ -177,6 +228,7 @@ pub enum ExpectedProposalData {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedStorageItem {
     // case kRPCNone:
     //   WireStorageItem item;
@@ -191,6 +243,7 @@ pub enum ExpectedStorageItem {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedRetrocausalQueueBlock {
     // case kRPCNone:
     //   RetrocausalQueueBlock queue_block;
@@ -205,6 +258,7 @@ pub enum ExpectedRetrocausalQueueBlock {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedQueueEntry {
     // case kRPCNone:
     //   QueueEntry queue_entry;
@@ -219,6 +273,7 @@ pub enum ExpectedQueueEntry {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExpectedDBTip {
     // case kRPCNone:
     //   DbTip db_tip;
@@ -237,81 +292,81 @@ pub type ContractAddressBatch = VecM::<ContractAddress>;
 //
 
 impl ExpectedStorageCost {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedStorageCost::Default{ error } => *error ,
+            ExpectedStorageCost::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedContract {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedContract::Default{ error } => *error ,
+            ExpectedContract::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedDeployment {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedDeployment::Default{ error } => *error ,
+            ExpectedDeployment::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedProposalData {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedProposalData::Default{ error } => *error ,
+            ExpectedProposalData::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedStorageItem {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedStorageItem::Default{ error } => *error ,
+            ExpectedStorageItem::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedRetrocausalQueueBlock {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedRetrocausalQueueBlock::Default{ error } => *error ,
+            ExpectedRetrocausalQueueBlock::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedQueueEntry {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedQueueEntry::Default{ error } => *error ,
+            ExpectedQueueEntry::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl ExpectedDBTip {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> RPCError {
         match self {
-            ExpectedDBTip::Default{ error } => *error ,
+            ExpectedDBTip::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

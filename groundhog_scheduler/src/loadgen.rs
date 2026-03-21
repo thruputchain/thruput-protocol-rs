@@ -48,6 +48,22 @@ impl From<i32> for ExperimentType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for ExperimentType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kExperimentTypeERC20Payments.0 => {
+                write!(f, "ExperimentType::kExperimentTypeERC20Payments")
+            },
+            x if x == Self::kExperimentTypeERC20BasicAuthPayments.0 => {
+                write!(f, "ExperimentType::kExperimentTypeERC20BasicAuthPayments")
+            },
+            _ => {
+                write!(f, "ExperimentType({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -64,6 +80,7 @@ pub struct ERC20PaymentsConfig {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExperimentConfig {
     // case kExperimentTypeERC20Payments:
     // case kExperimentTypeERC20BasicAuthPayments:
@@ -116,6 +133,25 @@ impl From<i32> for LoadgenRPCError {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for LoadgenRPCError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kLoadgenRPCErrorOK.0 => {
+                write!(f, "LoadgenRPCError::kLoadgenRPCErrorOK")
+            },
+            x if x == Self::kLoadgenRPCErrorInvalidConfig.0 => {
+                write!(f, "LoadgenRPCError::kLoadgenRPCErrorInvalidConfig")
+            },
+            x if x == Self::kLoadgenRPCErrorInvalidContext.0 => {
+                write!(f, "LoadgenRPCError::kLoadgenRPCErrorInvalidContext")
+            },
+            _ => {
+                write!(f, "LoadgenRPCError({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -123,6 +159,7 @@ impl From<i32> for LoadgenRPCError {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum LoadgenResult {
     // case kLoadgenRPCErrorOK:
     //   LoadgenSuccessResult success;
@@ -137,6 +174,7 @@ pub enum LoadgenResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum LoadgenExtensionResult {
     // case kLoadgenRPCErrorOK:
     //   LoadgenExtension success;
@@ -229,30 +267,30 @@ impl LoadgenInterface_LoadgenInterfaceV1_Client {
 //
 
 impl ExperimentConfig {
-    pub fn experiment_type(&self) -> i32 {
+    pub fn experiment_type(&self) -> ExperimentType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl LoadgenResult {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> LoadgenRPCError {
         match self {
-            LoadgenResult::Default{ error } => *error ,
+            LoadgenResult::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl LoadgenExtensionResult {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> LoadgenRPCError {
         match self {
-            LoadgenExtensionResult::Default{ error } => *error ,
+            LoadgenExtensionResult::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

@@ -95,6 +95,25 @@ impl From<i32> for GenesisContractAddresses {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for GenesisContractAddresses {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kAddressNull.0 => {
+                write!(f, "GenesisContractAddresses::kAddressNull")
+            },
+            x if x == Self::kAddressPrecompiledHogToken.0 => {
+                write!(f, "GenesisContractAddresses::kAddressPrecompiledHogToken")
+            },
+            x if x == Self::kAddressInitialTokenClaim.0 => {
+                write!(f, "GenesisContractAddresses::kAddressInitialTokenClaim")
+            },
+            _ => {
+                write!(f, "GenesisContractAddresses({})", self.0)
+            }
+        }
+    }
+}
 
 
 

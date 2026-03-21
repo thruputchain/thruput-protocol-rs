@@ -154,6 +154,31 @@ impl From<i32> for AuthClaimType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for AuthClaimType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kInvokedAddressSignature.0 => {
+                write!(f, "AuthClaimType::kInvokedAddressSignature")
+            },
+            x if x == Self::kInvokedAddressSignedWeight.0 => {
+                write!(f, "AuthClaimType::kInvokedAddressSignedWeight")
+            },
+            x if x == Self::kOtherAddressSignature.0 => {
+                write!(f, "AuthClaimType::kOtherAddressSignature")
+            },
+            x if x == Self::kOtherAddressSignedWeight.0 => {
+                write!(f, "AuthClaimType::kOtherAddressSignedWeight")
+            },
+            x if x == Self::kPubkeySignature.0 => {
+                write!(f, "AuthClaimType::kPubkeySignature")
+            },
+            _ => {
+                write!(f, "AuthClaimType({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -221,6 +246,7 @@ pub struct AuthClaim_other_address_signed_weight {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum AuthClaim {
     /// The ID of the key that must sign, from the invoked address's key set.
     // case kInvokedAddressSignature:
@@ -300,6 +326,25 @@ impl From<i32> for AuthVerifyErrorCode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for AuthVerifyErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kAuthMalformed.0 => {
+                write!(f, "AuthVerifyErrorCode::kAuthMalformed")
+            },
+            x if x == Self::kSignatureVerificationFailed.0 => {
+                write!(f, "AuthVerifyErrorCode::kSignatureVerificationFailed")
+            },
+            x if x == Self::kAuthDataMismatch.0 => {
+                write!(f, "AuthVerifyErrorCode::kAuthDataMismatch")
+            },
+            _ => {
+                write!(f, "AuthVerifyErrorCode({})", self.0)
+            }
+        }
+    }
+}
 
 
 
@@ -308,10 +353,10 @@ impl From<i32> for AuthVerifyErrorCode {
 //
 
 impl AuthClaim {
-    pub fn claim_type(&self) -> i32 {
+    pub fn claim_type(&self) -> AuthClaimType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

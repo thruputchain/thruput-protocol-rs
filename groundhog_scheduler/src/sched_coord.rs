@@ -48,6 +48,22 @@ impl From<i32> for CoordinatorRegistrationOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for CoordinatorRegistrationOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::CoordinatorRegistrationOK.0 => {
+                write!(f, "CoordinatorRegistrationOutcome::CoordinatorRegistrationOK")
+            },
+            x if x == Self::CoordinatorRegistrationInvalidProtocol.0 => {
+                write!(f, "CoordinatorRegistrationOutcome::CoordinatorRegistrationInvalidProtocol")
+            },
+            _ => {
+                write!(f, "CoordinatorRegistrationOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -78,6 +94,22 @@ impl From<i32> for SchedulerNominationOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerNominationOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerNominationOK.0 => {
+                write!(f, "SchedulerNominationOutcome::SchedulerNominationOK")
+            },
+            x if x == Self::SchedulerNominationError.0 => {
+                write!(f, "SchedulerNominationOutcome::SchedulerNominationError")
+            },
+            _ => {
+                write!(f, "SchedulerNominationOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -96,6 +128,7 @@ pub struct SchedulerNominatedBlock {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SchedulerNominationResult {
     // case SchedulerNominationOK:
     //   SchedulerNominatedBlock nominated_block;
@@ -127,6 +160,31 @@ impl From<i32> for SchedulerValidationOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerValidationOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerValidationOK.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationOK")
+            },
+            x if x == Self::SchedulerValidationInvalid.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationInvalid")
+            },
+            x if x == Self::SchedulerValidationMissingTxs.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationMissingTxs")
+            },
+            x if x == Self::SchedulerValidationDbFailed.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationDbFailed")
+            },
+            x if x == Self::SchedulerValidationExecutorFailed.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationExecutorFailed")
+            },
+            _ => {
+                write!(f, "SchedulerValidationOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -134,6 +192,7 @@ impl From<i32> for SchedulerValidationOutcome {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SchedulerValidationResult {
     // case SchedulerValidationOK:
     //   DbTip db_tip;
@@ -170,6 +229,25 @@ impl From<i32> for SchedulerCommitOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerCommitOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerCommitOK.0 => {
+                write!(f, "SchedulerCommitOutcome::SchedulerCommitOK")
+            },
+            x if x == Self::SchedulerCommitBlockNotFound.0 => {
+                write!(f, "SchedulerCommitOutcome::SchedulerCommitBlockNotFound")
+            },
+            x if x == Self::SchedulerCommitRace.0 => {
+                write!(f, "SchedulerCommitOutcome::SchedulerCommitRace")
+            },
+            _ => {
+                write!(f, "SchedulerCommitOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -190,6 +268,22 @@ impl From<i32> for SchedulerGetTipOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerGetTipOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerGetTipOK.0 => {
+                write!(f, "SchedulerGetTipOutcome::SchedulerGetTipOK")
+            },
+            x if x == Self::SchedulerGetTipNoGenesisBlock.0 => {
+                write!(f, "SchedulerGetTipOutcome::SchedulerGetTipNoGenesisBlock")
+            },
+            _ => {
+                write!(f, "SchedulerGetTipOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -197,6 +291,7 @@ impl From<i32> for SchedulerGetTipOutcome {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SchedulerGetTipResult {
     // case SchedulerGetTipOK:
     //   DbTip db_tip;
@@ -415,28 +510,28 @@ impl SchedulerCoord_SchedulerCoord1_Client {
 //
 
 impl SchedulerNominationResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> SchedulerNominationOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl SchedulerValidationResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> SchedulerValidationOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl SchedulerGetTipResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> SchedulerGetTipOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

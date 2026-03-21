@@ -87,6 +87,22 @@ impl From<i32> for DogwoodTransmissionType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for DogwoodTransmissionType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::DogwoodTransmissionPayload.0 => {
+                write!(f, "DogwoodTransmissionType::DogwoodTransmissionPayload")
+            },
+            x if x == Self::DogwoodTransmissionRoute.0 => {
+                write!(f, "DogwoodTransmissionType::DogwoodTransmissionRoute")
+            },
+            _ => {
+                write!(f, "DogwoodTransmissionType({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

@@ -90,6 +90,49 @@ impl From<i32> for SyscallErrorCode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SyscallErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kSyscallErrorCodeNone.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeNone")
+            },
+            x if x == Self::kSyscallErrorCodeFault.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeFault")
+            },
+            x if x == Self::kSyscallErrorCodeNoSyscall.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeNoSyscall")
+            },
+            x if x == Self::kSyscallErrorCodeIsRootTransaction.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeIsRootTransaction")
+            },
+            x if x == Self::kSyscallErrorCodeContractAlreadyDeployed.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed")
+            },
+            x if x == Self::kSyscallErrorCodeNoReturnBufferAvailable.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeNoReturnBufferAvailable")
+            },
+            x if x == Self::kSyscallErrorCodeInvalidSyscallInput.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput")
+            },
+            x if x == Self::kSyscallErrorCodeStorageKeyNotExist.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist")
+            },
+            x if x == Self::kSyscallErrorCodeNoRetrocausalQueueEntry.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry")
+            },
+            x if x == Self::kSyscallErrorCodeDeterministicWasm.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeDeterministicWasm")
+            },
+            x if x == Self::kSyscallErrorCodeFrameReverted.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeFrameReverted")
+            },
+            _ => {
+                write!(f, "SyscallErrorCode({})", self.0)
+            }
+        }
+    }
+}
 
 
 

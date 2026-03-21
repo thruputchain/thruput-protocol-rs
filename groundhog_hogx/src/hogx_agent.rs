@@ -48,6 +48,22 @@ impl From<i32> for HogxOutcome {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for HogxOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::HOGX_OK.0 => {
+                write!(f, "HogxOutcome::HOGX_OK")
+            },
+            x if x == Self::HOGX_ERROR.0 => {
+                write!(f, "HogxOutcome::HOGX_ERROR")
+            },
+            _ => {
+                write!(f, "HogxOutcome({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -55,6 +71,7 @@ impl From<i32> for HogxOutcome {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxHostConfigureResult {
     // case HOGX_OK:
     //   void;
@@ -70,6 +87,7 @@ pub enum HogxHostConfigureResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxHostQueryResult {
     // case HOGX_OK:
     //   HostState host_state;
@@ -85,6 +103,7 @@ pub enum HogxHostQueryResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitStartResult {
     // case HOGX_OK:
     //   void;
@@ -100,6 +119,7 @@ pub enum HogxUnitStartResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitStopResult {
     // case HOGX_OK:
     //   void;
@@ -115,6 +135,7 @@ pub enum HogxUnitStopResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitQueryResult {
     // case HOGX_OK:
     //   UnitState unit_state;
@@ -130,6 +151,7 @@ pub enum HogxUnitQueryResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitListResult {
     // case HOGX_OK:
     //   VecM<UnitState> unit_state;
@@ -145,6 +167,7 @@ pub enum HogxUnitListResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitClearResult {
     // case HOGX_OK:
     //   void;
@@ -160,6 +183,7 @@ pub enum HogxUnitClearResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogxUnitTailResult {
     // case HOGX_OK:
     //   void;
@@ -443,73 +467,73 @@ impl HogxTail_HogxTail1_Client {
 //
 
 impl HogxHostConfigureResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxHostQueryResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitStartResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitStopResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitQueryResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitListResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitClearResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HogxUnitTailResult {
-    pub fn outcome(&self) -> i32 {
+    pub fn outcome(&self) -> HogxOutcome {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

@@ -35,6 +35,7 @@ use ::serde_arrays;
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ExecProposeResult {
     // case ExecResultOK:
     // case ExecResultTxDeterministicError:
@@ -253,11 +254,11 @@ impl ExecutorSched_ExecutorSched1_Client {
 //
 
 impl ExecProposeResult {
-    pub fn result(&self) -> i32 {
+    pub fn result(&self) -> ExecResult {
         match self {
-            ExecProposeResult::Default{ result } => *result ,
+            ExecProposeResult::Default{ result } => (*result).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

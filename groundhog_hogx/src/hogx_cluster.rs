@@ -85,6 +85,7 @@ pub struct LoadgenSystemConfig {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SystemConfig {
     // case SYSTEM_VALIDATOR:
     //   ValidatorSystemConfig validator_config;
@@ -139,10 +140,10 @@ pub struct ClusterConfig {
 //
 
 impl SystemConfig {
-    pub fn system_type(&self) -> i32 {
+    pub fn system_type(&self) -> SystemType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

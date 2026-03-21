@@ -58,6 +58,37 @@ impl From<i32> for StorageItemType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for StorageItemType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kItemTypeBytestring.0 => {
+                write!(f, "StorageItemType::kItemTypeBytestring")
+            },
+            x if x == Self::kItemTypeNonnegativeInt.0 => {
+                write!(f, "StorageItemType::kItemTypeNonnegativeInt")
+            },
+            x if x == Self::kItemTypeRetrocausalQueue.0 => {
+                write!(f, "StorageItemType::kItemTypeRetrocausalQueue")
+            },
+            x if x == Self::kItemTypeReplayCacheData.0 => {
+                write!(f, "StorageItemType::kItemTypeReplayCacheData")
+            },
+            x if x == Self::kItemTypeAuthData.0 => {
+                write!(f, "StorageItemType::kItemTypeAuthData")
+            },
+            x if x == Self::kItemTypeDeployedContractHash.0 => {
+                write!(f, "StorageItemType::kItemTypeDeployedContractHash")
+            },
+            x if x == Self::kItemTypeDeleted.0 => {
+                write!(f, "StorageItemType::kItemTypeDeleted")
+            },
+            _ => {
+                write!(f, "StorageItemType({})", self.0)
+            }
+        }
+    }
+}
 
 
 pub const kBytestringMaxLen : u32 = 1024;
@@ -78,6 +109,7 @@ pub type Bytestring = BytesM::<kBytestringMaxLen>;
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum StorageItem {
     /// An arbitrary value, stored as an opaque string of bytes.
     // case kItemTypeBytestring:
@@ -134,6 +166,7 @@ pub enum StorageItem {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum WireStorageItem {
     // case kItemTypeBytestring:
     //   Bytestring bytestring;
@@ -180,6 +213,40 @@ impl StorageDeltaType {
 impl From<i32> for StorageDeltaType {
     fn from(v: i32) -> Self {
         Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for StorageDeltaType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kDeltaTypeBytestringSet.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeBytestringSet")
+            },
+            x if x == Self::kDeltaTypeNonnegativeIntSetAdd.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeNonnegativeIntSetAdd")
+            },
+            x if x == Self::kDeltaTypeDelete.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeDelete")
+            },
+            x if x == Self::kDeltaTypeRetrocausalQueue.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeRetrocausalQueue")
+            },
+            x if x == Self::kDeltaTypeNonnegativeIntAdd.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeNonnegativeIntAdd")
+            },
+            x if x == Self::kDeltaTypeAuthDataChange.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeAuthDataChange")
+            },
+            x if x == Self::kDeltaTypeDeployContract.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeDeployContract")
+            },
+            x if x == Self::kDeltaTypeConsumeUniquifier.0 => {
+                write!(f, "StorageDeltaType::kDeltaTypeConsumeUniquifier")
+            },
+            _ => {
+                write!(f, "StorageDeltaType({})", self.0)
+            }
+        }
     }
 }
 
@@ -248,6 +315,7 @@ pub struct ConsumeUniquifierArgs {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum StorageDelta {
     /// Creates a bytestring item, with the supplied value.
     ///
@@ -414,6 +482,22 @@ impl From<i32> for StorageDeltaFlags {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for StorageDeltaFlags {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kStorageDeltaFlagNone.0 => {
+                write!(f, "StorageDeltaFlags::kStorageDeltaFlagNone")
+            },
+            x if x == Self::kStorageDeltaFlagExclusiveLock.0 => {
+                write!(f, "StorageDeltaFlags::kStorageDeltaFlagExclusiveLock")
+            },
+            _ => {
+                write!(f, "StorageDeltaFlags({})", self.0)
+            }
+        }
+    }
+}
 
 
 /// A bitset of StorageDeltaFlags values.
@@ -442,28 +526,28 @@ pub struct FlaggedStorageDelta {
 //
 
 impl StorageItem {
-    pub fn type_(&self) -> i32 {
+    pub fn type_(&self) -> StorageItemType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl WireStorageItem {
-    pub fn type_(&self) -> i32 {
+    pub fn type_(&self) -> StorageItemType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl StorageDelta {
-    pub fn type_(&self) -> i32 {
+    pub fn type_(&self) -> StorageDeltaType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

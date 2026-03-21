@@ -91,6 +91,25 @@ impl From<i32> for ContractType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for ContractType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kWasmi.0 => {
+                write!(f, "ContractType::kWasmi")
+            },
+            x if x == Self::kNative.0 => {
+                write!(f, "ContractType::kNative")
+            },
+            x if x == Self::kMockTest.0 => {
+                write!(f, "ContractType::kMockTest")
+            },
+            _ => {
+                write!(f, "ContractType({})", self.0)
+            }
+        }
+    }
+}
 
 
 /// A contract that can be deployed to an address and invoked.
@@ -108,6 +127,7 @@ impl From<i32> for ContractType {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum Contract {
     // case kWasmi:
     //   ContractBlob wasmi_contract;
@@ -315,7 +335,6 @@ impl<'a> From<&'a [u8; 8]> for &'a ContractEntrypointID {
     }
 }
 #[cfg(feature = "xdrs")]
-
 impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 8] = xdrs::read_xdr(r)?;
@@ -376,10 +395,10 @@ pub struct AddressMetadata {
 //
 
 impl Contract {
-    pub fn contract_type(&self) -> i32 {
+    pub fn contract_type(&self) -> ContractType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

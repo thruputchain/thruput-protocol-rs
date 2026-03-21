@@ -49,6 +49,25 @@ impl From<i32> for SCPValidationLevel {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SCPValidationLevel {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SCP_INVALID.0 => {
+                write!(f, "SCPValidationLevel::SCP_INVALID")
+            },
+            x if x == Self::SCP_MAYBE_VALID.0 => {
+                write!(f, "SCPValidationLevel::SCP_MAYBE_VALID")
+            },
+            x if x == Self::SCP_FULLY_VALID.0 => {
+                write!(f, "SCPValidationLevel::SCP_FULLY_VALID")
+            },
+            _ => {
+                write!(f, "SCPValidationLevel({})", self.0)
+            }
+        }
+    }
+}
 
 
 

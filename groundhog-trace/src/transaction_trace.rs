@@ -945,6 +945,7 @@ pub struct SyscallGetBlockHeightTrace {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SyscallTraceBody {
     // case kSHA256:
     //   SyscallSHA256Trace sha256;
@@ -1052,6 +1053,7 @@ pub enum SyscallTraceBody {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HostFunctionStatusXdr {
     // case NoneOrRecoverable:
     //   SyscallErrorCode syscall_return_code;
@@ -1098,21 +1100,21 @@ pub struct InvocationFrameTrace {
 //
 
 impl SyscallTraceBody {
-    pub fn syscall_number(&self) -> i32 {
+    pub fn syscall_number(&self) -> SyscallNo {
         match self {
-            SyscallTraceBody::Default{ syscall_number } => *syscall_number ,
+            SyscallTraceBody::Default{ syscall_number } => (*syscall_number).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl HostFunctionStatusXdr {
-    pub fn error(&self) -> i32 {
+    pub fn error(&self) -> HostFnErrorCode {
         match self {
-            HostFunctionStatusXdr::Default{ error } => *error ,
+            HostFunctionStatusXdr::Default{ error } => (*error).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

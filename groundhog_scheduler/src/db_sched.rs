@@ -48,6 +48,22 @@ impl From<i32> for DbSchedResult {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for DbSchedResult {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::DbSchedResultOK.0 => {
+                write!(f, "DbSchedResult::DbSchedResultOK")
+            },
+            x if x == Self::DbSchedResultError.0 => {
+                write!(f, "DbSchedResult::DbSchedResultError")
+            },
+            _ => {
+                write!(f, "DbSchedResult({})", self.0)
+            }
+        }
+    }
+}
 
 
 pub const kHogAgeGroupToSchedule : u32 = 0;
@@ -76,6 +92,7 @@ pub type HogAgeBatch = VecM::<HogAge>;
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum HogAgeResult {
     // case DbSchedResultOK:
     //   HogAgeBatch hog_age_batch;
@@ -90,6 +107,7 @@ pub enum HogAgeResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum DbAddressAuthDataBatchResult {
     // case DbSchedResultOK:
     //   VecM<AddressAuthData> address_auth_data_batch;
@@ -104,6 +122,7 @@ pub enum DbAddressAuthDataBatchResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum DbBlockResult {
     // case DbSchedResultOK:
     //   DbHash db_hash;
@@ -130,6 +149,19 @@ impl From<i32> for DbShardResult {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for DbShardResult {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::ShardOK.0 => {
+                write!(f, "DbShardResult::ShardOK")
+            },
+            _ => {
+                write!(f, "DbShardResult({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -137,6 +169,7 @@ impl From<i32> for DbShardResult {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum DbTipResult {
     // case DbSchedResultOK:
     //   DbTip db_tip;
@@ -376,41 +409,41 @@ impl DbSched_DbSched1_Client {
 //
 
 impl HogAgeResult {
-    pub fn result(&self) -> i32 {
+    pub fn result(&self) -> DbSchedResult {
         match self {
-            HogAgeResult::Default{ result } => *result ,
+            HogAgeResult::Default{ result } => (*result).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl DbAddressAuthDataBatchResult {
-    pub fn result(&self) -> i32 {
+    pub fn result(&self) -> DbSchedResult {
         match self {
-            DbAddressAuthDataBatchResult::Default{ result } => *result ,
+            DbAddressAuthDataBatchResult::Default{ result } => (*result).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl DbBlockResult {
-    pub fn result(&self) -> i32 {
+    pub fn result(&self) -> DbSchedResult {
         match self {
-            DbBlockResult::Default{ result } => *result ,
+            DbBlockResult::Default{ result } => (*result).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
 
 impl DbTipResult {
-    pub fn result(&self) -> i32 {
+    pub fn result(&self) -> DbSchedResult {
         match self {
-            DbTipResult::Default{ result } => *result ,
+            DbTipResult::Default{ result } => (*result).into(),
 
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

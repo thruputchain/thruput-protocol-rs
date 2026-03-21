@@ -76,6 +76,28 @@ impl From<i32> for SCPStatementType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SCPStatementType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SCP_ST_PREPARE.0 => {
+                write!(f, "SCPStatementType::SCP_ST_PREPARE")
+            },
+            x if x == Self::SCP_ST_CONFIRM.0 => {
+                write!(f, "SCPStatementType::SCP_ST_CONFIRM")
+            },
+            x if x == Self::SCP_ST_EXTERNALIZE.0 => {
+                write!(f, "SCPStatementType::SCP_ST_EXTERNALIZE")
+            },
+            x if x == Self::SCP_ST_NOMINATE.0 => {
+                write!(f, "SCPStatementType::SCP_ST_NOMINATE")
+            },
+            _ => {
+                write!(f, "SCPStatementType({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -149,6 +171,7 @@ pub struct SCPStatementExternalize {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum SCPStatement_pledges {
     // case SCP_ST_PREPARE:
     //   SCPStatementPrepare prepare;
@@ -211,10 +234,10 @@ pub type SCPOptQuorumSet = Option::<SCPQuorumSet>;
 //
 
 impl SCPStatement_pledges {
-    pub fn stmt_type(&self) -> i32 {
+    pub fn stmt_type(&self) -> SCPStatementType {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

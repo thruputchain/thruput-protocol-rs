@@ -50,6 +50,22 @@ impl From<i32> for SystemType {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for SystemType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SYSTEM_VALIDATOR.0 => {
+                write!(f, "SystemType::SYSTEM_VALIDATOR")
+            },
+            x if x == Self::SYSTEM_LOADGEN.0 => {
+                write!(f, "SystemType::SYSTEM_LOADGEN")
+            },
+            _ => {
+                write!(f, "SystemType({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -78,6 +94,40 @@ impl UnitType {
 impl From<i32> for UnitType {
     fn from(v: i32) -> Self {
         Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for UnitType {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::UNIT_COORDINATOR.0 => {
+                write!(f, "UnitType::UNIT_COORDINATOR")
+            },
+            x if x == Self::UNIT_MEMPOOL.0 => {
+                write!(f, "UnitType::UNIT_MEMPOOL")
+            },
+            x if x == Self::UNIT_EXEC.0 => {
+                write!(f, "UnitType::UNIT_EXEC")
+            },
+            x if x == Self::UNIT_DB.0 => {
+                write!(f, "UnitType::UNIT_DB")
+            },
+            x if x == Self::UNIT_EVENT.0 => {
+                write!(f, "UnitType::UNIT_EVENT")
+            },
+            x if x == Self::UNIT_INDEXER.0 => {
+                write!(f, "UnitType::UNIT_INDEXER")
+            },
+            x if x == Self::UNIT_AUTH.0 => {
+                write!(f, "UnitType::UNIT_AUTH")
+            },
+            x if x == Self::UNIT_LOADGEN.0 => {
+                write!(f, "UnitType::UNIT_LOADGEN")
+            },
+            _ => {
+                write!(f, "UnitType({})", self.0)
+            }
+        }
     }
 }
 
@@ -193,6 +243,25 @@ impl From<i32> for ProcessStatus {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for ProcessStatus {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::PROCESS_RUNNING.0 => {
+                write!(f, "ProcessStatus::PROCESS_RUNNING")
+            },
+            x if x == Self::PROCESS_EXITED.0 => {
+                write!(f, "ProcessStatus::PROCESS_EXITED")
+            },
+            x if x == Self::PROCESS_INTERRUPTED.0 => {
+                write!(f, "ProcessStatus::PROCESS_INTERRUPTED")
+            },
+            _ => {
+                write!(f, "ProcessStatus({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -200,6 +269,7 @@ impl From<i32> for ProcessStatus {
 #[derive(ReadXDR, WriteXDR)]
 
 #[repr(i32)]
+#[non_exhaustive]
 pub enum ProcessState {
     // case PROCESS_RUNNING:
     //   u32 pid;
@@ -244,10 +314,10 @@ pub struct UnitState {
 //
 
 impl ProcessState {
-    pub fn status(&self) -> i32 {
+    pub fn status(&self) -> ProcessStatus {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

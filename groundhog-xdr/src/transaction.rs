@@ -157,6 +157,25 @@ impl From<i32> for InvocationFrameStatusCode {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for InvocationFrameStatusCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::Return.0 => {
+                write!(f, "InvocationFrameStatusCode::Return")
+            },
+            x if x == Self::Fault.0 => {
+                write!(f, "InvocationFrameStatusCode::Fault")
+            },
+            x if x == Self::Abort.0 => {
+                write!(f, "InvocationFrameStatusCode::Abort")
+            },
+            _ => {
+                write!(f, "InvocationFrameStatusCode({})", self.0)
+            }
+        }
+    }
+}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -164,6 +183,7 @@ impl From<i32> for InvocationFrameStatusCode {
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[repr(i32)]
+#[non_exhaustive]
 pub enum InvocationFrameOutput {
     // case Return:
     //   ReturnBuffer return_buffer;
@@ -235,6 +255,28 @@ impl InvokeFlag {
 impl From<i32> for InvokeFlag {
     fn from(v: i32) -> Self {
         Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for InvokeFlag {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::None.0 => {
+                write!(f, "InvokeFlag::None")
+            },
+            x if x == Self::TryInvoke.0 => {
+                write!(f, "InvokeFlag::TryInvoke")
+            },
+            x if x == Self::ReadOnly.0 => {
+                write!(f, "InvokeFlag::ReadOnly")
+            },
+            x if x == Self::DelegateCall.0 => {
+                write!(f, "InvokeFlag::DelegateCall")
+            },
+            _ => {
+                write!(f, "InvokeFlag({})", self.0)
+            }
+        }
     }
 }
 
@@ -502,6 +544,19 @@ impl From<i32> for TransactionStatistic {
         Self(v)
     }
 }
+#[cfg(feature = "std")]
+impl core::fmt::Display for TransactionStatistic {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::GasRemaining.0 => {
+                write!(f, "TransactionStatistic::GasRemaining")
+            },
+            _ => {
+                write!(f, "TransactionStatistic({})", self.0)
+            }
+        }
+    }
+}
 
 
 
@@ -510,10 +565,10 @@ impl From<i32> for TransactionStatistic {
 //
 
 impl InvocationFrameOutput {
-    pub fn status_code(&self) -> i32 {
+    pub fn status_code(&self) -> InvocationFrameStatusCode {
         match self {
             
-            _ => unsafe { *(self as *const Self as *const i32) },
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
