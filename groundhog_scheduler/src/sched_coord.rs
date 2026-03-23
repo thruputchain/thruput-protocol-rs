@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b35b4bc56dc32f40c6de155f35b76f18a1da5f2
+// Generated from xdrc commit: 738ffcebf4d4aa33f5880797b1f889b551bb5a62
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -187,6 +187,16 @@ impl core::fmt::Display for SchedulerValidationOutcome {
 }
 
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SchedulerValidationBlock {
+    pub db_tip: DbTip,
+    pub signed_transactions: ParallelSignedTransactionBatch,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -195,8 +205,8 @@ impl core::fmt::Display for SchedulerValidationOutcome {
 #[non_exhaustive]
 pub enum SchedulerValidationResult {
     // case SchedulerValidationOK:
-    //   DbTip db_tip;
-    SchedulerValidationOK { db_tip: DbTip } = SchedulerValidationOutcome::SchedulerValidationOK.0 as i32,
+    //   SchedulerValidationBlock block;
+    SchedulerValidationOK { block: SchedulerValidationBlock } = SchedulerValidationOutcome::SchedulerValidationOK.0 as i32,
     // case SchedulerValidationMissingTxs:
     //   VecM<SignedTransactionHash> missing_tx_hashes;
     SchedulerValidationMissingTxs { missing_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
