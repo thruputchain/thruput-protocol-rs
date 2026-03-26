@@ -1,8 +1,6 @@
 name: Auto-update protocol
 
 on:
-  repository_dispatch:
-    types: [protocol-updated]
   workflow_dispatch:
 
 permissions:
