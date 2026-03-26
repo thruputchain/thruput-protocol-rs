@@ -17,24 +17,6 @@ jobs:
   update:
     runs-on: namespace-profile-hogd-linux
     steps:
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.10.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
-            ${{ secrets.PROTOCOL_RS_SELF_ACCESS_KEY }}
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          ssh-key: ${{ secrets.PROTOCOL_RS_SELF_ACCESS_KEY }}
-
-      - name: Update protocol submodule to latest main
-        run: |
-          git -C protocol fetch origin main
-          git -C protocol checkout origin/main
-
       - name: Generate hogd read token
         id: hogd-token
         uses: actions/create-github-app-token@v1
@@ -43,6 +25,24 @@ jobs:
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
           owner: groundhogchain
           repositories: hogd
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
+            ${{ secrets.PROT_RS_WRITE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ssh-key: ${{ secrets.PROT_RS_WRITE_KEY }}
+
+      - name: Update protocol submodule to latest main
+        run: |
+          git -C protocol fetch origin main
+          git -C protocol checkout origin/main
 
       - name: Download x23c
         run: |
