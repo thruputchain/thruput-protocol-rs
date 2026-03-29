@@ -36,7 +36,7 @@ mod tests {
             },
             delivery: DogwoodDelivery {
                 stream: DogwoodStream {
-                    source_id: [0xAB; 32],
+                    source_id: ValidatorID::from([0xAB; 32]),
                     stream_id: 42,
                 },
                 route: DogwoodRoute {
