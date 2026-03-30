@@ -60,6 +60,12 @@
         "description": [
           "The invoked contract manually reverted itself."
         ]
+      },
+      {
+        "code": "kSyscallErrorCodeReentrance",
+        "description": [
+          "The invoked address is already on the stack."
+        ]
       }
     ]
   },

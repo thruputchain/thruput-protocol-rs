@@ -59,6 +59,9 @@ impl SyscallErrorCode {
     /// Cannot call get_msg_sender on root invocation
     pub const kSyscallErrorCodeIsRootTransaction: Self = Self(3);
 
+    /// Reentrance guard violation
+    pub const kSyscallErrorCodeReentrance: Self = Self(4);
+
     /// Attempt made to deploy a contract twice (same nonce and contract hash, from
     /// same address)
     pub const kSyscallErrorCodeContractAlreadyDeployed: Self = Self(5);
@@ -105,6 +108,9 @@ impl core::fmt::Display for SyscallErrorCode {
             },
             x if x == Self::kSyscallErrorCodeIsRootTransaction.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeIsRootTransaction")
+            },
+            x if x == Self::kSyscallErrorCodeReentrance.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeReentrance")
             },
             x if x == Self::kSyscallErrorCodeContractAlreadyDeployed.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed")
