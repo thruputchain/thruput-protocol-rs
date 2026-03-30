@@ -471,11 +471,11 @@ pub struct ReplayCacheData {
 pub struct StorageDeltaFlags(pub i32);
 
 impl StorageDeltaFlags {
-    pub const kStorageDeltaFlagNone: Self = Self(0);
+    pub const None: Self = Self(0);
 
     /// Forces the delta to acquire an exclusive lock on the item at the storage key,
     /// regardless of any other conflict resolution rules.
-    pub const kStorageDeltaFlagExclusiveLock: Self = Self(0x00000001);
+    pub const ExclusiveLock: Self = Self(0x00000001);
 }
 impl From<i32> for StorageDeltaFlags {
     fn from(v: i32) -> Self {
@@ -486,11 +486,11 @@ impl From<i32> for StorageDeltaFlags {
 impl core::fmt::Display for StorageDeltaFlags {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::kStorageDeltaFlagNone.0 => {
-                write!(f, "StorageDeltaFlags::kStorageDeltaFlagNone")
+            x if x == Self::None.0 => {
+                write!(f, "StorageDeltaFlags::None")
             },
-            x if x == Self::kStorageDeltaFlagExclusiveLock.0 => {
-                write!(f, "StorageDeltaFlags::kStorageDeltaFlagExclusiveLock")
+            x if x == Self::ExclusiveLock.0 => {
+                write!(f, "StorageDeltaFlags::ExclusiveLock")
             },
             _ => {
                 write!(f, "StorageDeltaFlags({})", self.0)
