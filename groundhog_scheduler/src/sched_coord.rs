@@ -232,7 +232,6 @@ pub struct SchedulerCommitOutcome(pub i32);
 impl SchedulerCommitOutcome {
     pub const SchedulerCommitOK: Self = Self(0);
     pub const SchedulerCommitBlockNotFound: Self = Self(1);
-    pub const SchedulerCommitRace: Self = Self(2);
 }
 impl From<i32> for SchedulerCommitOutcome {
     fn from(v: i32) -> Self {
@@ -248,9 +247,6 @@ impl core::fmt::Display for SchedulerCommitOutcome {
             },
             x if x == Self::SchedulerCommitBlockNotFound.0 => {
                 write!(f, "SchedulerCommitOutcome::SchedulerCommitBlockNotFound")
-            },
-            x if x == Self::SchedulerCommitRace.0 => {
-                write!(f, "SchedulerCommitOutcome::SchedulerCommitRace")
             },
             _ => {
                 write!(f, "SchedulerCommitOutcome({})", self.0)
