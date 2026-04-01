@@ -229,21 +229,6 @@ pub enum ExpectedProposalData {
 
 #[repr(i32)]
 #[non_exhaustive]
-pub enum ExpectedStorageItem {
-    // case kRPCNone:
-    //   WireStorageItem item;
-    kRPCNone { item: WireStorageItem } = RPCError::kRPCNone.0 as i32,
-    // default:
-    //   void;
-    Default { error: i32 },
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[repr(i32)]
-#[non_exhaustive]
 pub enum ExpectedRetrocausalQueueBlock {
     // case kRPCNone:
     //   RetrocausalQueueBlock queue_block;
@@ -325,16 +310,6 @@ impl ExpectedProposalData {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedProposalData::Default{ error } => (*error).into(),
-
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
-        }
-    }
-}
-
-impl ExpectedStorageItem {
-    pub fn error(&self) -> RPCError {
-        match self {
-            ExpectedStorageItem::Default{ error } => (*error).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
