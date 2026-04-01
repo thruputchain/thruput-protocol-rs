@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cc15a4d11720a65cbba82dde3f028696fecf5aaa
+// Generated from xdrc commit: 3f7aa40465e2d2834a4cf154e51fc9d19cc97d83
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -154,6 +154,7 @@ impl SchedulerValidationOutcome {
     pub const SchedulerValidationMissingTxs: Self = Self(2);
     pub const SchedulerValidationDbFailed: Self = Self(3);
     pub const SchedulerValidationExecutorFailed: Self = Self(4);
+    pub const SchedulerValidationTooLateToValidate: Self = Self(5);
 }
 impl From<i32> for SchedulerValidationOutcome {
     fn from(v: i32) -> Self {
@@ -178,6 +179,9 @@ impl core::fmt::Display for SchedulerValidationOutcome {
             },
             x if x == Self::SchedulerValidationExecutorFailed.0 => {
                 write!(f, "SchedulerValidationOutcome::SchedulerValidationExecutorFailed")
+            },
+            x if x == Self::SchedulerValidationTooLateToValidate.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationTooLateToValidate")
             },
             _ => {
                 write!(f, "SchedulerValidationOutcome({})", self.0)
