@@ -59,6 +59,8 @@ fn test_console_log_span_input() {
     assert_eq!(invocations[0].args[2..], [0; 5]);
 }
 
+use groundhog_xdr::invoke_flag::InvokeFlagSet;
+
 #[test]
 fn test_invoke_primitive_inputs() {
     let handler = Arc::new(MockSyscallHandler::new());
