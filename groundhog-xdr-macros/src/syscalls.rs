@@ -1020,7 +1020,8 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     let spec = load_syscall_yaml(file_path);
 
     let lines = spec.syscalls.iter().map(generate_syscall_no_line);
-    let display_lines = spec.syscalls.iter().map(generate_syscall_no_display_line);
+    let display_lines =
+        spec.syscalls.iter().map(generate_syscall_no_display_line);
 
     quote! {
         /// Syscall numbers identifying each system call.
