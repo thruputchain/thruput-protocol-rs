@@ -1038,6 +1038,7 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
             #(#lines)*
         }
 
+        #[cfg(feature = "std")]
         const _: () = {
             use core::fmt::{self, Display};
 
