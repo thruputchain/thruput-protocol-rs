@@ -1007,11 +1007,20 @@ fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
     }
 }
 
+fn generate_syscall_no_display_line(syscall: &Syscall) -> TokenStream2 {
+    let name = syscall.name.as_str();
+    let num: u64 = syscall.number.try_into().unwrap();
+    quote! {
+        #num => Some(#name),
+    }
+}
+
 pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path);
 
     let lines = spec.syscalls.iter().map(generate_syscall_no_line);
+    let display_lines = spec.syscalls.iter().map(generate_syscall_no_display_line);
 
     quote! {
         /// Syscall numbers identifying each system call.
@@ -1027,6 +1036,25 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         impl SyscallNo {
             #(#lines)*
         }
+
+        const _: () = {
+            use core::fmt::{self, Display};
+
+            impl Display for SyscallNo {
+                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                    let name = match self.0 {
+                        #(#display_lines)*
+                        _ => None,
+                    };
+
+                    if let Some(name) = name {
+                        write!(f, "{}", name)
+                    } else {
+                        write!(f, "#{}", self.0)
+                    }
+                }
+            }
+        };
     }
     .into()
 }
