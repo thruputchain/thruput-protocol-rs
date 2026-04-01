@@ -19,8 +19,6 @@ use core::option::Option;
 use std::io::{Read, Write};
 use xdrs::*;
 
-use groundhog_xdr::invoke_flag::InvokeFlagSet;
-
 #[cfg(feature = "serde")]
 use ::serde::{Deserialize, Serialize};
 #[cfg(feature = "serde")]
@@ -29,24 +27,27 @@ use ::serde_arrays;
 // === Syscall Trace Unions and Structs ===
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256Inputs {
     pub input: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256Outputs {
     pub hash: SHA256Hash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256Trace {
     pub inputs: SyscallSHA256Inputs,
@@ -54,22 +55,25 @@ pub struct SyscallSHA256Trace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetMsgSenderInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetMsgSenderOutputs {
     pub sender: ContractAddress,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetMsgSenderTrace {
     pub inputs: SyscallGetMsgSenderInputs,
@@ -77,22 +81,25 @@ pub struct SyscallGetMsgSenderTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataLenInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataLenOutputs {
     pub len: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataLenTrace {
     pub inputs: SyscallGetCalldataLenInputs,
@@ -100,22 +107,25 @@ pub struct SyscallGetCalldataLenTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataOutputs {
     pub calldata: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCalldataTrace {
     pub inputs: SyscallGetCalldataInputs,
@@ -123,27 +133,32 @@ pub struct SyscallGetCalldataTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallConsoleLogInputs {
     pub buffer: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallConsoleLogOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallConsoleLogTrace {
     pub inputs: SyscallConsoleLogInputs,
     pub outputs: Option<SyscallConsoleLogOutputs>,
 }
+
+use groundhog_xdr::invoke_flag::InvokeFlagSet;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -158,16 +173,18 @@ pub struct SyscallInvokeInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallInvokeOutputs {
     pub child_trace: Option<InvocationFrameTrace>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallInvokeTrace {
     pub inputs: SyscallInvokeInputs,
@@ -175,8 +192,9 @@ pub struct SyscallInvokeTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallReturnInputs {
     pub buffer: BytesM,
@@ -184,14 +202,16 @@ pub struct SyscallReturnInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallReturnOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallReturnTrace {
     pub inputs: SyscallReturnInputs,
@@ -199,22 +219,25 @@ pub struct SyscallReturnTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetReturnedBufferInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetReturnedBufferOutputs {
     pub buffer: ReturnBuffer,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetReturnedBufferTrace {
     pub inputs: SyscallGetReturnedBufferInputs,
@@ -222,20 +245,23 @@ pub struct SyscallGetReturnedBufferTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallExitInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallExitOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallExitTrace {
     pub inputs: SyscallExitInputs,
@@ -243,8 +269,9 @@ pub struct SyscallExitTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetDeployAddressInputs {
     pub caller_address: Option<ContractAddress>,
@@ -253,16 +280,18 @@ pub struct SyscallGetDeployAddressInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetDeployAddressOutputs {
     pub to_be_deployed: ContractAddress,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetDeployAddressTrace {
     pub inputs: SyscallGetDeployAddressInputs,
@@ -270,8 +299,9 @@ pub struct SyscallGetDeployAddressTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeployContractInputs {
     pub nonce: SHA256Hash,
@@ -279,16 +309,18 @@ pub struct SyscallDeployContractInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeployContractOutputs {
     pub deployed_address: ContractAddress,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeployContractTrace {
     pub inputs: SyscallDeployContractInputs,
@@ -296,22 +328,25 @@ pub struct SyscallDeployContractTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetSourceTransactionHashInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetSourceTransactionHashOutputs {
     pub source_tx_hash: SHA256Hash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetSourceTransactionHashTrace {
     pub inputs: SyscallGetSourceTransactionHashInputs,
@@ -319,8 +354,9 @@ pub struct SyscallGetSourceTransactionHashTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallVerifySignatureInputs {
     pub scheme: i32,
@@ -330,14 +366,16 @@ pub struct SyscallVerifySignatureInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallVerifySignatureOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallVerifySignatureTrace {
     pub inputs: SyscallVerifySignatureInputs,
@@ -345,24 +383,27 @@ pub struct SyscallVerifySignatureTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetLenInputs {
     pub key: StorageKeyContractData,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetLenOutputs {
     pub length: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetLenTrace {
     pub inputs: SyscallBytestringGetLenInputs,
@@ -370,24 +411,27 @@ pub struct SyscallBytestringGetLenTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetInputs {
     pub key: StorageKeyContractData,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetOutputs {
     pub bytestring: Bytestring,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringGetTrace {
     pub inputs: SyscallBytestringGetInputs,
@@ -395,8 +439,9 @@ pub struct SyscallBytestringGetTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringSetInputs {
     pub key: StorageKeyContractData,
@@ -405,14 +450,16 @@ pub struct SyscallBytestringSetInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringSetOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallBytestringSetTrace {
     pub inputs: SyscallBytestringSetInputs,
@@ -420,8 +467,9 @@ pub struct SyscallBytestringSetTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntGetInputs {
     pub key: StorageKeyContractData,
@@ -429,8 +477,9 @@ pub struct SyscallNonnegativeIntGetInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntGetOutputs {
     pub current_set: Option<int128_xdr>,
@@ -438,8 +487,9 @@ pub struct SyscallNonnegativeIntGetOutputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntGetTrace {
     pub inputs: SyscallNonnegativeIntGetInputs,
@@ -447,8 +497,9 @@ pub struct SyscallNonnegativeIntGetTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntSetAddInputs {
     pub key: StorageKeyContractData,
@@ -458,14 +509,16 @@ pub struct SyscallNonnegativeIntSetAddInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntSetAddOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallNonnegativeIntSetAddTrace {
     pub inputs: SyscallNonnegativeIntSetAddInputs,
@@ -473,8 +526,9 @@ pub struct SyscallNonnegativeIntSetAddTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeleteObjectInputs {
     pub key: StorageKeyContractData,
@@ -482,14 +536,16 @@ pub struct SyscallDeleteObjectInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeleteObjectOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallDeleteObjectTrace {
     pub inputs: SyscallDeleteObjectInputs,
@@ -497,22 +553,25 @@ pub struct SyscallDeleteObjectTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCurrentAddressInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCurrentAddressOutputs {
     pub address: ContractAddress,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetCurrentAddressTrace {
     pub inputs: SyscallGetCurrentAddressInputs,
@@ -520,8 +579,9 @@ pub struct SyscallGetCurrentAddressTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueInsertInputs {
     pub key: StorageKeyContractData,
@@ -529,14 +589,16 @@ pub struct SyscallRetrocausalQueueInsertInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueInsertOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueInsertTrace {
     pub inputs: SyscallRetrocausalQueueInsertInputs,
@@ -544,8 +606,9 @@ pub struct SyscallRetrocausalQueueInsertTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueConsumeInputs {
     pub key: StorageKeyContractData,
@@ -553,16 +616,18 @@ pub struct SyscallRetrocausalQueueConsumeInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueConsumeOutputs {
     pub queue_entry: QueueEntry,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallRetrocausalQueueConsumeTrace {
     pub inputs: SyscallRetrocausalQueueConsumeInputs,
@@ -570,24 +635,27 @@ pub struct SyscallRetrocausalQueueConsumeTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetTransactionStatisticsInputs {
     pub statistic: TransactionStatistic,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetTransactionStatisticsOutputs {
     pub result: u64,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetTransactionStatisticsTrace {
     pub inputs: SyscallGetTransactionStatisticsInputs,
@@ -595,8 +663,9 @@ pub struct SyscallGetTransactionStatisticsTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallChangePublicKeyRegistrationInputs {
     pub key_index: u32,
@@ -606,14 +675,16 @@ pub struct SyscallChangePublicKeyRegistrationInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallChangePublicKeyRegistrationOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallChangePublicKeyRegistrationTrace {
     pub inputs: SyscallChangePublicKeyRegistrationInputs,
@@ -621,8 +692,9 @@ pub struct SyscallChangePublicKeyRegistrationTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallLogEventInputs {
     pub topic0: Option<Topic>,
@@ -632,14 +704,16 @@ pub struct SyscallLogEventInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallLogEventOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallLogEventTrace {
     pub inputs: SyscallLogEventInputs,
@@ -647,22 +721,25 @@ pub struct SyscallLogEventTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimCountInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimCountOutputs {
     pub count: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimCountTrace {
     pub inputs: SyscallGetAuthClaimCountInputs,
@@ -670,24 +747,27 @@ pub struct SyscallGetAuthClaimCountTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimInputs {
     pub index: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimOutputs {
     pub auth_claim: AuthClaim,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetAuthClaimTrace {
     pub inputs: SyscallGetAuthClaimInputs,
@@ -695,8 +775,9 @@ pub struct SyscallGetAuthClaimTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256UpdateInputs {
     pub index: u32,
@@ -705,14 +786,16 @@ pub struct SyscallSHA256UpdateInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256UpdateOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256UpdateTrace {
     pub inputs: SyscallSHA256UpdateInputs,
@@ -720,24 +803,27 @@ pub struct SyscallSHA256UpdateTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256FinalizeInputs {
     pub index: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256FinalizeOutputs {
     pub hash: SHA256Hash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallSHA256FinalizeTrace {
     pub inputs: SyscallSHA256FinalizeInputs,
@@ -745,22 +831,25 @@ pub struct SyscallSHA256FinalizeTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressNonceConfigInputs {
     pub nonce_config: NonceConfig,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressNonceConfigOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressNonceConfigTrace {
     pub inputs: SyscallWriteAddressNonceConfigInputs,
@@ -768,8 +857,9 @@ pub struct SyscallWriteAddressNonceConfigTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressGasPermissionConfigsInputs {
     pub permission0: Option<GasPermissionConfig>,
@@ -780,14 +870,16 @@ pub struct SyscallWriteAddressGasPermissionConfigsInputs {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressGasPermissionConfigsOutputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallWriteAddressGasPermissionConfigsTrace {
     pub inputs: SyscallWriteAddressGasPermissionConfigsInputs,
@@ -795,22 +887,25 @@ pub struct SyscallWriteAddressGasPermissionConfigsTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetBlockHeightInputs();
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetBlockHeightOutputs {
     pub result: BlockHeight,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallGetBlockHeightTrace {
     pub inputs: SyscallGetBlockHeightInputs,
@@ -1013,8 +1108,9 @@ pub enum HostFunctionStatusXdr {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SyscallTrace {
     pub gas_remaining_at_start: GasAmount,
@@ -1024,8 +1120,9 @@ pub struct SyscallTrace {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct InvocationFrameTrace {
     pub invocation: Invocation,

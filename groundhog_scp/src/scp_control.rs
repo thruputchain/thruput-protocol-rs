@@ -48,6 +48,8 @@ pub trait SCP_Control_SCP_Control1: Send + Sync {
     async fn scp_control_get_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
     
     async fn scp_control_remove_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
+    
+    async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
 
@@ -125,6 +127,13 @@ impl ::rpc_driver::handler::RpcHandler for SCP_Control_SCP_Control1_Dispatcher {
                 let res = self.inner.scp_control_remove_qset(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // scp_control_set_lowest_non_externalized_slot
+            400 => {
+                let args: (SCPSlotIndex, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.scp_control_set_lowest_non_externalized_slot(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -181,6 +190,11 @@ impl SCP_Control_SCP_Control1_Client {
     pub async fn scp_control_remove_qset(&self, arg0 : &SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 302, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : &SCPSlotIndex) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 400, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
