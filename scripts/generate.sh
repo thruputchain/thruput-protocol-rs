@@ -8,6 +8,7 @@ protos=(
   event.x
   genesis.x
   transaction.x
+  invoke_flag.x
   retrocausal_queue.x
   storage_cost.x
   syscall_error.x
