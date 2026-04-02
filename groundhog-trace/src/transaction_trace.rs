@@ -158,8 +158,6 @@ pub struct SyscallConsoleLogTrace {
     pub outputs: Option<SyscallConsoleLogOutputs>,
 }
 
-use groundhog_xdr::invoke_flag::InvokeFlagSet;
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
