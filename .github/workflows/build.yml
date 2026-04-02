@@ -69,6 +69,8 @@ jobs:
         run: cargo build -p groundhog_rpc
       - name: build scp
         run: cargo build -p groundhog_scp
+      - name: build trace
+        run: cargo build -p groundhog_trace
       - name: format checks
         run: cargo fmt --check
       - name: clippy macros
