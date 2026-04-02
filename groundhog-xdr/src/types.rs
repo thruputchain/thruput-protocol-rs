@@ -55,7 +55,42 @@ pub struct int128_xdr {
 
 /// uint64_t, Unix time as nanoseconds elapsed since
 /// January 1, 1970 UTC
-pub type TimePoint = u64;
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct TimePoint {
+    inner: u64,
+}
+impl From<u64> for TimePoint {
+    fn from(_inner: u64) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl TimePoint {
+    pub fn into_inner(self) -> u64 {
+        self.inner
+    }
+    pub const fn new(_inner: u64) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for TimePoint {
+    type Target = u64;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for TimePoint {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 /// Typedef representing a length of memory in bytes, within
 /// a wasm runtime.  This is primarily used as an argument to syscalls,
@@ -759,7 +794,42 @@ pub struct AddressAndKey {
 /// The first block of transactions is at height 0.
 /// It is signed to prevent overflows in
 /// calculations.
-pub type BlockHeight = i64;
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct BlockHeight {
+    inner: i64,
+}
+impl From<i64> for BlockHeight {
+    fn from(_inner: i64) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl BlockHeight {
+    pub fn into_inner(self) -> i64 {
+        self.inner
+    }
+    pub const fn new(_inner: i64) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for BlockHeight {
+    type Target = i64;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for BlockHeight {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
 
 
 //
