@@ -170,6 +170,10 @@ impl ContractEntrypointID {
     pub const fn from_u64(n: u64) -> Self {
         Self::new(n.to_be_bytes())
     }
+
+    pub fn into_u64(self) -> u64 {
+        u64::from_be_bytes(self.into_inner())
+    }
 }
 
 impl From<uint128_xdr> for u128 {
