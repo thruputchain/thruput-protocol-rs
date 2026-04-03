@@ -95,12 +95,14 @@ pub type HogAgeBatch = VecM::<HogAge>;
 #[non_exhaustive]
 pub enum HogAgeResult {
     // case DbSchedResultOK:
-    //   HogAgeBatch hog_age_batch;
-    DbSchedResultOK { hog_age_batch: HogAgeBatch } = DbSchedResult::DbSchedResultOK.0 as i32,
+    //   HogAge hog_age;
+    DbSchedResultOK { hog_age: HogAge } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     Default { result: i32 },
 }
+
+pub type HogAgeResults = VecM::<HogAgeResult>;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -187,7 +189,7 @@ pub trait DbSched_DbSched1: Send + Sync {
     
     async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_driver::ProgramError>;
     
-    async fn dbsched_get_hog_ages(&self, arg0 : ContractAddressBatch) -> Result<HogAgeResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_get_hog_ages(&self, arg0 : ContractAddressBatch) -> Result<HogAgeResults, ::rpc_driver::ProgramError>;
     
     async fn dbsched_write_hog_ages(&self, arg0 : HogAgeBatch) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
         // Examples of valid call sequences to the db:
@@ -360,7 +362,7 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn dbsched_get_hog_ages(&self, arg0 : &ContractAddressBatch) -> Result<HogAgeResult, ::rpc_driver::RpcError> {
+    pub async fn dbsched_get_hog_ages(&self, arg0 : &ContractAddressBatch) -> Result<HogAgeResults, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
