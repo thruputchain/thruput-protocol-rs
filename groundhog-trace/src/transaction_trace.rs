@@ -938,6 +938,34 @@ pub struct SyscallGetBlockHeightTrace {
     pub outputs: Option<SyscallGetBlockHeightOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRetrocausalQueuePeekLenInputs {
+    pub key: StorageKeyContractData,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRetrocausalQueuePeekLenOutputs {
+    pub len: RuntimeMemoryLength,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRetrocausalQueuePeekLenTrace {
+    pub inputs: SyscallRetrocausalQueuePeekLenInputs,
+    pub outputs: Option<SyscallRetrocausalQueuePeekLenOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1043,6 +1071,9 @@ pub enum SyscallTraceBody {
     // case kGetBlockHeight:
     //   SyscallGetBlockHeightTrace get_block_height;
     kGetBlockHeight { get_block_height: SyscallGetBlockHeightTrace } = SyscallNo::kGetBlockHeight.0 as i32,
+    // case kRetrocausalQueuePeekLen:
+    //   SyscallRetrocausalQueuePeekLenTrace retrocausal_queue_peek_len;
+    kRetrocausalQueuePeekLen { retrocausal_queue_peek_len: SyscallRetrocausalQueuePeekLenTrace } = SyscallNo::kRetrocausalQueuePeekLen.0 as i32,
     // default:
     //   void;
     Default { syscall_number: i32 },
