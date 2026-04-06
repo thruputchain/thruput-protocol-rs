@@ -115,6 +115,14 @@ for hogx in "${hogxs[@]}"; do
   generate_rpc "protocol/${hogx}" "groundhog_hogx"
 done
 
+indexers=(
+  indexer.x
+)
+
+for idx in "${indexers[@]}"; do
+  generate_rpc "protocol/${idx}" "groundhog_indexer"
+done
+
 scheduler_deps=(
   rpc_types.x
   parallel.x
