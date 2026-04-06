@@ -155,6 +155,7 @@ impl SchedulerValidationOutcome {
     pub const SchedulerValidationDbFailed: Self = Self(3);
     pub const SchedulerValidationExecutorFailed: Self = Self(4);
     pub const SchedulerValidationTooLateToValidate: Self = Self(5);
+    pub const SchedulerValidationUnknownParentBlock: Self = Self(6);
 }
 impl From<i32> for SchedulerValidationOutcome {
     fn from(v: i32) -> Self {
@@ -182,6 +183,9 @@ impl core::fmt::Display for SchedulerValidationOutcome {
             },
             x if x == Self::SchedulerValidationTooLateToValidate.0 => {
                 write!(f, "SchedulerValidationOutcome::SchedulerValidationTooLateToValidate")
+            },
+            x if x == Self::SchedulerValidationUnknownParentBlock.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationUnknownParentBlock")
             },
             _ => {
                 write!(f, "SchedulerValidationOutcome({})", self.0)
