@@ -223,7 +223,7 @@ pub trait DbSched_DbSched1: Send + Sync {
     // block will return an error if accessed. This BlockID must be the
     // immediate descendant of the most recently committed block.
 
-    async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : BlockHash) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
+    async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : BlockHash, arg2 : SHA256Hash) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
         // Call to close a block. This indicates that no more transactions
     // will be added to this block. The block must have been previously opened
     // with open_database_snapshot().
@@ -305,9 +305,9 @@ impl ::rpc_driver::handler::RpcHandler for DbSched_DbSched1_Dispatcher {
             }
             // dbsched_commit_snapshot
             6 => {
-                let args: (BlockID, BlockHash, ) =
+                let args: (BlockID, BlockHash, SHA256Hash, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_commit_snapshot(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.dbsched_commit_snapshot(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // dbsched_close_snapshot
@@ -381,8 +381,8 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn dbsched_commit_snapshot(&self, arg0 : &BlockID, arg1 : &BlockHash) -> Result<DbBlockResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn dbsched_commit_snapshot(&self, arg0 : &BlockID, arg1 : &BlockHash, arg2 : &SHA256Hash) -> Result<DbBlockResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
