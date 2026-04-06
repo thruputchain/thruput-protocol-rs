@@ -42,6 +42,7 @@ pub struct DbSchedResult(pub i32);
 impl DbSchedResult {
     pub const DbSchedResultOK: Self = Self(0);
     pub const DbSchedResultError: Self = Self(1);
+    pub const DbSchedResultInvalidParentId: Self = Self(2);
 }
 impl From<i32> for DbSchedResult {
     fn from(v: i32) -> Self {
@@ -57,6 +58,9 @@ impl core::fmt::Display for DbSchedResult {
             },
             x if x == Self::DbSchedResultError.0 => {
                 write!(f, "DbSchedResult::DbSchedResultError")
+            },
+            x if x == Self::DbSchedResultInvalidParentId.0 => {
+                write!(f, "DbSchedResult::DbSchedResultInvalidParentId")
             },
             _ => {
                 write!(f, "DbSchedResult({})", self.0)
