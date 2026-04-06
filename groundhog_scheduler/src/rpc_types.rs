@@ -41,6 +41,7 @@ pub type BlockID = u64;
 pub struct DbTip {
     pub height: BlockHeight,
     pub block_hash: BlockHash,
+    pub events_hash: SHA256Hash,
     pub db_hash: DbHash,
     pub id: BlockID,
 }
