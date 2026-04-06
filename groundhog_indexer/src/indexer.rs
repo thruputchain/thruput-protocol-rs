@@ -92,8 +92,6 @@ pub enum TxInfoResult {
     Default { outcome: i32 },
 }
 
-pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
@@ -137,8 +135,6 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     async fn indexer_block_explorer_intro(&self, arg0 : Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
-    
-    async fn get_contract_events(&self, arg0 : ContractAddress, arg1 : BlockHeight, arg2 : BlockHeight) -> Result<IdentifiedEventBatch, ::rpc_driver::ProgramError>;
 }
 
 
@@ -174,13 +170,6 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // get_contract_events
-            2 => {
-                let args: (ContractAddress, BlockHeight, BlockHeight, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.get_contract_events(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -207,11 +196,6 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     pub async fn get_transaction_info(&self, arg0 : &SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn get_contract_events(&self, arg0 : &ContractAddress, arg1 : &BlockHeight, arg2 : &BlockHeight) -> Result<IdentifiedEventBatch, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
