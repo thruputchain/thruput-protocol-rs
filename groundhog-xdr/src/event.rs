@@ -138,6 +138,7 @@ pub struct TxEmittedEvent {
 pub struct TxEventLog {
     // sha256(ProposedTransaction)
     pub proposed_tx_hash: SHA256Hash,
+    pub exec_result: ExecResult,
     pub events: VecM<TxEmittedEvent>,
 }
 
@@ -156,6 +157,7 @@ pub struct TxEventLog {
 pub struct IdentifiedEvent {
     // sha256(ProposedTransaction)
     pub proposed_tx_hash: SHA256Hash,
+    pub block_height: BlockHeight,
     // uniquifies the event
     pub sequence_number: u32,
     pub emitted_event: TxEmittedEvent,
