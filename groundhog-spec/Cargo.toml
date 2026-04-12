@@ -1,0 +1,49 @@
+[package]
+name = "groundhog-spec"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description =  "Bindings for groundhog specs"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = ["std"]
+std = []
+serde = [
+    "dep:serde",
+    "dep:serde_arrays",
+    "dep:serde_with",
+    "xdrs/serde",
+]
+
+[dependencies]
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.serde_arrays]
+optional = true
+workspace = true
+default-features = false
+
+[dependencies.serde_with]
+workspace = true
+optional = true
+features = []
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "int128", "ns", "alloc"]
+

@@ -59,6 +59,11 @@ hogxs=(
     hogx_validator.x
 )
 
+specs=(
+  groundhog_contract_spec.x
+)
+
+
 [[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"
 
 echo "-- Using XDRC=${XDRC} --" >&2
@@ -78,7 +83,6 @@ generate_rpc() {
   name=$(basename "${proto}" .x)
   $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature serde-arrays -o "${package}/src/${name}.rs" "${proto}"
 }
-
 
 generate_trace() {
   proto=${1:?}
@@ -113,6 +117,10 @@ done
 
 for hogx in "${hogxs[@]}"; do
   generate_rpc "protocol/${hogx}" "groundhog_hogx"
+done
+
+for spec in "${specs[@]}"; do
+  generate_trace "protocol/${spec}" "groundhog-spec"
 done
 
 indexers=(
