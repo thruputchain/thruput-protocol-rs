@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 62e9499281ddd4bba47339441d974e43f84de257
+// Generated from xdrc commit: bab641a16d398d48b16086772f51d186ac0522cb
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -214,6 +214,20 @@ pub enum ContractType {
 }
 
 // ---------------------------------------------------------------------------
+// Exception type wrapper (carries selector metadata alongside the type)
+// ---------------------------------------------------------------------------
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractExceptionType {
+    pub selector: u64,
+    pub ty: ContractType,
+}
+
+// ---------------------------------------------------------------------------
 // Fields, methods, interfaces
 // ---------------------------------------------------------------------------
 
@@ -246,7 +260,7 @@ pub struct ContractSpecMethod {
 pub struct ContractSpecInterface {
     pub name: ContractSpecString,
     pub vers: ContractSpecString,
-    pub throws: VecM<ContractType>,
+    pub throws: VecM<ContractExceptionType>,
     pub methods: VecM<ContractSpecMethod>,
 }
 
@@ -451,7 +465,7 @@ pub struct ContractSpec {
 pub struct SpecInterfaceFragment {
     pub interface_name: ContractSpecString,
     pub interface_version: ContractSpecString,
-    pub throws: VecM<ContractType>,
+    pub throws: VecM<ContractExceptionType>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
