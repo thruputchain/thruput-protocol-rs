@@ -73,5 +73,7 @@ jobs:
         run: cargo build -p groundhog-trace
       - name: format checks
         run: cargo fmt --check
+      - name: build spec
+        run: cargo build -p groundhog-spec
       - name: clippy macros
         run: cargo clippy -p groundhog-xdr-macros -- -D warnings

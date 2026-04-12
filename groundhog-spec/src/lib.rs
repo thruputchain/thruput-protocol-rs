@@ -2,4 +2,3 @@
 
 pub mod groundhog_contract_spec;
 pub use groundhog_contract_spec::*;
-

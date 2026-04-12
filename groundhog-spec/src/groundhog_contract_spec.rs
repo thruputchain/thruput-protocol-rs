@@ -12,30 +12,25 @@
 #![allow(clippy::unnecessary_cast)]
 
 use crate::*;
-use core::option::Option;
 use core::ops::{Deref, DerefMut};
+use core::option::Option;
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
 use xdrs::*;
 
-
-
 #[cfg(feature = "serde")]
-use ::serde::{{Serialize, Deserialize}};
+use ::serde::{Deserialize, Serialize};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
-
-
 
 // RFC 4506: string types must declare a max length; `<>` is unbounded (max 2^32-1 bytes).
 pub type ContractSpecString = StringM;
 
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractArrayType {
     // #[rust(box_ptr)]
@@ -44,9 +39,9 @@ pub struct ContractArrayType {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractVectorType {
     // #[rust(box_ptr)]
@@ -57,10 +52,9 @@ pub struct ContractVectorType {
 /// Mirrors #[repr(i32)] enum ContractType in sdk_rs/groundhog-contract-spec/src/model.rs
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Copy,
+)]
 #[repr(transparent)]
 pub struct ContractTypeKind(pub i32);
 
@@ -94,55 +88,55 @@ impl core::fmt::Display for ContractTypeKind {
         match self.0 {
             x if x == Self::Void.0 => {
                 write!(f, "ContractTypeKind::Void")
-            },
+            }
             x if x == Self::Bool.0 => {
                 write!(f, "ContractTypeKind::Bool")
-            },
+            }
             x if x == Self::U32.0 => {
                 write!(f, "ContractTypeKind::U32")
-            },
+            }
             x if x == Self::I32.0 => {
                 write!(f, "ContractTypeKind::I32")
-            },
+            }
             x if x == Self::U64.0 => {
                 write!(f, "ContractTypeKind::U64")
-            },
+            }
             x if x == Self::I64.0 => {
                 write!(f, "ContractTypeKind::I64")
-            },
+            }
             x if x == Self::U128.0 => {
                 write!(f, "ContractTypeKind::U128")
-            },
+            }
             x if x == Self::I128.0 => {
                 write!(f, "ContractTypeKind::I128")
-            },
+            }
             x if x == Self::String.0 => {
                 write!(f, "ContractTypeKind::String")
-            },
+            }
             x if x == Self::Bytes.0 => {
                 write!(f, "ContractTypeKind::Bytes")
-            },
+            }
             x if x == Self::Address.0 => {
                 write!(f, "ContractTypeKind::Address")
-            },
+            }
             x if x == Self::Option.0 => {
                 write!(f, "ContractTypeKind::Option")
-            },
+            }
             x if x == Self::Vector.0 => {
                 write!(f, "ContractTypeKind::Vector")
-            },
+            }
             x if x == Self::Tuple.0 => {
                 write!(f, "ContractTypeKind::Tuple")
-            },
+            }
             x if x == Self::Named.0 => {
                 write!(f, "ContractTypeKind::Named")
-            },
+            }
             x if x == Self::U8.0 => {
                 write!(f, "ContractTypeKind::U8")
-            },
+            }
             x if x == Self::Array.0 => {
                 write!(f, "ContractTypeKind::Array")
-            },
+            }
             _ => {
                 write!(f, "ContractTypeKind({})", self.0)
             }
@@ -150,11 +144,9 @@ impl core::fmt::Display for ContractTypeKind {
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ContractType {
@@ -194,23 +186,32 @@ pub enum ContractType {
     // #[rust(box_ptr)]
     // case Option:
     //   Option<Box<ContractType>> option_inner;
-    Option { option_inner: Option<Box<ContractType>> } = ContractTypeKind::Option.0 as i32,
+    Option {
+        option_inner: Option<Box<ContractType>>,
+    } = ContractTypeKind::Option.0 as i32,
     // case Vector:
     //   ContractVectorType vector;
-    Vector { vector: ContractVectorType } = ContractTypeKind::Vector.0 as i32,
+    Vector {
+        vector: ContractVectorType,
+    } = ContractTypeKind::Vector.0 as i32,
     // case Tuple:
     //   VecM<ContractType> tuple;
-    Tuple { tuple: VecM<ContractType> } = ContractTypeKind::Tuple.0 as i32,
+    Tuple {
+        tuple: VecM<ContractType>,
+    } = ContractTypeKind::Tuple.0 as i32,
     // case Named:
     //   ContractSpecString named;
-    Named { named: ContractSpecString } = ContractTypeKind::Named.0 as i32,
+    Named {
+        named: ContractSpecString,
+    } = ContractTypeKind::Named.0 as i32,
     // case U8:
     //   void;
     U8 = ContractTypeKind::U8.0 as i32,
     // case Array:
     //   ContractArrayType array;
-    Array { array: ContractArrayType } = ContractTypeKind::Array.0 as i32,
-    
+    Array {
+        array: ContractArrayType,
+    } = ContractTypeKind::Array.0 as i32,
 }
 
 // ---------------------------------------------------------------------------
@@ -218,9 +219,9 @@ pub enum ContractType {
 // ---------------------------------------------------------------------------
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractField {
     pub name: ContractSpecString,
@@ -228,9 +229,9 @@ pub struct ContractField {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractSpecMethod {
     pub name: ContractSpecString,
@@ -239,9 +240,9 @@ pub struct ContractSpecMethod {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractSpecInterface {
     pub name: ContractSpecString,
@@ -255,9 +256,9 @@ pub struct ContractSpecInterface {
 // ---------------------------------------------------------------------------
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractStructDef {
     pub name: ContractSpecString,
@@ -265,9 +266,9 @@ pub struct ContractStructDef {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractEnumVariant {
     pub name: ContractSpecString,
@@ -275,9 +276,9 @@ pub struct ContractEnumVariant {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractEnumDef {
     pub name: ContractSpecString,
@@ -288,10 +289,9 @@ pub struct ContractEnumDef {
 /// (goxdr requires enum tags unique across the namespace; names prefixed for uniqueness.)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Copy,
+)]
 #[repr(transparent)]
 pub struct ContractUnionCaseKind(pub i32);
 
@@ -311,13 +311,13 @@ impl core::fmt::Display for ContractUnionCaseKind {
         match self.0 {
             x if x == Self::UnionCaseVoid.0 => {
                 write!(f, "ContractUnionCaseKind::UnionCaseVoid")
-            },
+            }
             x if x == Self::UnionCaseTuple.0 => {
                 write!(f, "ContractUnionCaseKind::UnionCaseTuple")
-            },
+            }
             x if x == Self::UnionCaseStruct.0 => {
                 write!(f, "ContractUnionCaseKind::UnionCaseStruct")
-            },
+            }
             _ => {
                 write!(f, "ContractUnionCaseKind({})", self.0)
             }
@@ -325,11 +325,9 @@ impl core::fmt::Display for ContractUnionCaseKind {
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ContractUnionCaseType {
@@ -338,17 +336,20 @@ pub enum ContractUnionCaseType {
     UnionCaseVoid = ContractUnionCaseKind::UnionCaseVoid.0 as i32,
     // case UnionCaseTuple:
     //   VecM<ContractType> tuple;
-    UnionCaseTuple { tuple: VecM<ContractType> } = ContractUnionCaseKind::UnionCaseTuple.0 as i32,
+    UnionCaseTuple {
+        tuple: VecM<ContractType>,
+    } = ContractUnionCaseKind::UnionCaseTuple.0 as i32,
     // case UnionCaseStruct:
     //   VecM<ContractField> struct_fields;
-    UnionCaseStruct { struct_fields: VecM<ContractField> } = ContractUnionCaseKind::UnionCaseStruct.0 as i32,
-    
+    UnionCaseStruct {
+        struct_fields: VecM<ContractField>,
+    } = ContractUnionCaseKind::UnionCaseStruct.0 as i32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractUnionCase {
     pub name: ContractSpecString,
@@ -357,9 +358,9 @@ pub struct ContractUnionCase {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractUnionDef {
     pub name: ContractSpecString,
@@ -368,10 +369,9 @@ pub struct ContractUnionDef {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Copy,
+)]
 #[repr(transparent)]
 pub struct ContractTypeDefKind(pub i32);
 
@@ -391,13 +391,13 @@ impl core::fmt::Display for ContractTypeDefKind {
         match self.0 {
             x if x == Self::TypeDefStruct.0 => {
                 write!(f, "ContractTypeDefKind::TypeDefStruct")
-            },
+            }
             x if x == Self::TypeDefEnum.0 => {
                 write!(f, "ContractTypeDefKind::TypeDefEnum")
-            },
+            }
             x if x == Self::TypeDefUnion.0 => {
                 write!(f, "ContractTypeDefKind::TypeDefUnion")
-            },
+            }
             _ => {
                 write!(f, "ContractTypeDefKind({})", self.0)
             }
@@ -405,24 +405,24 @@ impl core::fmt::Display for ContractTypeDefKind {
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ContractTypeDef {
     // case TypeDefStruct:
     //   ContractStructDef struct_def;
-    TypeDefStruct { struct_def: ContractStructDef } = ContractTypeDefKind::TypeDefStruct.0 as i32,
+    TypeDefStruct { struct_def: ContractStructDef } =
+        ContractTypeDefKind::TypeDefStruct.0 as i32,
     // case TypeDefEnum:
     //   ContractEnumDef enum_def;
-    TypeDefEnum { enum_def: ContractEnumDef } = ContractTypeDefKind::TypeDefEnum.0 as i32,
+    TypeDefEnum { enum_def: ContractEnumDef } =
+        ContractTypeDefKind::TypeDefEnum.0 as i32,
     // case TypeDefUnion:
     //   ContractUnionDef union_def;
-    TypeDefUnion { union_def: ContractUnionDef } = ContractTypeDefKind::TypeDefUnion.0 as i32,
-    
+    TypeDefUnion { union_def: ContractUnionDef } =
+        ContractTypeDefKind::TypeDefUnion.0 as i32,
 }
 
 // ---------------------------------------------------------------------------
@@ -430,9 +430,9 @@ pub enum ContractTypeDef {
 // ---------------------------------------------------------------------------
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct ContractSpec {
     pub interfaces: VecM<ContractSpecInterface>,
@@ -444,9 +444,9 @@ pub struct ContractSpec {
 // ---------------------------------------------------------------------------
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SpecInterfaceFragment {
     pub interface_name: ContractSpecString,
@@ -455,9 +455,9 @@ pub struct SpecInterfaceFragment {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
 #[repr(C)]
 pub struct SpecMethodFragment {
     pub interface_name: ContractSpecString,
@@ -467,10 +467,9 @@ pub struct SpecMethodFragment {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
+#[derive(
+    ReadXDR, WriteXDR, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Copy,
+)]
 #[repr(transparent)]
 pub struct SpecFragmentKind(pub i32);
 
@@ -490,13 +489,13 @@ impl core::fmt::Display for SpecFragmentKind {
         match self.0 {
             x if x == Self::SpecInterface.0 => {
                 write!(f, "SpecFragmentKind::SpecInterface")
-            },
+            }
             x if x == Self::SpecMethod.0 => {
                 write!(f, "SpecFragmentKind::SpecMethod")
-            },
+            }
             x if x == Self::SpecTypeDef.0 => {
                 write!(f, "SpecFragmentKind::SpecTypeDef")
-            },
+            }
             _ => {
                 write!(f, "SpecFragmentKind({})", self.0)
             }
@@ -504,26 +503,26 @@ impl core::fmt::Display for SpecFragmentKind {
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
-
 #[repr(i32)]
 #[non_exhaustive]
 pub enum SpecFragment {
     // case SpecInterface:
     //   SpecInterfaceFragment interface_fragment;
-    SpecInterface { interface_fragment: SpecInterfaceFragment } = SpecFragmentKind::SpecInterface.0 as i32,
+    SpecInterface {
+        interface_fragment: SpecInterfaceFragment,
+    } = SpecFragmentKind::SpecInterface.0 as i32,
     // case SpecMethod:
     //   SpecMethodFragment method_fragment;
-    SpecMethod { method_fragment: SpecMethodFragment } = SpecFragmentKind::SpecMethod.0 as i32,
+    SpecMethod { method_fragment: SpecMethodFragment } =
+        SpecFragmentKind::SpecMethod.0 as i32,
     // case SpecTypeDef:
     //   ContractTypeDef type_def;
-    SpecTypeDef { type_def: ContractTypeDef } = SpecFragmentKind::SpecTypeDef.0 as i32,
-    
+    SpecTypeDef { type_def: ContractTypeDef } =
+        SpecFragmentKind::SpecTypeDef.0 as i32,
 }
-
 
 //
 // XDR internals below this point
@@ -532,7 +531,6 @@ pub enum SpecFragment {
 impl ContractType {
     pub fn v(&self) -> ContractTypeKind {
         match self {
-            
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
@@ -541,7 +539,6 @@ impl ContractType {
 impl ContractUnionCaseType {
     pub fn v(&self) -> ContractUnionCaseKind {
         match self {
-            
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
@@ -550,7 +547,6 @@ impl ContractUnionCaseType {
 impl ContractTypeDef {
     pub fn v(&self) -> ContractTypeDefKind {
         match self {
-            
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
@@ -559,10 +555,7 @@ impl ContractTypeDef {
 impl SpecFragment {
     pub fn v(&self) -> SpecFragmentKind {
         match self {
-            
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
-
-
