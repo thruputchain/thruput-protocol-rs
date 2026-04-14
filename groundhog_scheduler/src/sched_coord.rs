@@ -222,11 +222,13 @@ pub enum SchedulerValidationResult {
     // case SchedulerValidationExecutorFailed:
     // case SchedulerValidationInvalid:
     // case SchedulerValidationTooLateToValidate:
+    // case SchedulerValidationUnknownParentBlock:
     //   void;
     SchedulerValidationDbFailed = SchedulerValidationOutcome::SchedulerValidationDbFailed.0 as i32,
     SchedulerValidationExecutorFailed = SchedulerValidationOutcome::SchedulerValidationExecutorFailed.0 as i32,
     SchedulerValidationInvalid = SchedulerValidationOutcome::SchedulerValidationInvalid.0 as i32,
     SchedulerValidationTooLateToValidate = SchedulerValidationOutcome::SchedulerValidationTooLateToValidate.0 as i32,
+    SchedulerValidationUnknownParentBlock = SchedulerValidationOutcome::SchedulerValidationUnknownParentBlock.0 as i32,
     
 }
 
