@@ -360,8 +360,6 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
         // Returns transactions from the mempool that have not yet been committed in a block.
 
     async fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::ProgramError>;
-    
-    async fn schedcoord_pending_transaction_count(&self) -> Result<BlockHeight, ::rpc_driver::ProgramError>;
 }
 
 
@@ -453,13 +451,6 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
                 let res = self.inner.schedcoord_lookup_transactions(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // schedcoord_pending_transaction_count
-            101 => {
-                let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedcoord_pending_transaction_count().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -526,11 +517,6 @@ impl SchedulerCoord_SchedulerCoord1_Client {
     pub async fn schedcoord_lookup_transactions(&self, arg0 : &SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn schedcoord_pending_transaction_count(&self) -> Result<BlockHeight, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 101, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
