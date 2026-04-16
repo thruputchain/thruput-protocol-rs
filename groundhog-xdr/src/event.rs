@@ -40,6 +40,11 @@ use ::serde_arrays;
 // 
 pub const kMaxEventLength : u32 = 1024;
 
+/// Maximum number of events a single transaction may emit.
+/// This keeps a single TxEventLog well below the RPC transport message limit.
+// 
+pub const kMaxEventsPerTransaction : u32 = 1000;
+
 /// Maximum number of topics that can be attached to an event.
 /// Topics enable efficient indexing and filtering of events.
 pub const kMaxTopics : u32 = 3;
@@ -139,7 +144,7 @@ pub struct TxEventLog {
     // sha256(ProposedTransaction)
     pub proposed_tx_hash: SHA256Hash,
     pub exec_result: ExecResult,
-    pub events: VecM<TxEmittedEvent>,
+    pub events: VecM<TxEmittedEvent, kMaxEventsPerTransaction>,
 }
 
 /// Complete identification of a unique event within the blockchain.
