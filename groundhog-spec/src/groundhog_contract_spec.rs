@@ -492,6 +492,7 @@ impl SpecFragmentKind {
     pub const SpecInterface: Self = Self(0);
     pub const SpecMethod: Self = Self(1);
     pub const SpecTypeDef: Self = Self(2);
+    pub const ExportedSpecTypeDef: Self = Self(3);
 }
 impl From<i32> for SpecFragmentKind {
     fn from(v: i32) -> Self {
@@ -510,6 +511,9 @@ impl core::fmt::Display for SpecFragmentKind {
             },
             x if x == Self::SpecTypeDef.0 => {
                 write!(f, "SpecFragmentKind::SpecTypeDef")
+            },
+            x if x == Self::ExportedSpecTypeDef.0 => {
+                write!(f, "SpecFragmentKind::ExportedSpecTypeDef")
             },
             _ => {
                 write!(f, "SpecFragmentKind({})", self.0)
@@ -533,8 +537,10 @@ pub enum SpecFragment {
     //   SpecMethodFragment method_fragment;
     SpecMethod { method_fragment: SpecMethodFragment } = SpecFragmentKind::SpecMethod.0 as i32,
     // case SpecTypeDef:
+    // case ExportedSpecTypeDef:
     //   ContractTypeDef type_def;
     SpecTypeDef { type_def: ContractTypeDef } = SpecFragmentKind::SpecTypeDef.0 as i32,
+    ExportedSpecTypeDef { type_def: ContractTypeDef } = SpecFragmentKind::ExportedSpecTypeDef.0 as i32,
     
 }
 
