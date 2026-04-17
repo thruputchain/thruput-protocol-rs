@@ -37,6 +37,7 @@ use ::serde_arrays;
 #[repr(C)]
 pub struct MissingTransactions {
     pub transaction_hashes: VecM<SignedTransactionHash>,
+    pub height: BlockHeight,
     pub cv_hash: ConsensusValueHash,
     pub block_hash: BlockHash,
 }
