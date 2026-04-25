@@ -151,6 +151,9 @@ unsafe extern "C" {
         arg5: u64,
         arg6: u64,
         arg7: u64,
+        arg8: u64,
+        arg9: u64,
+        arg10: u64,
     ) -> i32;
 }
 
@@ -165,6 +168,9 @@ unsafe extern "C-unwind" {
         arg5: u64,
         arg6: u64,
         arg7: u64,
+        arg8: u64,
+        arg9: u64,
+        arg10: u64,
     ) -> i32;
 }
 
@@ -178,6 +184,9 @@ fn syscall_wrapper(
     arg5: u64,
     arg6: u64,
     arg7: u64,
+    arg8: u64,
+    arg9: u64,
+    arg10: u64,
 ) -> SysErr {
     unsafe {
         SysErr(syscall_wrapper_impl(
@@ -189,6 +198,9 @@ fn syscall_wrapper(
             arg5,
             arg6,
             arg7,
+            arg8,
+            arg9,
+            arg10,
         ))
     }
 }

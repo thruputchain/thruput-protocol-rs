@@ -40,11 +40,14 @@ struct TypeMapping {
     rust_uses_as_ptr: bool,
     #[serde(default = "default_false")]
     primitive_type: bool,
-    /// True if this type is a newtype struct (e.g. `Foo(i32)`) rather than
-    /// a bare primitive or type alias. Newtype primitives use `.0 as u64`
-    /// instead of `as u64` when passed by value.
+    /// rust newtype wrappers (with the transparent wrapper structs
+    /// in the generated code) use .inner to access the inner object.
     #[serde(default = "default_false")]
     newtype: bool,
+    /// Enum types, and newtype structs (i.e. Foo(i32)) use .0 as u64
+    /// as input arguments
+    #[serde(default = "default_false")]
+    dot_zero_type: bool,
 }
 
 #[derive(Debug)]
@@ -53,6 +56,7 @@ struct TypeInfo {
     rust_uses_as_ptr: bool,
     primitive_type: bool,
     newtype: bool,
+    dot_zero_type: bool,
 }
 
 type TypeMap = HashMap<String, TypeInfo>;
@@ -68,6 +72,7 @@ impl SyscallSpec {
                     rust_uses_as_ptr: elt.rust_uses_as_ptr,
                     primitive_type: elt.primitive_type,
                     newtype: elt.newtype,
+                    dot_zero_type: elt.dot_zero_type,
                 },
             );
         }
@@ -258,6 +263,14 @@ impl Arg {
         }
     }
 
+    fn is_dot_zero_type(&self, type_map: &TypeMap) -> bool {
+        if let Some(type_details) = self.get_type_details(type_map) {
+            type_details.dot_zero_type
+        } else {
+            false
+        }
+    }
+
     fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.rust_uses_as_ptr
@@ -321,6 +334,8 @@ impl Arg {
             } else if self.is_primitive(type_map) {
                 if is_input {
                     if self.is_newtype(type_map) {
+                        quote! { #name.into_inner() as u64 }
+                    } else if self.is_dot_zero_type(type_map) {
                         quote! { #name.0 as u64 }
                     } else {
                         quote! { #name as u64 }
