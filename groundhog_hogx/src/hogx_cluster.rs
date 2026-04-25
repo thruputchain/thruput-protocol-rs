@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1e1e39628b29553aba80b0ca0698248ea45c2bdf
+// Generated from xdrc commit: f17bff5213c00e7a1b7224bee0ad727237390b89
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -61,7 +61,6 @@ pub struct HostDef {
 pub struct ValidatorSystemConfig {
     pub base_private_port: u32,
     pub coordinator_public_port: u32,
-    pub coordinator_public_wallet_port: u32,
     //
     pub exec_num_threads: u32,
     pub db_ram_bytes: u64,

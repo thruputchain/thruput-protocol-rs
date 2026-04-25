@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1e1e39628b29553aba80b0ca0698248ea45c2bdf
+// Generated from xdrc commit: f17bff5213c00e7a1b7224bee0ad727237390b89
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -40,16 +40,6 @@ pub type Seconds = i64;
 pub struct ValidatorConfig {
     pub private_info: ValidatorPrivateInfo,
     pub known_validators: VecM<ValidatorPublicInfo>,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct WalletConfig {
-    pub secret_key: JWTSecretKey,
-    pub users: VecM<WalletUser>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -163,7 +153,6 @@ pub struct StorageConfig {
 #[repr(C)]
 pub struct Config {
     pub validator_config: Option<ValidatorConfig>,
-    pub wallet_config: Option<WalletConfig>,
     pub discovery_config: Option<DiscoveryConfig>,
     pub router_config: Option<RouterConfig>,
     pub dogwood_config: Option<DogwoodConfig>,

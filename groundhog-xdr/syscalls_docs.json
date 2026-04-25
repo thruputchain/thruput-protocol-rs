@@ -40,13 +40,14 @@
     "description": [
       "Invokes the specified method of the contract at the specified\naddress, with the supplied parameters. Creates a new invocation\nframe, which terminates upon conclusion of the Invoke() syscall.",
       "The frame will be limited to the minimum of gas_limit units\nof gas and the remaining gas in the current frame.\nThe SDK sets the default gas limit as UINT64_MAX, meaning i.e.\nall of the remaining gas in the current frame.\nAny unused gas will be returned to the caller.",
-      "Note that the entrypoint_id is passed as a u64,\nbut that u64 is derived from a ContractEntrypointID ([u8, 8]),\nas the little-endian interpretation of the entrypoint id.\nThis is a minor optimization that lets the entrypoint id be passed\nto the syscall directly as one of the u64 arguments, instead of\nas an offset into linear memory.\n(and, if the compiler is able to find this optimization,\nthe entrypoint id can in principle be passed as a wasm stack argument,\nwithout an i64.store into linear memory)."
+      "Note that the entrypoint_id is passed as a u64,\nbut that u64 is derived from a ContractEntrypointID ([u8, 8]),\nas the little-endian interpretation of the entrypoint id.\nThis is a minor optimization that lets the entrypoint id be passed\nto the syscall directly as one of the u64 arguments, instead of\nas an offset into linear memory.\n(and, if the compiler is able to find this optimization,\nthe entrypoint id can in principle be passed as a wasm stack argument,\nwithout an i64.store into linear memory).",
+      "The list of auth tokens is passed as a span, which should be\ninterpreted as a [u32] slice."
     ],
     "errors": [
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The invocation failed because the contract was not found."
+          "The invocation failed because the contract was not found, or one or more of the supplied auth token ids are not owned by the current frame."
         ]
       },
       {
@@ -403,6 +404,19 @@
         "code": "kSyscallErrorCodeNoRetrocausalQueueEntry",
         "description": [
           "The retrocausal queue is empty and has no entries to peek."
+        ]
+      }
+    ]
+  },
+  "MintAuthToken": {
+    "description": [
+      "Mints an authentication token for the current contract address."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "The serialized authentication token fails to parse as a valid AuthToken, expiry height is in the past, or the number of auth tokens minted would exceed the maximum for the transaction."
         ]
       }
     ]

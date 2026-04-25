@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1e1e39628b29553aba80b0ca0698248ea45c2bdf
+// Generated from xdrc commit: f17bff5213c00e7a1b7224bee0ad727237390b89
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -178,6 +178,7 @@ pub struct SyscallInvokeInputs {
     pub gas_limit: GasAmount,
     pub calldata: BytesM,
     pub flags: InvokeFlagSet,
+    pub owned_auth_token_ids_list: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -242,6 +243,7 @@ pub struct SyscallGetReturnedBufferInputs (
 #[repr(C)]
 pub struct SyscallGetReturnedBufferOutputs {
     pub buffer: ReturnBuffer,
+    pub returned_auth_tokens: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -966,6 +968,35 @@ pub struct SyscallRetrocausalQueuePeekLenTrace {
     pub outputs: Option<SyscallRetrocausalQueuePeekLenOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallMintAuthTokenInputs {
+    pub expiry_height: BlockHeight,
+    pub serialized_auth_token: BytesM,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallMintAuthTokenOutputs {
+    pub token_id: uint32_t,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallMintAuthTokenTrace {
+    pub inputs: SyscallMintAuthTokenInputs,
+    pub outputs: Option<SyscallMintAuthTokenOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1074,6 +1105,9 @@ pub enum SyscallTraceBody {
     // case kRetrocausalQueuePeekLen:
     //   SyscallRetrocausalQueuePeekLenTrace retrocausal_queue_peek_len;
     kRetrocausalQueuePeekLen { retrocausal_queue_peek_len: SyscallRetrocausalQueuePeekLenTrace } = SyscallNo::kRetrocausalQueuePeekLen.0 as i32,
+    // case kMintAuthToken:
+    //   SyscallMintAuthTokenTrace mint_auth_token;
+    kMintAuthToken { mint_auth_token: SyscallMintAuthTokenTrace } = SyscallNo::kMintAuthToken.0 as i32,
     // default:
     //   void;
     Default { syscall_number: i32 },
