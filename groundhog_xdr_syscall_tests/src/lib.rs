@@ -10,7 +10,7 @@ use std::sync::{Arc, Mutex};
 #[derive(Debug, Clone)]
 pub struct SyscallInvocation {
     pub syscall_no: u64,
-    pub args: [u64; 7],
+    pub args: [u64; 10],
 }
 
 /// Mock syscall handler that captures invocations
@@ -43,7 +43,7 @@ impl MockSyscallHandler {
         self.invocations.lock().unwrap().last().cloned()
     }
 
-    fn record_invocation(&self, syscall_no: u64, args: [u64; 7]) -> SysErr {
+    fn record_invocation(&self, syscall_no: u64, args: [u64; 10]) -> SysErr {
         self.invocations
             .lock()
             .unwrap()
@@ -79,11 +79,14 @@ pub extern "C-unwind" fn syscall_wrapper_impl(
     arg5: u64,
     arg6: u64,
     arg7: u64,
+    arg8: u64,
+    arg9: u64,
+    arg10: u64,
 ) -> SysErr {
     if let Some(handler) = get_mock_handler() {
         handler.record_invocation(
             syscall_no,
-            [arg1, arg2, arg3, arg4, arg5, arg6, arg7],
+            [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10],
         )
     } else {
         // Default: return success if no handler is set
@@ -100,12 +103,12 @@ mod tests {
         let handler = Arc::new(MockSyscallHandler::new());
         set_mock_handler(handler.clone());
 
-        let result = syscall_wrapper_impl(1, 2, 3, 4, 5, 6, 7, 8);
+        let result = syscall_wrapper_impl(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
         assert!(result.is_none());
 
         let invocations = handler.get_invocations();
         assert_eq!(invocations.len(), 1);
         assert_eq!(invocations[0].syscall_no, 1);
-        assert_eq!(invocations[0].args, [2, 3, 4, 5, 6, 7, 8]);
+        assert_eq!(invocations[0].args, [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     }
 }

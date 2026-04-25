@@ -31,7 +31,7 @@ fn test_get_calldata_len_primitive_output() {
     // The first arg should be the pointer to len
     assert_eq!(invocations[0].args[0], &len as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[1..], [0; 6]);
+    assert_eq!(invocations[0].args[1..], [0; 9]);
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn test_console_log_span_input() {
     assert_eq!(invocations[0].args[0], buffer.as_ptr() as u64);
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[2..], [0; 5]);
+    assert_eq!(invocations[0].args[2..], [0; 8]);
 }
 
 use groundhog_xdr::invoke_flag::InvokeFlagSet;
@@ -80,6 +80,9 @@ fn test_invoke_primitive_inputs() {
     let calldata = b"test calldata";
     let flags: InvokeFlagSet = 0x01;
     let mut return_buffer_len: RuntimeMemoryLength = 0;
+    let mut owned_auth_token_ids_len: RuntimeMemoryLength = 0;
+
+    let owned_auth_token_ids: [u8; 0] = [];
 
     let result = raw_Invoke(
         &address,
@@ -87,7 +90,9 @@ fn test_invoke_primitive_inputs() {
         gas_limit,
         calldata,
         flags,
+        &owned_auth_token_ids,
         &mut return_buffer_len,
+        &mut owned_auth_token_ids_len,
     );
 
     assert!(result.is_ok());
@@ -111,10 +116,19 @@ fn test_invoke_primitive_inputs() {
     assert_eq!(invocations[0].args[4], calldata.len() as u64);
     // arg6: flags (i32 primitive, passed by value as u64)
     assert_eq!(invocations[0].args[5], flags as u64);
-    // arg7: return_buffer_len pointer
+    // arg6: owned_auth_token_ids pointer
+    assert_eq!(invocations[0].args[6], owned_auth_token_ids.as_ptr() as u64);
+    // arg7: owned_auth_token_ids length
+    assert_eq!(invocations[0].args[7], owned_auth_token_ids.len() as u64);
+    // arg8: return_buffer_len pointer
     assert_eq!(
-        invocations[0].args[6],
+        invocations[0].args[8],
         &return_buffer_len as *const _ as u64
+    );
+    // arg9: return_buffer_len pointer
+    assert_eq!(
+        invocations[0].args[9],
+        &owned_auth_token_ids_len as *const _ as u64
     );
 }
 
@@ -159,5 +173,5 @@ fn test_sha256_update_bool_primitive() {
     assert_eq!(invocations[0].args[3], reset as u64);
     assert_eq!(invocations[0].args[3], 1u64); // true should be 1
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 3]);
+    assert_eq!(invocations[0].args[4..], [0; 6]);
 }

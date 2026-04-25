@@ -36,7 +36,7 @@ fn test_sha256_span_input_output() {
     // arg3: output hash pointer
     assert_eq!(invocations[0].args[2], hash.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 4]);
+    assert_eq!(invocations[0].args[3..], [0; 7]);
 }
 
 #[test]
@@ -69,7 +69,7 @@ fn test_get_calldata_span_output() {
     // arg3: written_len pointer
     assert_eq!(invocations[0].args[2], &written_len as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 4]);
+    assert_eq!(invocations[0].args[3..], [0; 7]);
 }
 
 #[test]
@@ -85,7 +85,15 @@ fn test_get_returned_buffer_span_output() {
     let mut buffer = [0u8; 512];
     let mut written_len: RuntimeMemoryLength = 0;
 
-    let result = raw_GetReturnedBuffer(&mut buffer, &mut written_len);
+    let mut restored_auth_token_ids = [0u8; 512];
+    let mut restored_auth_token_ids_written_len: RuntimeMemoryLength = 0;
+
+    let result = raw_GetReturnedBuffer(
+        &mut buffer,
+        &mut written_len,
+        &mut restored_auth_token_ids,
+        &mut restored_auth_token_ids_written_len,
+    );
 
     assert!(result.is_ok());
 
@@ -101,8 +109,21 @@ fn test_get_returned_buffer_span_output() {
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
     // arg3: written_len pointer
     assert_eq!(invocations[0].args[2], &written_len as *const _ as u64);
+
+    // arg4: restored_auth_token_ids pointer
+    assert_eq!(
+        invocations[0].args[3],
+        restored_auth_token_ids.as_mut_ptr() as u64
+    );
+    // arg5: restored_auth_token_ids length
+    assert_eq!(invocations[0].args[4], restored_auth_token_ids.len() as u64);
+    // arg6: restored_auth_token_ids_written_len pointer
+    assert_eq!(
+        invocations[0].args[5],
+        &restored_auth_token_ids_written_len as *const _ as u64
+    );
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 4]);
+    assert_eq!(invocations[0].args[6..], [0; 4]);
 }
 
 #[test]
@@ -139,5 +160,5 @@ fn test_bytestring_get_span_output() {
     // arg4: written_len pointer
     assert_eq!(invocations[0].args[3], &written_len as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 3]);
+    assert_eq!(invocations[0].args[4..], [0; 6]);
 }
