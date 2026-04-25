@@ -984,7 +984,7 @@ pub struct SyscallMintAuthTokenInputs {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SyscallMintAuthTokenOutputs {
-    pub token_id: uint32_t,
+    pub token_id: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
