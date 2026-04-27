@@ -420,5 +420,18 @@
         ]
       }
     ]
+  },
+  "ConsumeAuthToken": {
+    "description": [
+      "Consumes an authentication token for the current contract address. Returns any nested tokens unwrapped by the token."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "The authentication token is not owned by the current contract address, or the auth token has expired."
+        ]
+      }
+    ]
   }
 }

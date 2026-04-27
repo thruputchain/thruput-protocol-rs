@@ -125,6 +125,7 @@ done
 
 indexers=(
   indexer.x
+  pagination.x
 )
 
 for idx in "${indexers[@]}"; do

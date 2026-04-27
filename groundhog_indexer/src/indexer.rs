@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 94dfb8fa449cc159d9413f64baf6026f3466805d
+// Generated from xdrc commit: bc2bfbfe6f157bc6b3da02ab427232e6dd9b855c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -94,6 +94,101 @@ pub enum TxInfoResult {
 
 pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
 
+/// Max contracts per filter and max filters per query.  Matches Soroban
+/// getEvents' limit of 5; designed to be low enough that the merge-walk
+/// stays cheap even on degenerate inputs.
+pub const kMaxContractAddressesPerEventFilter : u32 = 5;
+
+pub const kMaxEventFiltersPerQuery : u32 = 5;
+
+pub type ContractAddressList = VecM::<ContractAddress, kMaxContractAddressesPerEventFilter>;
+
+/// Positional topic filter.  For each topic position (0, 1, 2):
+///   - An empty list means "match anything at this position."
+///   - A non-empty list means "match if the event's topic at this
+///     position is in this list."  OR within a position, AND across
+///     positions.
+///
+/// Partial match: a filter that specifies only topic0 matches events
+/// with more topics.  Extra topics on the event past the filter's
+/// specified positions are ignored.  (This is the ethereum getLogs /
+/// stellar-rpc post-#358 semantics.)
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct EventTopicFilter {
+    pub topic0: VecM<Topic>,
+    pub topic1: VecM<Topic>,
+    pub topic2: VecM<Topic>,
+}
+
+/// A single event-filter predicate: events must be emitted by one of
+/// `contract_addresses` AND match the topic constraints.  Required
+/// non-empty contract_addresses — the indexer has no topic-indexed
+/// column family and can't efficiently serve "any contract" scans.
+/// (When such an index is added, the gateway relaxes the non-empty
+/// check; the XDR stays the same.)
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct EventFilter {
+    pub contract_addresses: ContractAddressList,
+    pub topics: EventTopicFilter,
+}
+
+pub type EventFilterList = VecM::<EventFilter, kMaxEventFiltersPerQuery>;
+
+/// `get_events` request.  A candidate event matches the query iff it
+/// matches at least one `EventFilter` in `filters` (OR across filters,
+/// AND within each filter).
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct EventQuery {
+    pub filters: EventFilterList,
+    pub order: IterationOrder,
+    pub anchor: BlockAnchor,
+    /// Empty on the initial call.  Non-empty to continue where a
+    /// previous response left off; `order` and `anchor` in the request
+    /// are ignored when a cursor is supplied — the cursor carries them.
+    pub cursor: PaginationCursor,
+    /// Clamped server-side to [1, 200]; 0 means server default (50).
+    pub limit: u32,
+}
+
+/// `get_events` response.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct EventPage {
+    /// Matched events in the requested order.  May be empty even when
+    /// `cursor` is non-empty: the filter was selective and the current
+    /// scan window produced no matches, so the client should keep
+    /// paginating.  Empty events + empty cursor = stream exhausted.
+    pub events: IdentifiedEventBatch,
+    /// Empty when the stream has been exhausted in the requested
+    /// direction.  Non-empty: pass back in the next call's `cursor`
+    /// argument.
+    pub cursor: PaginationCursor,
+    /// Highest block height the indexer has processed at response time.
+    /// Clients compare to the heights on their last-seen events to
+    /// decide whether they're caught up.
+    pub latest_block: BlockHeight,
+    /// Oldest block height the indexer still retains data for at
+    /// response time.  Today always 0; once retention/pruning lands
+    /// this is the lower bound below which queries return empty
+    /// regardless of anchor.
+    pub oldest_block: BlockHeight,
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
@@ -137,8 +232,12 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     async fn indexer_block_explorer_intro(&self, arg0 : Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
-    
-    async fn get_contract_events(&self, arg0 : ContractAddress, arg1 : BlockHeight, arg2 : BlockHeight) -> Result<IdentifiedEventBatch, ::rpc_driver::ProgramError>;
+        // Paginated, filtered events query.  A candidate event matches
+    // iff it matches at least one EventFilter in the request (OR
+    // across filters, AND within each filter).  Supports the wallet
+    // "transfers to OR from me" case in a single call.
+
+    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPage, ::rpc_driver::ProgramError>;
 }
 
 
@@ -174,11 +273,11 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // get_contract_events
-            2 => {
-                let args: (ContractAddress, BlockHeight, BlockHeight, ) =
+            // get_events
+            3 => {
+                let args: (EventQuery, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.get_contract_events(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.get_events(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -209,9 +308,9 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn get_contract_events(&self, arg0 : &ContractAddress, arg1 : &BlockHeight, arg2 : &BlockHeight) -> Result<IdentifiedEventBatch, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
+    pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPage, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }

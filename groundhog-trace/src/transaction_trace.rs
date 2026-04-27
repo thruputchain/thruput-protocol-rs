@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 94dfb8fa449cc159d9413f64baf6026f3466805d
+// Generated from xdrc commit: bc2bfbfe6f157bc6b3da02ab427232e6dd9b855c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -999,6 +999,37 @@ pub struct SyscallMintAuthTokenTrace {
     pub outputs: Option<SyscallMintAuthTokenOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallConsumeAuthTokenInputs {
+    pub token_id: u32,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallConsumeAuthTokenOutputs {
+    pub payload: AuthTokenPayload,
+    pub auth_payload_written_len: RuntimeMemoryLength,
+    pub unwrapped_token_id_start: u32,
+    pub unwrapped_token_id_count: u32,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallConsumeAuthTokenTrace {
+    pub inputs: SyscallConsumeAuthTokenInputs,
+    pub outputs: Option<SyscallConsumeAuthTokenOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1110,6 +1141,9 @@ pub enum SyscallTraceBody {
     // case kMintAuthToken:
     //   SyscallMintAuthTokenTrace mint_auth_token;
     kMintAuthToken { mint_auth_token: SyscallMintAuthTokenTrace } = SyscallNo::kMintAuthToken.0 as i32,
+    // case kConsumeAuthToken:
+    //   SyscallConsumeAuthTokenTrace consume_auth_token;
+    kConsumeAuthToken { consume_auth_token: SyscallConsumeAuthTokenTrace } = SyscallNo::kConsumeAuthToken.0 as i32,
     // default:
     //   void;
     Default { syscall_number: i32 },
