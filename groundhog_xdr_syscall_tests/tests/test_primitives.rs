@@ -15,10 +15,12 @@ fn test_get_calldata_len_primitive_output() {
     // GetCalldataLen returns a u32 (RuntimeMemoryLength)
     // It has no inputs, one output: len: RuntimeMemoryLength
     let mut len: RuntimeMemoryLength = 0;
+    let mut auth_token_count: u32 = 0;
 
     // GetCalldataLen returns a u32 (RuntimeMemoryLength)
     // It has no inputs, one output: len: RuntimeMemoryLength
-    let result = raw_GetCalldataLen(&mut len);
+    // and one output: auth_token_count: u32
+    let result = raw_GetCalldataLen(&mut len, &mut auth_token_count);
 
     assert!(result.is_ok());
 

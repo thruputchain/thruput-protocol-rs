@@ -20,13 +20,13 @@
   },
   "GetCalldataLen": {
     "description": [
-      "Returns the length of the calldata supplied to the invocation associated with the current call frame."
+      "Returns the length of the calldata supplied to the invocation associated with the current call frame. Also returns the number of auth tokens supplied to the invocation."
     ],
     "errors": []
   },
   "GetCalldata": {
     "description": [
-      "Returns the calldata supplied to the invocation associated with the current call frame."
+      "Returns the calldata supplied to the invocation associated with the current call frame. Also returns the auth tokens supplied to the invocation. The auth token list is passed as a span, which should be interpreted as a [u32] slice."
     ],
     "errors": []
   },

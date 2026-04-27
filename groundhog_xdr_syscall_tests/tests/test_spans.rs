@@ -51,8 +51,15 @@ fn test_get_calldata_span_output() {
 
     let mut buffer = [0u8; 1024];
     let mut written_len: RuntimeMemoryLength = 0;
+    let mut auth_token_list = [0u8; 1024];
+    let mut auth_token_written_len: RuntimeMemoryLength = 0;
 
-    let result = raw_GetCalldata(&mut buffer, &mut written_len);
+    let result = raw_GetCalldata(
+        &mut buffer,
+        &mut written_len,
+        &mut auth_token_list,
+        &mut auth_token_written_len,
+    );
 
     assert!(result.is_ok());
 
