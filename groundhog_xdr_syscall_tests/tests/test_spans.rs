@@ -75,8 +75,17 @@ fn test_get_calldata_span_output() {
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
     // arg3: written_len pointer
     assert_eq!(invocations[0].args[2], &written_len as *const _ as u64);
+    // arg4: auth_token_list pointer
+    assert_eq!(invocations[0].args[3], auth_token_list.as_mut_ptr() as u64);
+    // arg5: auth_token_list length
+    assert_eq!(invocations[0].args[4], auth_token_list.len() as u64);
+    // arg6: auth_token_written_len pointer
+    assert_eq!(
+        invocations[0].args[5],
+        &auth_token_written_len as *const _ as u64
+    );
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 7]);
+    assert_eq!(invocations[0].args[6..], [0; 4]);
 }
 
 #[test]

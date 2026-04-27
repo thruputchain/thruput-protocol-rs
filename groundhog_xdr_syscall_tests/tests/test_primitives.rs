@@ -32,8 +32,10 @@ fn test_get_calldata_len_primitive_output() {
     // Output parameter should be passed as a pointer
     // The first arg should be the pointer to len
     assert_eq!(invocations[0].args[0], &len as *const _ as u64);
+    // The second arg should be the pointer to auth_token_count
+    assert_eq!(invocations[0].args[1], &auth_token_count as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[1..], [0; 9]);
+    assert_eq!(invocations[0].args[2..], [0; 8]);
 }
 
 #[test]
