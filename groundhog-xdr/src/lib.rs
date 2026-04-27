@@ -108,3 +108,7 @@ use block::*;
 #[rustfmt::skip]
 pub mod invoke_flag;
 use invoke_flag::*;
+
+#[rustfmt::skip]
+mod auth_token;
+pub use auth_token::*;

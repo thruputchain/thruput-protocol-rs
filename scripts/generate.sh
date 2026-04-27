@@ -18,6 +18,7 @@ protos=(
   storage_item.x
   precompiles.x
   block.x
+  auth_token.x
 )
 
 traces=(
