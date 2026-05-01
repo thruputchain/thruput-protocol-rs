@@ -41,7 +41,7 @@ use ::serde_arrays;
 // Key concepts:
 // - Each transaction invokes a contract method with specified parameters
 // - Transactions include authorization claims and signatures
-// - Transactions can deploy new contracts and sponsor gas
+// - Transactions can deploy new contracts
 // - Groundhog executes transactions in parallel, using two-phase commit for conflict resolution
 // - Proposers attach nondeterministic data to ensure deterministic re-execution
 //
@@ -80,32 +80,6 @@ pub const kMaxReturnBufferLen : u32 = 1024;
 /// Like Calldata, contracts can encode return values arbitrarily, but the
 /// SDK default uses XDR serialization per RFC 4506 (<https://datatracker.ietf.org/doc/html/rfc4506>).
 pub type ReturnBuffer = BytesM::<kMaxReturnBufferLen>;
-
-//------------------------------------------------------------------------------
-// Gas Sponsorship
-//------------------------------------------------------------------------------
-
-/// A claim that gas should be sponsored for a specific contract.
-///
-/// Gas claims allow one contract to pay for the gas costs of another contract's
-/// execution. The transaction will fail if the gas claim is not covered during
-/// execution by the appropriate authorization.
-///
-/// TODO(geoff): Update this documentation once gas sponsorship syscalls are finalized.
-/// Current plan: Add a syscall that lets a contract declare "I am willing to
-/// sponsor X units of gas". The transaction will fail if there's a gas claim
-/// that isn't covered during execution by such a declaration.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct GasClaim {
-    /// The contract address whose gas costs are being sponsored.
-    pub sponsored_contract: ContractAddress,
-    /// The number of gas units being sponsored for this contract.
-    pub amount: GasAmount,
-}
 
 //------------------------------------------------------------------------------
 // Invocations
@@ -268,14 +242,10 @@ pub struct Transaction {
     ///
     /// Deployed via the DeployContract syscall during transaction execution.
     pub contracts_to_deploy: VecM<Contract>,
-    /// Authorization claims specifying required signatures.
+    /// Authorization claim specifying required signatures.
     ///
-    /// See [`AuthClaimData`] in auth_claim.x for details.
-    pub auth_claims: AuthClaimData,
-    /// Gas sponsorship claims for this transaction.
-    ///
-    /// TODO(geoff): Update when gas sponsorship is finalized.
-    pub gas_claims: VecM<GasClaim>,
+    /// See [`AuthClaim`] in auth_claim.x for details.
+    pub auth_claim: AuthClaim,
 }
 
 //------------------------------------------------------------------------------
@@ -283,9 +253,6 @@ pub struct Transaction {
 //------------------------------------------------------------------------------
 
 /// A cryptographic signature paired with its key identifier.
-///
-/// The auth_claim_idx indicates which auth claim from a signed transaction's
-/// list of claims produced this signature.
 ///
 /// The public_key_id indicates which key from an address's key set produced
 /// this signature, allowing the signature to be matched against the transaction's
@@ -296,9 +263,6 @@ pub struct Transaction {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DecoratedSignature {
-    // The index in [SignedTransaction::auth_claims] for the address that
-    // generated this signature.
-    pub auth_claim_idx: u32,
     /// The KeyID of the public key that created this signature.
     ///
     /// This is matched against the auth claims to determine if the signature
@@ -333,7 +297,7 @@ pub struct SignedTransaction {
     pub tx: Transaction,
     /// Signatures that authorize this transaction.
     ///
-    /// These signatures must satisfy the auth_claims in the transaction.
+    /// These signatures must satisfy the auth_claim in the transaction.
     /// The signatures are over the [`Transaction`] object.
     pub signatures: VecM<DecoratedSignature>,
 }

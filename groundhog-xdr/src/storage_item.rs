@@ -266,19 +266,9 @@ pub struct AuthDataChangeSigner {
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct GasConfigChange {
-    pub new_gas_permission_configs: VecM<GasPermissionConfig, kMaxGasConfigs>,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
 pub struct AuthDataChangeArgs {
     pub auth_data_change_signers: VecM<AuthDataChangeSigner>,
-    pub new_nonce_config: Option<NonceConfig>,
-    pub new_gas_config_change: Option<GasConfigChange>,
+    pub new_required_weight: Option<Weight>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

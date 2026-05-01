@@ -312,24 +312,11 @@
       }
     ]
   },
-  "GetAuthClaimCount": {
-    "description": [
-      "Returns the number of authentication claims associated with the current transaction."
-    ],
-    "errors": []
-  },
   "GetAuthClaim": {
     "description": [
-      "Returns the authentication claim at the specified index."
+      "Returns the authentication claim associated with the current transaction."
     ],
-    "errors": [
-      {
-        "code": "kSyscallErrorCodeInvalidSyscallInput",
-        "description": [
-          "The (0-indexed) input index is out of bounds (i.e. >= the number of authentication claims)."
-        ]
-      }
-    ]
+    "errors": []
   },
   "SHA256Update": {
     "description": [
@@ -357,31 +344,11 @@
       }
     ]
   },
-  "WriteAddressNonceConfig": {
+  "WriteAddressRequiredWeight": {
     "description": [
-      "Writes the nonce configuration for the current contract address."
+      "Writes the required weight threshold for the current contract address. This is the minimum total weight of signing keys needed to authorize a transaction from this address."
     ],
-    "errors": [
-      {
-        "code": "kSyscallErrorCodeInvalidSyscallInput",
-        "description": [
-          "Returns an error if `nonce_config.accepted_keys` has a bit set beyond `kMaxSigners` in the configured signer bitmap."
-        ]
-      }
-    ]
-  },
-  "WriteAddressGasPermissionConfigs": {
-    "description": [
-      "Writes the gas permission configurations for the current contract address. Up to 5 permission configurations can be set."
-    ],
-    "errors": [
-      {
-        "code": "kSyscallErrorCodeInvalidSyscallInput",
-        "description": [
-          "The gas permission configurations are invalid, or if permissions are not supplied in an initial segment of the submitted arguments (i.e. if permission_1 is supplied, then permission_0 must also be supplied)."
-        ]
-      }
-    ]
+    "errors": []
   },
   "GetBlockHeight": {
     "description": [

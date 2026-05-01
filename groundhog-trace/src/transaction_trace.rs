@@ -750,33 +750,6 @@ pub struct SyscallLogEventTrace {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallGetAuthClaimCountInputs (
-);
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct SyscallGetAuthClaimCountOutputs {
-    pub count: u32,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct SyscallGetAuthClaimCountTrace {
-    pub inputs: SyscallGetAuthClaimCountInputs,
-    pub outputs: Option<SyscallGetAuthClaimCountOutputs>,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
 pub struct SyscallGetAuthClaimInputs {
     pub index: u32,
 }
@@ -862,8 +835,8 @@ pub struct SyscallSHA256FinalizeTrace {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallWriteAddressNonceConfigInputs {
-    pub nonce_config: NonceConfig,
+pub struct SyscallWriteAddressRequiredWeightInputs {
+    pub required_weight: Weight,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -871,7 +844,7 @@ pub struct SyscallWriteAddressNonceConfigInputs {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallWriteAddressNonceConfigOutputs (
+pub struct SyscallWriteAddressRequiredWeightOutputs (
 );
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -879,40 +852,9 @@ pub struct SyscallWriteAddressNonceConfigOutputs (
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallWriteAddressNonceConfigTrace {
-    pub inputs: SyscallWriteAddressNonceConfigInputs,
-    pub outputs: Option<SyscallWriteAddressNonceConfigOutputs>,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct SyscallWriteAddressGasPermissionConfigsInputs {
-    pub permission0: Option<GasPermissionConfig>,
-    pub permission1: Option<GasPermissionConfig>,
-    pub permission2: Option<GasPermissionConfig>,
-    pub permission3: Option<GasPermissionConfig>,
-    pub permission4: Option<GasPermissionConfig>,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct SyscallWriteAddressGasPermissionConfigsOutputs (
-);
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct SyscallWriteAddressGasPermissionConfigsTrace {
-    pub inputs: SyscallWriteAddressGasPermissionConfigsInputs,
-    pub outputs: Option<SyscallWriteAddressGasPermissionConfigsOutputs>,
+pub struct SyscallWriteAddressRequiredWeightTrace {
+    pub inputs: SyscallWriteAddressRequiredWeightInputs,
+    pub outputs: Option<SyscallWriteAddressRequiredWeightOutputs>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1114,9 +1056,6 @@ pub enum SyscallTraceBody {
     // case kLogEvent:
     //   SyscallLogEventTrace log_event;
     kLogEvent { log_event: SyscallLogEventTrace } = SyscallNo::kLogEvent.0 as i32,
-    // case kGetAuthClaimCount:
-    //   SyscallGetAuthClaimCountTrace get_auth_claim_count;
-    kGetAuthClaimCount { get_auth_claim_count: SyscallGetAuthClaimCountTrace } = SyscallNo::kGetAuthClaimCount.0 as i32,
     // case kGetAuthClaim:
     //   SyscallGetAuthClaimTrace get_auth_claim;
     kGetAuthClaim { get_auth_claim: SyscallGetAuthClaimTrace } = SyscallNo::kGetAuthClaim.0 as i32,
@@ -1126,12 +1065,9 @@ pub enum SyscallTraceBody {
     // case kSHA256Finalize:
     //   SyscallSHA256FinalizeTrace sha256_finalize;
     kSHA256Finalize { sha256_finalize: SyscallSHA256FinalizeTrace } = SyscallNo::kSHA256Finalize.0 as i32,
-    // case kWriteAddressNonceConfig:
-    //   SyscallWriteAddressNonceConfigTrace write_address_nonce_config;
-    kWriteAddressNonceConfig { write_address_nonce_config: SyscallWriteAddressNonceConfigTrace } = SyscallNo::kWriteAddressNonceConfig.0 as i32,
-    // case kWriteAddressGasPermissionConfigs:
-    //   SyscallWriteAddressGasPermissionConfigsTrace write_address_gas_permission_configs;
-    kWriteAddressGasPermissionConfigs { write_address_gas_permission_configs: SyscallWriteAddressGasPermissionConfigsTrace } = SyscallNo::kWriteAddressGasPermissionConfigs.0 as i32,
+    // case kWriteAddressRequiredWeight:
+    //   SyscallWriteAddressRequiredWeightTrace write_address_required_weight;
+    kWriteAddressRequiredWeight { write_address_required_weight: SyscallWriteAddressRequiredWeightTrace } = SyscallNo::kWriteAddressRequiredWeight.0 as i32,
     // case kGetBlockHeight:
     //   SyscallGetBlockHeightTrace get_block_height;
     kGetBlockHeight { get_block_height: SyscallGetBlockHeightTrace } = SyscallNo::kGetBlockHeight.0 as i32,
