@@ -38,8 +38,7 @@ use ::serde_arrays;
 // can begin execution in a given block.
 //
 // In Groundhog, every address can originate transactions and can be configured
-// with multiple signing keys, weighted multi-signature requirements, and
-// gas sponsorship permissions.
+// with multiple signing keys and weighted multi-signature requirements.
 //
 // TODO(geoff): give an example of what that might look like here.
 //
@@ -115,47 +114,6 @@ impl DerefMut for PublicKeyConfigOpt {
 }
 
 //------------------------------------------------------------------------------
-// Gas Permission Configuration
-//------------------------------------------------------------------------------
-
-/// Configuration for gas sponsorship permissions.
-///
-/// Allows an address to grant specific keys permission to spend gas
-/// on behalf of the address, with configurable limits and multi-sig requirements.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct GasPermissionConfig {
-    /// Maximum amount of gas that can be spent under this permission.
-    pub limit: GasAmount,
-    /// Bitmap of keys that are acceptable for this gas permission.
-    pub accepted_keys: BitMap,
-    /// Total weight required from the accepted keys to use this permission.
-    pub required_weight: Weight,
-}
-
-//------------------------------------------------------------------------------
-// Nonce Configuration
-//------------------------------------------------------------------------------
-
-/// Configuration for transaction nonce management.
-///
-/// Specifies which keys can increment the nonce and what weight is required.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct NonceConfig {
-    /// Bitmap of keys that can contribute to nonce operations.
-    pub accepted_keys: BitMap,
-    /// Total weight required to increment the nonce.
-    pub required_weight: Weight,
-}
-
-//------------------------------------------------------------------------------
 // Default Initialization Values
 //------------------------------------------------------------------------------
 
@@ -184,8 +142,7 @@ pub const kDefaultNewAddressKeyID : u32 = 0;
 /// This struct stores all the information needed to verify transactions
 /// originating from an address:
 /// - The set of public keys and their weights
-/// - Gas sponsorship permissions
-/// - Nonce management rules
+/// - The minimum weight threshold required to authorize a transaction
 ///
 /// When a transaction is submitted, its `AuthClaims` are verified against
 /// this data to determine if the transaction is properly authorized.
@@ -208,12 +165,9 @@ pub struct AddressAuthData {
     ///
     /// Null entries indicate unoccupied key slots.
     pub public_keys: [PublicKeyConfigOpt; kMaxSigners as usize],
-    /// Gas permission configurations.
-    ///
-    /// Allows separation of concerns (e.g., sponsored gas vs contract owner management).
-    pub gas_permissions: VecM<GasPermissionConfig, kMaxGasConfigs>,
-    /// Configuration for nonce management.
-    pub nonce_config: NonceConfig,
+    /// The minimum total weight required from signing keys to authorize
+    /// a transaction from this address.
+    pub required_weight: Weight,
     /// The block height at which this auth data was last modified.
     ///
     /// # TODO

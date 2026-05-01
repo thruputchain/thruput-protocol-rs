@@ -58,8 +58,8 @@ impl ExecResult {
     // and indicate a block validation failure.
     pub const ExecResultTxNonDeterministicError: Self = Self(3);
 
-    // One or more [GasClaim]s in the transaction were not validated with a
-    // corresponding [sponsor_gas()] system call in a contract.
+    // No longer used. Previously indicated that gas sponsorship claims were
+    // not validated. Retained to avoid renumbering enum values.
     pub const ExecResultFailedGasSponsorship: Self = Self(100);
 
     // Validation on the transaction has failed because the attached validation

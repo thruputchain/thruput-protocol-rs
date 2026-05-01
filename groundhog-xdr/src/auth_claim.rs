@@ -34,24 +34,25 @@ use ::serde_arrays;
 // Authentication Claims
 //
 // This module defines the authorization model for Groundhog transactions.
-// Each transaction includes a set of AuthClaims that specify which signatures
+// Each transaction includes an AuthClaim that specifies which signatures
 // are required to authorize the transaction's execution.
 //
 // Workflow:
-// 1. A user constructs a Transaction, which includes some number of AuthClaims.
+// 1. A user constructs a Transaction, which includes an AuthClaim.
 // 2. Signatures are added to create a SignedTransaction
-// 3. Groundhog verifies that signatures match the auth claims (before execution)
-// 4. During execution, contracts can read the auth claims but NOT the signatures
+// 3. Groundhog verifies that signatures match the AuthClaim (before execution)
+// 4. During execution, contracts can read the AuthClaim and relevant compressed metadata,
+// (such as which keys were used to authorize the transaction), but not the actual signatures.
 //
-// This design ensures transaction behavior depends only on the auth claims
+// This design ensures transaction behavior depends only on the AuthClaim
 // (which are included in what gets signed), not on the signature bytes themselves.
 // This makes transactions signature-scheme agnostic and prevents signature
 // reordering or re-randomization from changing transaction behavior.
 //
-// The authentication model supports:
-// - Single-signature authorization (one specific key must sign)
-// - Multi-signature authorization (weighted threshold of keys must sign)
-// - Cross-contract authorization (signatures from other contract addresses)
+// The authentication model supports two claim types:
+// - Source address auth data: the transaction is signed by the keys in the source address's auth data.
+//   and the account stores per-key weights and a minimum threshold
+// - Pubkey signature: a standalone public key signs the transaction
 //
 // Auth claims reference AddressAuthData stored at each contract address,
 // which defines the available keys and their weights.
@@ -91,27 +92,11 @@ pub type KeyID = u32;
 // 
 pub const kMaxSigners : u32 = 21;
 
-/// Maximum number of gas permission configurations per address.
-///
-/// Multiple configs allow separation of concerns (e.g., sponsored gas vs
-/// contract owner management operations).
-// 
-pub const kMaxGasConfigs : u32 = 5;
-
-/// Maximum number of auth claims allowed in a single transaction.
-///
-/// This limits the verification complexity of a transaction.
-pub const kMaxAuthClaims : u32 = 10;
-
 //------------------------------------------------------------------------------
 // Auth Claim Types
 //------------------------------------------------------------------------------
 
 /// Discriminator for the different types of authorization claims.
-///
-/// Claims are categorized by:
-/// 1. Whether they reference the invoked contract or another contract
-/// 2. Whether they require a single signature or weighted multi-sig
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
@@ -122,32 +107,16 @@ pub const kMaxAuthClaims : u32 = 10;
 pub struct AuthClaimType(pub i32);
 
 impl AuthClaimType {
-    /// Requires a signature from a specific key on the invoked contract address.
-    ///
-    /// This is the simplest and most common authorization pattern.
-    pub const kInvokedAddressSignature: Self = Self(0);
+    /// Requires a set of signatures from the source address's auth data.
+    /// The runtime checks whether there are sufficient signatures associated with the address
+    /// to satisfy the address auth data's required weight.
+    // TODO(geoff): consider surfacing the data about which keys signed in a syscall.
+    pub const kSourceAddressAuthData: Self = Self(0);
 
-    /// Requires a weighted threshold of signatures from the invoked contract.
+    /// Requires a signature from a specific public key.
     ///
-    /// The bitmap specifies which keys are acceptable, and signatures are
-    /// accumulated until the `required_weight` threshold is met.
-    pub const kInvokedAddressSignedWeight: Self = Self(1);
-
-    /// Requires a signature from a specific key on a different contract address.
-    ///
-    /// Used for cross-contract authorization (e.g., a contract authorizing
-    /// operations on behalf of another contract).
-    pub const kOtherAddressSignature: Self = Self(2);
-
-    /// Requires a weighted threshold of signatures from a different contract.
-    ///
-    /// Combines cross-contract auth with multi-signature requirements.
-    pub const kOtherAddressSignedWeight: Self = Self(3);
-
-    /// Requires a signature from a specific key
-    ///
-    /// XXX
-    pub const kPubkeySignature: Self = Self(4);
+    /// Used for accounts identified by a pubkey preimage (pubkey + nonce).
+    pub const kPubkeySignature: Self = Self(1);
 }
 impl From<i32> for AuthClaimType {
     fn from(v: i32) -> Self {
@@ -158,17 +127,8 @@ impl From<i32> for AuthClaimType {
 impl core::fmt::Display for AuthClaimType {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::kInvokedAddressSignature.0 => {
-                write!(f, "AuthClaimType::kInvokedAddressSignature")
-            },
-            x if x == Self::kInvokedAddressSignedWeight.0 => {
-                write!(f, "AuthClaimType::kInvokedAddressSignedWeight")
-            },
-            x if x == Self::kOtherAddressSignature.0 => {
-                write!(f, "AuthClaimType::kOtherAddressSignature")
-            },
-            x if x == Self::kOtherAddressSignedWeight.0 => {
-                write!(f, "AuthClaimType::kOtherAddressSignedWeight")
+            x if x == Self::kSourceAddressAuthData.0 => {
+                write!(f, "AuthClaimType::kSourceAddressAuthData")
             },
             x if x == Self::kPubkeySignature.0 => {
                 write!(f, "AuthClaimType::kPubkeySignature")
@@ -193,51 +153,13 @@ pub struct PubkeyAccountPreimage {
 
 /// An authorization claim specifying what signatures are needed to authorize
 /// a transaction.
-///
-/// Each transaction includes one or more auth claims. During verification,
-/// the signatures in the `SignedTransaction` are matched against these claims
-/// to determine if the transaction is properly authorized.
-///
-/// The four variants support different authorization patterns:
-/// - Single key from invoked contract (most common)
-/// - Multi-sig from invoked contract (for high-security operations)
-/// - Single key from other contract (for delegation)
-/// - Multi-sig from other contract (for complex delegated operations)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct AuthClaim_invoked_address_signed_weight {
-    /// Bitmap of acceptable keys (bit `i` = 1 means key `i` can contribute).
-    pub accepted_keys: BitMap,
-    /// Total weight required from the accepted keys' signatures.
-    pub required_weight: Weight,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct AuthClaim_other_address_signature_id {
-    /// The contract address whose key must sign.
-    pub address: ContractAddress,
-    /// The ID of the key from that address's key set.
-    pub key_id: KeyID,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct AuthClaim_other_address_signed_weight {
-    /// The contract address whose keys must sign.
-    pub address: ContractAddress,
-    /// Bitmap of acceptable keys from that address's key set.
-    pub accepted_keys: BitMap,
-    /// Total weight required from the accepted keys' signatures.
+pub struct AuthClaim_source_address_claim {
+    pub allowed_keys: BitMap,
     pub required_weight: Weight,
 }
 
@@ -248,30 +170,16 @@ pub struct AuthClaim_other_address_signed_weight {
 #[repr(i32)]
 #[non_exhaustive]
 pub enum AuthClaim {
-    /// The ID of the key that must sign, from the invoked address's key set.
-    // case kInvokedAddressSignature:
-    //   KeyID invoked_address_signature_id;
-    kInvokedAddressSignature { invoked_address_signature_id: KeyID } = AuthClaimType::kInvokedAddressSignature.0 as i32,
-    // case kInvokedAddressSignedWeight:
-    //   invoked_address_signed_weight invoked_address_signed_weight;
-    kInvokedAddressSignedWeight { invoked_address_signed_weight: AuthClaim_invoked_address_signed_weight } = AuthClaimType::kInvokedAddressSignedWeight.0 as i32,
-    // case kOtherAddressSignature:
-    //   other_address_signature_id other_address_signature_id;
-    kOtherAddressSignature { other_address_signature_id: AuthClaim_other_address_signature_id } = AuthClaimType::kOtherAddressSignature.0 as i32,
-    // case kOtherAddressSignedWeight:
-    //   other_address_signed_weight other_address_signed_weight;
-    kOtherAddressSignedWeight { other_address_signed_weight: AuthClaim_other_address_signed_weight } = AuthClaimType::kOtherAddressSignedWeight.0 as i32,
+    /// The transaction is signed by the keys in the source address's auth data.
+    /// The bitmap specifies which are allowed to be used to sign the transaction.
+    // case kSourceAddressAuthData:
+    //   source_address_claim source_address_claim;
+    kSourceAddressAuthData { source_address_claim: AuthClaim_source_address_claim } = AuthClaimType::kSourceAddressAuthData.0 as i32,
     // case kPubkeySignature:
     //   PubkeyAccountPreimage pubkey_preimage;
     kPubkeySignature { pubkey_preimage: PubkeyAccountPreimage } = AuthClaimType::kPubkeySignature.0 as i32,
     
 }
-
-/// A list of auth claims for a transaction.
-///
-/// Each transaction must include at least one auth claim to be valid.
-/// The list is bounded by `kMaxAuthClaims` to limit verification complexity.
-pub type AuthClaimData = VecM::<AuthClaim, kMaxAuthClaims>;
 
 //------------------------------------------------------------------------------
 // Auth Verification Error Codes
@@ -301,8 +209,6 @@ impl AuthVerifyErrorCode {
     /// Transactions with this error should never be flooded over the network
     /// as they are structurally invalid. Examples include:
     /// - Public key IDs that are out of bounds
-    /// - Invalid bitmaps (bits set beyond kMaxSigners)
-    /// - Mismatched signature counts
     pub const kAuthMalformed: Self = Self(1);
 
     /// Cryptographic signature verification failed.
@@ -318,7 +224,6 @@ impl AuthVerifyErrorCode {
     /// that do not exist or do not satisfy the requirements. Examples include:
     /// - Referencing a public key ID that doesn't exist in the auth data
     /// - Failing to meet required weight thresholds
-    /// - Insufficient gas permissions for the claimed sponsorship
     pub const kAuthDataMismatch: Self = Self(3);
 }
 impl From<i32> for AuthVerifyErrorCode {
