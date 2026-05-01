@@ -750,9 +750,8 @@ pub struct SyscallLogEventTrace {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallGetAuthClaimInputs {
-    pub index: u32,
-}
+pub struct SyscallGetAuthClaimInputs (
+);
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
