@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "Cleaning up .gitconfig"
           rm -f /home/hogci/.gitconfig
-      - uses: webfactory/ssh-agent@v0.9.1
+      - uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
@@ -30,7 +30,7 @@ jobs:
             ${{ secrets.PROTOCOL_RS_TO_XDR_COMMON }}
             ${{ secrets.PROTOCOL_RS_TO_XDR_RPC }}
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Setup environment

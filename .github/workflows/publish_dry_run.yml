@@ -17,13 +17,13 @@ jobs:
             echo "Cleaning up .gitconfig"
             rm -f /home/hogci/.gitconfig
       - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.9.1
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.ACTIONS_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configure git to use SSH
         run: |
