@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa6e8c614a824e73c3e9dd1fe0e5a478096c3fce
+// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -33,6 +33,7 @@ use ::serde_arrays;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct TxInfo {
@@ -45,6 +46,7 @@ pub struct TxInfo {
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -81,6 +83,7 @@ impl core::fmt::Display for TxInfoOutcome {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum TxInfoResult {
@@ -116,6 +119,7 @@ pub type ContractAddressList = VecM::<ContractAddress, kMaxContractAddressesPerE
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct EventTopicFilter {
@@ -133,6 +137,7 @@ pub struct EventTopicFilter {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct EventFilter {
@@ -148,6 +153,7 @@ pub type EventFilterList = VecM::<EventFilter, kMaxEventFiltersPerQuery>;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct EventQuery {
@@ -166,6 +172,7 @@ pub struct EventQuery {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct EventPage {
@@ -193,6 +200,7 @@ pub struct EventPage {
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -380,6 +388,7 @@ impl IndexerEvent_IndexerEvent1_Client {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IndexerCard {

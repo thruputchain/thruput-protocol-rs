@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa6e8c614a824e73c3e9dd1fe0e5a478096c3fce
+// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -33,6 +33,7 @@ use ::serde_arrays;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ParallelBatch {
@@ -45,6 +46,7 @@ pub struct ParallelBatch {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -82,6 +84,7 @@ impl DerefMut for ParallelSignedTransactionBatch {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -119,6 +122,7 @@ impl DerefMut for ParallelSignedTransactionHashBatch {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]

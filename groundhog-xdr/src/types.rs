@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa6e8c614a824e73c3e9dd1fe0e5a478096c3fce
+// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -34,6 +34,7 @@ use ::serde_arrays;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct uint128_xdr {
@@ -46,6 +47,7 @@ pub struct uint128_xdr {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct int128_xdr {
@@ -59,6 +61,7 @@ pub struct int128_xdr {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -163,6 +166,22 @@ impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for Ed25519Signature {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "Ed25519Signature".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 128,
+            "maxLength": 128
+        })
+    }
+}
+
 
 
 // 
@@ -222,6 +241,22 @@ impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
       let val = Self::from(arr);
       Ok(val)
   }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for Ed25519PublicKey {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "Ed25519PublicKey".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
 }
 
 
@@ -284,6 +319,22 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for Ed25519SecretKey {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "Ed25519SecretKey".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 128,
+            "maxLength": 128
+        })
+    }
+}
+
 
 
 /// Represents the cryptographic scheme used for a signature or public key.
@@ -291,6 +342,7 @@ impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -324,6 +376,7 @@ impl core::fmt::Display for CryptographicScheme {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Signature {
@@ -338,6 +391,7 @@ pub enum Signature {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum PublicKey {
@@ -352,6 +406,7 @@ pub enum PublicKey {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum SecretKey {
@@ -372,6 +427,7 @@ pub enum SecretKey {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExtensionPoint {
@@ -440,6 +496,22 @@ impl<'r> ReadXDR<'r> for &'r SHA256Hash {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for SHA256Hash {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "SHA256Hash".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
+}
+
 
 
 /// Hash of the groundhog database contents.
@@ -502,6 +574,22 @@ impl<'r> ReadXDR<'r> for &'r DbHash {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for DbHash {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "DbHash".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 4096,
+            "maxLength": 4096
+        })
+    }
+}
+
 
 
 /// Hash of a groundhog block of transactions
@@ -509,6 +597,7 @@ impl<'r> ReadXDR<'r> for &'r DbHash {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -603,6 +692,22 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for ContractAddress {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "ContractAddress".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
+}
+
 
 
 /// Each ContractAddress owns a namespace of storage keys.
@@ -618,6 +723,7 @@ impl<'r> ReadXDR<'r> for &'r ContractAddress {
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -744,6 +850,22 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
   }
 }
 
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for StorageKeyContractData {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "StorageKeyContractData".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
+}
+
 
 
 /// Union of a StorageKey type over the various storage key types.
@@ -751,6 +873,7 @@ impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum StorageKey {
@@ -783,6 +906,7 @@ pub const kHogDivisibility : u32 = 10_000_000;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AddressAndKey {
@@ -798,6 +922,7 @@ pub struct AddressAndKey {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]

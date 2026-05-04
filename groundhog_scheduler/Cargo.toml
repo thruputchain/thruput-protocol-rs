@@ -29,12 +29,13 @@ serde = [
 
 [dependencies]
 async-trait = "0.1.89"
-groundhog-xdr = { workspace = true, features = ["std", "xdrs"] }
+groundhog-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
 groundhog_coordinator = { workspace = true, features = ["std"] }
-xdrs = { workspace = true, features = ["derive", "alloc"] }
+xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
 xdr-common = { workspace = true }
 rpc_driver = { workspace = true }
 
+schemars = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }
 serde_with = { workspace = true, optional = true }
 serde_arrays = { workspace = true, optional = true }

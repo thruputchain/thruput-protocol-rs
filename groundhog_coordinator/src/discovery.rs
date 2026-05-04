@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa6e8c614a824e73c3e9dd1fe0e5a478096c3fce
+// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -85,6 +85,21 @@ impl<'r> ReadXDR<'r> for &'r ValidatorID {
   }
 }
 
+impl schemars::JsonSchema for ValidatorID {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "ValidatorID".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
+}
+
 
 
 pub type ValidatorPublicKey = Ed25519PublicKey;
@@ -94,6 +109,7 @@ pub type ValidatorSecretKey = Ed25519SecretKey;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorPublicInfo {
@@ -104,6 +120,7 @@ pub struct ValidatorPublicInfo {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorPrivateInfo {
@@ -114,6 +131,7 @@ pub struct ValidatorPrivateInfo {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct QuorumSetSnapshot {
@@ -124,6 +142,7 @@ pub struct QuorumSetSnapshot {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SignedQuorumSetSnapshot {
@@ -135,6 +154,7 @@ pub struct SignedQuorumSetSnapshot {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ValidatorInfoSnapshot {
@@ -145,6 +165,7 @@ pub struct ValidatorInfoSnapshot {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SignedValidatorInfoSnapshot {
@@ -156,6 +177,7 @@ pub struct SignedValidatorInfoSnapshot {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct KnownQuorumSets {
