@@ -191,6 +191,7 @@ pub enum ContractType {
     // case Address:
     //   void;
     Address = ContractTypeKind::Address.0 as i32,
+    // Cannot be null; uses pointer indirection to make type constructible.
     // #[rust(box_ptr)]
     // case Option:
     //   Option<Box<ContractType>> option_inner;
