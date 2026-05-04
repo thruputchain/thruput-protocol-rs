@@ -37,9 +37,7 @@ use ::serde_arrays;
 #[repr(C)]
 pub struct MissingTransactions {
     pub transaction_hashes: VecM<SignedTransactionHash>,
-    pub height: BlockHeight,
-    pub cv_hash: ConsensusValueHash,
-    pub block_hash: BlockHash,
+    pub cue: ConsensusValueCue,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -70,7 +68,7 @@ pub trait Repair_Repair1: Send + Sync {
     
     async fn repair_missing_txs(&self, arg0 : MissingTransactionsEnvelope) -> Result<RepairedTransactions, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_cv(&self, arg0 : ConsensusValueHash, arg1 : BlockHeight) -> Result<OptConsensusValue, ::rpc_driver::ProgramError>;
+    async fn repair_missing_cv(&self, arg0 : ConsensusValueCue) -> Result<OptConsensusValue, ::rpc_driver::ProgramError>;
     
     async fn repair_missing_scp_envelopes(&self, arg0 : SCPSlotIndex) -> Result<SCPEnvelopes, ::rpc_driver::ProgramError>;
 }
@@ -110,9 +108,9 @@ impl ::rpc_driver::handler::RpcHandler for Repair_Repair1_Dispatcher {
             }
             // repair_missing_cv
             20 => {
-                let args: (ConsensusValueHash, BlockHeight, ) =
+                let args: (ConsensusValueCue, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_cv(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_cv(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_scp_envelopes
@@ -150,8 +148,8 @@ impl Repair_Repair1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_cv(&self, arg0 : &ConsensusValueHash, arg1 : &BlockHeight) -> Result<OptConsensusValue, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn repair_missing_cv(&self, arg0 : &ConsensusValueCue) -> Result<OptConsensusValue, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
