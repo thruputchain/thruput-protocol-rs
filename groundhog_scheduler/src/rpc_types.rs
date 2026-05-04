@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fa6e8c614a824e73c3e9dd1fe0e5a478096c3fce
+// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -36,6 +36,7 @@ pub type BlockID = u64;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DbTip {
@@ -59,6 +60,7 @@ pub type TransactionID = u64;
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -129,6 +131,7 @@ impl core::fmt::Display for RPCError {
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
@@ -167,6 +170,7 @@ pub type StorageCost = int128_xdr;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedStorageCost {
@@ -183,6 +187,7 @@ pub enum ExpectedStorageCost {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedContract {
@@ -198,6 +203,7 @@ pub enum ExpectedContract {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedDeployment {
@@ -213,6 +219,7 @@ pub enum ExpectedDeployment {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedProposalData {
@@ -228,6 +235,7 @@ pub enum ExpectedProposalData {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedRetrocausalQueueBlock {
@@ -243,6 +251,7 @@ pub enum ExpectedRetrocausalQueueBlock {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedQueueEntry {
@@ -258,6 +267,7 @@ pub enum ExpectedQueueEntry {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
+#[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ExpectedDBTip {

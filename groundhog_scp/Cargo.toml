@@ -29,6 +29,9 @@ serde = [
 [dependencies]
 async-trait = "0.1.89"
 
+[dependencies.schemars]
+workspace = true
+
 [dependencies.serde]
 optional = true
 version = "1.0.219"
@@ -47,11 +50,11 @@ features = []
 
 [dependencies.groundhog-xdr]
 workspace = true
-features = ["std", "xdrs"]
+features = ["std", "xdrs", "schema"]
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "int128", "ns", "alloc"]
+features = ["derive", "int128", "ns", "alloc", "schemars"]
 
 [dependencies.rpc_driver]
 workspace = true
