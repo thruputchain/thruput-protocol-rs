@@ -31,7 +31,7 @@ std = ["alloc"]
 serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde", "serde_arrays/alloc"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
-schema = ["dep:schemars", "xdrs/schemars"]
+schema = ["dep:schemars", "xdrs/schemars", "std"]
 syscalls = ["dep:thiserror"]
 syscalls_mock = ["syscalls", "std"]                             # required for native_exec integration
 
