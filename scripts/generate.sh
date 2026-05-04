@@ -164,6 +164,14 @@ for sched in "${schedulers[@]}"; do
   generate_rpc "protocol/${sched}" "groundhog_scheduler"
 done
 
+db_gateways=(
+  db_gateway.x
+)
+
+for dg in "${db_gateways[@]}"; do
+  generate_rpc "protocol/${dg}" "groundhog_db_gateway"
+done
+
 # Generate protocol version constant from the checked-out protocol submodule revision.
 PROTOCOL_HASH=$(git -C protocol rev-parse --short=12 HEAD)
 echo "-- Generating protocol version: hogp/${PROTOCOL_HASH} --" >&2
