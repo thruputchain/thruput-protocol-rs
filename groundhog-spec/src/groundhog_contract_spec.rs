@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 076d53880b71d9063d5455fe857591448b4f0fb8
+// Generated from xdrc commit: b516a2309c47d23e003572fcd5df7834a31d42e9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -85,6 +85,7 @@ impl ContractTypeKind {
     pub const Named: Self = Self(14);
     pub const U8: Self = Self(15);
     pub const Array: Self = Self(16);
+    pub const SignedToken: Self = Self(17);
 }
 impl From<i32> for ContractTypeKind {
     fn from(v: i32) -> Self {
@@ -146,6 +147,9 @@ impl core::fmt::Display for ContractTypeKind {
             x if x == Self::Array.0 => {
                 write!(f, "ContractTypeKind::Array")
             },
+            x if x == Self::SignedToken.0 => {
+                write!(f, "ContractTypeKind::SignedToken")
+            },
             _ => {
                 write!(f, "ContractTypeKind({})", self.0)
             }
@@ -195,11 +199,10 @@ pub enum ContractType {
     // case Address:
     //   void;
     Address = ContractTypeKind::Address.0 as i32,
-    // Cannot be null; uses pointer indirection to make type constructible.
-    // #[rust(box_ptr)]
+    // #[rust(box_ptr)], #[cpp(box)]
     // case Option:
-    //   Option<Box<ContractType>> option_inner;
-    Option { option_inner: Option<Box<ContractType>> } = ContractTypeKind::Option.0 as i32,
+    //   Box<ContractType> option_inner;
+    Option { option_inner: Box<ContractType> } = ContractTypeKind::Option.0 as i32,
     // case Vector:
     //   ContractVectorType vector;
     Vector { vector: ContractVectorType } = ContractTypeKind::Vector.0 as i32,
@@ -215,7 +218,25 @@ pub enum ContractType {
     // case Array:
     //   ContractArrayType array;
     Array { array: ContractArrayType } = ContractTypeKind::Array.0 as i32,
+    // case SignedToken:
+    //   ContractSignedTokenPreimage signed_token_preimage;
+    SignedToken { signed_token_preimage: ContractSignedTokenPreimage } = ContractTypeKind::SignedToken.0 as i32,
     
+}
+
+// ---------------------------------------------------------------------------
+// SignedTokenPreimage (Rust: SignedTokenPreimage)
+// ---------------------------------------------------------------------------
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractSignedTokenPreimage {
+    // #[rust(box_ptr)], #[cpp(box)]
+    pub preimage_type: Box<ContractType>,
 }
 
 // ---------------------------------------------------------------------------
