@@ -1054,6 +1054,7 @@ pub struct SyscallConsumeAuthTokenInputs {
 #[repr(C)]
 pub struct SyscallConsumeAuthTokenOutputs {
     pub payload: AuthTokenPayload,
+    pub token_minter: ContractAddress,
     pub auth_payload_written_len: RuntimeMemoryLength,
     pub unwrapped_token_id_start: u32,
     pub unwrapped_token_id_count: u32,
