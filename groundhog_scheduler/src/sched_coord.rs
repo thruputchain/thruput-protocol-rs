@@ -162,6 +162,11 @@ impl SchedulerValidationOutcome {
     pub const SchedulerValidationExecutorFailed: Self = Self(4);
     pub const SchedulerValidationTooLateToValidate: Self = Self(5);
     pub const SchedulerValidationUnknownParentBlock: Self = Self(6);
+
+    // Nomination batch metadata is malformed or fails to decode (e.g.
+    // segment token/byte counts are inconsistent, XDR deserialization
+    // fails, or tx_hashes/tx_nominations counts do not match).
+    pub const SchedulerValidationMalformed: Self = Self(7);
 }
 impl From<i32> for SchedulerValidationOutcome {
     fn from(v: i32) -> Self {
@@ -192,6 +197,9 @@ impl core::fmt::Display for SchedulerValidationOutcome {
             },
             x if x == Self::SchedulerValidationUnknownParentBlock.0 => {
                 write!(f, "SchedulerValidationOutcome::SchedulerValidationUnknownParentBlock")
+            },
+            x if x == Self::SchedulerValidationMalformed.0 => {
+                write!(f, "SchedulerValidationOutcome::SchedulerValidationMalformed")
             },
             _ => {
                 write!(f, "SchedulerValidationOutcome({})", self.0)
@@ -231,12 +239,14 @@ pub enum SchedulerValidationResult {
     // case SchedulerValidationInvalid:
     // case SchedulerValidationTooLateToValidate:
     // case SchedulerValidationUnknownParentBlock:
+    // case SchedulerValidationMalformed:
     //   void;
     SchedulerValidationDbFailed = SchedulerValidationOutcome::SchedulerValidationDbFailed.0 as i32,
     SchedulerValidationExecutorFailed = SchedulerValidationOutcome::SchedulerValidationExecutorFailed.0 as i32,
     SchedulerValidationInvalid = SchedulerValidationOutcome::SchedulerValidationInvalid.0 as i32,
     SchedulerValidationTooLateToValidate = SchedulerValidationOutcome::SchedulerValidationTooLateToValidate.0 as i32,
     SchedulerValidationUnknownParentBlock = SchedulerValidationOutcome::SchedulerValidationUnknownParentBlock.0 as i32,
+    SchedulerValidationMalformed = SchedulerValidationOutcome::SchedulerValidationMalformed.0 as i32,
     
 }
 
