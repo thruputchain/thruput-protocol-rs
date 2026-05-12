@@ -21,4 +21,4 @@ pub use scp_handle::*;
 
 #[rustfmt::skip]
 pub mod network;
-pub use network::*;
+pub use crate::network::*;

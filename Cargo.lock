@@ -207,6 +207,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "groundhog-koordinator"
+version = "0.12.2"
+dependencies = [
+ "async-trait",
+ "groundhog-serde_arrays",
+ "groundhog-xdr",
+ "groundhog_scp",
+ "rpc_driver",
+ "schemars 1.2.0",
+ "serde",
+ "serde_with",
+ "xdrs",
+]
+
+[[package]]
 name = "groundhog-serde_arrays"
 version = "0.2.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"

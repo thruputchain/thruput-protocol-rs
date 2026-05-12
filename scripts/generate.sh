@@ -49,6 +49,35 @@ coordinators=(
   dogwood.x
 )
 
+# dependencies for the wip rust coordinator
+koordinators=(
+  address_auth.x
+  auth_claim.x
+  batch.x
+  catchup.x
+  config.x
+  consensus.x
+  coord_sched.x
+  db_sched.x
+  discovery.x
+  dogwood_kit.x
+  dogwood.x
+  integration.x
+  precompiles.x
+  contract.x
+  genesis.x
+  loadgen.x
+  multiplex.x
+  nomination.x
+  parallel.x
+  repair.x
+  retrocausal_queue.x
+  rpc_types.x
+  sched_coord.x
+  storage_cost.x
+  transaction.x
+)
+
 hogxs=(
     port.x
     hogx_agent.x
@@ -120,6 +149,10 @@ done
 
 for coordinator in "${coordinators[@]}"; do
   generate_rpc "protocol/${coordinator}" "groundhog_coordinator"
+done
+
+for koordinator in "${koordinators[@]}"; do
+  generate_rpc "protocol/${koordinator}" "groundhog-koordinator"
 done
 
 for hogx in "${hogxs[@]}"; do
