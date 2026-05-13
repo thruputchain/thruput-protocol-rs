@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ca84ca7f43039d74b7bb3e1dfd7a32766d798d77
+// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -40,7 +40,7 @@ pub type ContractSpecString = StringM;
 #[repr(C)]
 pub struct ContractArrayType {
     // #[rust(box_ptr)]
-    pub element: Option<Box<ContractType>>,
+    pub element: Box<ContractType>,
     pub len: u32,
 }
 
@@ -52,7 +52,7 @@ pub struct ContractArrayType {
 #[repr(C)]
 pub struct ContractVectorType {
     // #[rust(box_ptr)]
-    pub element: Option<Box<ContractType>>,
+    pub element: Box<ContractType>,
     pub max_len: u32,
 }
 

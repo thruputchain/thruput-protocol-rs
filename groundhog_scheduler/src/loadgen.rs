@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ca84ca7f43039d74b7bb3e1dfd7a32766d798d77
+// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -173,7 +173,7 @@ pub enum LoadgenResult {
     kLoadgenRPCErrorOK { success: LoadgenSuccessResult } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -189,7 +189,7 @@ pub enum LoadgenExtensionResult {
     kLoadgenRPCErrorOK { success: LoadgenExtension } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    Default { error: i32 },
 }
 
 
