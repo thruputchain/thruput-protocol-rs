@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -106,7 +106,7 @@ pub enum HogAgeResult {
     DbSchedResultOK { hog_age: HogAge } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    Default { result: i32 },
+    #[xdr(default_variant)] Default { result: i32 },
 }
 
 pub type HogAgeResults = VecM::<HogAgeResult>;
@@ -124,7 +124,7 @@ pub enum DbAddressAuthDataBatchResult {
     DbSchedResultOK { address_auth_data_batch: VecM<AddressAuthData> } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    Default { result: i32 },
+    #[xdr(default_variant)] Default { result: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -140,7 +140,7 @@ pub enum DbBlockResult {
     DbSchedResultOK { db_hash: DbHash } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    Default { result: i32 },
+    #[xdr(default_variant)] Default { result: i32 },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -189,7 +189,7 @@ pub enum DbTipResult {
     DbSchedResultOK { db_tip: DbTip } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    Default { result: i32 },
+    #[xdr(default_variant)] Default { result: i32 },
 }
 
 

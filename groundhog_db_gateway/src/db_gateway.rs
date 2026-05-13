@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -54,7 +54,7 @@ pub enum DbGatewayItemResult {
     kRPCNone { item: WireStorageItem } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 pub type DbGatewayItemBatch = VecM::<DbGatewayItemResult>;
@@ -87,7 +87,7 @@ pub enum DbGatewayResult {
     kRPCNone { payload: DbGatewayPayload } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

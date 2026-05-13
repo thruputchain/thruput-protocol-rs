@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -179,7 +179,7 @@ pub enum ExpectedStorageCost {
     kRPCNone { storage_cost: StorageCost } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 // Is this the XDR pattern we want?
@@ -196,7 +196,7 @@ pub enum ExpectedContract {
     kRPCNone { contract: Contract } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -212,7 +212,7 @@ pub enum ExpectedDeployment {
     kRPCNone { deployed_hash: DeployedContractHash } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -228,7 +228,7 @@ pub enum ExpectedProposalData {
     kRPCNone { proposal_data: NondeterministicProposalData } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -244,7 +244,7 @@ pub enum ExpectedRetrocausalQueueBlock {
     kRPCNone { queue_block: RetrocausalQueueBlock } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -260,7 +260,7 @@ pub enum ExpectedQueueEntry {
     kRPCNone { queue_entry: QueueEntry } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -276,7 +276,7 @@ pub enum ExpectedDBTip {
     kRPCNone { db_tip: DbTip } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 },
 }
 
 /// Typedef for a list of contract addresses.

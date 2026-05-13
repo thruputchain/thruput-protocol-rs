@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -92,7 +92,7 @@ pub enum TxInfoResult {
     TxInfoFound { info: TxInfo } = TxInfoOutcome::TxInfoFound.0 as i32,
     // default:
     //   void;
-    Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 },
 }
 
 pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
