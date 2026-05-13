@@ -32,7 +32,7 @@ The `transaction` module provides types and structures for constructing, signing
 
 Groundhog's key innovation is parallel transaction execution. Unlike sequential blockchains, Groundhog executes transactions without observing other transactions' writes. After execution, a two-phase commit process commits writes to the database. If there's a conflict, the entire transaction aborts.
 
-The [`InvokeFlag::kInvokeFlagTryInvoke`] flag enables early conflict detection: when a try_invoke frame finishes, it performs two-phase commit lock acquisition immediately. If any lock fails, the subinvocation frame reverts (but the caller can handle this gracefully).
+The [`InvokeFlag::TryInvoke`] flag enables early conflict detection: when a try_invoke frame finishes, it performs two-phase commit lock acquisition immediately. If any lock fails, the subinvocation frame reverts (but the caller can handle this gracefully).
 
 Since two-phase commit results are nondeterministic, they are captured in [`NondeterministicProposalData`] to ensure validators can deterministically replay the same execution path as the proposer.
 
@@ -40,9 +40,9 @@ Since two-phase commit results are nondeterministic, they are captured in [`Nond
 
 The Invoke syscall supports several flags that modify subinvocation behavior:
 
-- **[`InvokeFlag::kInvokeFlagTryInvoke`]**: Enable early conflict detection for parallel execution
-- **[`InvokeFlag::kInvokeFlagReadOnly`]**: Prevent all state modifications in the subinvocation
-- **[`InvokeFlag::kInvokeFlagDelegateCall`]**: Execute target contract's code in caller's context (not yet implemented)
+- **[`InvokeFlag::TryInvoke`]**: Enable early conflict detection for parallel execution
+- **[`InvokeFlag::ReadOnly`]**: Prevent all state modifications in the subinvocation
+- **[`InvokeFlag::DelegateCall`]**: Execute target contract's code in caller's context (not yet implemented)
 
 Note: [`InvokeFlagSet`] is NOT part of the [`Invocation`] struct itself, but is instead a parameter to the Invoke syscall. The root transaction invocation always has no flags set.
 

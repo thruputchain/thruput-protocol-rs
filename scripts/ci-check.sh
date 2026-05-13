@@ -10,23 +10,42 @@ git submodule update --init --recursive
 
 export RUSTFLAGS="--deny warnings"
 
+LOCKED="--locked"
+if ["$1" == "--unlocked"]; then
+    LOCKED=""
+fi
+
+kargo() {
+    if [ "$1" == "+nightly" ]; then
+        shift
+        cargo +nightly $LOCKED "$@"
+    else
+        cargo $LOCKED "$@"
+    fi
+}
+
 g="-p groundhog-xdr"
-cargo build $g
-cargo build $g -F alloc
-cargo build $g -F std
-cargo build $g -F spec
-cargo build $g -F syscalls
-cargo test $g -F std
+kargo build $g
+kargo build $g -F alloc
+kargo build $g -F std
+kargo build $g -F spec
+kargo build $g -F xdrs
+kargo build $g -F xdrs,syscalls_mock
+kargo test $g -F std
 
-RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
+RUSTDOCFLAGS="--deny warnings --cfg docsrs" \
+    kargo +nightly doc \
+        -p groundhog-xdr \
+        -F syscalls \
+        --no-deps \
 
-cargo build -p groundhog_rpc
-cargo build -p groundhog_scp
-cargo build -p groundhog_coordinator
-cargo build -p groundhog_hogx
+kargo build -p groundhog_rpc
+kargo build -p groundhog_scp
+kargo build -p groundhog_coordinator
+kargo build -p groundhog_hogx
 
-cargo fmt --check
+kargo fmt --check
 
-cargo test -p groundhog_xdr_syscall_tests
+kargo test -p groundhog_xdr_syscall_tests
 
 echo ">> CI clean!"
