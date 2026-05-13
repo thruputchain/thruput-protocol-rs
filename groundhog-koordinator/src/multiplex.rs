@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: bca4204390034cf31ecbfd4ca04619eab347032d
+// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -12,32 +12,28 @@
 #![allow(clippy::unnecessary_cast)]
 
 use crate::*;
-use core::ops::{Deref, DerefMut};
 use core::option::Option;
+use core::ops::{Deref, DerefMut};
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
 use xdrs::*;
 
+
+
 #[cfg(feature = "serde")]
-use ::serde::{Deserialize, Serialize};
+use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
 use ::serde_arrays;
+
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
-#[derive(
-    schemars::JsonSchema,
-    Clone,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-    PartialOrd,
-    Ord,
-    Copy,
-)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
 #[repr(transparent)]
 pub struct MultiplexMessageType(pub i32);
 
@@ -58,19 +54,16 @@ impl core::fmt::Display for MultiplexMessageType {
         match self.0 {
             x if x == Self::MultiplexMessageInvalid.0 => {
                 write!(f, "MultiplexMessageType::MultiplexMessageInvalid")
-            }
+            },
             x if x == Self::MultiplexMessageSubmittedTxs.0 => {
                 write!(f, "MultiplexMessageType::MultiplexMessageSubmittedTxs")
-            }
+            },
             x if x == Self::MultiplexMessageConsensusValue.0 => {
-                write!(
-                    f,
-                    "MultiplexMessageType::MultiplexMessageConsensusValue"
-                )
-            }
+                write!(f, "MultiplexMessageType::MultiplexMessageConsensusValue")
+            },
             x if x == Self::MultiplexMessageSCP.0 => {
                 write!(f, "MultiplexMessageType::MultiplexMessageSCP")
-            }
+            },
             _ => {
                 write!(f, "MultiplexMessageType({})", self.0)
             }
@@ -78,45 +71,42 @@ impl core::fmt::Display for MultiplexMessageType {
     }
 }
 
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
+
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum MultiplexMessage {
     // case MultiplexMessageSubmittedTxs:
     //   SubmittedTransactions submitted;
-    MultiplexMessageSubmittedTxs {
-        submitted: SubmittedTransactions,
-    } = MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
+    MultiplexMessageSubmittedTxs { submitted: SubmittedTransactions } = MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
     // case MultiplexMessageConsensusValue:
     //   ConsensusValue consensus_value;
-    MultiplexMessageConsensusValue {
-        consensus_value: ConsensusValue,
-    } = MultiplexMessageType::MultiplexMessageConsensusValue.0 as i32,
+    MultiplexMessageConsensusValue { consensus_value: ConsensusValue } = MultiplexMessageType::MultiplexMessageConsensusValue.0 as i32,
     // case MultiplexMessageSCP:
     //   SCPEnvelope envelope;
-    MultiplexMessageSCP {
-        envelope: SCPEnvelope,
-    } = MultiplexMessageType::MultiplexMessageSCP.0 as i32,
+    MultiplexMessageSCP { envelope: SCPEnvelope } = MultiplexMessageType::MultiplexMessageSCP.0 as i32,
     // default:
     //   void;
-    Default {
-        r#type: i32,
-    },
+    Default { r#type: i32 },
 }
+
 
 //
 // XDR internals below this point
 //
 
 impl MultiplexMessage {
-    pub fn type_(&self) -> MultiplexMessageType {
+    pub fn r#type(&self) -> MultiplexMessageType {
         match self {
-            MultiplexMessage::Default { r#type } => (*r#type).into(),
+            MultiplexMessage::Default{ r#type } => (*r#type).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
+
+

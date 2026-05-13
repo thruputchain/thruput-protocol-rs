@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: bca4204390034cf31ecbfd4ca04619eab347032d
+// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -530,7 +530,7 @@ pub struct FlaggedStorageDelta {
 //
 
 impl StorageItem {
-    pub fn type_(&self) -> StorageItemType {
+    pub fn r#type(&self) -> StorageItemType {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
@@ -539,7 +539,7 @@ impl StorageItem {
 }
 
 impl WireStorageItem {
-    pub fn type_(&self) -> StorageItemType {
+    pub fn r#type(&self) -> StorageItemType {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
@@ -548,7 +548,7 @@ impl WireStorageItem {
 }
 
 impl StorageDelta {
-    pub fn type_(&self) -> StorageDeltaType {
+    pub fn r#type(&self) -> StorageDeltaType {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),

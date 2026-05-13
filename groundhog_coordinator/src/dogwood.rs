@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: bca4204390034cf31ecbfd4ca04619eab347032d
+// Generated from xdrc commit: a238ec3f5700fe0c9d304af7119641d21be8cc63
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -117,7 +117,7 @@ impl core::fmt::Display for DogwoodTransmissionType {
 #[repr(C)]
 pub struct DogwoodTransmission {
     pub transmission_id: DogwoodTransmissionID,
-    pub type_: DogwoodTransmissionType,
+    pub r#type: DogwoodTransmissionType,
     pub num_payload_bytes: DogwoodInt64,
     pub num_payload_sheaves: DogwoodInt32,
     pub num_parity_sheaves: DogwoodInt32,
