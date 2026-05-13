@@ -11,7 +11,7 @@ git submodule update --init --recursive
 export RUSTFLAGS="--deny warnings"
 
 LOCKED="--locked"
-if ["$1" == "--unlocked"]; then
+if [ "$1" == "--unlocked" ]; then
     LOCKED=""
 fi
 
