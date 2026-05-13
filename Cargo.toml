@@ -46,7 +46,7 @@ groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.13.1", reg
 hogexec-internal = { path = "hogexec-internal", version = "=0.13.1", registry = "groundhog" }
 macros = { path = "macros", version = "=0.13.1", registry = "groundhog" }
 groundhog-spec = { path = "groundhog-spec", version = "=0.13.1", registry = "groundhog" }
-xdrs = { registry = "groundhog", version = "0.7.0", features = [
+xdrs = { registry = "groundhog", version = "0.7.1", features = [
     "int128",
     "derive",
     "ns",
