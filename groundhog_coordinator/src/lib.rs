@@ -42,7 +42,7 @@ mod tests {
                 pkg: DogwoodPackage {
                     transmission: DogwoodTransmission {
                         transmission_id: 7,
-                        type_:
+                        r#type:
                             DogwoodTransmissionType::DogwoodTransmissionPayload,
                         num_payload_bytes: 1024,
                         num_payload_sheaves: 4,
