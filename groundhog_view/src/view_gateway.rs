@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b1bcc286c9580081fa47ba66ce66175439ebbeac
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -104,11 +104,14 @@ pub enum ViewGatewayResult {
     //   ViewGatewayPayload payload;
     ViewGatewayOk { payload: ViewGatewayPayload } = ViewGatewayOutcome::ViewGatewayOk.0 as i32,
     // case ViewGatewayAbandoned:
-    // case ViewGatewayInternalError:
     //   void;
     ViewGatewayAbandoned = ViewGatewayOutcome::ViewGatewayAbandoned.0 as i32,
+    // case ViewGatewayInternalError:
+    //   void;
     ViewGatewayInternalError = ViewGatewayOutcome::ViewGatewayInternalError.0 as i32,
-
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -229,6 +232,7 @@ impl ViewGateway_ViewGateway1_Client {
 impl ViewGatewayResult {
     pub fn outcome(&self) -> ViewGatewayOutcome {
         match self {
+            ViewGatewayResult::Default { outcome } => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }

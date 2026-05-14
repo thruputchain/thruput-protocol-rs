@@ -142,6 +142,32 @@ mod tests {
         round_trip(ViewGatewayResult::ViewGatewayInternalError);
     }
 
+    #[test]
+    fn view_gateway_result_round_trips_unknown_default_outcome() {
+        round_trip(ViewGatewayResult::Default { outcome: 99 });
+    }
+
+    #[test]
+    fn view_gateway_types_have_json_schema() {
+        let _ = schemars::schema_for!(ViewGatewayPayload);
+        let _ = schemars::schema_for!(ViewGatewayOutcome);
+        let _ = schemars::schema_for!(ViewGatewayResult);
+        let _ = schemars::schema_for!(ViewGatewayIntroOutcome);
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn view_gateway_result_serde_round_trips() {
+        let result = ok(InvocationFrameOutput::Return {
+            return_buffer: BytesM(vec![1, 2, 3]),
+        });
+        let json = serde_json::to_value(&result)
+            .expect("serialize ViewGatewayResult");
+        let decoded: ViewGatewayResult = serde_json::from_value(json)
+            .expect("deserialize ViewGatewayResult");
+        assert_eq!(decoded, result);
+    }
+
     #[tokio::test]
     async fn generated_client_dispatches_intro_and_view() {
         let calls = Arc::new(Mutex::new(Vec::new()));
