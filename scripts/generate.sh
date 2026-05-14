@@ -51,9 +51,7 @@ coordinators=(
 )
 
 # dependencies for the wip rust coordinator
-koordinators=(
-  address_auth.x
-  auth_claim.x
+akkads=(
   batch.x
   catchup.x
   config.x
@@ -64,19 +62,13 @@ koordinators=(
   dogwood_kit.x
   dogwood.x
   integration.x
-  precompiles.x
-  contract.x
-  genesis.x
   loadgen.x
   multiplex.x
   nomination.x
   parallel.x
   repair.x
-  retrocausal_queue.x
   rpc_types.x
   sched_coord.x
-  storage_cost.x
-  transaction.x
 )
 
 hogxs=(
@@ -152,8 +144,8 @@ for coordinator in "${coordinators[@]}"; do
   generate_rpc "protocol/${coordinator}" "groundhog_coordinator"
 done
 
-for koordinator in "${koordinators[@]}"; do
-  generate_rpc "protocol/${koordinator}" "groundhog-koordinator"
+for akkad in "${akkads[@]}"; do
+  generate_rpc "protocol/${akkad}" "groundhog-akkad"
 done
 
 for hogx in "${hogxs[@]}"; do

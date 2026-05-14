@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b1bcc286c9580081fa47ba66ce66175439ebbeac
+// Generated from xdrc commit: 61d57e8bc7352aa3310343599c50db9b92a3256c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -139,7 +139,7 @@ pub enum ExpectedViewResult {
     Abandoned = TransactionViewStatus::Abandoned.0 as i32,
     InternalError = TransactionViewStatus::InternalError.0 as i32,
     NondeterministicDataValidationFailure = TransactionViewStatus::NondeterministicDataValidationFailure.0 as i32,
-
+    
 }
 
 
@@ -150,8 +150,10 @@ pub enum ExpectedViewResult {
 impl ExpectedViewResult {
     pub fn status(&self) -> TransactionViewStatus {
         match self {
-
+            
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
+
+

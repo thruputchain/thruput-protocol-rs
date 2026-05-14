@@ -5,7 +5,7 @@ members = [
     "groundhog_rpc",
     "groundhog_scp",
     "groundhog_coordinator",
-    "groundhog-koordinator",
+    "groundhog-akkad",
     "groundhog_hogx",
     "groundhog_indexer",
     "groundhog_scheduler",
@@ -38,7 +38,7 @@ groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.13.3", reg
 groundhog-trace = { path = "groundhog-trace", version = "=0.13.3", registry = "groundhog" }
 groundhog_scp = { path = "groundhog_scp", version = "=0.13.3", registry = "groundhog" }
 groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.13.3", registry = "groundhog" }
-groundhog-koordinator = { path = "groundhog-koordinator", version = "=0.13.3", registry = "groundhog" }
+groundhog-akkad = { path = "groundhog-akkad", version = "=0.13.3", registry = "groundhog" }
 groundhog_hogx = { path = "groundhog_hogx", version = "=0.13.3", registry = "groundhog" }
 groundhog_rpc = { path = "groundhog_rpc", version = "=0.13.3", registry = "groundhog" }
 groundhog_indexer = { path = "groundhog_indexer", version = "=0.13.3", registry = "groundhog" }

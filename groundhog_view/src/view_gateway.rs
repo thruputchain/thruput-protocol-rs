@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: 61d57e8bc7352aa3310343599c50db9b92a3256c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -154,9 +154,9 @@ impl core::fmt::Display for ViewGatewayIntroOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait ViewGateway_ViewGateway1: Send + Sync {
+pub trait ViewGateway_ViewGateway1: Send + Sync {    
     async fn viewgateway_intro(&self, arg0 : Protocol) -> Result<ViewGatewayIntroOutcome, ::rpc_driver::ProgramError>;
-
+    
     async fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> Result<ViewGatewayResult, ::rpc_driver::ProgramError>;
 }
 
@@ -232,9 +232,11 @@ impl ViewGateway_ViewGateway1_Client {
 impl ViewGatewayResult {
     pub fn outcome(&self) -> ViewGatewayOutcome {
         match self {
-            ViewGatewayResult::Default { outcome } => (*outcome).into(),
+            ViewGatewayResult::Default{ outcome } => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
+
+

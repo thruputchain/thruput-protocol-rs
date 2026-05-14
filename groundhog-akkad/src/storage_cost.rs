@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: 61d57e8bc7352aa3310343599c50db9b92a3256c
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -28,18 +28,22 @@ use ::serde_arrays;
 
 
 
-// clang-format on
-
-// A "batch" contains a set of proposed transactions.
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SubmittedTransactions {
-    pub transactions: ParallelSignedTransactionBatch,
+pub struct StorageCostModelXdr {
+    pub ext: ExtensionPoint,
+    pub base_data_item_cost: int128_xdr,
+    pub bytestring_cost_per_byte: i32,
+    pub base_contract_deployment_cost: int128_xdr,
+    pub contract_deployment_cost_per_byte: int128_xdr,
+    pub auth_per_key_cost: int128_xdr,
+    pub rcq_cost_per_entry: int128_xdr,
+    pub replay_cache_cost_per_entry: int128_xdr,
+    pub balance_cost: int128_xdr,
 }
 
 
