@@ -26,5 +26,6 @@ cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
 cargo test --features=std
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp
+cargo build -p groundhog_view
 cargo fmt --check
 cargo clippy -p groundhog-xdr-macros -- -D warnings

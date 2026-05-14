@@ -395,6 +395,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "groundhog_view"
+version = "0.13.2"
+dependencies = [
+ "async-trait",
+ "groundhog-serde_arrays",
+ "groundhog-xdr",
+ "groundhog_scp",
+ "rpc_driver",
+ "schemars 1.2.0",
+ "serde",
+ "serde_json",
+ "serde_with",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
 name = "groundhog_xdr_syscall_tests"
 version = "0.13.2"
 dependencies = [

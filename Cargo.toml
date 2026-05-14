@@ -10,6 +10,7 @@ members = [
     "groundhog_indexer",
     "groundhog_scheduler",
     "groundhog_db_gateway",
+    "groundhog_view",
     "bin/rpcthroughput_server",
     "groundhog_xdr_syscall_tests",
     "hogexec-internal",
@@ -43,6 +44,7 @@ groundhog_rpc = { path = "groundhog_rpc", version = "=0.13.2", registry = "groun
 groundhog_indexer = { path = "groundhog_indexer", version = "=0.13.2", registry = "groundhog" }
 groundhog_scheduler = { path = "groundhog_scheduler", version = "=0.13.2", registry = "groundhog" }
 groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.13.2", registry = "groundhog" }
+groundhog_view = { path = "groundhog_view", version = "=0.13.2", registry = "groundhog" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.13.2", registry = "groundhog" }
 macros = { path = "macros", version = "=0.13.2", registry = "groundhog" }
 groundhog-spec = { path = "groundhog-spec", version = "=0.13.2", registry = "groundhog" }
