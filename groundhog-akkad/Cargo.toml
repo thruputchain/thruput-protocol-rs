@@ -1,5 +1,5 @@
 [package]
-name = "groundhog-koordinator"
+name = "groundhog-akkad"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -10,7 +10,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
-description = "Bindings for groundhog koordinator rpcs"
+description = "Bindings for groundhog Akkad coordinator rpcs"
 
 [lib]
 crate-type = ["rlib"]
