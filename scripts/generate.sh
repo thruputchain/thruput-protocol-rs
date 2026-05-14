@@ -19,6 +19,7 @@ protos=(
   precompiles.x
   block.x
   auth_token.x
+  view.x
 )
 
 traces=(
@@ -203,6 +204,14 @@ db_gateways=(
 
 for dg in "${db_gateways[@]}"; do
   generate_rpc "protocol/${dg}" "groundhog_db_gateway"
+done
+
+views=(
+  view_gateway.x
+)
+
+for view in "${views[@]}"; do
+  generate_rpc "protocol/${view}" "groundhog_view"
 done
 
 # Generate protocol version constant from the checked-out protocol submodule revision.

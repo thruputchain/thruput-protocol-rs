@@ -43,6 +43,7 @@ kargo build -p groundhog_rpc
 kargo build -p groundhog_scp
 kargo build -p groundhog_coordinator
 kargo build -p groundhog_hogx
+kargo build -p groundhog_view
 
 kargo fmt --check
 
