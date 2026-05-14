@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 61d57e8bc7352aa3310343599c50db9b92a3256c
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -140,6 +140,11 @@ pub struct BlockExecutionMode(pub i32);
 impl BlockExecutionMode {
     pub const kBlockExecutionModeValidation: Self = Self(0);
     pub const kBlockExecutionModeProposal: Self = Self(1);
+
+    // Read-only access to the database.
+    // Used for view RPCs, guaranteeing that the executor cannot accidentially
+    // do a write operation when it should not be able to.
+    pub const kBlockExecutionModeViewing: Self = Self(2);
 }
 impl From<i32> for BlockExecutionMode {
     fn from(v: i32) -> Self {
@@ -155,6 +160,9 @@ impl core::fmt::Display for BlockExecutionMode {
             },
             x if x == Self::kBlockExecutionModeProposal.0 => {
                 write!(f, "BlockExecutionMode::kBlockExecutionModeProposal")
+            },
+            x if x == Self::kBlockExecutionModeViewing.0 => {
+                write!(f, "BlockExecutionMode::kBlockExecutionModeViewing")
             },
             _ => {
                 write!(f, "BlockExecutionMode({})", self.0)
