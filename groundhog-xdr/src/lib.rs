@@ -90,6 +90,9 @@ use address_auth::*;
 mod syscall_numbers;
 pub use syscall_numbers::*;
 
+pub mod syserr;
+use syserr::*;
+
 /// System call bindings and syscall numbers (SyscallNo enum).
 #[cfg(feature = "syscalls")]
 pub mod syscalls;

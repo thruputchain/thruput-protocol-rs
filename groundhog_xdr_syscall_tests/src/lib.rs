@@ -2,7 +2,7 @@
 // This provides a way to capture and verify syscall arguments
 // Uses thread-local storage so tests can run in parallel without interference
 
-use groundhog_xdr::syscalls::SysErr;
+use groundhog_xdr::syserr::SysErr;
 use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
 

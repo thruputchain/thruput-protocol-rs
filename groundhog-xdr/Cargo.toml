@@ -25,14 +25,14 @@ crate-type = ["rlib"]
 [features]
 default = []
 alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
-std = ["alloc"]
+std = ["alloc", "dep:thiserror"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
 # Additionally, the serde_arrays::hex feature requires an allocator
 serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde", "serde_arrays/alloc"]
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
 schema = ["dep:schemars", "xdrs/schemars", "std"]
-syscalls = ["dep:thiserror"]
+syscalls = []
 syscalls_mock = ["syscalls", "std"]                             # required for native_exec integration
 
 [dependencies.xdrs]
