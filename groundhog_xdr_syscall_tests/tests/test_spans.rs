@@ -2,6 +2,7 @@
 
 use groundhog_xdr::SyscallNo;
 use groundhog_xdr::syscalls::*;
+use groundhog_xdr::syserr::SysErr;
 use groundhog_xdr::types::*;
 use groundhog_xdr_syscall_tests::{MockSyscallHandler, set_mock_handler};
 use std::sync::Arc;
