@@ -287,6 +287,33 @@ pub enum ExpectedDBTip {
     #[xdr(default_variant)] Default { error: i32 },
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ViewingSnapshot {
+    pub block_id: BlockID,
+    pub tip: DbTip,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum ExpectedViewingSnapshot {
+    // case kRPCNone:
+    //   ViewingSnapshot snapshot;
+    kRPCNone { snapshot: ViewingSnapshot } = RPCError::kRPCNone.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { error: i32 },
+}
+
 /// Typedef for a list of contract addresses.
 pub type ContractAddressBatch = VecM::<ContractAddress>;
 
@@ -359,6 +386,16 @@ impl ExpectedDBTip {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedDBTip::Default{ error } => (*error).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl ExpectedViewingSnapshot {
+    pub fn error(&self) -> RPCError {
+        match self {
+            ExpectedViewingSnapshot::Default{ error } => (*error).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
