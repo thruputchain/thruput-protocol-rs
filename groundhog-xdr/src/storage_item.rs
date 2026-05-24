@@ -458,7 +458,7 @@ pub struct ReplayCacheMetadata {
 #[repr(C)]
 pub struct ReplayCacheData {
     // Sorted list of nonces for a particular height of a ReplayCache.
-    pub nonces: VecM<i64, kReplayCacheNoncesMaxLen>,
+    pub nonces: VecM<u64, kReplayCacheNoncesMaxLen>,
 }
 
 /// Flags that can be set on a storage delta to modify its behavior.
