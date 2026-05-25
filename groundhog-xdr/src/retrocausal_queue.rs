@@ -154,6 +154,11 @@ pub struct RetrocausalQueueDelta {
     // This version of the retrocausal queue is single-consumer multi-producer.
     pub consume: Option<RetrocausalQueueConsumeDelta>,
     pub insert: RetrocausalQueueInsertDelta,
+    // Concurrent entries observed (e.g. via peek) but not consumed.
+    // HogDB validates that each entry was actually inserted by a concurrent
+    // transaction. Unlike current_block_consumed, these do not decrement the
+    // insert balance — they only require that a matching insert exists.
+    pub observed_concurrent_entries: VecM<QueueEntry>,
 }
 
 
