@@ -668,7 +668,7 @@ pub struct SyscallGetCurrentAddressTrace {
 #[repr(C)]
 pub struct SyscallRetrocausalQueueInsertInputs {
     pub key: StorageKeyContractData,
-    pub queue_entry: QueueEntry,
+    pub queue_entry: BytesM,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
