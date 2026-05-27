@@ -43,6 +43,7 @@ pub struct CoordinatorRegistrationOutcome(pub i32);
 impl CoordinatorRegistrationOutcome {
     pub const CoordinatorRegistrationOK: Self = Self(0);
     pub const CoordinatorRegistrationInvalidProtocol: Self = Self(1);
+    pub const CoordinatorRegistrationAlreadyRegistered: Self = Self(2);
 }
 impl From<i32> for CoordinatorRegistrationOutcome {
     fn from(v: i32) -> Self {
@@ -58,6 +59,9 @@ impl core::fmt::Display for CoordinatorRegistrationOutcome {
             },
             x if x == Self::CoordinatorRegistrationInvalidProtocol.0 => {
                 write!(f, "CoordinatorRegistrationOutcome::CoordinatorRegistrationInvalidProtocol")
+            },
+            x if x == Self::CoordinatorRegistrationAlreadyRegistered.0 => {
+                write!(f, "CoordinatorRegistrationOutcome::CoordinatorRegistrationAlreadyRegistered")
             },
             _ => {
                 write!(f, "CoordinatorRegistrationOutcome({})", self.0)
