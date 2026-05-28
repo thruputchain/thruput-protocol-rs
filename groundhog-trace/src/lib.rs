@@ -4,7 +4,7 @@ use groundhog_xdr::SyscallNo;
 use groundhog_xdr::auth_claim::*;
 use groundhog_xdr::auth_token::*;
 use groundhog_xdr::event::*;
-use groundhog_xdr::invoke_flag::*;
+use groundhog_xdr::invoke_args::*;
 use groundhog_xdr::retrocausal_queue::*;
 use groundhog_xdr::storage_item::*;
 use groundhog_xdr::syscall_error::*;

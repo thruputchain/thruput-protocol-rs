@@ -31,7 +31,7 @@ fn test_get_msg_sender_fixed_size_output() {
     // arg1: sender pointer
     assert_eq!(invocations[0].args[0], sender.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[1..], [0; 9]);
+    assert_eq!(invocations[0].args[1..], [0; 6]);
 }
 
 #[test]
@@ -61,7 +61,7 @@ fn test_get_source_transaction_hash_fixed_size_output() {
     // arg1: source_tx_hash pointer
     assert_eq!(invocations[0].args[0], source_tx_hash.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[1..], [0; 9]);
+    assert_eq!(invocations[0].args[1..], [0; 6]);
 }
 
 #[test]
@@ -97,7 +97,7 @@ fn test_deploy_contract_fixed_size_input_output() {
     // arg3: deployed_address pointer
     assert_eq!(invocations[0].args[2], deployed_address.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 7]);
+    assert_eq!(invocations[0].args[3..], [0; 4]);
 }
 
 #[test]
@@ -128,7 +128,7 @@ fn test_bytestring_get_len_fixed_size_input() {
     // arg2: length pointer
     assert_eq!(invocations[0].args[1], &length as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[2..], [0; 8]);
+    assert_eq!(invocations[0].args[2..], [0; 5]);
 }
 
 #[test]
@@ -163,7 +163,7 @@ fn test_bytestring_set_fixed_size_input() {
     // arg4: flags
     assert_eq!(invocations[0].args[3], 12 as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 6]);
+    assert_eq!(invocations[0].args[4..], [0; 3]);
 }
 
 #[test]
@@ -190,5 +190,5 @@ fn test_get_current_address_fixed_size_output() {
     // arg1: address pointer
     assert_eq!(invocations[0].args[0], address.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[1..], [0; 9]);
+    assert_eq!(invocations[0].args[1..], [0; 6]);
 }

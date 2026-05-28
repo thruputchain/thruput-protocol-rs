@@ -37,7 +37,7 @@ fn test_sha256_span_input_output() {
     // arg3: output hash pointer
     assert_eq!(invocations[0].args[2], hash.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[3..], [0; 7]);
+    assert_eq!(invocations[0].args[3..], [0; 4]);
 }
 
 #[test]
@@ -86,7 +86,7 @@ fn test_get_calldata_span_output() {
         &auth_token_written_len as *const _ as u64
     );
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[6..], [0; 4]);
+    assert_eq!(invocations[0].args[6..], [0; 1]);
 }
 
 #[test]
@@ -140,7 +140,7 @@ fn test_get_returned_buffer_span_output() {
         &restored_auth_token_ids_written_len as *const _ as u64
     );
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[6..], [0; 4]);
+    assert_eq!(invocations[0].args[6..], [0; 1]);
 }
 
 #[test]
@@ -177,5 +177,5 @@ fn test_bytestring_get_span_output() {
     // arg4: written_len pointer
     assert_eq!(invocations[0].args[3], &written_len as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 6]);
+    assert_eq!(invocations[0].args[4..], [0; 3]);
 }
