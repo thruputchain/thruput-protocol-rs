@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: 7dfa9702b29aa3f5afc9f38b8b22beb22e3d2e31
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -192,11 +192,9 @@ pub struct SyscallConsoleLogTrace {
 #[repr(C)]
 pub struct SyscallInvokeInputs {
     pub address: ContractAddress,
-    pub entrypoint_id: u64,
-    pub gas_limit: GasAmount,
     pub calldata: BytesM,
-    pub flags: InvokeFlagSet,
     pub owned_auth_token_ids_list: BytesM,
+    pub inputs: CopyableInvokeInputs,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
