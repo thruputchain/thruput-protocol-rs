@@ -49,7 +49,7 @@ fn test_get_deploy_address_optional_input() {
     // arg4: to_be_deployed pointer
     assert_eq!(invocations[0].args[3], to_be_deployed.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 6]);
+    assert_eq!(invocations[0].args[4..], [0; 3]);
 }
 
 #[test]
@@ -88,7 +88,7 @@ fn test_get_deploy_address_optional_none() {
     // arg4: to_be_deployed pointer
     assert_eq!(invocations[0].args[3], to_be_deployed.as_mut_ptr() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 6]);
+    assert_eq!(invocations[0].args[4..], [0; 3]);
 }
 
 #[test]
@@ -131,7 +131,7 @@ fn test_log_event_optional_topics() {
     // arg5: data length
     assert_eq!(invocations[0].args[4], data.len() as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[5..], [0; 5]);
+    assert_eq!(invocations[0].args[5..], [0; 2]);
 }
 
 #[test]
@@ -179,5 +179,5 @@ fn test_change_public_key_registration_optional_params() {
     // arg5: key_weight (Some value, passed as pointer to the value)
     assert_eq!(invocations[0].args[4], &key_weight_val as *const u32 as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[5..], [0; 5]);
+    assert_eq!(invocations[0].args[5..], [0; 2]);
 }
