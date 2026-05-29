@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: d77f1087b6802e206902605689e2d4f92618a753
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -51,6 +51,14 @@ pub struct CopyableInvokeInputs {
 pub struct CopyableInvokeOutputs {
     pub return_buffer_len: RuntimeMemoryLength,
     pub returned_auth_token_len: RuntimeMemoryLength,
+    // The outcome of the child frame. Only meaningful when the Invoke syscall
+    // returns kSyscallErrorCodeNone (i.e. a child frame actually ran):
+    //   Return -> child returned normally; return_buffer_len bytes available
+    //   Abort  -> child manually reverted; abort buffer available
+    //   Fault  -> child trapped / ran out of gas; no return buffer
+    // Left untouched when the syscall returns a nonzero error code (the call
+    // was rejected before any child frame ran, and is a complete no-op).
+    pub frame_status: InvocationFrameStatusCode,
 }
 
 
