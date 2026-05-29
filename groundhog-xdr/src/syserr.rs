@@ -29,10 +29,6 @@ impl SysErr {
     pub fn is_invalid_input(self) -> bool {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput)
     }
-
-    pub fn is_aborted(self) -> bool {
-        self.is_code(SyscallErrorCode::kSyscallErrorCodeFrameReverted)
-    }
 }
 
 impl fmt::Debug for SysErr {
@@ -65,12 +61,6 @@ impl fmt::Debug for SysErr {
             }
             SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry => {
                 write!(f, "SysErr<NoRetrocausalQueueEntry>")
-            }
-            SyscallErrorCode::kSyscallErrorCodeDeterministicWasm => {
-                write!(f, "SysErr<DeterministicWasm>")
-            }
-            SyscallErrorCode::kSyscallErrorCodeFrameReverted => {
-                write!(f, "SysErr<FrameReverted>")
             }
             _ => write!(f, "SysErr({})", self.0),
         }

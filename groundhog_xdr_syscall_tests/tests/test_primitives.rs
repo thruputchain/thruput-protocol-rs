@@ -66,6 +66,7 @@ fn test_console_log_span_input() {
 use groundhog_xdr::invoke_args::{
     CopyableInvokeInputs, CopyableInvokeOutputs,
 };
+use groundhog_xdr::transaction::InvocationFrameStatusCode;
 
 #[test]
 fn test_invoke_primitive_inputs() {
@@ -92,6 +93,7 @@ fn test_invoke_primitive_inputs() {
     let mut outputs = CopyableInvokeOutputs {
         return_buffer_len: 0,
         returned_auth_token_len: 0,
+        frame_status: InvocationFrameStatusCode::Return,
     };
 
     let result = raw_Invoke(

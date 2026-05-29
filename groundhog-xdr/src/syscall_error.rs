@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: d77f1087b6802e206902605689e2d4f92618a753
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -80,14 +80,6 @@ impl SyscallErrorCode {
 
     /// No entry in the retrocausal queue to consume
     pub const kSyscallErrorCodeNoRetrocausalQueueEntry: Self = Self(9);
-
-    // ===== Error codes that signal the called frame reverted =====
-    
-    /// Deterministic error within called wasm (i.e. trap)
-    pub const kSyscallErrorCodeDeterministicWasm: Self = Self(-1);
-
-    /// Child call frame manually reverted
-    pub const kSyscallErrorCodeFrameReverted: Self = Self(-2);
 }
 impl From<i32> for SyscallErrorCode {
     fn from(v: i32) -> Self {
@@ -127,12 +119,6 @@ impl core::fmt::Display for SyscallErrorCode {
             },
             x if x == Self::kSyscallErrorCodeNoRetrocausalQueueEntry.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry")
-            },
-            x if x == Self::kSyscallErrorCodeDeterministicWasm.0 => {
-                write!(f, "SyscallErrorCode::kSyscallErrorCodeDeterministicWasm")
-            },
-            x if x == Self::kSyscallErrorCodeFrameReverted.0 => {
-                write!(f, "SyscallErrorCode::kSyscallErrorCodeFrameReverted")
             },
             _ => {
                 write!(f, "SyscallErrorCode({})", self.0)
