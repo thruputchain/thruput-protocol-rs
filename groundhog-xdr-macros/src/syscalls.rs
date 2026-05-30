@@ -1037,13 +1037,13 @@ fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
     let name = format_ident!("k{}", &syscall.name);
     let num = syscall.number;
     quote! {
-        pub const #name: Self = Self(#num as u64);
+        pub const #name: Self = Self(#num as u32);
     }
 }
 
 fn generate_syscall_no_display_line(syscall: &Syscall) -> TokenStream2 {
     let name = syscall.name.as_str();
-    let num: u64 = syscall.number.try_into().unwrap();
+    let num: u32 = syscall.number.try_into().unwrap();
     quote! {
         #num => Some(#name),
     }
@@ -1066,7 +1066,7 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
         #[derive(Eq,PartialEq,Copy,Debug,Clone,Hash)]
         #[repr(transparent)]
-        pub struct SyscallNo(pub u64);
+        pub struct SyscallNo(pub u32);
 
         impl SyscallNo {
             #(#lines)*

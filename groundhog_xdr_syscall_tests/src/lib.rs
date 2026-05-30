@@ -9,7 +9,7 @@ use std::sync::{Arc, Mutex};
 /// Captured syscall invocation
 #[derive(Debug, Clone)]
 pub struct SyscallInvocation {
-    pub syscall_no: u64,
+    pub syscall_no: u32,
     pub args: [u64; 7],
 }
 
@@ -43,7 +43,7 @@ impl MockSyscallHandler {
         self.invocations.lock().unwrap().last().cloned()
     }
 
-    fn record_invocation(&self, syscall_no: u64, args: [u64; 7]) -> SysErr {
+    fn record_invocation(&self, syscall_no: u32, args: [u64; 7]) -> SysErr {
         self.invocations
             .lock()
             .unwrap()
@@ -82,7 +82,7 @@ pub extern "C-unwind" fn syscall_wrapper_impl(
 ) -> SysErr {
     if let Some(handler) = get_mock_handler() {
         handler.record_invocation(
-            syscall_no,
+            syscall_no as u32,
             [arg1, arg2, arg3, arg4, arg5, arg6, arg7],
         )
     } else {
