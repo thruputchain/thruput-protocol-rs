@@ -254,7 +254,7 @@ impl Arg {
     }
 
     /// Returns true if this arg's type is a newtype struct (e.g. `Foo(i32)`)
-    /// that needs `.0 as u64` instead of `as u64`.
+    /// that needs `.into_inner() as SyscallWord` instead of `as SyscallWord`.
     fn is_newtype(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.newtype
@@ -294,7 +294,11 @@ impl Arg {
         }
     }
 
-    pub fn to_u64s(
+    /// Lowers this argument into one or more syscall slots, each a
+    /// `SyscallWord` (pointer-width: `u32` on wasm32, `u64` on native). The
+    /// `SyscallWord` alias is resolved in the consuming crate, so each cast is
+    /// correct for the target the bindings are compiled for.
+    pub fn to_words(
         &self,
         type_map: &TypeMap,
         is_input: bool,
@@ -302,59 +306,75 @@ impl Arg {
         let name = self.formatted_name();
 
         if self.is_span_argument() {
-            let span_len = quote! { #name.len() as u64 };
+            let span_len = quote! { #name.len() as SyscallWord };
             let span_ptr = if is_input {
                 quote! {
-                    #name.as_ptr() as u64
+                    #name.as_ptr() as SyscallWord
                 }
             } else {
                 quote! {
-                    #name.as_mut_ptr() as u64
+                    #name.as_mut_ptr() as SyscallWord
                 }
             };
             vec![span_ptr, span_len]
-        } else if self.fixed_size_type(type_map).is_some() {
+        } else if let Some(arg_ty) = self.fixed_size_type(type_map) {
             let arg = if self.optional {
                 assert!(is_input);
                 if self.uses_as_ptr(type_map) {
                     quote! {
                         match #name {
-                            Some(x) => x.as_ptr() as u64,
-                            None => u64::MAX,
+                            Some(x) => x.as_ptr() as SyscallWord,
+                            None => SyscallWord::MAX,
                         }
                     }
                 } else {
                     quote! {
                         match #name {
-                            Some(x) => x as *const _ as u64,
-                            None => u64::MAX,
+                            Some(x) => x as *const _ as SyscallWord,
+                            None => SyscallWord::MAX,
                         }
                     }
                 }
             } else if self.is_primitive(type_map) {
                 if is_input {
-                    if self.is_newtype(type_map) {
-                        quote! { #name.into_inner() as u64 }
+                    // A primitive input is passed by value in a single slot, so
+                    // it MUST fit in a `SyscallWord`. On wasm32 that slot is 32
+                    // bits, so this assertion (resolved per-target in the
+                    // consuming crate) turns an oversized by-value argument into
+                    // a compile error instead of a silent truncation. Wider
+                    // values must be passed by reference.
+                    let value = if self.is_newtype(type_map) {
+                        quote! { #name.into_inner() }
                     } else if self.is_dot_zero_type(type_map) {
-                        quote! { #name.0 as u64 }
+                        quote! { #name.0 }
                     } else {
-                        quote! { #name as u64 }
+                        quote! { #name }
+                    };
+                    quote! {
+                        {
+                            const _: () = assert!(
+                                ::core::mem::size_of::<#arg_ty>()
+                                    <= ::core::mem::size_of::<SyscallWord>(),
+                                "syscall by-value primitive argument is wider than a syscall word; pass it by reference instead"
+                            );
+                            #value as SyscallWord
+                        }
                     }
                 } else {
-                    quote! { #name as *mut _ as u64 }
+                    quote! { #name as *mut _ as SyscallWord }
                 }
             } else if self.uses_as_ptr(type_map) {
                 if is_input {
-                    quote! { #name.as_ptr() as u64 }
+                    quote! { #name.as_ptr() as SyscallWord }
                 } else {
-                    quote! { #name.as_mut_ptr() as u64 }
+                    quote! { #name.as_mut_ptr() as SyscallWord }
                 }
             } else {
                 // else it's, at this point in time, a 128 bit int
                 if is_input {
-                    quote! { #name as *const _ as u64 }
+                    quote! { #name as *const _ as SyscallWord }
                 } else {
-                    quote! { #name as *mut _ as u64 }
+                    quote! { #name as *mut _ as SyscallWord }
                 }
             };
 
@@ -497,36 +517,36 @@ fn generate_raw_syscall_args(
     args
 }
 
-fn generate_u64_syscall_args(
+fn generate_word_args(
     syscall: &Syscall,
     type_map: &TypeMap,
     syscall_input_count: usize,
 ) -> Vec<TokenStream2> {
     // inputs
-    let mut u64_args: Vec<TokenStream2> = syscall
+    let mut word_args: Vec<TokenStream2> = syscall
         .inputs
         .iter()
-        .flat_map(|inp| inp.to_u64s(type_map, true))
+        .flat_map(|inp| inp.to_words(type_map, true))
         .collect();
 
     // outputs
     let output_args: Vec<TokenStream2> = syscall
         .outputs
         .iter()
-        .flat_map(|outp| outp.to_u64s(type_map, false))
+        .flat_map(|outp| outp.to_words(type_map, false))
         .collect();
 
-    u64_args.extend(output_args);
+    word_args.extend(output_args);
 
-    if u64_args.len() > syscall_input_count {
+    if word_args.len() > syscall_input_count {
         return vec![quote! {
             compile_error!("Too many syscall args")
         }];
     }
 
-    u64_args.resize(syscall_input_count, quote! { 0 });
+    word_args.resize(syscall_input_count, quote! { 0 });
 
-    u64_args
+    word_args
 }
 
 fn generate_syscall_uninit_decl(
@@ -540,9 +560,9 @@ fn generate_syscall_uninit_decl(
     //      // syscall will initialize outputs, if error is kNone
     //      let err: SysErr =
     //          syscall_wrapper(SyscallNo::kSHA256,
-    //              buffer.as_ptr() as u64,
-    //              buffer.len() as u64,
-    //              hash.as_mut_ptr() as u64,
+    //              buffer.as_ptr() as SyscallWord,
+    //              buffer.len() as SyscallWord,
+    //              hash.as_mut_ptr() as SyscallWord,
     //              0,
     //              0,
     //              0);
@@ -569,8 +589,7 @@ fn generate_syscall_uninit_decl(
         }
     };
 
-    let u64_args =
-        generate_u64_syscall_args(syscall, type_map, syscall_input_count);
+    let word_args = generate_word_args(syscall, type_map, syscall_input_count);
     let uninit_syscall_inputs =
         generate_uninit_syscall_inputs(syscall, type_map);
 
@@ -602,7 +621,7 @@ fn generate_syscall_uninit_decl(
             // syscall will initialize outputs, if error is kNone
             let err: SysErr =
                 syscall_wrapper(SyscallNo::#syscall_no,
-                    #(#u64_args),*);
+                    #(#word_args),*);
 
             #post_syscall
         }
@@ -1018,13 +1037,13 @@ fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
     let name = format_ident!("k{}", &syscall.name);
     let num = syscall.number;
     quote! {
-        pub const #name: Self = Self(#num as u64);
+        pub const #name: Self = Self(#num as u32);
     }
 }
 
 fn generate_syscall_no_display_line(syscall: &Syscall) -> TokenStream2 {
     let name = syscall.name.as_str();
-    let num: u64 = syscall.number.try_into().unwrap();
+    let num: u32 = syscall.number.try_into().unwrap();
     quote! {
         #num => Some(#name),
     }
@@ -1047,7 +1066,7 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
         #[derive(Eq,PartialEq,Copy,Debug,Clone,Hash)]
         #[repr(transparent)]
-        pub struct SyscallNo(pub u64);
+        pub struct SyscallNo(pub u32);
 
         impl SyscallNo {
             #(#lines)*
