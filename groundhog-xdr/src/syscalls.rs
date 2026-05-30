@@ -83,7 +83,9 @@ const _: () = assert!(core::mem::size_of::<SyscallWord>() == 4);
     not(target_arch = "riscv32"),
     not(docsrs)
 ))]
-compile_error!("no syscall dispatch path for this target (expected wasm, riscv32, or syscalls_mock)");
+compile_error!(
+    "no syscall dispatch path for this target (expected wasm, riscv32, or syscalls_mock)"
+);
 
 // The syscall entrypoint is declared with the *concrete* slot type for each
 // target, written out explicitly rather than via the `SyscallWord` alias. Since
