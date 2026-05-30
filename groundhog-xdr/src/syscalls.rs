@@ -40,6 +40,19 @@ use crate::*;
 
 pub type SyscallResult<T> = core::result::Result<T, SysErr>;
 
+/// The integer width of a single syscall argument slot.
+///
+/// Syscall arguments are passed as pointer-width words. On `wasm32` each slot is
+/// a 32-bit value, lowered to a wasm `i32` to match the host (`marmot`) ABI. On
+/// native targets each slot is a 64-bit value, wide enough to carry a host
+/// pointer (this is the path used by `native_exec` in the SDK). This happens to
+/// equal the platform pointer width, but is spelled out explicitly so the
+/// syscall ABI is decoupled from any incidental use of `usize` elsewhere.
+#[cfg(target_arch = "wasm32")]
+pub type SyscallWord = u32;
+#[cfg(not(target_arch = "wasm32"))]
+pub type SyscallWord = u64;
+
 // Note: On MacOS accidentally building with this link_name silently links against
 // some system "syscall" symbol and gives garbage results.
 #[cfg(all(
@@ -49,7 +62,34 @@ pub type SyscallResult<T> = core::result::Result<T, SysErr>;
 ))]
 compile_error!("do not link wasm syscall binding on non-wasm targets!");
 
-#[cfg(not(feature = "syscalls_mock"))]
+// The syscall entrypoint is declared with the *concrete* slot type for each
+// target, written out explicitly rather than via the `SyscallWord` alias. Since
+// `syscall_wrapper` (below) passes `SyscallWord`-typed values into it, any
+// disagreement between these declarations and `SyscallWord` is a compile error
+// at the call site — a tripwire if `SyscallWord` is ever defined incorrectly.
+
+// wasm32 real import, provided by the host (`marmot`): 32-bit slots, lowered to
+// wasm `i32`.
+#[cfg(all(not(feature = "syscalls_mock"), target_arch = "wasm32"))]
+#[link(wasm_import_module = "marmot")]
+unsafe extern "C" {
+    #[link_name = "syscall"]
+    fn syscall_wrapper_impl(
+        syscall_no: u32,
+        arg1: u32,
+        arg2: u32,
+        arg3: u32,
+        arg4: u32,
+        arg5: u32,
+        arg6: u32,
+        arg7: u32,
+    ) -> i32;
+}
+
+// Non-wasm32 without the mock: only reachable under `--cfg docsrs` (otherwise
+// the compile_error above fires). Type-checked for the docs build but never
+// linked. 64-bit slots, matching the native `SyscallWord`.
+#[cfg(all(not(feature = "syscalls_mock"), not(target_arch = "wasm32")))]
 #[link(wasm_import_module = "marmot")]
 unsafe extern "C" {
     #[link_name = "syscall"]
@@ -65,6 +105,8 @@ unsafe extern "C" {
     ) -> i32;
 }
 
+// Native mock entrypoint (used by `native_exec` and the syscall tests): always
+// native, so the slots are concretely 64-bit.
 #[cfg(feature = "syscalls_mock")]
 unsafe extern "C-unwind" {
     fn syscall_wrapper_impl(
@@ -82,17 +124,17 @@ unsafe extern "C-unwind" {
 #[inline(always)]
 fn syscall_wrapper(
     syscall_no: SyscallNo,
-    arg1: u64,
-    arg2: u64,
-    arg3: u64,
-    arg4: u64,
-    arg5: u64,
-    arg6: u64,
-    arg7: u64,
+    arg1: SyscallWord,
+    arg2: SyscallWord,
+    arg3: SyscallWord,
+    arg4: SyscallWord,
+    arg5: SyscallWord,
+    arg6: SyscallWord,
+    arg7: SyscallWord,
 ) -> SysErr {
     unsafe {
         SysErr(syscall_wrapper_impl(
-            syscall_no.0,
+            syscall_no.0 as SyscallWord,
             arg1,
             arg2,
             arg3,
