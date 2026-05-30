@@ -59,6 +59,10 @@ jobs:
           cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
       - name: cargo build syscalls
         run: cargo build -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
+      - name: cargo build riscv32 syscalls
+        run: |
+          rustup target add riscv32im-unknown-none-elf
+          cargo build -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
       - name: cargo build wasm xdrs
         run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
       - name: cargo build wasm alloc
