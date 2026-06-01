@@ -24,11 +24,13 @@ serde = [
     "dep:serde_with",
     "xdrs/serde",
 ]
+schema = ["dep:schemars"]
 
 [dependencies]
 
 [dependencies.schemars]
 workspace = true
+optional = true
 
 [dependencies.serde]
 optional = true

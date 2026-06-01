@@ -121,6 +121,13 @@ generate_trace() {
   $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
+generate_contract_spec() {
+  proto=${1:?}
+  package=${2:?}
+  name=$(basename "${proto}" .x)
+  $XDRC --rust --rust-feature xdrs --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+}
+
 for proto in "${protos[@]}"; do
   generate "protocol/${proto}" "groundhog-xdr"
 done
@@ -154,7 +161,7 @@ for hogx in "${hogxs[@]}"; do
 done
 
 for spec in "${specs[@]}"; do
-  generate_trace "protocol/${spec}" "groundhog-spec"
+  generate_contract_spec "protocol/${spec}" "groundhog-spec"
 done
 
 indexers=(

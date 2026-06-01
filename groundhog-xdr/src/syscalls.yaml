@@ -1,10 +1,8 @@
 ---
-# The number of argument slots to a syscall.
-# Each slot is a `SyscallWord`: a pointer-width value, i.e. 32 bits (lowered to
-# a wasm `i32`) on wasm32 and 64 bits on native targets. The native path keeps
-# 64-bit slots so it can carry host pointers; by-value slots must still fit in
-# the narrowest (32-bit) slot, and that constraint is now enforced at compile
-# time by the generated bindings.
+# The number of u32 arguments to a syscall.
+# (The wasm32 syscall ABI passes each argument slot as a 32-bit value / i32.
+# The native mock entrypoint in test_ffi keeps u64 slots so it can carry host
+# pointers, but value slots are still validated against the 32-bit constraint.)
 # Syscalls that need fewer than this many arguments pad the argument list
 # with arbitrary values (in the SDK, this defaults to 0, although that
 # condition is not enforced.)
