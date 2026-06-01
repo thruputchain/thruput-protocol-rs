@@ -264,6 +264,7 @@ name = "groundhog-xdr"
 version = "0.15.1"
 dependencies = [
  "groundhog-serde_arrays",
+ "groundhog-syscall",
  "groundhog-xdr-macros",
  "schemars 1.2.0",
  "serde",

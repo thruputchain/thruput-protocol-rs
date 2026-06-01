@@ -14,8 +14,8 @@ cargo build -p groundhog-xdr --features=alloc
 cargo build -p groundhog-xdr --features=std
 cargo build -p groundhog-xdr --features=xdrs
 cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
-CARGO_NET_GIT_FETCH_WITH_CLI=true RUSTDOCFLAGS="--cfg docsrs" \
-    cargo +nightly doc -F syscalls --no-deps -p groundhog-xdr
+CARGO_NET_GIT_FETCH_WITH_CLI=true \
+    cargo +nightly doc -F syscalls_mock --no-deps -p groundhog-xdr
 cargo build -p groundhog-xdr --features=serde
 cargo build -p groundhog-xdr --features=serde,xdrs
 cargo build -p groundhog-xdr --features=serde,alloc

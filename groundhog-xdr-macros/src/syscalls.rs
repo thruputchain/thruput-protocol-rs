@@ -559,13 +559,13 @@ fn generate_syscall_uninit_decl(
     //
     //      // syscall will initialize outputs, if error is kNone
     //      let err: SysErr =
-    //          syscall_wrapper(SyscallNo::kSHA256,
+    //          SysErr(syscall_wrapper(SyscallNo::kSHA256.0 as SyscallWord,
     //              buffer.as_ptr() as SyscallWord,
     //              buffer.len() as SyscallWord,
     //              hash.as_mut_ptr() as SyscallWord,
     //              0,
     //              0,
-    //              0);
+    //              0));
     //
     //      if !err.is_none() {
     //          return Err(err);
@@ -620,8 +620,8 @@ fn generate_syscall_uninit_decl(
 
             // syscall will initialize outputs, if error is kNone
             let err: SysErr =
-                syscall_wrapper(SyscallNo::#syscall_no,
-                    #(#word_args),*);
+                SysErr(syscall_wrapper(SyscallNo::#syscall_no.0 as SyscallWord,
+                    #(#word_args),*));
 
             #post_syscall
         }
