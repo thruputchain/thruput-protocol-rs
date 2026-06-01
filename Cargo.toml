@@ -1,8 +1,8 @@
 [workspace]
 members = [
     "groundhog-xdr-macros",
-    "groundhog-xdr",
     "groundhog-syscall",
+    "groundhog-xdr",
     "groundhog_rpc",
     "groundhog_scp",
     "groundhog_coordinator",
