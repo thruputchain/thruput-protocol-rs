@@ -24,7 +24,7 @@ serde = [
     "dep:serde_with",
     "xdrs/serde",
 ]
-schema = ["dep:schemars"]
+schema = ["dep:schemars", "xdrs/schemars"]
 
 [dependencies]
 
@@ -50,5 +50,5 @@ features = []
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "int128", "ns", "alloc", "schemars"]
+features = ["derive", "int128", "ns", "alloc"]
 
