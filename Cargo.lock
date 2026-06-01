@@ -242,6 +242,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "groundhog-syscall"
+version = "0.15.1"
+
+[[package]]
 name = "groundhog-trace"
 version = "0.15.1"
 dependencies = [

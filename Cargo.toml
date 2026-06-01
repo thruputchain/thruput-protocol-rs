@@ -2,6 +2,7 @@
 members = [
     "groundhog-xdr-macros",
     "groundhog-xdr",
+    "groundhog-syscall",
     "groundhog_rpc",
     "groundhog_scp",
     "groundhog_coordinator",
@@ -33,6 +34,7 @@ categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
+groundhog-syscall = { path = "groundhog-syscall", version = "=0.15.1", registry = "groundhog" }
 groundhog-xdr = { path = "groundhog-xdr", version = "=0.15.1", registry = "groundhog" }
 groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.15.1", registry = "groundhog" }
 groundhog-trace = { path = "groundhog-trace", version = "=0.15.1", registry = "groundhog" }
