@@ -28,10 +28,18 @@
 //! typed bindings generated in `groundhog-xdr`.
 #![no_std]
 
-#[cfg(any(target_arch = "wasm32", target_arch = "riscv32", feature = "syscalls_mock"))]
+#[cfg(any(
+    target_arch = "wasm32",
+    target_arch = "riscv32",
+    feature = "syscalls_mock"
+))]
 pub use dispatch::{SyscallWord, syscall_wrapper};
 
-#[cfg(any(target_arch = "wasm32", target_arch = "riscv32", feature = "syscalls_mock"))]
+#[cfg(any(
+    target_arch = "wasm32",
+    target_arch = "riscv32",
+    feature = "syscalls_mock"
+))]
 mod dispatch {
     /// The integer width of a single syscall argument slot.
     ///
@@ -152,7 +160,9 @@ mod dispatch {
         // arguments (it has no further preconditions); the typed `SyscallWord`
         // parameters guarantee that.
         unsafe {
-            syscall_wrapper_impl(syscall_no, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+            syscall_wrapper_impl(
+                syscall_no, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
+            )
         }
     }
 }
