@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: a3b921b9de2770b9d2cf4663589132ec222ce8f2
+// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -37,7 +37,7 @@ use ::serde_arrays;
 // code that can be deployed to addresses and invoked to execute logic.
 //
 // Key concepts:
-// - Contracts can be WebAssembly blobs, native precompiled code, or test mocks
+// - Contracts can be executable blobs, native precompiled code, or test mocks
 // - Contract addresses are deterministically derived from deployment parameters
 // - Contract methods are identified by 8-byte entrypoint IDs
 // - Entrypoint IDs are derived from interface names and versions
@@ -47,9 +47,9 @@ use ::serde_arrays;
 // Contract Types and Code
 //------------------------------------------------------------------------------
 
-/// An opaque blob of WebAssembly code.
+/// An opaque blob of executable code.
 ///
-/// This is the raw WASM binary that will be executed by the Wasmi runtime.
+/// This is the raw binary that will be executed as a (wasm or riscv) contract.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
 #[cfg_attr(feature = "spec", derive(XDR))]
@@ -57,7 +57,7 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractBlob {
-    pub wasm: BytesM,
+    pub data: BytesM,
 }
 
 /// The execution environment for a contract.
@@ -87,6 +87,11 @@ impl ContractType {
     ///
     /// Never deployed on-chain; exists only in the test harness.
     pub const kMockTest: Self = Self(2);
+
+    /// RiscV contract executed in the RV32 VM.
+    ///
+    /// This is the standard contract type for user-deployed contracts.
+    pub const kRv32: Self = Self(3);
 }
 impl From<i32> for ContractType {
     fn from(v: i32) -> Self {
@@ -105,6 +110,9 @@ impl core::fmt::Display for ContractType {
             },
             x if x == Self::kMockTest.0 => {
                 write!(f, "ContractType::kMockTest")
+            },
+            x if x == Self::kRv32.0 => {
+                write!(f, "ContractType::kRv32")
             },
             _ => {
                 write!(f, "ContractType({})", self.0)
@@ -145,6 +153,9 @@ pub enum Contract {
     // case kMockTest:
     //   i32 mock_contract_id;
     kMockTest { mock_contract_id: i32 } = ContractType::kMockTest.0 as i32,
+    // case kRv32:
+    //   ContractBlob rv32_contract;
+    kRv32 { rv32_contract: ContractBlob } = ContractType::kRv32.0 as i32,
     
 }
 
