@@ -2,7 +2,6 @@
 
 // Brings types from %#include'd .x files (event.hh) into scope for the
 // generated module, which imports them via `use crate::*`.
-#[allow(unused_imports)]
 use groundhog_xdr::event::Topic;
 
 #[rustfmt::skip]
