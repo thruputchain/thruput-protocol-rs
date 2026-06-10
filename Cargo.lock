@@ -235,6 +235,7 @@ name = "groundhog-spec"
 version = "0.16.0"
 dependencies = [
  "groundhog-serde_arrays",
+ "groundhog-xdr",
  "schemars 1.2.0",
  "serde",
  "serde_with",

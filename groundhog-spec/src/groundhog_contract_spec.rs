@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: b89462754658cb15bd45d5f4bfaf76372e55a454
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -479,6 +479,33 @@ pub enum ContractTypeDef {
 }
 
 // ---------------------------------------------------------------------------
+// Event definitions (Rust: ContractEventDef)
+// ---------------------------------------------------------------------------
+
+/// Describes an event emitted via the LogEvent syscall (see event.x).
+/// Topic 0 is always the event signature:
+///   sha256(MAJOR_VERSION :: CRATE_NAME :: TYPE_NAME)
+/// Topic fields and payload fields are listed separately, each in
+/// declaration order. Topic values that are not already 32 bytes wide are
+/// XDR-encoded and sha256-hashed; payload fields are XDR-encoded in order
+/// to form the event data.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractEventDef {
+    pub name: ContractSpecString,
+    // topic 0
+    pub signature: Topic,
+    // topics 1.. ; at most kMaxTopics-1 entries
+    pub topics: VecM<ContractField>,
+    // payload, XDR-encoded in order
+    pub fields: VecM<ContractField>,
+}
+
+// ---------------------------------------------------------------------------
 // Full spec (Rust: ContractSpec)
 // ---------------------------------------------------------------------------
 
@@ -491,6 +518,7 @@ pub enum ContractTypeDef {
 pub struct ContractSpec {
     pub interfaces: VecM<ContractSpecInterface>,
     pub type_defs: VecM<ContractTypeDef>,
+    pub events: VecM<ContractEventDef>,
 }
 
 // ---------------------------------------------------------------------------
@@ -536,6 +564,8 @@ impl SpecFragmentKind {
     pub const SpecMethod: Self = Self(1);
     pub const SpecTypeDef: Self = Self(2);
     pub const ExportedSpecTypeDef: Self = Self(3);
+    pub const SpecEvent: Self = Self(4);
+    pub const ExportedSpecEvent: Self = Self(5);
 }
 impl From<i32> for SpecFragmentKind {
     fn from(v: i32) -> Self {
@@ -557,6 +587,12 @@ impl core::fmt::Display for SpecFragmentKind {
             },
             x if x == Self::ExportedSpecTypeDef.0 => {
                 write!(f, "SpecFragmentKind::ExportedSpecTypeDef")
+            },
+            x if x == Self::SpecEvent.0 => {
+                write!(f, "SpecFragmentKind::SpecEvent")
+            },
+            x if x == Self::ExportedSpecEvent.0 => {
+                write!(f, "SpecFragmentKind::ExportedSpecEvent")
             },
             _ => {
                 write!(f, "SpecFragmentKind({})", self.0)
@@ -585,6 +621,11 @@ pub enum SpecFragment {
     //   ContractTypeDef type_def;
     SpecTypeDef { type_def: ContractTypeDef } = SpecFragmentKind::SpecTypeDef.0 as i32,
     ExportedSpecTypeDef { type_def: ContractTypeDef } = SpecFragmentKind::ExportedSpecTypeDef.0 as i32,
+    // case SpecEvent:
+    // case ExportedSpecEvent:
+    //   ContractEventDef event_def;
+    SpecEvent { event_def: ContractEventDef } = SpecFragmentKind::SpecEvent.0 as i32,
+    ExportedSpecEvent { event_def: ContractEventDef } = SpecFragmentKind::ExportedSpecEvent.0 as i32,
     
 }
 
