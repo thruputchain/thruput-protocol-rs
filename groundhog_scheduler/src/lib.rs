@@ -1,15 +1,16 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
-pub use groundhog_coordinator::*;
-pub use groundhog_xdr::address_auth::*;
-pub use groundhog_xdr::contract::*;
-pub use groundhog_xdr::exec_result::*;
-pub use groundhog_xdr::genesis::*;
-pub use groundhog_xdr::retrocausal_queue::*;
-pub use groundhog_xdr::storage_item::*;
-pub use groundhog_xdr::transaction::*;
-pub use groundhog_xdr::types::*;
+use groundhog_coordinator::*;
+use groundhog_scp::*;
+use groundhog_xdr::address_auth::*;
+use groundhog_xdr::contract::*;
+use groundhog_xdr::exec_result::*;
+use groundhog_xdr::genesis::*;
+use groundhog_xdr::retrocausal_queue::*;
+use groundhog_xdr::storage_item::*;
+use groundhog_xdr::transaction::*;
+use groundhog_xdr::types::*;
 
 #[rustfmt::skip]
 pub mod rpc_types;

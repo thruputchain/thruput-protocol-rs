@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
-pub use groundhog_xdr::types::*;
+use groundhog_xdr::types::*;
 
 #[rustfmt::skip]
 pub mod scp;
