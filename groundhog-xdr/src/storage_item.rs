@@ -126,7 +126,7 @@ pub enum StorageItem {
     //   int128_xdr nnint;
     kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt.0 as i32,
     /// A retrocausal multi-producer, single-consumer queue.
-    /// Tranactions can only insert entries into the queue or consume entries one by one
+    /// Transactions can only insert entries into the queue or consume entries one by one
     /// from the queue, so the whole queue is generally not loaded all at once.
     // case kItemTypeRetrocausalQueue:
     //   VecM<QueueEntry> queue_entries;
