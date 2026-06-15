@@ -142,7 +142,7 @@ impl BlockExecutionMode {
     pub const kBlockExecutionModeProposal: Self = Self(1);
 
     // Read-only access to the database.
-    // Used for view RPCs, guaranteeing that the executor cannot accidentially
+    // Used for view RPCs, guaranteeing that the executor cannot accidentally
     // do a write operation when it should not be able to.
     pub const kBlockExecutionModeViewing: Self = Self(2);
 }
