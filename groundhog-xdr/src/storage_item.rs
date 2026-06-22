@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -413,8 +413,11 @@ pub const kReplayCacheHeightsMaxLen : u32 = 4000;
 pub const kReplayCacheNoncesMaxLen : u32 = 8000;
 
 /// Maximum number of entries in a single RetrocausalQueue block.
-/// Each entry is at most 256 bytes, so 1000 entries is ~256KB.
-pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 1000;
+/// Each entry is at most 256 bytes. With XDR serialization overhead (4 bytes
+/// per entry length prefix, 12 bytes framing), ramdb key overhead (73 bytes),
+/// and ItemHeader (24 bytes), 250 entries of 256 bytes fits within ramdb's
+/// 64 KiB item limit (kBigItemThreshold). See issue #1437.
+pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 250;
 // 
 // Information about the number of nonces stored at each height of a
 // ReplayCache. Tracked in the ReplayCacheMetadata so nonce GC can

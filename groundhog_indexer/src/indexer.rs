@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 5351fdbd5f24dc09297b1857e6e8605cbf0ee655
+// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -96,6 +96,8 @@ pub enum TxInfoResult {
 }
 
 pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
+
+pub type TxInfoBatch = VecM::<TxInfo>;
 
 /// Max contracts per filter and max filters per query.  Matches Soroban
 /// getEvents' limit of 5; designed to be low enough that the merge-walk
@@ -196,6 +198,58 @@ pub struct EventPage {
     pub oldest_block: BlockHeight,
 }
 
+/// `get_transactions` request.  Walked in `order` from `anchor`,
+/// optionally filtered to transactions involving a single address.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct TransactionQuery {
+    /// When present, match only transactions involving this address.
+    /// Absent means match all transactions.  TODO(confirm): "involving"
+    /// = source/sender only, or any address touched during execution?
+    /// Depends on what the indexer indexes.
+    pub address: Option<ContractAddress>,
+    pub order: IterationOrder,
+    pub anchor: BlockAnchor,
+    /// Empty on the initial call.  Non-empty to continue where a previous
+    /// response left off; `order` and `anchor` in the request are ignored
+    /// when a cursor is supplied — the cursor carries them.
+    pub cursor: PaginationCursor,
+    /// Clamped server-side to [1, 200]; 0 means server default (50).
+    pub limit: u32,
+}
+
+/// `get_transactions` response.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct TransactionPage {
+    /// Matched transactions in the requested order.  May be empty even
+    /// when `cursor` is non-empty: the current scan window produced no
+    /// matches, so the client should keep paginating.  Empty
+    /// transactions + empty cursor = stream exhausted.
+    pub transactions: TxInfoBatch,
+    /// Empty when the stream has been exhausted in the requested
+    /// direction.  Non-empty: pass back in the next call's `cursor`
+    /// argument.
+    pub cursor: PaginationCursor,
+    /// Highest block height the indexer has processed at response time.
+    /// Clients compare to the heights on their last-seen transactions to
+    /// decide whether they're caught up.
+    pub latest_block: BlockHeight,
+    /// Oldest block height the indexer still retains data for at
+    /// response time.  Today always 0; once retention/pruning lands
+    /// this is the lower bound below which queries return empty
+    /// regardless of anchor.
+    pub oldest_block: BlockHeight,
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
@@ -246,6 +300,9 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     // "transfers to OR from me" case in a single call.
 
     async fn get_events(&self, arg0 : EventQuery) -> Result<EventPage, ::rpc_driver::ProgramError>;
+        // Paginated transactions, optionally filtered to a single address.
+
+    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPage, ::rpc_driver::ProgramError>;
 }
 
 
@@ -288,6 +345,13 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let res = self.inner.get_events(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // get_transactions
+            4 => {
+                let args: (TransactionQuery, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -319,6 +383,11 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPage, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn get_transactions(&self, arg0 : &TransactionQuery) -> Result<TransactionPage, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
