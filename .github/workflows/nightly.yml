@@ -47,9 +47,10 @@ jobs:
         run: |
           set -euo pipefail
           HEAD_SHA=$(git rev-parse HEAD)
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
           REMOTE_SHA=$(git ls-remote origin refs/tags/nightly | cut -f1 || true)
           if [ -n "$REMOTE_SHA" ] && [ "$REMOTE_SHA" = "$HEAD_SHA" ]; then
-            echo "main unchanged since last nightly ($HEAD_SHA); skipping publish."
+            echo "main unchanged since last nightly ($HEAD_SHA); skipping publish and tag re-push."
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
           else
             echo "should_publish=true" >> "$GITHUB_OUTPUT"
@@ -59,6 +60,8 @@ jobs:
         if: steps.changed.outputs.should_publish == 'true'
         id: version
         uses: ./actions/cargo-nightly-version
+        with:
+          commit: 'true'
 
       - name: dry run
         if: steps.changed.outputs.should_publish == 'true'
@@ -79,8 +82,11 @@ jobs:
         if: steps.changed.outputs.should_publish == 'true'
         run: |
           set -euo pipefail
-          echo "Tagging $(git rev-parse HEAD) as nightly ${{ steps.version.outputs.version }}"
-          git tag -f nightly "$(git rev-parse HEAD)"
+          # Tag the ORIGINAL pre-bump commit (captured before the ephemeral local
+          # version commit), which is the commit actually on the remote.
+          BASE_SHA="${{ steps.changed.outputs.head_sha }}"
+          echo "Tagging $BASE_SHA as nightly ${{ steps.version.outputs.version }}"
+          git tag -f nightly "$BASE_SHA"
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
           git push -f origin refs/tags/nightly
           git remote set-url origin git@github.com:${{ github.repository }}.git
