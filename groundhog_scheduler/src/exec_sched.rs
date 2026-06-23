@@ -50,8 +50,6 @@ pub enum ExecProposeResult {
     #[xdr(default_variant)] Default { result: i32 },
 }
 
-pub type ProposedTransactionBatch = VecM::<ProposedTransaction>;
-
 pub type ExecProposeBatchResult = VecM::<ExecProposeResult>;
 
 pub type ExecValidateBatchResult = VecM::<ExecResult>;

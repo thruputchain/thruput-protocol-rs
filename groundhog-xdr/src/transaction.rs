@@ -396,6 +396,8 @@ pub struct ProposedTransaction {
     pub nondeterministic_proposal_data: NondeterministicProposalData,
 }
 
+pub type ProposedTransactionBatch = VecM::<ProposedTransaction>;
+
 //------------------------------------------------------------------------------
 // Transaction Statistics
 //------------------------------------------------------------------------------

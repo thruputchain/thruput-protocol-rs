@@ -398,8 +398,16 @@ pub type TxEventLogBatch = VecM::<TxEventLog>;
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent1: Send + Sync {    
-    async fn indexer_event_process_events(&self, arg0 : BlockHeight, arg1 : TxEventLogBatch) -> Result<(), ::rpc_driver::ProgramError>;
+pub trait IndexerEvent_IndexerEvent1: Send + Sync {        // Event logs and the full transaction bodies for a committed block,
+    // forwarded together and index-aligned: the body at position i is the
+    // transaction whose event log is at position i.  The event server pairs
+    // them at emission, so the indexer never has to re-match bodies to events.
+    //
+    // The bodies travel beside the event log (which is hashed into the
+    // consensus event trie) rather than inside it; the indexer stores them for
+    // block-explorer transaction lookups.
+
+    async fn indexer_event_process_events(&self, arg0 : BlockHeight, arg1 : TxEventLogBatch, arg2 : ProposedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
 
@@ -423,9 +431,9 @@ impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent1_Dispatcher
         match proc {
             // indexer_event_process_events
             0 => {
-                let args: (BlockHeight, TxEventLogBatch, ) =
+                let args: (BlockHeight, TxEventLogBatch, ProposedTransactionBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_process_events(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.indexer_event_process_events(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -446,8 +454,8 @@ impl IndexerEvent_IndexerEvent1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaab, 1)
     }
-    pub async fn indexer_event_process_events(&self, arg0 : &BlockHeight, arg1 : &TxEventLogBatch) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn indexer_event_process_events(&self, arg0 : &BlockHeight, arg1 : &TxEventLogBatch, arg2 : &ProposedTransactionBatch) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
