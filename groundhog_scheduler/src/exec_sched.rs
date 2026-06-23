@@ -64,11 +64,11 @@ pub trait ExecutorSched_ExecutorSched1: Send + Sync {
     
     async fn executorsched_ready(&self) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : Transaction) -> Result<ExecProposeResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : SignedTransaction) -> Result<ExecProposeResult, ::rpc_driver::ProgramError>;
     
     async fn executorsched_validate_transaction(&self, arg0 : BlockID, arg1 : ProposedTransaction) -> Result<ExecResult, ::rpc_driver::ProgramError>;
     
-    async fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : TransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::ProgramError>;
+    async fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::ProgramError>;
     
     async fn executorsched_validate_batch(&self, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_driver::ProgramError>;
         // Executor can be in one of three states: None, Proposing, Validating
@@ -124,7 +124,7 @@ impl ::rpc_driver::handler::RpcHandler for ExecutorSched_ExecutorSched1_Dispatch
             }
             // executorsched_propose_transaction
             10 => {
-                let args: (BlockID, Transaction, ) =
+                let args: (BlockID, SignedTransaction, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.executorsched_propose_transaction(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -138,7 +138,7 @@ impl ::rpc_driver::handler::RpcHandler for ExecutorSched_ExecutorSched1_Dispatch
             }
             // executorsched_propose_batch
             11 => {
-                let args: (BlockID, TransactionBatch, ) =
+                let args: (BlockID, SignedTransactionBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.executorsched_propose_batch(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -206,7 +206,7 @@ impl ExecutorSched_ExecutorSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn executorsched_propose_transaction(&self, arg0 : &BlockID, arg1 : &Transaction) -> Result<ExecProposeResult, ::rpc_driver::RpcError> {
+    pub async fn executorsched_propose_transaction(&self, arg0 : &BlockID, arg1 : &SignedTransaction) -> Result<ExecProposeResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -216,7 +216,7 @@ impl ExecutorSched_ExecutorSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn executorsched_propose_batch(&self, arg0 : &BlockID, arg1 : &TransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::RpcError> {
+    pub async fn executorsched_propose_batch(&self, arg0 : &BlockID, arg1 : &SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
