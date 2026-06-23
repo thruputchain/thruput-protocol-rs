@@ -1,0 +1,87 @@
+name: Nightly release
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # 05:00 EDT / 02:00 PDT
+  workflow_dispatch:
+
+env:
+  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+jobs:
+  nightly:
+    permissions:
+      contents: write
+    runs-on: hog1
+
+    steps:
+      - name: Clean up .gitconfig
+        run: |
+          echo "Cleaning up .gitconfig"
+          rm -f /home/hogci/.gitconfig
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.ACTIONS_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          persist-credentials: true
+
+      - name: Configure git to use SSH
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+
+      - name: Checkout actions repository
+        uses: actions/checkout@v6
+        with:
+          repository: groundhogchain/actions
+          path: actions
+          ref: main
+
+      - name: Check for changes since last nightly
+        id: changed
+        run: |
+          set -euo pipefail
+          HEAD_SHA=$(git rev-parse HEAD)
+          REMOTE_SHA=$(git ls-remote origin refs/tags/nightly | cut -f1 || true)
+          if [ -n "$REMOTE_SHA" ] && [ "$REMOTE_SHA" = "$HEAD_SHA" ]; then
+            echo "main unchanged since last nightly ($HEAD_SHA); skipping publish."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute nightly version
+        if: steps.changed.outputs.should_publish == 'true'
+        id: version
+        uses: ./actions/cargo-nightly-version
+
+      - name: dry run
+        if: steps.changed.outputs.should_publish == 'true'
+        uses: ./actions/cargo-publish-dry-run
+        with:
+          skip-clippy: true
+          cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
+
+      - name: publish prerelease
+        if: steps.changed.outputs.should_publish == 'true'
+        uses: ./actions/cargo-publish-prerelease
+        with:
+          registry-name: groundhog
+          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+          no-verify: 'true'
+
+      - name: Move nightly tag
+        if: steps.changed.outputs.should_publish == 'true'
+        run: |
+          set -euo pipefail
+          echo "Tagging $(git rev-parse HEAD) as nightly ${{ steps.version.outputs.version }}"
+          git tag -f nightly "$(git rev-parse HEAD)"
+          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
+          git push -f origin refs/tags/nightly
+          git remote set-url origin git@github.com:${{ github.repository }}.git
