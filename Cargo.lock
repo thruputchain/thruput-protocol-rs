@@ -208,7 +208,7 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
 name = "groundhog-akkad"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -232,7 +232,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog-spec"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
@@ -244,11 +244,11 @@ dependencies = [
 
 [[package]]
 name = "groundhog-syscall"
-version = "0.18.2"
+version = "0.18.3"
 
 [[package]]
 name = "groundhog-trace"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
@@ -262,7 +262,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog-xdr"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "groundhog-serde_arrays",
  "groundhog-syscall",
@@ -277,7 +277,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog-xdr-macros"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2",
@@ -290,7 +290,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_coordinator"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -305,7 +305,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_db_gateway"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -323,7 +323,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_hogx"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -339,7 +339,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_indexer"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -356,7 +356,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_rpc"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -370,7 +370,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_scheduler"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -388,7 +388,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_scp"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -403,7 +403,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_view"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
@@ -421,7 +421,7 @@ dependencies = [
 
 [[package]]
 name = "groundhog_xdr_syscall_tests"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "groundhog-xdr",
 ]
@@ -446,7 +446,7 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hogexec-internal"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "xdrs",
 ]
@@ -677,7 +677,7 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.18.2"
+version = "0.18.3"
 dependencies = [
  "async-trait",
  "groundhog_rpc",
