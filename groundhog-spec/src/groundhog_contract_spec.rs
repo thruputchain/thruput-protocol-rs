@@ -550,6 +550,17 @@ pub struct SpecMethodFragment {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SpecInterfaceAnchor {
+    pub interface_name: ContractSpecString,
+    pub interface_version: ContractSpecString,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -566,6 +577,7 @@ impl SpecFragmentKind {
     pub const ExportedSpecTypeDef: Self = Self(3);
     pub const SpecEvent: Self = Self(4);
     pub const ExportedSpecEvent: Self = Self(5);
+    pub const InterfaceAnchor: Self = Self(6);
 }
 impl From<i32> for SpecFragmentKind {
     fn from(v: i32) -> Self {
@@ -593,6 +605,9 @@ impl core::fmt::Display for SpecFragmentKind {
             },
             x if x == Self::ExportedSpecEvent.0 => {
                 write!(f, "SpecFragmentKind::ExportedSpecEvent")
+            },
+            x if x == Self::InterfaceAnchor.0 => {
+                write!(f, "SpecFragmentKind::InterfaceAnchor")
             },
             _ => {
                 write!(f, "SpecFragmentKind({})", self.0)
@@ -626,6 +641,9 @@ pub enum SpecFragment {
     //   ContractEventDef event_def;
     SpecEvent { event_def: ContractEventDef } = SpecFragmentKind::SpecEvent.0 as i32,
     ExportedSpecEvent { event_def: ContractEventDef } = SpecFragmentKind::ExportedSpecEvent.0 as i32,
+    // case InterfaceAnchor:
+    //   SpecInterfaceAnchor interface_anchor;
+    InterfaceAnchor { interface_anchor: SpecInterfaceAnchor } = SpecFragmentKind::InterfaceAnchor.0 as i32,
     
 }
 
