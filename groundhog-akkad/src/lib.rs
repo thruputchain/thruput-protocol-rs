@@ -2,7 +2,7 @@
 #![allow(unused_imports)]
 
 use groundhog_scp::*;
-use groundhog_xdr::types::*;
+pub use groundhog_xdr::types::*;
 
 #[rustfmt::skip]
 pub mod batch;
