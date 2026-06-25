@@ -39,6 +39,9 @@ use ::serde_arrays;
 pub struct TxInfo {
     // The height of the block the tx was executed in.
     pub height: BlockHeight,
+    // The full transaction body (signed tx + nondeterministic data), as
+    // forwarded by the event server and stored in the indexer.
+    pub tx: ProposedTransaction,
     pub events: TxEventLog,
 }
 
