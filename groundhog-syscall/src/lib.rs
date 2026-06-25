@@ -8,9 +8,11 @@
 //!
 //! A dispatch path exists only when the target is `wasm32`/`riscv32`, or when
 //! the `syscalls_mock` feature is enabled. On any other target (a plain host
-//! without the mock) there is no way to leave the guest, so the crate is empty —
-//! it exports nothing. This keeps a feature-less host build (and `cargo build
-//! -p`, `cargo hack`, rust-analyzer) clean without a `compile_error!` guard.
+//! without the mock) there is no way to leave the guest, so the dispatch
+//! chokepoint `syscall_wrapper` is not exported. This keeps a feature-less host
+//! build (and `cargo build -p`, `cargo hack`, rust-analyzer) clean without a
+//! `compile_error!` guard. The `SyscallWord` type alias, by contrast, is a pure
+//! pointer-width type with no dispatch dependency, so it is always defined.
 //!
 //! There are three guest dispatch paths, selected by target:
 //!
@@ -28,12 +30,35 @@
 //! typed bindings generated in `groundhog-xdr`.
 #![no_std]
 
+/// The integer width of a single syscall argument slot.
+///
+/// Syscall arguments are passed as pointer-width words. On `wasm32` each slot is
+/// a 32-bit value, lowered to a wasm `i32` to match the host (`marmot`) ABI. On
+/// `riscv32` each slot is likewise a 32-bit value, carried in a register
+/// (`a1..a7`) across the `ecall` trap. On native targets each slot is a 64-bit
+/// value, wide enough to carry a host pointer (this is the path used by
+/// `native_exec` in the SDK). This happens to equal the platform pointer width,
+/// but is spelled out explicitly so the syscall ABI is decoupled from any
+/// incidental use of `usize` elsewhere.
+///
+/// This is a pure type alias with no dispatch dependency, so it is always
+/// defined — even on targets where `syscall_wrapper` is unavailable.
+#[cfg(any(target_arch = "wasm32", target_arch = "riscv32"))]
+pub type SyscallWord = u32;
+#[cfg(not(any(target_arch = "wasm32", target_arch = "riscv32")))]
+pub type SyscallWord = u64;
+
+// On riscv32 the slot must be exactly pointer/register width (32 bits); a 64-bit
+// slot would be split across a register pair and break the `ecall` ABI.
+#[cfg(target_arch = "riscv32")]
+const _: () = assert!(core::mem::size_of::<SyscallWord>() == 4);
+
 #[cfg(any(
     target_arch = "wasm32",
     target_arch = "riscv32",
     feature = "syscalls_mock"
 ))]
-pub use dispatch::{SyscallWord, syscall_wrapper};
+pub use dispatch::syscall_wrapper;
 
 #[cfg(any(
     target_arch = "wasm32",
@@ -41,25 +66,7 @@ pub use dispatch::{SyscallWord, syscall_wrapper};
     feature = "syscalls_mock"
 ))]
 mod dispatch {
-    /// The integer width of a single syscall argument slot.
-    ///
-    /// Syscall arguments are passed as pointer-width words. On `wasm32` each slot is
-    /// a 32-bit value, lowered to a wasm `i32` to match the host (`marmot`) ABI. On
-    /// `riscv32` each slot is likewise a 32-bit value, carried in a register
-    /// (`a1..a7`) across the `ecall` trap. On native targets each slot is a 64-bit
-    /// value, wide enough to carry a host pointer (this is the path used by
-    /// `native_exec` in the SDK). This happens to equal the platform pointer width,
-    /// but is spelled out explicitly so the syscall ABI is decoupled from any
-    /// incidental use of `usize` elsewhere.
-    #[cfg(any(target_arch = "wasm32", target_arch = "riscv32"))]
-    pub type SyscallWord = u32;
-    #[cfg(not(any(target_arch = "wasm32", target_arch = "riscv32")))]
-    pub type SyscallWord = u64;
-
-    // On riscv32 the slot must be exactly pointer/register width (32 bits); a 64-bit
-    // slot would be split across a register pair and break the `ecall` ABI.
-    #[cfg(target_arch = "riscv32")]
-    const _: () = assert!(core::mem::size_of::<SyscallWord>() == 4);
+    use super::SyscallWord;
 
     // The syscall entrypoint is declared with the *concrete* slot type for each
     // target, written out explicitly rather than via the `SyscallWord` alias. Since
