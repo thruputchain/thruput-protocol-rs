@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
+// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -38,7 +38,7 @@ use ::serde_arrays;
 #[repr(C)]
 pub struct MissingTransactions {
     pub transaction_hashes: VecM<SignedTransactionHash>,
-    pub cue: ConsensusValueCue,
+    pub consensus_value: ConsensusValue,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -71,7 +71,7 @@ pub trait Repair_Repair1: Send + Sync {
     
     async fn repair_missing_txs(&self, arg0 : MissingTransactionsEnvelope) -> Result<RepairedTransactions, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_cv(&self, arg0 : ConsensusValueCue) -> Result<OptConsensusValue, ::rpc_driver::ProgramError>;
+    async fn repair_missing_basis(&self, arg0 : ConsensusValue) -> Result<OptConsensusBasis, ::rpc_driver::ProgramError>;
     
     async fn repair_missing_scp_envelopes(&self, arg0 : SCPSlotIndex) -> Result<SCPEnvelopes, ::rpc_driver::ProgramError>;
 }
@@ -109,11 +109,11 @@ impl ::rpc_driver::handler::RpcHandler for Repair_Repair1_Dispatcher {
                 let res = self.inner.repair_missing_txs(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // repair_missing_cv
+            // repair_missing_basis
             20 => {
-                let args: (ConsensusValueCue, ) =
+                let args: (ConsensusValue, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_cv(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_basis(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_scp_envelopes
@@ -151,7 +151,7 @@ impl Repair_Repair1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_cv(&self, arg0 : &ConsensusValueCue) -> Result<OptConsensusValue, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_basis(&self, arg0 : &ConsensusValue) -> Result<OptConsensusBasis, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)

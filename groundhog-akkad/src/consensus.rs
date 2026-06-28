@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
+// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -70,6 +70,61 @@ impl DerefMut for ConsensusValueHash {
     }
 }
 
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ConsensusBasisHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for ConsensusBasisHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ConsensusBasisHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ConsensusBasisHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ConsensusBasisHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ConsensusBasis {
+    pub timestamp: TimePoint,
+    pub proposer: ValidatorID,
+    pub nomination: Nomination,
+    pub upgrades: VecM<Upgrade, 6>,
+    pub prev_value_hash: ConsensusValueHash,
+    pub prev_basis_hash: ConsensusBasisHash,
+}
+
+pub type OptConsensusBasis = Option::<ConsensusBasis>;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -78,24 +133,12 @@ impl DerefMut for ConsensusValueHash {
 #[repr(C)]
 pub struct ConsensusValue {
     pub timestamp: TimePoint,
-    pub nomination: Nomination,
+    pub proposer: ValidatorID,
     pub upgrades: VecM<Upgrade, 6>,
-    pub prev_cv_hash: ConsensusValueHash,
-}
-
-pub type OptConsensusValue = Option::<ConsensusValue>;
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct ConsensusValueCue {
-    pub proposer: ValidatorPublicInfo,
-    pub cv_hash: ConsensusValueHash,
-    pub prev_cv_hash: ConsensusValueHash,
     pub block_height: BlockHeight,
+    pub prev_value_hash: ConsensusValueHash,
+    pub basis_hash: ConsensusBasisHash,
+    pub prev_basis_hash: ConsensusBasisHash,
     pub block_hash: BlockHash,
     pub prev_block_hash: BlockHash,
 }

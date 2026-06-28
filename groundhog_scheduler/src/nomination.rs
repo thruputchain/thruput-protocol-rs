@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
+// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -38,7 +38,6 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Nomination {
-    pub proposer: ValidatorPublicInfo,
     pub block_height: BlockHeight,
     //XXX: rename to merkle_hash
     pub block_hash: BlockHash,
