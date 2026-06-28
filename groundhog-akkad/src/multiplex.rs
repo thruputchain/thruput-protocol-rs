@@ -40,7 +40,7 @@ pub struct MultiplexMessageType(pub i32);
 impl MultiplexMessageType {
     pub const MultiplexMessageInvalid: Self = Self(0);
     pub const MultiplexMessageSubmittedTxs: Self = Self(1);
-    pub const MultiplexMessageConsensusValue: Self = Self(2);
+    pub const MultiplexMessageConsensusBasis: Self = Self(2);
     pub const MultiplexMessageSCP: Self = Self(3);
 }
 impl From<i32> for MultiplexMessageType {
@@ -58,8 +58,8 @@ impl core::fmt::Display for MultiplexMessageType {
             x if x == Self::MultiplexMessageSubmittedTxs.0 => {
                 write!(f, "MultiplexMessageType::MultiplexMessageSubmittedTxs")
             },
-            x if x == Self::MultiplexMessageConsensusValue.0 => {
-                write!(f, "MultiplexMessageType::MultiplexMessageConsensusValue")
+            x if x == Self::MultiplexMessageConsensusBasis.0 => {
+                write!(f, "MultiplexMessageType::MultiplexMessageConsensusBasis")
             },
             x if x == Self::MultiplexMessageSCP.0 => {
                 write!(f, "MultiplexMessageType::MultiplexMessageSCP")
@@ -83,9 +83,9 @@ pub enum MultiplexMessage {
     // case MultiplexMessageSubmittedTxs:
     //   SubmittedTransactions submitted;
     MultiplexMessageSubmittedTxs { submitted: SubmittedTransactions } = MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
-    // case MultiplexMessageConsensusValue:
-    //   ConsensusValue consensus_value;
-    MultiplexMessageConsensusValue { consensus_value: ConsensusValue } = MultiplexMessageType::MultiplexMessageConsensusValue.0 as i32,
+    // case MultiplexMessageConsensusBasis:
+    //   ConsensusBasis consensus_basis;
+    MultiplexMessageConsensusBasis { consensus_basis: ConsensusBasis } = MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
     // case MultiplexMessageSCP:
     //   SCPEnvelope envelope;
     MultiplexMessageSCP { envelope: SCPEnvelope } = MultiplexMessageType::MultiplexMessageSCP.0 as i32,

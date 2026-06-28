@@ -38,7 +38,6 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Nomination {
-    pub proposer: ValidatorPublicInfo,
     pub block_height: BlockHeight,
     //XXX: rename to merkle_hash
     pub block_hash: BlockHash,

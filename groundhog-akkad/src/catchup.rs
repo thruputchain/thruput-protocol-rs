@@ -35,7 +35,7 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct CatchupBlock {
-    pub consensus_value: ConsensusValue,
+    pub consensus_basis: ConsensusBasis,
     pub signed_transactions: ParallelSignedTransactionBatch,
 }
 
