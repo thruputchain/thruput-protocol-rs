@@ -663,9 +663,9 @@ dependencies = [
 
 [[package]]
 name = "rpc_driver"
-version = "0.8.2"
+version = "0.9.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "3f78c23f1517d19a39f847cb1857eaf099d958d7f89d489c3b30271e47093e10"
+checksum = "d0057acc8f244617d93e3d7db04d8a585e685b32435d2c7a8166264160bcea24"
 dependencies = [
  "async-trait",
  "libc",
