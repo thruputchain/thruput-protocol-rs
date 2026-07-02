@@ -367,7 +367,7 @@ pub struct NondeterministicProposalData {
     /// TODO(geoff): Update this documentation once retrocausal queue handling
     /// is finalized. This field captures the queue entries consumed during
     /// execution to ensure deterministic replay.
-    pub observed_queue_entry_sequence: VecM<QueueEntry>,
+    pub observed_queue_entry_sequence: VecM<QueueEntry, kMaxConcurrentRcqReadsPerTx>,
 }
 
 /// A signed transaction with nondeterministic execution data attached.

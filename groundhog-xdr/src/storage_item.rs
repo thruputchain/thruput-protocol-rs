@@ -273,7 +273,7 @@ pub struct AuthDataChangeSigner {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct AuthDataChangeArgs {
-    pub auth_data_change_signers: VecM<AuthDataChangeSigner>,
+    pub auth_data_change_signers: VecM<AuthDataChangeSigner, kMaxSigners>,
     pub new_required_weight: Option<Weight>,
 }
 
@@ -411,13 +411,6 @@ pub const kReplayCacheHeightsMaxLen : u32 = 4000;
 
 /// Maximum unexpired consumed uniquifiers allowed per height in a cache.
 pub const kReplayCacheNoncesMaxLen : u32 = 8000;
-
-/// Maximum number of entries in a single RetrocausalQueue block.
-/// Each entry is at most 256 bytes. With XDR serialization overhead (4 bytes
-/// per entry length prefix, 12 bytes framing), ramdb key overhead (73 bytes),
-/// and ItemHeader (24 bytes), 250 entries of 256 bytes fits within ramdb's
-/// 64 KiB item limit (kBigItemThreshold). See issue #1437.
-pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 250;
 // 
 // Information about the number of nonces stored at each height of a
 // ReplayCache. Tracked in the ReplayCacheMetadata so nonce GC can

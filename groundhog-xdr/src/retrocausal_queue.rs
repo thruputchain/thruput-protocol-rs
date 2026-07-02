@@ -72,6 +72,25 @@ impl DerefMut for QueueEntry {
     }
 }
 
+/// Per-transaction cap on the number of concurrent RetrocausalQueue entries a
+/// transaction may observe (peek/consume) and record in its
+/// NondeterministicProposalData. Each observation is proposer-controlled and
+/// must be buffered and validated against an insert, so an unbounded count is
+/// an unbounded memory/compute vector — this is a tx resource limit in the same
+/// family as gas, not an RPC artifact. Because it is a tx-observable count
+/// checked against this protocol constant, the limit is consensus-uniform
+/// (every node agrees on "<= cap reads") and independent of any RPC buffer size.
+/// (Full rationale — incl. why an RPC-message-size bound would be unsafe — in
+/// the PR.)
+pub const kMaxConcurrentRcqReadsPerTx : u32 = 16384;
+
+/// Maximum number of entries in a single RetrocausalQueue block.
+/// Each entry is at most 256 bytes. With XDR serialization overhead (4 bytes
+/// per entry length prefix, 12 bytes framing), ramdb key overhead (73 bytes),
+/// and ItemHeader (24 bytes), 250 entries of 256 bytes fits within ramdb's
+/// 64 KiB item limit (kBigItemThreshold). See issue #1437.
+pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 250;
+
 // A block in a retrocausal queue, containing a list of entries and a block
 // number The entries are stored in lexicographically sorted order within the
 // block Block numbers are monotonically increasing
@@ -130,7 +149,7 @@ pub struct RetrocausalQueueMetadata {
 #[repr(C)]
 pub struct RetrocausalQueueConsumeDelta {
     pub past_block_consume: RetrocausalQueuePastBlockConsumeDelta,
-    pub current_block_consumed: VecM<QueueEntry>,
+    pub current_block_consumed: VecM<QueueEntry, kRetrocausalQueueBlockEntriesMaxLen>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -140,7 +159,7 @@ pub struct RetrocausalQueueConsumeDelta {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct RetrocausalQueueInsertDelta {
-    pub added_entries: VecM<QueueEntry>,
+    pub added_entries: VecM<QueueEntry, kRetrocausalQueueBlockEntriesMaxLen>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -158,7 +177,18 @@ pub struct RetrocausalQueueDelta {
     // HogDB validates that each entry was actually inserted by a concurrent
     // transaction. Unlike current_block_consumed, these do not decrement the
     // insert balance — they only require that a matching insert exists.
-    pub observed_concurrent_entries: VecM<QueueEntry>,
+    //
+    // This is bounded by the per-transaction observation cap
+    // (kMaxConcurrentRcqReadsPerTx), not the much smaller per-block entry cap
+    // (kRetrocausalQueueBlockEntriesMaxLen), for a non-obvious reason: when a
+    // validator replays a proposed block, the executor rebuilds this per-queue
+    // array from the proposer-supplied observation list, and a dishonest proposer
+    // can pack a whole transaction's observations into a single queue. The bogus
+    // entries are caught afterward (HogDB matches each observed entry to a real
+    // insert), but the array must be built before that check runs -- so it has to
+    // hold a full transaction's worth. Capping it at the per-block size would make
+    // that rebuild overflow and crash the validator instead of cleanly rejecting.
+    pub observed_concurrent_entries: VecM<QueueEntry, kMaxConcurrentRcqReadsPerTx>,
 }
 
 
