@@ -201,8 +201,9 @@ pub struct EventPage {
     pub oldest_block: BlockHeight,
 }
 
-/// `get_transactions` request.  Walked in `order` from `anchor`,
-/// optionally filtered to transactions involving a single address.
+/// `get_transactions` request.  Whole-chain walk in `order` from `anchor`.
+/// There is no address filter here — use `get_transactions_by_address` for
+/// per-account (root invoked address) transaction history.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -210,11 +211,6 @@ pub struct EventPage {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct TransactionQuery {
-    /// When present, match only transactions involving this address.
-    /// Absent means match all transactions.  TODO(confirm): "involving"
-    /// = source/sender only, or any address touched during execution?
-    /// Depends on what the indexer indexes.
-    pub address: Option<ContractAddress>,
     pub order: IterationOrder,
     pub anchor: BlockAnchor,
     /// Empty on the initial call.  Non-empty to continue where a previous
@@ -250,6 +246,56 @@ pub struct TransactionPage {
     /// response time.  Today always 0; once retention/pruning lands
     /// this is the lower bound below which queries return empty
     /// regardless of anchor.
+    pub oldest_block: BlockHeight,
+}
+
+/// Lightweight reference to a transaction: its hash plus the block it
+/// executed in.  Returned by `get_transactions_by_address`; hydrate the
+/// full body via `get_transaction_info`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct TransactionRef {
+    pub tx_hash: SignedTransactionHash,
+    pub height: BlockHeight,
+}
+
+pub type TransactionRefBatch = VecM::<TransactionRef>;
+
+/// `get_transactions_by_address` request.  Walked in `order` from `anchor`,
+/// returning transactions whose ROOT invocation targets `address` (i.e. the
+/// account's transaction history).
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct AddressTransactionQuery {
+    pub address: ContractAddress,
+    pub order: IterationOrder,
+    pub anchor: BlockAnchor,
+    /// Empty on the initial call.  Non-empty to continue; `order`/`anchor`
+    /// are ignored when a cursor is supplied.
+    pub cursor: PaginationCursor,
+    /// Clamped server-side to [1, 200]; 0 means server default (50).
+    pub limit: u32,
+}
+
+/// `get_transactions_by_address` response: transaction refs in `order`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct TransactionRefPage {
+    pub refs: TransactionRefBatch,
+    pub cursor: PaginationCursor,
+    pub latest_block: BlockHeight,
     pub oldest_block: BlockHeight,
 }
 
@@ -303,9 +349,13 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     // "transfers to OR from me" case in a single call.
 
     async fn get_events(&self, arg0 : EventQuery) -> Result<EventPage, ::rpc_driver::ProgramError>;
-        // Paginated transactions, optionally filtered to a single address.
+        // Paginated transactions, whole-chain, in block order.
 
     async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPage, ::rpc_driver::ProgramError>;
+        // Paginated transaction refs whose root invoked address == the query
+    // address (account transaction history).  Hydrate via get_transaction_info.
+
+    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::ProgramError>;
 }
 
 
@@ -355,6 +405,13 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let res = self.inner.get_transactions(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // get_transactions_by_address
+            5 => {
+                let args: (AddressTransactionQuery, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions_by_address(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -391,6 +448,11 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     pub async fn get_transactions(&self, arg0 : &TransactionQuery) -> Result<TransactionPage, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn get_transactions_by_address(&self, arg0 : &AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
