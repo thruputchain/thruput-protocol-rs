@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -90,29 +90,29 @@ pub struct CoordCard {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
-pub struct SchedulerNominationOutcome(pub i32);
+pub struct SchedulerProposalOutcome(pub i32);
 
-impl SchedulerNominationOutcome {
-    pub const SchedulerNominationOK: Self = Self(0);
-    pub const SchedulerNominationError: Self = Self(1);
+impl SchedulerProposalOutcome {
+    pub const SchedulerProposalOK: Self = Self(0);
+    pub const SchedulerProposalError: Self = Self(1);
 }
-impl From<i32> for SchedulerNominationOutcome {
+impl From<i32> for SchedulerProposalOutcome {
     fn from(v: i32) -> Self {
         Self(v)
     }
 }
 #[cfg(feature = "std")]
-impl core::fmt::Display for SchedulerNominationOutcome {
+impl core::fmt::Display for SchedulerProposalOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::SchedulerNominationOK.0 => {
-                write!(f, "SchedulerNominationOutcome::SchedulerNominationOK")
+            x if x == Self::SchedulerProposalOK.0 => {
+                write!(f, "SchedulerProposalOutcome::SchedulerProposalOK")
             },
-            x if x == Self::SchedulerNominationError.0 => {
-                write!(f, "SchedulerNominationOutcome::SchedulerNominationError")
+            x if x == Self::SchedulerProposalError.0 => {
+                write!(f, "SchedulerProposalOutcome::SchedulerProposalError")
             },
             _ => {
-                write!(f, "SchedulerNominationOutcome({})", self.0)
+                write!(f, "SchedulerProposalOutcome({})", self.0)
             }
         }
     }
@@ -125,10 +125,10 @@ impl core::fmt::Display for SchedulerNominationOutcome {
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SchedulerNominatedBlock {
+pub struct SchedulerProposedBlock {
     pub block_id: BlockID,
     pub txs: ParallelSignedTransactionBatch,
-    pub nomination: Nomination,
+    pub proposal: Proposal,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -138,13 +138,13 @@ pub struct SchedulerNominatedBlock {
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
-pub enum SchedulerNominationResult {
-    // case SchedulerNominationOK:
-    //   SchedulerNominatedBlock nominated_block;
-    SchedulerNominationOK { nominated_block: SchedulerNominatedBlock } = SchedulerNominationOutcome::SchedulerNominationOK.0 as i32,
-    // case SchedulerNominationError:
+pub enum SchedulerProposalResult {
+    // case SchedulerProposalOK:
+    //   SchedulerProposedBlock proposed_block;
+    SchedulerProposalOK { proposed_block: SchedulerProposedBlock } = SchedulerProposalOutcome::SchedulerProposalOK.0 as i32,
+    // case SchedulerProposalError:
     //   void;
-    SchedulerNominationError = SchedulerNominationOutcome::SchedulerNominationError.0 as i32,
+    SchedulerProposalError = SchedulerProposalOutcome::SchedulerProposalError.0 as i32,
     
 }
 
@@ -167,9 +167,9 @@ impl SchedulerValidationOutcome {
     pub const SchedulerValidationTooLateToValidate: Self = Self(5);
     pub const SchedulerValidationUnknownParentBlock: Self = Self(6);
 
-    // Nomination batch metadata is malformed or fails to decode (e.g.
+    // Proposal batch metadata is malformed or fails to decode (e.g.
     // segment token/byte counts are inconsistent, XDR deserialization
-    // fails, or tx_hashes/tx_nominations counts do not match).
+    // fails, or tx_hashes/tx_nondeterministic counts do not match).
     pub const SchedulerValidationMalformed: Self = Self(7);
 }
 impl From<i32> for SchedulerValidationOutcome {
@@ -220,7 +220,7 @@ impl core::fmt::Display for SchedulerValidationOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct SchedulerValidationBlock {
-    pub db_tip: DbTip,
+    pub block_id: BlockID,
     pub signed_transactions: ParallelSignedTransactionBatch,
 }
 
@@ -361,19 +361,21 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     async fn schedulercoord_submit_unvetted(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
     
     async fn schedulercoord_submit_vetted(&self, arg0 : ValidatorID, arg1 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
-        // schedulercoord_nominate asks the scheduler to prepare a nomination (a
+        // schedulercoord_propose asks the scheduler to prepare a proposal (a
     // block proposal) on top of the given db block.
 
-    async fn schedulercoord_nominate(&self, arg0 : DbTip) -> Result<SchedulerNominationResult, ::rpc_driver::ProgramError>;
-        // schedulercoord_validate asks the scheduler to validate a nomination,
+    async fn schedulercoord_propose_block(&self, arg0 : BlockID, arg1 : ProposalContext) -> Result<SchedulerProposalResult, ::rpc_driver::ProgramError>;
+        // schedulercoord_validate asks the scheduler to validate a proposal,
     // and if successful, return the block ID in the db of the validated
-    // block. DbTip is the block onto which the nomination is done.
+    // block. BlockID is the block onto which the proposal is done.
 
-    async fn schedulercoord_validate(&self, arg0 : DbTip, arg1 : Nomination) -> Result<SchedulerValidationResult, ::rpc_driver::ProgramError>;
+    async fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : Proposal) -> Result<SchedulerValidationResult, ::rpc_driver::ProgramError>;
         // Commit the block with block ID. This block must have been previously
-    // nominated or validated by the mempool.
+    // proposed or validated by the mempool.
+    // On commit the block is associated with the ConsensusValue that confirmed it.
+    // This value is saved in the database and retrievable via schedcoord_get_tip.
 
-    async fn schedulercoord_commit_block(&self, arg0 : BlockID) -> Result<SchedulerCommitOutcome, ::rpc_driver::ProgramError>;
+    async fn schedulercoord_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<SchedulerCommitOutcome, ::rpc_driver::ProgramError>;
         // Returns information about the current highest committed block.
     // If there is no committed block, returns SchedulerGetTipNoGenesisBlock.
 
@@ -434,25 +436,25 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
                 let res = self.inner.schedulercoord_submit_vetted(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // schedulercoord_nominate
+            // schedulercoord_propose_block
             4 => {
-                let args: (DbTip, ) =
+                let args: (BlockID, ProposalContext, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedulercoord_nominate(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.schedulercoord_propose_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // schedulercoord_validate
+            // schedulercoord_validate_block
             5 => {
-                let args: (DbTip, Nomination, ) =
+                let args: (BlockID, Proposal, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedulercoord_validate(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.schedulercoord_validate_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // schedulercoord_commit_block
             6 => {
-                let args: (BlockID, ) =
+                let args: (BlockID, ConsensusValue, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedulercoord_commit_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.schedulercoord_commit_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // schedcoord_get_tip
@@ -514,18 +516,18 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn schedulercoord_nominate(&self, arg0 : &DbTip) -> Result<SchedulerNominationResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn schedulercoord_propose_block(&self, arg0 : &BlockID, arg1 : &ProposalContext) -> Result<SchedulerProposalResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn schedulercoord_validate(&self, arg0 : &DbTip, arg1 : &Nomination) -> Result<SchedulerValidationResult, ::rpc_driver::RpcError> {
+    pub async fn schedulercoord_validate_block(&self, arg0 : &BlockID, arg1 : &Proposal) -> Result<SchedulerValidationResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn schedulercoord_commit_block(&self, arg0 : &BlockID) -> Result<SchedulerCommitOutcome, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn schedulercoord_commit_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<SchedulerCommitOutcome, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
@@ -552,8 +554,8 @@ impl SchedulerCoord_SchedulerCoord1_Client {
 // XDR internals below this point
 //
 
-impl SchedulerNominationResult {
-    pub fn outcome(&self) -> SchedulerNominationOutcome {
+impl SchedulerProposalResult {
+    pub fn outcome(&self) -> SchedulerProposalOutcome {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),

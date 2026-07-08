@@ -5,6 +5,10 @@ use groundhog_scp::*;
 use groundhog_xdr::types::*;
 
 #[rustfmt::skip]
+pub mod validator;
+pub use validator::*;
+
+#[rustfmt::skip]
 pub mod discovery;
 pub use discovery::*;
 
