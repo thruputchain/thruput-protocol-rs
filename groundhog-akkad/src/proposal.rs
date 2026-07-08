@@ -30,22 +30,6 @@ use ::serde_arrays;
 
 // clang-format on
 
-/// A candidate block: header plus the transaction metadata needed to
-/// re-execute it.
-///
-/// Does not travel on network: nodes reconstruct it from a `ConsensusValue`
-/// and its `ProposalTxs`.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct Proposal {
-    pub header: ProposalHeader,
-    pub transactions: ProposalTxs,
-}
-
 /// Transaction-side payload for a proposal.
 ///
 /// This is the payload a `ConsensusValue` commits to through
@@ -105,6 +89,22 @@ impl DerefMut for ProposalTxsHash {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
+}
+
+/// A candidate block: header plus the transaction metadata needed to
+/// re-execute it.
+///
+/// Does not travel on network: nodes reconstruct it from a `ConsensusValue`
+/// and its `ProposalTxs`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct Proposal {
+    pub header: ProposalHeader,
+    pub transactions: ProposalTxs,
 }
 
 pub type OptProposal = Option::<Proposal>;

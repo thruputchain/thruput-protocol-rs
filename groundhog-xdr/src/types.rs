@@ -514,6 +514,45 @@ impl schemars::JsonSchema for SHA256Hash {
 
 
 
+/// SHA-256 of the XDR-encoded `ConsensusValue`; the canonical block identity.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ConsensusValueHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for ConsensusValueHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ConsensusValueHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ConsensusValueHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ConsensusValueHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]

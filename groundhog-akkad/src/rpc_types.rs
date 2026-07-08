@@ -305,8 +305,8 @@ pub struct ViewingSnapshot {
 #[non_exhaustive]
 pub enum ExpectedViewingSnapshot {
     // case kRPCNone:
-    //   DbTip snapshot;
-    kRPCNone { snapshot: DbTip } = RPCError::kRPCNone.0 as i32,
+    //   ViewingSnapshot snapshot;
+    kRPCNone { snapshot: ViewingSnapshot } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { error: i32 },
