@@ -24,6 +24,7 @@ protos=(
 )
 
 traces=(
+  db_conflict.x
   transaction_trace.x
 )
 

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 7205267353bfdfe0f30403515b2c0aa330a72344
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1230,6 +1230,11 @@ pub struct InvocationFrameTrace {
     pub storage_writes: VecM<FlaggedStorageDelta>,
     /// Status of the frame when it terminates.
     pub status: InvocationFrameOutput,
+    /// Two-phase-commit conflict diagnostic for a try_invoke frame whose
+    /// subtransaction push failed (proposal mode). The kDbDiagnosticNone arm on
+    /// every other frame. Best-effort SDK-testing diagnostic; see
+    /// SystemCallHandler::finish_frame.
+    pub commit_conflict: DbConflictResult,
 }
 
 
