@@ -18,9 +18,11 @@ protos=(
   address_auth.x
   storage_item.x
   precompiles.x
-  block.x
   auth_token.x
   view.x
+  header.x
+  validator.x
+  network.x
 )
 
 traces=(
@@ -45,6 +47,7 @@ rpcs=(
 )
 
 coordinators=(
+  validator.x
   discovery.x
   config.x
   dogwood_kit.x
@@ -65,11 +68,13 @@ akkads=(
   integration.x
   loadgen.x
   multiplex.x
-  nomination.x
+  proposal.x
   parallel.x
   repair.x
   rpc_types.x
   sched_coord.x
+  header.x
+  validator.x
 )
 
 hogxs=(
@@ -176,7 +181,7 @@ done
 scheduler_deps=(
   rpc_types.x
   parallel.x
-  nomination.x
+  proposal.x
   db_sched.x
   exec_sched.x
   consensus.x

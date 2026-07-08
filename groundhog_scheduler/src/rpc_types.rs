@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -40,11 +40,9 @@ pub type BlockID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DbTip {
-    pub height: BlockHeight,
-    pub block_hash: BlockHash,
-    pub events_hash: SHA256Hash,
-    pub db_hash: DbHash,
     pub id: BlockID,
+    pub storage_long_hash: StorageLongHash,
+    pub value: ConsensusValue,
 }
 
 // Internal unique ID describing a transaction.
@@ -294,7 +292,7 @@ pub enum ExpectedDBTip {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ViewingSnapshot {
-    pub block_id: BlockID,
+    pub viewing_block_id: BlockID,
     pub tip: DbTip,
 }
 
@@ -307,8 +305,8 @@ pub struct ViewingSnapshot {
 #[non_exhaustive]
 pub enum ExpectedViewingSnapshot {
     // case kRPCNone:
-    //   ViewingSnapshot snapshot;
-    kRPCNone { snapshot: ViewingSnapshot } = RPCError::kRPCNone.0 as i32,
+    //   DbTip snapshot;
+    kRPCNone { snapshot: DbTip } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { error: i32 },

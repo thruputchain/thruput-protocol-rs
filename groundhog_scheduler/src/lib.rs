@@ -7,6 +7,7 @@ use groundhog_xdr::address_auth::*;
 use groundhog_xdr::contract::*;
 use groundhog_xdr::exec_result::*;
 use groundhog_xdr::genesis::*;
+use groundhog_xdr::header::*;
 use groundhog_xdr::retrocausal_queue::*;
 use groundhog_xdr::storage_item::*;
 use groundhog_xdr::transaction::*;
@@ -21,8 +22,8 @@ pub mod parallel;
 pub use parallel::*;
 
 #[rustfmt::skip]
-pub mod nomination;
-pub use nomination::*;
+pub mod proposal;
+pub use proposal::*;
 
 #[rustfmt::skip]
 pub mod db_sched;

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -84,8 +84,8 @@ pub enum MultiplexMessage {
     //   SubmittedTransactions submitted;
     MultiplexMessageSubmittedTxs { submitted: SubmittedTransactions } = MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
     // case MultiplexMessageConsensusBasis:
-    //   ConsensusBasis consensus_basis;
-    MultiplexMessageConsensusBasis { consensus_basis: ConsensusBasis } = MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
+    //   ConsensusBasis basis;
+    MultiplexMessageConsensusBasis { basis: ConsensusBasis } = MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
     // case MultiplexMessageSCP:
     //   SCPEnvelope envelope;
     MultiplexMessageSCP { envelope: SCPEnvelope } = MultiplexMessageType::MultiplexMessageSCP.0 as i32,
