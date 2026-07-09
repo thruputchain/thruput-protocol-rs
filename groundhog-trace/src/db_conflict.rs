@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7205267353bfdfe0f30403515b2c0aa330a72344
+// Generated from xdrc commit: 21ee49e9b2a76b0fa98de8a0837954f4f9d61f19
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -208,6 +208,22 @@ pub enum DbConflictResult {
     //   VecM<DbConflictDiagnostic> conflicts;
     kDbDiagnosticAll { conflicts: VecM<DbConflictDiagnostic> } = DbDiagnosticLevel::kDbDiagnosticAll.0 as i32,
     
+}
+
+/// Best-effort diagnostic for a transaction that failed nondeterministically
+/// during two-phase commit at proposal time: the executing block height of
+/// the failed attempt plus the first conflicting storage op hogdb reported.
+/// Fixed-size by construction; the wire and caches carry exactly one
+/// diagnostic per failure to bound memory end to end.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct TxFailureDiagnostic {
+    pub attempt_height: BlockHeight,
+    pub conflict: DbConflictDiagnostic,
 }
 
 
