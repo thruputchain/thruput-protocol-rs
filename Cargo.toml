@@ -8,6 +8,7 @@ members = [
     "groundhog_coordinator",
     "groundhog-akkad",
     "groundhog_hogx",
+    "groundhog-trace",
     "groundhog_indexer",
     "groundhog_scheduler",
     "groundhog_db_gateway",
@@ -15,7 +16,6 @@ members = [
     "bin/rpcthroughput_server",
     "groundhog_xdr_syscall_tests",
     "hogexec-internal",
-    "groundhog-trace",
     "groundhog-spec",
 ]
 resolver = "2"
