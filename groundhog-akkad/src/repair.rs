@@ -354,13 +354,13 @@ impl Repair_Repair1_Client {
 pub trait Repair_Repair2: Send + Sync {    
     async fn repair_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_txs(&self, arg0 : SignedMissingTxs) -> Result<SignedRepairedTxs, ::rpc_driver::ProgramError>;
+    async fn repair_missing_txs(&self, arg0 : SignedMissingTxs) -> Result<RepairedTxs, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_proposal(&self, arg0 : SignedMissingProposal) -> Result<SignedRepairedProposal, ::rpc_driver::ProgramError>;
+    async fn repair_missing_proposal(&self, arg0 : SignedMissingProposal) -> Result<RepairedProposal, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_slot(&self, arg0 : SignedMissingSlot) -> Result<SignedRepairedSlot, ::rpc_driver::ProgramError>;
+    async fn repair_missing_slot(&self, arg0 : SignedMissingSlot) -> Result<RepairedSlot, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_blocks(&self, arg0 : SignedMissingBlocks) -> Result<SignedRepairedBlocks, ::rpc_driver::ProgramError>;
+    async fn repair_missing_blocks(&self, arg0 : SignedMissingBlocks) -> Result<RepairedBlocks, ::rpc_driver::ProgramError>;
 }
 
 
@@ -440,22 +440,22 @@ impl Repair_Repair2_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_txs(&self, arg0 : &SignedMissingTxs) -> Result<SignedRepairedTxs, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_txs(&self, arg0 : &SignedMissingTxs) -> Result<RepairedTxs, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_proposal(&self, arg0 : &SignedMissingProposal) -> Result<SignedRepairedProposal, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_proposal(&self, arg0 : &SignedMissingProposal) -> Result<RepairedProposal, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_slot(&self, arg0 : &SignedMissingSlot) -> Result<SignedRepairedSlot, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_slot(&self, arg0 : &SignedMissingSlot) -> Result<RepairedSlot, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_blocks(&self, arg0 : &SignedMissingBlocks) -> Result<SignedRepairedBlocks, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_blocks(&self, arg0 : &SignedMissingBlocks) -> Result<RepairedBlocks, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 40, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
