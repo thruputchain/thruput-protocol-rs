@@ -127,6 +127,17 @@ pub enum DbAddressAuthDataBatchResult {
     #[xdr(default_variant)] Default { result: i32 },
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct DbBlockOk {
+    pub storage_hash: StorageShortHash,
+    pub storage_long_hash: StorageLongHash,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
@@ -136,8 +147,8 @@ pub enum DbAddressAuthDataBatchResult {
 #[non_exhaustive]
 pub enum DbBlockResult {
     // case DbSchedResultOK:
-    //   StorageShortHash storage_hash;
-    DbSchedResultOK { storage_hash: StorageShortHash } = DbSchedResult::DbSchedResultOK.0 as i32,
+    //   DbBlockOk block;
+    DbSchedResultOK { block: DbBlockOk } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { result: i32 },

@@ -267,6 +267,7 @@ pub struct SchedulerCommitOutcome(pub i32);
 impl SchedulerCommitOutcome {
     pub const SchedulerCommitOK: Self = Self(0);
     pub const SchedulerCommitBlockNotFound: Self = Self(1);
+    pub const SchedulerCommitInvalidConsensusValue: Self = Self(2);
 }
 impl From<i32> for SchedulerCommitOutcome {
     fn from(v: i32) -> Self {
@@ -282,6 +283,9 @@ impl core::fmt::Display for SchedulerCommitOutcome {
             },
             x if x == Self::SchedulerCommitBlockNotFound.0 => {
                 write!(f, "SchedulerCommitOutcome::SchedulerCommitBlockNotFound")
+            },
+            x if x == Self::SchedulerCommitInvalidConsensusValue.0 => {
+                write!(f, "SchedulerCommitOutcome::SchedulerCommitInvalidConsensusValue")
             },
             _ => {
                 write!(f, "SchedulerCommitOutcome({})", self.0)
@@ -365,11 +369,12 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     // block proposal) on top of the given db block.
 
     async fn schedulercoord_propose_block(&self, arg0 : BlockID, arg1 : ProposalContext) -> Result<SchedulerProposalResult, ::rpc_driver::ProgramError>;
-        // schedulercoord_validate asks the scheduler to validate a proposal,
-    // and if successful, return the block ID in the db of the validated
-    // block. BlockID is the block onto which the proposal is done.
+        // schedulercoord_validate asks the scheduler to validate a consensus value
+    // against the proposal transaction payload. If successful, it returns the
+    // block ID in the db of the validated block. BlockID is the block onto which
+    // the consensus value is done.
 
-    async fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : Proposal) -> Result<SchedulerValidationResult, ::rpc_driver::ProgramError>;
+    async fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : ConsensusValue, arg2 : ProposalTxs) -> Result<SchedulerValidationResult, ::rpc_driver::ProgramError>;
         // Commit the block with block ID. This block must have been previously
     // proposed or validated by the mempool.
     // On commit the block is associated with the ConsensusValue that confirmed it.
@@ -445,9 +450,9 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
             }
             // schedulercoord_validate_block
             5 => {
-                let args: (BlockID, Proposal, ) =
+                let args: (BlockID, ConsensusValue, ProposalTxs, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedulercoord_validate_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.schedulercoord_validate_block(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // schedulercoord_commit_block
@@ -521,8 +526,8 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn schedulercoord_validate_block(&self, arg0 : &BlockID, arg1 : &Proposal) -> Result<SchedulerValidationResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn schedulercoord_validate_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue, arg2 : &ProposalTxs) -> Result<SchedulerValidationResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
