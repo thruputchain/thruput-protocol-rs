@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -30,101 +30,17 @@ use ::serde_arrays;
 
 // clang-format on
 
+/// A serialized protocol upgrade, carried opaquely in `ConsensusValue`.
 pub type Upgrade = BytesM::<128>;
 
-// 
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(transparent)]
-#[cfg_attr(feature = "serde", serde(transparent))]
-pub struct ConsensusValueHash {
-    inner: SHA256Hash,
-}
-impl From<SHA256Hash> for ConsensusValueHash {
-    fn from(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-impl ConsensusValueHash {
-    pub fn into_inner(self) -> SHA256Hash {
-        self.inner
-    }
-    pub const fn new(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-
-impl Deref for ConsensusValueHash {
-    type Target = SHA256Hash;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-impl DerefMut for ConsensusValueHash {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
-    }
-}
-
-// 
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(transparent)]
-#[cfg_attr(feature = "serde", serde(transparent))]
-pub struct ConsensusBasisHash {
-    inner: SHA256Hash,
-}
-impl From<SHA256Hash> for ConsensusBasisHash {
-    fn from(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-impl ConsensusBasisHash {
-    pub fn into_inner(self) -> SHA256Hash {
-        self.inner
-    }
-    pub const fn new(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-
-impl Deref for ConsensusBasisHash {
-    type Target = SHA256Hash;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-impl DerefMut for ConsensusBasisHash {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
-    }
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct ConsensusBasis {
-    pub timestamp: TimePoint,
-    pub proposer: ValidatorID,
-    pub nomination: Nomination,
-    pub upgrades: VecM<Upgrade, 6>,
-    pub prev_value_hash: ConsensusValueHash,
-    pub prev_basis_hash: ConsensusBasisHash,
-}
-
-pub type OptConsensusBasis = Option::<ConsensusBasis>;
-
+/// The block commitment externalized by consensus.
+///
+/// `ConsensusValue` is the small value that systems use to identify
+/// a finalized Groundhog block without the full transaction payload.
+/// Its XDR hash is the block identity (`ConsensusValueHash`), so every
+/// field is consensus-critical.
+///
+/// Travels on network.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR)]
 
@@ -132,15 +48,40 @@ pub type OptConsensusBasis = Option::<ConsensusBasis>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ConsensusValue {
-    pub timestamp: TimePoint,
-    pub proposer: ValidatorID,
+    // Network protocol version.
+    pub protocol: Protocol,
+    pub ext: ExtensionPoint,
+    /// Hash of the parent block's `ConsensusValue`, linking the chain.
+    pub prev_hash: ConsensusValueHash,
+    /// The executed header of the proposed block.
+    pub proposal_header: ProposalHeader,
+    /// Commits to the block's transaction payload, which is kept out of the
+    /// value for compactness and travels separately in `ConsensusBasis`.
+    pub proposal_txs_hash: ProposalTxsHash,
+    /// Protocol upgrades selected by consensus to take effect at this block.
     pub upgrades: VecM<Upgrade, 6>,
-    pub block_height: BlockHeight,
-    pub prev_value_hash: ConsensusValueHash,
-    pub basis_hash: ConsensusBasisHash,
-    pub prev_basis_hash: ConsensusBasisHash,
-    pub block_hash: BlockHash,
-    pub prev_block_hash: BlockHash,
+}
+
+/// The validation payload for a consensus value.
+///
+/// `ConsensusBasis` pairs a `ConsensusValue` with the transaction payload it
+/// commits to but does not contain, letting a node reconstruct the `Proposal`
+/// as `{ header: value.proposal_header, transactions: proposal_txs }` and
+/// validate it. Gossiped and used during catchup.
+///
+/// Consensus agrees only on `value`; the basis has no consensus identity of its own.
+///
+/// Travels on network.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ConsensusBasis {
+    pub ext: ExtensionPoint,
+    pub value: ConsensusValue,
+    pub proposal_txs: ProposalTxs,
 }
 
 

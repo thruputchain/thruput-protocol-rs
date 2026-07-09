@@ -20,6 +20,10 @@ pub use dogwood_kit::*;
 pub mod dogwood;
 pub use dogwood::*;
 
+#[rustfmt::skip]
+pub mod validator;
+pub use validator::*;
+
 #[cfg(test)]
 mod tests {
     use super::*;

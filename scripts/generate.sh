@@ -18,13 +18,13 @@ protos=(
   address_auth.x
   storage_item.x
   precompiles.x
-  block.x
   auth_token.x
   view.x
 )
 
 traces=(
   transaction_trace.x
+  db_conflict.x
 )
 
 # XDR files for hogexec-internal
@@ -49,6 +49,7 @@ coordinators=(
   config.x
   dogwood_kit.x
   dogwood.x
+  validator.x
 )
 
 # dependencies for the wip rust coordinator
@@ -65,11 +66,13 @@ akkads=(
   integration.x
   loadgen.x
   multiplex.x
-  nomination.x
+  proposal.x
+  header.x
   parallel.x
   repair.x
   rpc_types.x
   sched_coord.x
+  validator.x
 )
 
 hogxs=(
@@ -167,6 +170,7 @@ done
 indexers=(
   indexer.x
   pagination.x
+  db_conflict.x
 )
 
 for idx in "${indexers[@]}"; do
@@ -176,7 +180,8 @@ done
 scheduler_deps=(
   rpc_types.x
   parallel.x
-  nomination.x
+  proposal.x
+  header.x
   db_sched.x
   exec_sched.x
   consensus.x

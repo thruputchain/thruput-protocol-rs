@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -58,6 +58,14 @@ pub struct TxInfoOutcome(pub i32);
 impl TxInfoOutcome {
     pub const TxInfoFound: Self = Self(0);
     pub const TxInfoNotFound: Self = Self(1);
+
+    /// No committed record, but the transaction failed nondeterministically
+    /// within the last few blocks and the indexer still holds the diagnostic.
+    /// Best-effort and advisory: reports are dropped freely under load, only
+    /// the proposing node's indexers hear them, and a later retry of the same
+    /// tx may still commit (at which point TxInfoFound wins). Absence of this
+    /// outcome proves nothing.
+    pub const TxInfoRecentFailure: Self = Self(2);
 }
 impl From<i32> for TxInfoOutcome {
     fn from(v: i32) -> Self {
@@ -73,6 +81,9 @@ impl core::fmt::Display for TxInfoOutcome {
             },
             x if x == Self::TxInfoNotFound.0 => {
                 write!(f, "TxInfoOutcome::TxInfoNotFound")
+            },
+            x if x == Self::TxInfoRecentFailure.0 => {
+                write!(f, "TxInfoOutcome::TxInfoRecentFailure")
             },
             _ => {
                 write!(f, "TxInfoOutcome({})", self.0)
@@ -93,6 +104,9 @@ pub enum TxInfoResult {
     // case TxInfoFound:
     //   TxInfo info;
     TxInfoFound { info: TxInfo } = TxInfoOutcome::TxInfoFound.0 as i32,
+    // case TxInfoRecentFailure:
+    //   TxFailureDiagnostic recent_failure;
+    TxInfoRecentFailure { recent_failure: TxFailureDiagnostic } = TxInfoOutcome::TxInfoRecentFailure.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { outcome: i32 },
@@ -340,7 +354,7 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
-    async fn indexer_block_explorer_intro(&self, arg0 : Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
+    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
         // Paginated, filtered events query.  A candidate event matches
@@ -379,7 +393,7 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
         match proc {
             // indexer_block_explorer_intro
             0 => {
-                let args: (Protocol, ) =
+                let args: (ProtocolCommit, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.indexer_block_explorer_intro(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -430,7 +444,7 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaaa, 1)
     }
-    pub async fn indexer_block_explorer_intro(&self, arg0 : &Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::RpcError> {
+    pub async fn indexer_block_explorer_intro(&self, arg0 : &ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -473,6 +487,12 @@ pub trait IndexerEvent_IndexerEvent1: Send + Sync {        // Event logs and the
     // block-explorer transaction lookups.
 
     async fn indexer_event_process_events(&self, arg0 : BlockHeight, arg1 : TxEventLogBatch, arg2 : ProposedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
+        // Best-effort relay (from the event server) of a transaction that failed
+    // nondeterministically at proposal time. The indexer caches it briefly so
+    // get_transaction_info can explain the failure; it may drop reports
+    // freely (cache full) and expires them a few blocks later.
+
+    async fn indexer_event_report_tx_failure(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
 
@@ -501,6 +521,13 @@ impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent1_Dispatcher
                 let res = self.inner.indexer_event_process_events(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // indexer_event_report_tx_failure
+            1 => {
+                let args: (SignedTransactionHash, TxFailureDiagnostic, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.indexer_event_report_tx_failure(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -524,6 +551,11 @@ impl IndexerEvent_IndexerEvent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
+    pub async fn indexer_event_report_tx_failure(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<(), ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
 }
 
 
@@ -534,7 +566,7 @@ impl IndexerEvent_IndexerEvent1_Client {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IndexerCard {
-    pub protocol: Protocol,
+    pub protocol: ProtocolCommit,
     pub address_for_event: ServerAddress,
 }
 

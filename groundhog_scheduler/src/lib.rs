@@ -21,8 +21,12 @@ pub mod parallel;
 pub use parallel::*;
 
 #[rustfmt::skip]
-pub mod nomination;
-pub use nomination::*;
+pub mod proposal;
+pub use proposal::*;
+
+#[rustfmt::skip]
+pub mod header;
+pub use header::*;
 
 #[rustfmt::skip]
 pub mod db_sched;

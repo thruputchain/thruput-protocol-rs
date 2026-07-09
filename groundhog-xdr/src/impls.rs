@@ -206,7 +206,7 @@ impl Into<int128_xdr> for i128 {
     }
 }
 
-impl Default for DbHash {
+impl Default for StorageLongHash {
     fn default() -> Self {
         Self::new([0; 2048])
     }

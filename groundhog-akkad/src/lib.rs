@@ -61,8 +61,12 @@ pub mod multiplex;
 pub use multiplex::*;
 
 #[rustfmt::skip]
-pub mod nomination;
-pub use nomination::*;
+pub mod proposal;
+pub use proposal::*;
+
+#[rustfmt::skip]
+pub mod header;
+pub use header::*;
 
 #[rustfmt::skip]
 pub mod parallel;
@@ -103,3 +107,7 @@ pub use address_auth::*;
 #[rustfmt::skip]
 pub mod db_sched;
 pub use db_sched::*;
+
+#[rustfmt::skip]
+pub mod validator;
+pub use validator::*;

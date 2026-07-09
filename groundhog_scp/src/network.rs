@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e71362f6e7b2754f18b47834c49916f3f359ab01
+// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -37,8 +37,9 @@ pub type ServerAddress = StringM;
 /// and randomness)
 pub type UPID = [u8; 8 as usize];
 
-/// Protocol describes a specific protocol and version.
-pub type Protocol = StringM;
+/// ProtocolCommit describes a specific protocol repo version.
+/// Used to ensure communicating daemons in a validator deployment are compatible.
+pub type ProtocolCommit = StringM;
 
 
 //
