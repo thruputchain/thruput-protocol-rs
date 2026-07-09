@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "hogexec-internal",
     "groundhog-xdr-macros",
     "groundhog-syscall",
     "groundhog-xdr",
@@ -15,7 +16,6 @@ members = [
     "groundhog_view",
     "bin/rpcthroughput_server",
     "groundhog_xdr_syscall_tests",
-    "hogexec-internal",
     "groundhog-spec",
 ]
 resolver = "2"
