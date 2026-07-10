@@ -1,7 +1,10 @@
 use crate::*;
 use core::fmt;
 
-#[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR))]
+#[cfg_attr(
+    feature = "xdrs",
+    derive(xdrs::ReadXDR, xdrs::WriteXDR, xdrs::ConstWriteXDR)
+)]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
