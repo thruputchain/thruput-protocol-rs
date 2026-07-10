@@ -3,7 +3,12 @@ use core::fmt;
 
 #[cfg_attr(
     feature = "xdrs",
-    derive(xdrs::ReadXDR, xdrs::WriteXDR, xdrs::ConstWriteXDR)
+    derive(
+        xdrs::ReadXDR,
+        xdrs::WriteXDR,
+        xdrs::ConstWriteXDR,
+        xdrs::ConstXDRSize
+    )
 )]
 #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
 #[derive(Copy, Clone, PartialEq, Eq)]
