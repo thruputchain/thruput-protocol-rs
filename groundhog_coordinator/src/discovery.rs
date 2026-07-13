@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 33cc27325a7a3cb150f12f75fabfabeb95b17b44
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -154,6 +154,12 @@ impl Discovery_Discovery1_Client {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+}
+
+impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for Discovery_Discovery1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
+        Self::new(handle)
     }
 }
 
