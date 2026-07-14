@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 21ee49e9b2a76b0fa98de8a0837954f4f9d61f19
+// Generated from xdrc commit: c0e2b46d8abfb48cd8fb90d8f06af8d2a99acf27
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -412,6 +412,12 @@ impl DbSched_DbSched1_Client {
          let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+}
+
+impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for DbSched_DbSched1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
+        Self::new(handle)
     }
 }
 
