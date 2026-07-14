@@ -80,6 +80,13 @@ impl SyscallErrorCode {
 
     /// No entry in the retrocausal queue to consume
     pub const kSyscallErrorCodeNoRetrocausalQueueEntry: Self = Self(9);
+
+    /// The transaction has reached its per-transaction limit on concurrent
+    /// retrocausal-queue reads (kMaxConcurrentRcqReadsPerTx). This is a resource
+    /// limit, not a malformed call, and does not by itself fail the transaction;
+    /// a contract may use it as a stop condition (e.g. drain a queue until it
+    /// returns this).
+    pub const kSyscallErrorCodeRetrocausalQueueReadLimitReached: Self = Self(10);
 }
 impl From<i32> for SyscallErrorCode {
     fn from(v: i32) -> Self {
@@ -119,6 +126,9 @@ impl core::fmt::Display for SyscallErrorCode {
             },
             x if x == Self::kSyscallErrorCodeNoRetrocausalQueueEntry.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry")
+            },
+            x if x == Self::kSyscallErrorCodeRetrocausalQueueReadLimitReached.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeRetrocausalQueueReadLimitReached")
             },
             _ => {
                 write!(f, "SyscallErrorCode({})", self.0)

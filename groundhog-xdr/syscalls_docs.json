@@ -271,6 +271,12 @@
         "description": [
           "The storage key exists but contains a different type."
         ]
+      },
+      {
+        "code": "kSyscallErrorCodeRetrocausalQueueReadLimitReached",
+        "description": [
+          "The transaction has read the maximum number of concurrent retrocausal-queue entries allowed per transaction. Returning this does not fail the transaction; a contract may use it as a stop condition."
+        ]
       }
     ]
   },
@@ -372,6 +378,12 @@
         "code": "kSyscallErrorCodeNoRetrocausalQueueEntry",
         "description": [
           "The retrocausal queue is empty and has no entries to peek."
+        ]
+      },
+      {
+        "code": "kSyscallErrorCodeRetrocausalQueueReadLimitReached",
+        "description": [
+          "The transaction has read the maximum number of concurrent retrocausal-queue entries allowed per transaction. Returning this does not fail the transaction; a contract may use it as a stop condition."
         ]
       }
     ]
