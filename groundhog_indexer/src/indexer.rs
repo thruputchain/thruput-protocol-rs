@@ -582,11 +582,59 @@ pub struct IndexerCard {
     pub address_for_event: ServerAddress,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct EventIndexerIntroOutcome(pub i32);
+
+impl EventIndexerIntroOutcome {
+    pub const EventIntroSuccess: Self = Self(0);
+
+    // The indexer advertised a protocol string the event server does not speak.
+    pub const EventIntroMismatchedProtocol: Self = Self(1);
+
+    // The event server could not dial the indexer's advertised address_for_event
+    // (e.g. a bind/advertise mismatch or a refused connection). The registration
+    // is rejected rather than silently accepted, so the indexer does not mark
+    // itself healthy while the event server has no client for it.
+    pub const EventIntroConnectFailed: Self = Self(2);
+}
+impl From<i32> for EventIndexerIntroOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for EventIndexerIntroOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::EventIntroSuccess.0 => {
+                write!(f, "EventIndexerIntroOutcome::EventIntroSuccess")
+            },
+            x if x == Self::EventIntroMismatchedProtocol.0 => {
+                write!(f, "EventIndexerIntroOutcome::EventIntroMismatchedProtocol")
+            },
+            x if x == Self::EventIntroConnectFailed.0 => {
+                write!(f, "EventIndexerIntroOutcome::EventIntroConnectFailed")
+            },
+            _ => {
+                write!(f, "EventIndexerIntroOutcome({})", self.0)
+            }
+        }
+    }
+}
+
+
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_intro(&self, arg0 : IndexerCard) -> Result<(), ::rpc_driver::ProgramError>;
+    async fn event_indexer_intro(&self, arg0 : IndexerCard) -> Result<EventIndexerIntroOutcome, ::rpc_driver::ProgramError>;
 }
 
 
@@ -633,7 +681,7 @@ impl EventIndexer_EventIndexer1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaac, 1)
     }
-    pub async fn event_indexer_intro(&self, arg0 : &IndexerCard) -> Result<(), ::rpc_driver::RpcError> {
+    pub async fn event_indexer_intro(&self, arg0 : &IndexerCard) -> Result<EventIndexerIntroOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
