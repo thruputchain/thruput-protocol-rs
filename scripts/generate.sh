@@ -21,6 +21,7 @@ protos=(
   block.x
   auth_token.x
   view.x
+  preimage.x
 )
 
 traces=(

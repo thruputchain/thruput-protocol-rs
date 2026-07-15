@@ -123,3 +123,8 @@ use auth_token::*;
 #[rustfmt::skip]
 pub mod view;
 use view::*;
+
+#[rustfmt::skip]
+pub mod preimage;
+use preimage::*;
+
