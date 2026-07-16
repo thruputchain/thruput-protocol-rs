@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fcfcf83a6c5f2e7596b7a93113093597f40c45ec
+// Generated from xdrc commit: d4afd905c79896a20c85c696f0583bec86affbef
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -32,7 +32,7 @@ use ::serde_arrays;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -72,7 +72,7 @@ impl core::fmt::Display for CoordinatorRegistrationOutcome {
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -84,7 +84,7 @@ pub struct CoordCard {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -120,7 +120,7 @@ impl core::fmt::Display for SchedulerNominationOutcome {
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -133,7 +133,7 @@ pub struct SchedulerNominatedBlock {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -150,7 +150,7 @@ pub enum SchedulerNominationResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -214,7 +214,7 @@ impl core::fmt::Display for SchedulerValidationOutcome {
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -226,7 +226,7 @@ pub struct SchedulerValidationBlock {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -256,7 +256,7 @@ pub enum SchedulerValidationResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -293,7 +293,7 @@ impl core::fmt::Display for SchedulerCommitOutcome {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -330,7 +330,7 @@ impl core::fmt::Display for SchedulerGetTipOutcome {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]

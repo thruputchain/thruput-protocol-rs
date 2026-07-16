@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fcfcf83a6c5f2e7596b7a93113093597f40c45ec
+// Generated from xdrc commit: d4afd905c79896a20c85c696f0583bec86affbef
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -33,7 +33,7 @@ use ::serde_arrays;
 // TODO: x23c does not allow an empty struct, it requires "void;" inside, whereas
 // goxdr does not allow a "void;" field.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -51,7 +51,7 @@ pub type Tag = StringM;
 pub type Flag = StringM;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -66,7 +66,7 @@ pub type StringMap = VecM::<KeyString>;
 pub type SocketAddress = StringM;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -77,7 +77,7 @@ pub struct SocketConnection {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -91,7 +91,7 @@ pub struct KeySocketAddress {
 pub type SocketAddressMap = VecM::<KeySocketAddress>;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

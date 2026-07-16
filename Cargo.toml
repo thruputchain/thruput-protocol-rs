@@ -50,7 +50,7 @@ groundhog_view = { path = "groundhog_view", version = "=0.19.8", registry = "gro
 hogexec-internal = { path = "hogexec-internal", version = "=0.19.8", registry = "groundhog" }
 macros = { path = "macros", version = "=0.19.8", registry = "groundhog" }
 groundhog-spec = { path = "groundhog-spec", version = "=0.19.8", registry = "groundhog" }
-xdrs = { registry = "groundhog", version = "0.8.0", default-features = false, features = [
+xdrs = { registry = "groundhog", version = "0.8.1", default-features = false, features = [
     "int128",
     "derive",
     "ns",

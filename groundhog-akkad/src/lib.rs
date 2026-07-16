@@ -2,7 +2,15 @@
 #![allow(unused_imports)]
 
 pub use groundhog_scp::*;
-pub use groundhog_xdr::types::*;
+
+// These types are defined in groundhog-xdr and regenerated there on every
+// protocol bump (via the `protos` list in scripts/generate.sh). Re-export them
+// instead of vendoring stale copies that generate.sh's `akkads` list never
+// refreshes.
+pub use groundhog_xdr::{
+    address_auth::*, auth_claim::*, contract::*, genesis::*, precompiles::*,
+    retrocausal_queue::*, storage_cost::*, transaction::*, types::*,
+};
 
 #[rustfmt::skip]
 pub mod batch;
@@ -37,20 +45,8 @@ pub mod dogwood;
 pub use dogwood::*;
 
 #[rustfmt::skip]
-pub mod contract;
-pub use contract::*;
-
-#[rustfmt::skip]
-pub mod precompiles;
-pub use precompiles::*;
-
-#[rustfmt::skip]
 pub mod integration;
 pub use integration::*;
-
-#[rustfmt::skip]
-pub mod genesis;
-pub use genesis::*;
 
 #[rustfmt::skip]
 pub mod loadgen;
@@ -77,28 +73,8 @@ pub mod sched_coord;
 pub use sched_coord::*;
 
 #[rustfmt::skip]
-pub mod storage_cost;
-pub use storage_cost::*;
-
-#[rustfmt::skip]
-pub mod transaction;
-pub use transaction::*;
-
-#[rustfmt::skip]
 pub mod rpc_types;
 pub use rpc_types::*;
-
-#[rustfmt::skip]
-pub mod retrocausal_queue;
-pub use retrocausal_queue::*;
-
-#[rustfmt::skip]
-pub mod auth_claim;
-pub use auth_claim::*;
-
-#[rustfmt::skip]
-pub mod address_auth;
-pub use address_auth::*;
 
 #[rustfmt::skip]
 pub mod db_sched;

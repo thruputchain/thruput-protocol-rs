@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fcfcf83a6c5f2e7596b7a93113093597f40c45ec
+// Generated from xdrc commit: d4afd905c79896a20c85c696f0583bec86affbef
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -34,7 +34,7 @@ pub type Upgrade = BytesM::<128>;
 
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -72,7 +72,7 @@ impl DerefMut for ConsensusValueHash {
 
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -109,7 +109,7 @@ impl DerefMut for ConsensusBasisHash {
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -126,7 +126,7 @@ pub struct ConsensusBasis {
 pub type OptConsensusBasis = Option::<ConsensusBasis>;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

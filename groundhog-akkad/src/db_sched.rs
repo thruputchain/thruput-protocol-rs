@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: fcfcf83a6c5f2e7596b7a93113093597f40c45ec
+// Generated from xdrc commit: d4afd905c79896a20c85c696f0583bec86affbef
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -32,7 +32,7 @@ use ::serde_arrays;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -80,7 +80,7 @@ pub const kHogAgeGroupReceived : u32 = 2;
 pub const kHogAgeNumGroups : u32 = 3;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -95,7 +95,7 @@ pub type HogAgeBatch = VecM::<HogAge>;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -113,7 +113,7 @@ pub type HogAgeResults = VecM::<HogAgeResult>;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -129,7 +129,7 @@ pub enum DbAddressAuthDataBatchResult {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -145,7 +145,7 @@ pub enum DbBlockResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -178,7 +178,7 @@ impl core::fmt::Display for DbShardResult {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR)]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
