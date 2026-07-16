@@ -423,10 +423,9 @@ pub enum SecretKey {
 /// the only valid byte value is 0, but a struct that embeds this can
 /// later replace itself with a union (with the prior struct as variant 0)
 /// without breaking backwards compatibility.
-// #[rust(ConstWriteXDR)
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstWriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
