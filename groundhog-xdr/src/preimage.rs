@@ -30,9 +30,8 @@ use ::serde_arrays;
 
 
 
-// #[rust(ConstWriteXDR)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstWriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
