@@ -112,6 +112,59 @@ pub enum TxInfoResult {
     #[xdr(default_variant)] Default { outcome: i32 },
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct BlockLookupOutcome(pub i32);
+
+impl BlockLookupOutcome {
+    pub const BlockFound: Self = Self(0);
+    pub const BlockNotFound: Self = Self(1);
+}
+impl From<i32> for BlockLookupOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for BlockLookupOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::BlockFound.0 => {
+                write!(f, "BlockLookupOutcome::BlockFound")
+            },
+            x if x == Self::BlockNotFound.0 => {
+                write!(f, "BlockLookupOutcome::BlockNotFound")
+            },
+            _ => {
+                write!(f, "BlockLookupOutcome({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum BlockLookupResult {
+    // case BlockFound:
+    //   BlockHeader header;
+    BlockFound { header: BlockHeader } = BlockLookupOutcome::BlockFound.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
 pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
 
 pub type TxInfoBatch = VecM::<TxInfo>;
@@ -264,8 +317,8 @@ pub struct TransactionPage {
 }
 
 /// Lightweight reference to a transaction: its hash plus the block it
-/// executed in.  Returned by `get_transactions_by_address`; hydrate the
-/// full body via `get_transaction_info`.
+/// executed in. Returned by transaction-ref queries; hydrate the full body
+/// via `get_transaction_info`.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
@@ -299,7 +352,28 @@ pub struct AddressTransactionQuery {
     pub limit: u32,
 }
 
-/// `get_transactions_by_address` response: transaction refs in `order`.
+/// `get_transactions_by_block` request. Returns transactions committed at
+/// exactly `height`, ordered lexicographically by their 32 unsigned hash bytes.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct BlockTransactionQuery {
+    pub height: BlockHeight,
+    pub order: IterationOrder,
+    /// Empty on the initial call. Non-empty to continue at the same height;
+    /// `order` is ignored when a cursor is supplied because the cursor carries it.
+    /// Malformed, stale, or height-mismatched cursors produce an empty page with
+    /// an empty cursor.
+    pub cursor: PaginationCursor,
+    /// Clamped server-side to [1, 200]; 0 means server default (50).
+    pub limit: u32,
+}
+
+/// Transaction refs in the query's order. Every successful response reports
+/// the indexer's current bounds, including empty responses.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
@@ -357,6 +431,11 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     async fn indexer_block_explorer_intro(&self, arg0 : Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
+        // The canonical header for a retained, indexed height. Unknown, future,
+    // and unavailable heights return BlockNotFound; backend failures remain
+    // RPC errors.
+
+    async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_driver::ProgramError>;
         // Paginated, filtered events query.  A candidate event matches
     // iff it matches at least one EventFilter in the request (OR
     // across filters, AND within each filter).  Supports the wallet
@@ -370,6 +449,10 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     // address (account transaction history).  Hydrate via get_transaction_info.
 
     async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::ProgramError>;
+        // Paginated transaction refs committed at exactly the requested height.
+    // Hydrate via get_transaction_info.
+
+    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::ProgramError>;
 }
 
 
@@ -405,6 +488,13 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // get_block_by_height
+            2 => {
+                let args: (BlockHeight, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.get_block_by_height(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             // get_events
             3 => {
                 let args: (EventQuery, ) =
@@ -424,6 +514,13 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
                 let args: (AddressTransactionQuery, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.get_transactions_by_address(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // get_transactions_by_block
+            6 => {
+                let args: (BlockTransactionQuery, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions_by_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -454,6 +551,11 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
+    pub async fn get_block_by_height(&self, arg0 : &BlockHeight) -> Result<BlockLookupResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
     pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPage, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
@@ -467,6 +569,11 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     pub async fn get_transactions_by_address(&self, arg0 : &AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn get_transactions_by_block(&self, arg0 : &BlockTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 6, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
@@ -704,6 +811,16 @@ impl TxInfoResult {
     pub fn outcome(&self) -> TxInfoOutcome {
         match self {
             TxInfoResult::Default{ outcome } => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl BlockLookupResult {
+    pub fn outcome(&self) -> BlockLookupOutcome {
+        match self {
+            BlockLookupResult::Default{ outcome } => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
