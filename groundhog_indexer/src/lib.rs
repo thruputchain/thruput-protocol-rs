@@ -1,9 +1,9 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
+pub use groundhog_scheduler::consensus::ConsensusValue;
 use groundhog_scp::network::*;
 use groundhog_trace::*;
-use groundhog_xdr::block::*;
 use groundhog_xdr::event::*;
 use groundhog_xdr::transaction::*;
 use groundhog_xdr::types::*;

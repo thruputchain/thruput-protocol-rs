@@ -18,10 +18,12 @@ protos=(
   address_auth.x
   storage_item.x
   precompiles.x
-  block.x
   auth_token.x
   view.x
   preimage.x
+  header.x
+  validator.x
+  network.x
 )
 
 traces=(
@@ -39,7 +41,6 @@ scps=(
   scp_config.x
   scp_control.x
   scp_handle.x
-  network.x
 )
 
 rpcs=(
@@ -67,7 +68,7 @@ akkads=(
   integration.x
   loadgen.x
   multiplex.x
-  nomination.x
+  proposal.x
   parallel.x
   repair.x
   rpc_types.x
@@ -138,6 +139,10 @@ for trace in "${traces[@]}"; do
   generate_trace "protocol/${trace}" "groundhog-trace"
 done
 
+# x23c preserves this XDR fixed-opaque notation in rustdoc, where it is parsed
+# as an intra-doc link and fails documentation builds with warnings denied.
+perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' groundhog-trace/src/db_conflict.rs
+
 for ffi_enum in "${hogexec_internal[@]}"; do
   generate_no_schema "protocol/${ffi_enum}" "hogexec-internal"
 done
@@ -178,7 +183,7 @@ done
 scheduler_deps=(
   rpc_types.x
   parallel.x
-  nomination.x
+  proposal.x
   db_sched.x
   exec_sched.x
   consensus.x
@@ -230,3 +235,15 @@ echo "-- Generating syscall documentation --" >&2
 python3 protocol/generate_syscalls_doc.py --json-output groundhog-xdr/syscalls_docs.json
 echo "-- Copying syscall.yaml to groundhog-xdr/src/syscalls.yaml --" >&2
 cp protocol/syscalls.yaml groundhog-xdr/src/syscalls.yaml
+
+if [[ "${1:-}" == "--check" ]]; then
+  set +x
+  generation_status=$(git status --porcelain --untracked-files=all)
+  if [[ -n $generation_status ]]; then
+    echo "Generated files are out of date:" >&2
+    printf '%s\n' "$generation_status" >&2
+    echo "Tracked diff summary:" >&2
+    git diff --stat -- >&2
+    exit 1
+  fi
+fi

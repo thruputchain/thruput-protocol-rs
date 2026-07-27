@@ -17,8 +17,10 @@ use core::ops::{Deref, DerefMut};
 
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
+#[cfg(feature = "xdrs")]
 use xdrs::*;
-
+#[cfg(feature = "spec")]
+use xdrs::xdr_repr::*;
 
 
 #[cfg(feature = "serde")]
@@ -37,8 +39,9 @@ pub type ServerAddress = StringM;
 /// and randomness)
 pub type UPID = [u8; 8 as usize];
 
-/// Protocol describes a specific protocol and version.
-pub type Protocol = StringM;
+/// ProtocolCommit describes a specific protocol repo version.
+/// Used to ensure communicating daemons in a validator deployment are compatible.
+pub type ProtocolCommit = StringM;
 
 
 //

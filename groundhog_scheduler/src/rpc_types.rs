@@ -40,11 +40,9 @@ pub type BlockID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DbTip {
-    pub height: BlockHeight,
-    pub block_hash: BlockHash,
-    pub events_hash: SHA256Hash,
-    pub db_hash: DbHash,
     pub id: BlockID,
+    pub storage_long_hash: StorageLongHash,
+    pub value: ConsensusValue,
 }
 
 // Internal unique ID describing a transaction.
@@ -294,7 +292,7 @@ pub enum ExpectedDBTip {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ViewingSnapshot {
-    pub block_id: BlockID,
+    pub viewing_block_id: BlockID,
     pub tip: DbTip,
 }
 

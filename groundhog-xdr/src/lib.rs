@@ -102,11 +102,18 @@ pub mod syscalls;
 pub mod storage_item;
 use storage_item::*;
 
-/// The BlockHeader struct, which defines commitments to
-/// all other elements of the chain state.
+/// Proposal header commitments to executed block state.
 #[rustfmt::skip]
-pub mod block;
-use block::*;
+pub mod header;
+use header::*;
+
+#[rustfmt::skip]
+pub mod validator;
+use validator::*;
+
+#[rustfmt::skip]
+pub mod network;
+use network::*;
 
 #[rustfmt::skip]
 pub mod invoke_flag;

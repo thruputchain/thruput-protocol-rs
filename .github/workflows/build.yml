@@ -33,6 +33,31 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: recursive
+      - name: Generate hogd read token
+        id: hogd-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
+          private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
+          owner: groundhogchain
+          repositories: hogd
+      - name: Download x23c
+        run: |
+          gh release download latest-x23c \
+            --repo groundhogchain/hogd \
+            --pattern 'x23c-linux-x86_64.tar.gz' \
+            --dir "$RUNNER_TEMP"
+          tar xzf "$RUNNER_TEMP/x23c-linux-x86_64.tar.gz" -C "$RUNNER_TEMP"
+          chmod +x "$RUNNER_TEMP/x23c"
+        env:
+          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
+      - name: Install generation dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/protocol-rs-generator"
+          "$RUNNER_TEMP/protocol-rs-generator/bin/pip" install 'PyYAML==6.0.3'
+          echo "$RUNNER_TEMP/protocol-rs-generator/bin" >> "$GITHUB_PATH"
+      - name: Check generated sources
+        run: XDRC="$RUNNER_TEMP/x23c" ./scripts/generate.sh --check
       - name: Setup environment
         uses: ./.github/actions/setup
       - name: cargo build default

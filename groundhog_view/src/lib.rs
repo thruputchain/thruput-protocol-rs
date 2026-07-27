@@ -32,7 +32,7 @@ mod tests {
     impl ViewGateway_ViewGateway1 for ScriptedViewGateway {
         async fn viewgateway_intro(
             &self,
-            protocol: Protocol,
+            protocol: ProtocolCommit,
         ) -> Result<ViewGatewayIntroOutcome, ProgramError> {
             assert_eq!(protocol.0, b"hogp/test".to_vec());
             Ok(ViewGatewayIntroOutcome::ViewGatewayIntroSuccess)

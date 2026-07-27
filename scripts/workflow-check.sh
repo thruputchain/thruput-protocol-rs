@@ -9,6 +9,8 @@ fail() {
 
 trap fail ERR;
 
+./scripts/generate.sh --check
+
 cargo build -p groundhog-xdr
 cargo build -p groundhog-xdr --features=alloc
 cargo build -p groundhog-xdr --features=std

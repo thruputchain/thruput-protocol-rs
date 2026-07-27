@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 
 use groundhog_xdr::types::*;
+pub use groundhog_xdr::{network, network::*};
 
 #[rustfmt::skip]
 pub mod scp;
@@ -18,7 +19,3 @@ pub use scp_control::*;
 #[rustfmt::skip]
 pub mod scp_handle;
 pub use scp_handle::*;
-
-#[rustfmt::skip]
-pub mod network;
-pub use crate::network::*;

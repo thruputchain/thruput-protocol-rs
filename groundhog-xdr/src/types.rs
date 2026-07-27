@@ -55,6 +55,45 @@ pub struct int128_xdr {
     pub lowbits: u64,
 }
 
+/// Network protocol version.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct Protocol {
+    inner: u32,
+}
+impl From<u32> for Protocol {
+    fn from(_inner: u32) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl Protocol {
+    pub fn into_inner(self) -> u32 {
+        self.inner
+    }
+    pub const fn new(_inner: u32) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for Protocol {
+    type Target = u32;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for Protocol {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 /// uint64_t, Unix time as nanoseconds elapsed since
 /// January 1, 1970 UTC
 // 
@@ -514,6 +553,83 @@ impl schemars::JsonSchema for SHA256Hash {
 
 
 
+/// SHA-256 of the XDR-encoded `ConsensusValue`; the canonical block identity.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ConsensusValueHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for ConsensusValueHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ConsensusValueHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ConsensusValueHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ConsensusValueHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct NetworkHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for NetworkHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl NetworkHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for NetworkHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for NetworkHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 /// Hash of the groundhog database contents.
 /// Format is a 2048-byte LtHash16 hash.
 // 
@@ -524,16 +640,16 @@ impl schemars::JsonSchema for SHA256Hash {
 #[derive(Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
-pub struct DbHash {
+pub struct StorageLongHash {
     #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
     inner: [u8; 2048 as usize],
 }
-impl From<[u8; 2048 as usize]> for DbHash {
+impl From<[u8; 2048 as usize]> for StorageLongHash {
     fn from(_inner: [u8; 2048 as usize]) -> Self {
         Self { inner: _inner }
     }
 }
-impl DbHash {
+impl StorageLongHash {
     pub fn into_inner(self) -> [u8; 2048 as usize] {
         self.inner
     }
@@ -542,31 +658,31 @@ impl DbHash {
     }
 }
 
-impl Deref for DbHash {
+impl Deref for StorageLongHash {
     type Target = [u8; 2048 as usize];
 
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
-impl DerefMut for DbHash {
+impl DerefMut for StorageLongHash {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
 }
-impl AsRef<[u8]> for DbHash {
+impl AsRef<[u8]> for StorageLongHash {
     fn as_ref(&self) -> &[u8] {
         self.deref().as_slice()
     }
 }
-impl<'a> From<&'a [u8; 2048]> for &'a DbHash {
+impl<'a> From<&'a [u8; 2048]> for &'a StorageLongHash {
     fn from(arr: &[u8; 2048]) -> Self {
-        let ptr = arr as *const [u8; 2048] as *const DbHash;
+        let ptr = arr as *const [u8; 2048] as *const StorageLongHash;
         unsafe { &*ptr }
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r DbHash {
+impl<'r> ReadXDR<'r> for &'r StorageLongHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 2048] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -575,9 +691,9 @@ impl<'r> ReadXDR<'r> for &'r DbHash {
 }
 
 #[cfg(feature = "schema")]
-impl schemars::JsonSchema for DbHash {
+impl schemars::JsonSchema for StorageLongHash {
     fn schema_name() -> ::std::borrow::Cow<'static, str> {
-        "DbHash".into()
+        "StorageLongHash".into()
     }
     fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
         schemars::json_schema!({
@@ -592,7 +708,6 @@ impl schemars::JsonSchema for DbHash {
 
 
 
-/// Hash of a groundhog block of transactions
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -601,15 +716,15 @@ impl schemars::JsonSchema for DbHash {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
-pub struct BlockHash {
+pub struct StorageShortHash {
     inner: SHA256Hash,
 }
-impl From<SHA256Hash> for BlockHash {
+impl From<SHA256Hash> for StorageShortHash {
     fn from(_inner: SHA256Hash) -> Self {
         Self { inner: _inner }
     }
 }
-impl BlockHash {
+impl StorageShortHash {
     pub fn into_inner(self) -> SHA256Hash {
         self.inner
     }
@@ -618,14 +733,129 @@ impl BlockHash {
     }
 }
 
-impl Deref for BlockHash {
+impl Deref for StorageShortHash {
     type Target = SHA256Hash;
 
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
-impl DerefMut for BlockHash {
+impl DerefMut for StorageShortHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct TxsHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for TxsHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl TxsHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for TxsHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for TxsHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct EventsHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for EventsHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl EventsHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for EventsHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for EventsHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+/// Hash of proposal header
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ProposalHeaderHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for ProposalHeaderHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ProposalHeaderHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ProposalHeaderHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ProposalHeaderHash {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
