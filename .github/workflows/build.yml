@@ -37,13 +37,13 @@ jobs:
         with:
           submodules: recursive
       - name: Set up Rust 1.96
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
         with:
           toolchain: 1.96.0
           components: clippy, rustfmt
           targets: riscv32im-unknown-none-elf, wasm32-unknown-unknown
       - name: Set up dated nightly for rustdoc and rustfmt
-        uses: dtolnay/rust-toolchain@nightly
+        uses: dtolnay/rust-toolchain@4fd1da8b0805d2d2e936788875a7d65dbd677dc2 # nightly
         with:
           toolchain: nightly-2026-05-26
           components: rustfmt
@@ -127,6 +127,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Set up current stable Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
       - name: Test workspace
+        env:
+          CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+          CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: cargo +stable test --workspace --locked
