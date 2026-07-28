@@ -2,10 +2,13 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main", "auto-update/protocol" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: "0 7 * * 1"
 
 jobs:
   build:
@@ -33,6 +36,17 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: recursive
+      - name: Set up Rust 1.96
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+        with:
+          toolchain: 1.96.0
+          components: clippy, rustfmt
+          targets: riscv32im-unknown-none-elf, wasm32-unknown-unknown
+      - name: Set up dated nightly for rustdoc and rustfmt
+        uses: dtolnay/rust-toolchain@4fd1da8b0805d2d2e936788875a7d65dbd677dc2 # nightly
+        with:
+          toolchain: nightly-2026-05-26
+          components: rustfmt
       - name: Generate hogd read token
         id: hogd-token
         uses: actions/create-github-app-token@v1
@@ -61,48 +75,62 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
       - name: cargo build default
-        run: cargo build -p groundhog-xdr
+        run: cargo build --locked -p groundhog-xdr
       - name: cargo build alloc
-        run: cargo build -p groundhog-xdr --features=alloc
+        run: cargo build --locked -p groundhog-xdr --features=alloc
       - name: cargo build std
-        run: cargo build -p groundhog-xdr --features=std
+        run: cargo build --locked -p groundhog-xdr --features=std
       - name: cargo build xdrs
-        run: cargo build -p groundhog-xdr --features=xdrs
+        run: cargo build --locked -p groundhog-xdr --features=xdrs
       - name: cargo build syscalls mock
-        run: cargo build -p groundhog-xdr --features=xdrs,syscalls_mock
+        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls_mock
       - name: cargo doc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly doc -F syscalls_mock --no-deps -p groundhog-xdr
+        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly-2026-05-26 doc --locked -F syscalls_mock --no-deps -p groundhog-xdr
       - name: cargo build serde
-        run: cargo build -p groundhog-xdr --features=serde
+        run: cargo build --locked -p groundhog-xdr --features=serde
       - name: cargo build serde xdrs
-        run: cargo build -p groundhog-xdr --features=serde,xdrs
+        run: cargo build --locked -p groundhog-xdr --features=serde,xdrs
       - name: cargo build serde alloc
-        run: cargo build -p groundhog-xdr --features=serde,alloc
+        run: cargo build --locked -p groundhog-xdr --features=serde,alloc
       - name: cargo build wasm
-        run: |
-          rustup target add wasm32-unknown-unknown
-          cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
+        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown
       - name: cargo build syscalls
-        run: cargo build -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
+        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
       - name: cargo build riscv32 syscalls
-        run: |
-          rustup target add riscv32im-unknown-none-elf
-          cargo build -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
+        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
       - name: cargo build wasm xdrs
-        run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
+        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
       - name: cargo build wasm alloc
-        run: cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
+        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
       - name: run tests
-        run: cargo test --features=std
+        run: cargo test --locked --features=std
       - name: build rpc
-        run: cargo build -p groundhog_rpc
+        run: cargo build --locked -p groundhog_rpc
       - name: build scp
-        run: cargo build -p groundhog_scp
+        run: cargo build --locked -p groundhog_scp
       - name: build trace
-        run: cargo build -p groundhog-trace
+        run: cargo build --locked -p groundhog-trace
       - name: format checks
-        run: cargo fmt --check
+        run: cargo +nightly-2026-05-26 fmt --check
       - name: build spec
-        run: cargo build -p groundhog-spec
+        run: cargo build --locked -p groundhog-spec
       - name: clippy macros
-        run: cargo clippy -p groundhog-xdr-macros -- -D warnings
+        run: cargo clippy --locked -p groundhog-xdr-macros -- -D warnings
+
+  stable-compat:
+    name: Current stable compatibility
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: self-hosted
+    steps:
+      - name: Clean up .gitconfig
+        run: rm -f /home/hogci/.gitconfig
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set up current stable Rust
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+      - name: Test workspace
+        env:
+          CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+          CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: cargo +stable test --workspace --locked
