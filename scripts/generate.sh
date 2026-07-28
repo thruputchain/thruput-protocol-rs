@@ -94,6 +94,15 @@ specs=(
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
+if [[ ! -x "${XDRC}" ]]; then
+  echo "error: x23c is not executable at ${XDRC}; build hogd's x23c or set XDRC" >&2
+  exit 1
+fi
+if ! python3 -c 'import yaml' >/dev/null 2>&1; then
+  echo "error: PyYAML is required; install PyYAML==6.0.3 in the active Python environment" >&2
+  exit 1
+fi
+
 set -ex
 
 generate() {
