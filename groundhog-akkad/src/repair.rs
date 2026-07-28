@@ -71,7 +71,7 @@ pub trait Repair_Repair1: Send + Sync {
     
     async fn repair_missing_txs(&self, arg0 : MissingTransactionsEnvelope) -> Result<RepairedTransactions, ::rpc_driver::ProgramError>;
     
-    async fn repair_missing_basis(&self, arg0 : ConsensusValue) -> Result<OptConsensusBasis, ::rpc_driver::ProgramError>;
+    async fn repair_missing_proposal(&self, arg0 : ConsensusValue) -> Result<OptProposal, ::rpc_driver::ProgramError>;
     
     async fn repair_missing_scp_envelopes(&self, arg0 : SCPSlotIndex) -> Result<SCPEnvelopes, ::rpc_driver::ProgramError>;
 }
@@ -109,11 +109,11 @@ impl ::rpc_driver::handler::RpcHandler for Repair_Repair1_Dispatcher {
                 let res = self.inner.repair_missing_txs(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // repair_missing_basis
+            // repair_missing_proposal
             20 => {
                 let args: (ConsensusValue, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.repair_missing_basis(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.repair_missing_proposal(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // repair_missing_scp_envelopes
@@ -151,7 +151,7 @@ impl Repair_Repair1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn repair_missing_basis(&self, arg0 : &ConsensusValue) -> Result<OptConsensusBasis, ::rpc_driver::RpcError> {
+    pub async fn repair_missing_proposal(&self, arg0 : &ConsensusValue) -> Result<OptProposal, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)

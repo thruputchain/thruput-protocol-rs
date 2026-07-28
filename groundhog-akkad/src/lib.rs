@@ -8,8 +8,9 @@ pub use groundhog_scp::*;
 // instead of vendoring stale copies that generate.sh's `akkads` list never
 // refreshes.
 pub use groundhog_xdr::{
-    address_auth::*, auth_claim::*, contract::*, genesis::*, precompiles::*,
-    retrocausal_queue::*, storage_cost::*, transaction::*, types::*,
+    address_auth::*, auth_claim::*, contract::*, genesis::*, header::*,
+    precompiles::*, retrocausal_queue::*, storage_cost::*, transaction::*,
+    types::*, validator::*,
 };
 
 #[rustfmt::skip]
@@ -57,8 +58,8 @@ pub mod multiplex;
 pub use multiplex::*;
 
 #[rustfmt::skip]
-pub mod nomination;
-pub use nomination::*;
+pub mod proposal;
+pub use proposal::*;
 
 #[rustfmt::skip]
 pub mod parallel;

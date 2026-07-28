@@ -131,7 +131,7 @@ impl core::fmt::Display for DbGatewayIntroOutcome {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait DbGateway_DbGateway1: Send + Sync {    
-    async fn dbgateway_intro(&self, arg0 : Protocol) -> Result<DbGatewayIntroOutcome, ::rpc_driver::ProgramError>;
+    async fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> Result<DbGatewayResult, ::rpc_driver::ProgramError>;
 }
@@ -157,7 +157,7 @@ impl ::rpc_driver::handler::RpcHandler for DbGateway_DbGateway1_Dispatcher {
         match proc {
             // dbgateway_intro
             0 => {
-                let args: (Protocol, ) =
+                let args: (ProtocolCommit, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.dbgateway_intro(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -187,7 +187,7 @@ impl DbGateway_DbGateway1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x44424757, 1)
     }
-    pub async fn dbgateway_intro(&self, arg0 : &Protocol) -> Result<DbGatewayIntroOutcome, ::rpc_driver::RpcError> {
+    pub async fn dbgateway_intro(&self, arg0 : &ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)

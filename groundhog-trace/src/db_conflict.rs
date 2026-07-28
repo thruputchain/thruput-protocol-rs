@@ -172,7 +172,7 @@ impl core::fmt::Display for DbDiagnosticLevel {
 }
 
 
-/// One conflicting storage op. Fixed-size: ContractAddress[32] plus a
+/// One conflicting storage op. Fixed-size: `ContractAddress[32]` plus a
 /// fixed-size StorageKey plus the code — no heap allocation.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]

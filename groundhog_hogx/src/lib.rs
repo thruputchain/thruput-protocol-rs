@@ -4,6 +4,7 @@
 use groundhog_coordinator::*;
 use groundhog_scp::*;
 use groundhog_xdr::types::*;
+pub use groundhog_xdr::validator::*;
 
 #[rustfmt::skip]
 pub mod port;

@@ -1,22 +1,22 @@
 use crate::DbTip;
 use crate::SchedulerGetTipOutcome;
 use crate::SchedulerGetTipResult;
-use crate::SchedulerNominatedBlock;
-use crate::SchedulerNominationOutcome;
-use crate::SchedulerNominationResult;
+use crate::SchedulerProposalOutcome;
+use crate::SchedulerProposalResult;
+use crate::SchedulerProposedBlock;
 
-impl From<SchedulerNominationResult>
-    for Result<SchedulerNominatedBlock, SchedulerNominationOutcome>
+impl From<SchedulerProposalResult>
+    for Result<SchedulerProposedBlock, SchedulerProposalOutcome>
 {
     fn from(
-        value: SchedulerNominationResult,
-    ) -> Result<SchedulerNominatedBlock, SchedulerNominationOutcome> {
+        value: SchedulerProposalResult,
+    ) -> Result<SchedulerProposedBlock, SchedulerProposalOutcome> {
         match value {
-            SchedulerNominationResult::SchedulerNominationOK {
-                nominated_block,
-            } => Ok(nominated_block),
-            SchedulerNominationResult::SchedulerNominationError => {
-                Err(SchedulerNominationOutcome::SchedulerNominationError)
+            SchedulerProposalResult::SchedulerProposalOK {
+                proposed_block,
+            } => Ok(proposed_block),
+            SchedulerProposalResult::SchedulerProposalError => {
+                Err(SchedulerProposalOutcome::SchedulerProposalError)
             }
         }
     }

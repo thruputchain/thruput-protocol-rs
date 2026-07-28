@@ -7,6 +7,7 @@ set -e # exit on error
 set -o xtrace
 
 git submodule update --init --recursive
+./scripts/generate.sh --check
 
 LOCKED="--locked"
 if [ "$1" == "--unlocked" ]; then

@@ -158,8 +158,8 @@ impl core::fmt::Display for BlockLookupOutcome {
 #[non_exhaustive]
 pub enum BlockLookupResult {
     // case BlockFound:
-    //   BlockHeader header;
-    BlockFound { header: BlockHeader } = BlockLookupOutcome::BlockFound.0 as i32,
+    //   ConsensusValue value;
+    BlockFound { value: ConsensusValue } = BlockLookupOutcome::BlockFound.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { outcome: i32 },
@@ -428,12 +428,12 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
-    async fn indexer_block_explorer_intro(&self, arg0 : Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
+    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
-        // The canonical header for a retained, indexed height. Unknown, future,
-    // and unavailable heights return BlockNotFound; backend failures remain
-    // RPC errors.
+        // The canonical consensus value for a retained, indexed height. Unknown,
+    // future, and unavailable heights return BlockNotFound; backend failures
+    // remain RPC errors.
 
     async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_driver::ProgramError>;
         // Paginated, filtered events query.  A candidate event matches
@@ -476,7 +476,7 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
         match proc {
             // indexer_block_explorer_intro
             0 => {
-                let args: (Protocol, ) =
+                let args: (ProtocolCommit, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.indexer_block_explorer_intro(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -541,7 +541,7 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaaa, 1)
     }
-    pub async fn indexer_block_explorer_intro(&self, arg0 : &Protocol) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::RpcError> {
+    pub async fn indexer_block_explorer_intro(&self, arg0 : &ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -685,7 +685,7 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_Indexe
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IndexerCard {
-    pub protocol: Protocol,
+    pub protocol: ProtocolCommit,
     pub address_for_event: ServerAddress,
 }
 

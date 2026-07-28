@@ -84,8 +84,8 @@ pub enum MultiplexMessage {
     //   SubmittedTransactions submitted;
     MultiplexMessageSubmittedTxs { submitted: SubmittedTransactions } = MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
     // case MultiplexMessageConsensusBasis:
-    //   ConsensusBasis consensus_basis;
-    MultiplexMessageConsensusBasis { consensus_basis: ConsensusBasis } = MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
+    //   ConsensusBasis basis;
+    MultiplexMessageConsensusBasis { basis: ConsensusBasis } = MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
     // case MultiplexMessageSCP:
     //   SCPEnvelope envelope;
     MultiplexMessageSCP { envelope: SCPEnvelope } = MultiplexMessageType::MultiplexMessageSCP.0 as i32,
