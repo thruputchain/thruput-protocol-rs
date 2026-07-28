@@ -1,6 +1,7 @@
 [package]
 name = "groundhog_xdr_syscall_tests"
 version.workspace = true
+rust-version.workspace = true
 edition = "2021"
 publish = false
 
@@ -12,4 +13,3 @@ path = "src/lib.rs"
 groundhog-xdr = { workspace = true, features = ["syscalls_mock", "std"] }
 
 [dev-dependencies]
-

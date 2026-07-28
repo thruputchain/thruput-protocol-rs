@@ -1,6 +1,7 @@
 [package]
 name = "groundhog_rpc"
 version.workspace = true
+rust-version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true

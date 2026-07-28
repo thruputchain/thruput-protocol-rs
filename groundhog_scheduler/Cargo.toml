@@ -2,6 +2,7 @@
 name = "groundhog_scheduler"
 description = "Bindings for groundhog scheduler RPCs (sched_coord, coord_sched)"
 version.workspace = true
+rust-version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true

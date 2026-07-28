@@ -2,6 +2,7 @@
 name = "groundhog_db_gateway"
 description = "Bindings for groundhog DbGateway1: hogdb's public-RPC-gateway-facing read interface"
 version.workspace = true
+rust-version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
