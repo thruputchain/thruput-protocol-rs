@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: f7282792c30b9faf73d5246d54d97613694d3cfd
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -31,9 +31,9 @@ use ::serde_arrays;
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait CoordScheduler_CoordScheduler1: Send + Sync {    
+pub trait CoordScheduler_CoordScheduler1: Send + Sync {
     async fn coordscheduler_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-        // The scheduler calls coordscheduler_notify_vetted to indicate that the
+    // The scheduler calls coordscheduler_notify_vetted to indicate that the
     // given transactions are vetted, meaning the coordinator can broadcast
     // them to the network.
 
@@ -114,5 +114,3 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for CoordScheduler_Coor
 //
 // XDR internals below this point
 //
-
-

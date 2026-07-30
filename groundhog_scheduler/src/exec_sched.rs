@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: f7282792c30b9faf73d5246d54d97613694d3cfd
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -57,30 +57,23 @@ pub type ExecValidateBatchResult = VecM::<ExecResult>;
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait ExecutorSched_ExecutorSched1: Send + Sync {    
+pub trait ExecutorSched_ExecutorSched1: Send + Sync {
     async fn executorsched_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-    
     async fn executorsched_ready(&self) -> Result<ExecResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : SignedTransaction) -> Result<ExecProposeResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_validate_transaction(&self, arg0 : BlockID, arg1 : ProposedTransaction) -> Result<ExecResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_validate_batch(&self, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_driver::ProgramError>;
-        // Executor can be in one of three states: None, Proposing, Validating
+    // Executor can be in one of three states: None, Proposing, Validating
     // open_xyz_block() methods set the executor state, or return an error
     // if executor has already opened a block.
     // finish_block() blocks until all running executor threads are finished,
     // and stops the executor from accepting new transactions.
 
     async fn executorsched_open_proposal_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_open_validation_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
-    
     async fn executorsched_finish_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_driver::ProgramError>;
-        // Scheduler should call this to shutdown the executor.
+    // Scheduler should call this to shutdown the executor.
     // Shutdown will not occur until all pending transactions complete.
     // No new transactions or blocks can be opened after shutdown.
 
@@ -267,5 +260,3 @@ impl ExecProposeResult {
         }
     }
 }
-
-

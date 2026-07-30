@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: f7282792c30b9faf73d5246d54d97613694d3cfd
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -195,9 +195,9 @@ pub enum LoadgenExtensionResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {    
+pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {
     async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::ProgramError>;
-        // arguments:
+    // arguments:
     // LoadgenContextID context_id (a handle returned by generate_experiment)
     // unsigned hyper num_txs (the number of transactions to return)
     // BlockHeight expiry_height (the height at which the transactions will expire)
@@ -308,5 +308,3 @@ impl LoadgenExtensionResult {
         }
     }
 }
-
-

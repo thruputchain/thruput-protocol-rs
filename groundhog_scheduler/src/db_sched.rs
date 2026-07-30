@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: f7282792c30b9faf73d5246d54d97613694d3cfd
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -206,15 +206,12 @@ pub enum DbTipResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait DbSched_DbSched1: Send + Sync {    
+pub trait DbSched_DbSched1: Send + Sync {
     async fn dbsched_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-    
     async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_driver::ProgramError>;
-    
     async fn dbsched_get_hog_ages(&self, arg0 : ContractAddressBatch) -> Result<HogAgeResults, ::rpc_driver::ProgramError>;
-    
     async fn dbsched_write_hog_ages(&self, arg0 : HogAgeBatch) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-        // Examples of valid call sequences to the db:
+    // Examples of valid call sequences to the db:
     //
     // dbsched_create_snapshot | dbsched_open_snapshot
     //   ... calls to executor
@@ -235,14 +232,14 @@ pub trait DbSched_DbSched1: Send + Sync {
     // Parent block must be closed.
 
     async fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-        // Commits the block with the specified block ID to disk. Should only be
+    // Commits the block with the specified block ID to disk. Should only be
     // called for e.g. finalized blocks. At a minimum, the block must be closed
     // before being committed. Any BlockID that is not a descendant of this
     // block will return an error if accessed. This BlockID must be the
     // immediate descendant of the most recently committed block.
 
     async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
-        // Call to close a block. This indicates that no more transactions
+    // Call to close a block. This indicates that no more transactions
     // will be added to this block. The block must have been previously opened
     // with open_database_snapshot().
     // A block cannot have a child opened before it is closed.
@@ -250,10 +247,10 @@ pub trait DbSched_DbSched1: Send + Sync {
     // state (due to e.g. a block validation failure).
 
     async fn dbsched_close_snapshot(&self, arg0 : BlockID) -> Result<DbBlockResult, ::rpc_driver::ProgramError>;
-        // Call to abandon a block.
+    // Call to abandon a block.
 
     async fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-        // Load genesis configuration data into storage. The second argument is the
+    // Load genesis configuration data into storage. The second argument is the
     // network ID. The third argument is the txset hash and the third argument
     // is the events hash. Since the genesis block does not contain any
     // transactions, both of these hashes will generally be the root hash of an
@@ -263,7 +260,6 @@ pub trait DbSched_DbSched1: Send + Sync {
     // bytestrings.
 
     async fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-    
     async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_driver::ProgramError>;
 }
 
@@ -477,5 +473,3 @@ impl DbTipResult {
         }
     }
 }
-
-
