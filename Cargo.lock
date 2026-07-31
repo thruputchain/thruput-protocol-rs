@@ -376,6 +376,7 @@ version = "0.20.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
+ "groundhog-trace",
  "groundhog-xdr",
  "groundhog_coordinator",
  "groundhog_scp",

@@ -74,28 +74,39 @@ impl core::fmt::Display for SCPValidationLevel {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SCP_Handle_SCP_Handle1: Send + Sync {
+pub trait SCP_Handle_SCP_Handle1: Send + Sync {    
     async fn scp_handle_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-    // hooks
+        // hooks
 
 
     async fn scp_handle_emit_envelope(&self, arg0 : SCPEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_validate_ballot_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPValidationLevel, ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_validate_nomination_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPValidationLevel, ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_extract_valid_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPOptValue, ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_combine_candidates(&self, arg0 : SCPSlotIndex, arg1 : SCPValues) -> Result<SCPOptValue, ::rpc_driver::ProgramError>;
-    // notifications
+        // notifications
 
 
     async fn scp_handle_value_externalized(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_nominating_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_updated_candidate_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_started_ballot_proto(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_accepted_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_confirmed_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_accepted_commit(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_handle_ballot_did_hear_from_quorum(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::rpc_driver::ProgramError>;
-    // utils
+        // utils
 
     async fn scp_handle_get_quorum_set(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
 }
@@ -330,3 +341,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SCP_Handle_SCP_Hand
 //
 // XDR internals below this point
 //
+
+

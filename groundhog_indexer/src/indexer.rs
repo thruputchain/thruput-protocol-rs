@@ -427,28 +427,29 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
+pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
     async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
+    
     async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
-    // The canonical consensus value for a retained, indexed height. Unknown,
+        // The canonical consensus value for a retained, indexed height. Unknown,
     // future, and unavailable heights return BlockNotFound; backend failures
     // remain RPC errors.
 
     async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_driver::ProgramError>;
-    // Paginated, filtered events query.  A candidate event matches
+        // Paginated, filtered events query.  A candidate event matches
     // iff it matches at least one EventFilter in the request (OR
     // across filters, AND within each filter).  Supports the wallet
     // "transfers to OR from me" case in a single call.
 
     async fn get_events(&self, arg0 : EventQuery) -> Result<EventPage, ::rpc_driver::ProgramError>;
-    // Paginated transactions, whole-chain, in block order.
+        // Paginated transactions, whole-chain, in block order.
 
     async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPage, ::rpc_driver::ProgramError>;
-    // Paginated transaction refs whose root invoked address == the query
+        // Paginated transaction refs whose root invoked address == the query
     // address (account transaction history).  Hydrate via get_transaction_info.
 
     async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::ProgramError>;
-    // Paginated transaction refs committed at exactly the requested height.
+        // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
     async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPage, ::rpc_driver::ProgramError>;
@@ -859,8 +860,7 @@ pub enum IndexerBlockApplyResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent1: Send + Sync {
-    // Event logs and the full transaction bodies for a committed block,
+pub trait IndexerEvent_IndexerEvent1: Send + Sync {        // Event logs and the full transaction bodies for a committed block,
     // forwarded together and index-aligned: the body at position i is the
     // transaction whose event log is at position i.  The event server pairs
     // them at emission, so the indexer never has to re-match bodies to events.
@@ -870,7 +870,7 @@ pub trait IndexerEvent_IndexerEvent1: Send + Sync {
     // block-explorer transaction lookups.
 
     async fn indexer_event_process_events(&self, arg0 : BlockHeight, arg1 : TxEventLogBatch, arg2 : ProposedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
-    // Best-effort relay (from the event server) of a transaction that failed
+        // Best-effort relay (from the event server) of a transaction that failed
     // nondeterministically at proposal time. The indexer caches it briefly so
     // get_transaction_info can explain the failure; it may drop reports
     // freely (cache full) and expires them a few blocks later.
@@ -950,11 +950,13 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_Indexe
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent2: Send + Sync {
+pub trait IndexerEvent_IndexerEvent2: Send + Sync {    
     async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::ProgramError>;
+    
     async fn indexer_event_initialize_epoch(&self, arg0 : IndexerOutboxOrigin) -> Result<IndexerEpochResult, ::rpc_driver::ProgramError>;
+    
     async fn indexer_event_apply_committed_block(&self, arg0 : IndexerOutboxOrigin, arg1 : IndexerCommittedBlock) -> Result<IndexerBlockApplyResult, ::rpc_driver::ProgramError>;
-    // Diagnostics remain best-effort and are independent of durable block
+        // Diagnostics remain best-effort and are independent of durable block
     // acknowledgement.
 
     async fn indexer_event_report_tx_failure_v2(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<(), ::rpc_driver::ProgramError>;
@@ -1196,7 +1198,7 @@ impl core::fmt::Display for EventIndexerRegistrationOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait EventIndexer_EventIndexer1: Send + Sync {
+pub trait EventIndexer_EventIndexer1: Send + Sync {    
     async fn event_indexer_intro(&self, arg0 : IndexerCard) -> Result<EventIndexerIntroOutcome, ::rpc_driver::ProgramError>;
 }
 
@@ -1260,8 +1262,10 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for EventIndexer_EventI
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait EventIndexer_EventIndexer2: Send + Sync {
+pub trait EventIndexer_EventIndexer2: Send + Sync {    
     async fn event_indexer_register(&self, arg0 : IndexerCardV2) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
+    
+    async fn event_indexer_probe(&self, arg0 : UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
 }
 
 
@@ -1290,6 +1294,13 @@ impl ::rpc_driver::handler::RpcHandler for EventIndexer_EventIndexer2_Dispatcher
                 let res = self.inner.event_indexer_register(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // event_indexer_probe
+            11 => {
+                let args: (UPID, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.event_indexer_probe(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -1311,6 +1322,11 @@ impl EventIndexer_EventIndexer2_Client {
     pub async fn event_indexer_register(&self, arg0 : &IndexerCardV2) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn event_indexer_probe(&self, arg0 : &UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
@@ -1376,3 +1392,5 @@ impl IndexerBlockApplyResult {
         }
     }
 }
+
+

@@ -218,15 +218,23 @@ pub struct HogxTailKick {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait HogxAgent_HogxAgent1: Send + Sync {
+pub trait HogxAgent_HogxAgent1: Send + Sync {    
     async fn hogxagent_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_host_configure(&self, arg0 : HostConfig) -> Result<HogxHostConfigureResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_host_query(&self) -> Result<HogxHostQueryResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_start(&self, arg0 : UnitDef) -> Result<HogxUnitStartResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_stop(&self, arg0 : UnitID) -> Result<HogxUnitStopResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_query(&self, arg0 : UnitID) -> Result<HogxUnitQueryResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_clear(&self, arg0 : UnitID) -> Result<HogxUnitClearResult, ::rpc_driver::ProgramError>;
+    
     async fn hogxagent_unit_tail(&self, arg0 : HogxTailKick) -> Result<HogxUnitTailResult, ::rpc_driver::ProgramError>;
 }
 
@@ -400,8 +408,9 @@ pub struct HogxTailChunk {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait HogxTail_HogxTail1: Send + Sync {
+pub trait HogxTail_HogxTail1: Send + Sync {    
     async fn hogxtail_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn hogxtail_deliver(&self, arg0 : HogxTailChunk) -> Result<bool, ::rpc_driver::ProgramError>;
 }
 
@@ -551,3 +560,5 @@ impl HogxUnitTailResult {
         }
     }
 }
+
+

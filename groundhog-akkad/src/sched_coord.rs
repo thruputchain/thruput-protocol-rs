@@ -352,41 +352,43 @@ pub enum SchedulerGetTipResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
+pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {    
     async fn schedulercoord_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn schedulercoord_intro_coord(&self, arg0 : CoordCard) -> Result<CoordinatorRegistrationOutcome, ::rpc_driver::ProgramError>;
-    // Coordinator calls schedulercoord_submit_unvetted to submit new/unvetted
+        // Coordinator calls schedulercoord_submit_unvetted to submit new/unvetted
     // transactions coming from the wallet. Asynchronously, the scheduler will
     // call the coordinator's coordscheduler_notify_vetted to notify the
     // coordinator when transactions have become vetted and can be broadcast
     // to the network.
 
     async fn schedulercoord_submit_unvetted(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn schedulercoord_submit_vetted(&self, arg0 : ValidatorID, arg1 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
-    // schedulercoord_propose asks the scheduler to prepare a proposal (a
+        // schedulercoord_propose asks the scheduler to prepare a proposal (a
     // block proposal) on top of the given db block.
 
     async fn schedulercoord_propose_block(&self, arg0 : BlockID, arg1 : ProposalContext) -> Result<SchedulerProposalResult, ::rpc_driver::ProgramError>;
-    // schedulercoord_validate asks the scheduler to validate a proposal,
+        // schedulercoord_validate asks the scheduler to validate a proposal,
     // and if successful, return the block ID in the db of the validated
     // block. BlockID is the block onto which the proposal is done.
 
     async fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : Proposal) -> Result<SchedulerValidationResult, ::rpc_driver::ProgramError>;
-    // Commit the block with block ID. This block must have been previously
+        // Commit the block with block ID. This block must have been previously
     // proposed or validated by the mempool.
     // On commit the block is associated with the ConsensusValue that confirmed it.
     // This value is saved in the database and retrievable via schedcoord_get_tip.
 
     async fn schedulercoord_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<SchedulerCommitOutcome, ::rpc_driver::ProgramError>;
-    // Returns information about the current highest committed block.
+        // Returns information about the current highest committed block.
     // If there is no committed block, returns SchedulerGetTipNoGenesisBlock.
 
     async fn schedcoord_get_tip(&self) -> Result<SchedulerGetTipResult, ::rpc_driver::ProgramError>;
-    // TODO(jhumphri): Remove this once we integrate the coordinator into the
+        // TODO(jhumphri): Remove this once we integrate the coordinator into the
     // loadgen experiment.
 
     async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-    // Returns transactions from the mempool that have not yet been committed in a block.
+        // Returns transactions from the mempool that have not yet been committed in a block.
 
     async fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::ProgramError>;
 }
@@ -588,3 +590,5 @@ impl SchedulerGetTipResult {
         }
     }
 }
+
+

@@ -189,8 +189,9 @@ pub struct DogwoodDeliveryEnvelope {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait Dogwood_Dogwood1: Send + Sync {
+pub trait Dogwood_Dogwood1: Send + Sync {    
     async fn dogwood_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn dogwood_deliver(&self, arg0 : DogwoodDeliveryEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
@@ -268,3 +269,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for Dogwood_Dogwood1_Cl
 //
 // XDR internals below this point
 //
+
+

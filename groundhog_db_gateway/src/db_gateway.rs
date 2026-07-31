@@ -130,8 +130,9 @@ impl core::fmt::Display for DbGatewayIntroOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait DbGateway_DbGateway1: Send + Sync {
+pub trait DbGateway_DbGateway1: Send + Sync {    
     async fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::rpc_driver::ProgramError>;
+    
     async fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> Result<DbGatewayResult, ::rpc_driver::ProgramError>;
 }
 
@@ -229,3 +230,5 @@ impl DbGatewayResult {
         }
     }
 }
+
+

@@ -181,8 +181,7 @@ pub enum EventActivationResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SchedEvent_SchedEvent1: Send + Sync {
-    // [schedevent_intro_event] is called by an event server to introduce itself to
+pub trait SchedEvent_SchedEvent1: Send + Sync {        // [schedevent_intro_event] is called by an event server to introduce itself to
     // the system.
 
     async fn schedevent_intro_event(&self, arg0 : EventCard) -> Result<RPCError, ::rpc_driver::ProgramError>;
@@ -248,8 +247,9 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SchedEvent_SchedEve
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SchedEvent_SchedEvent2: Send + Sync {
+pub trait SchedEvent_SchedEvent2: Send + Sync {    
     async fn schedevent2_prepare_event(&self, arg0 : EventCard) -> Result<EventPrepareResult, ::rpc_driver::ProgramError>;
+    
     async fn schedevent2_activate_event(&self, arg0 : EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_driver::ProgramError>;
 }
 
@@ -347,3 +347,5 @@ impl EventActivationResult {
         }
     }
 }
+
+

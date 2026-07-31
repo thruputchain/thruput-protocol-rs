@@ -26,6 +26,7 @@ serde = [
     "xdrs/serde",
     "groundhog-xdr/serde",
     "groundhog_coordinator/serde",
+    "groundhog-trace/serde",
 ]
 
 [dependencies]
@@ -33,6 +34,7 @@ async-trait = "0.1.89"
 groundhog-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
 groundhog_coordinator = { workspace = true, features = ["std"] }
 groundhog_scp = { workspace = true, features = ["std"] }
+groundhog-trace = { workspace = true, features = ["std"] }
 xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
 xdr-common = { workspace = true }
 rpc_driver = { workspace = true }

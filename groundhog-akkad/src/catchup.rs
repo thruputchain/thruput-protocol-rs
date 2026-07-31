@@ -100,8 +100,9 @@ pub struct SignedCatchupBlocksResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait Catchup_Catchup1: Send + Sync {
+pub trait Catchup_Catchup1: Send + Sync {    
     async fn catchup_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn catchup_solicit(&self, arg0 : SignedCatchupBlocksRequest) -> Result<SignedCatchupBlocksResult, ::rpc_driver::ProgramError>;
 }
 
@@ -179,3 +180,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for Catchup_Catchup1_Cl
 //
 // XDR internals below this point
 //
+
+

@@ -31,18 +31,26 @@ use ::serde_arrays;
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SCP_Control_SCP_Control1: Send + Sync {
+pub trait SCP_Control_SCP_Control1: Send + Sync {    
     async fn scp_control_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
-    // arguments: slot index, value to nominate, previous value
+        // arguments: slot index, value to nominate, previous value
 
     async fn scp_control_nominate(&self, arg0 : SCPSlotIndex, arg1 : SCPValue, arg2 : SCPValue) -> Result<bool, ::rpc_driver::ProgramError>;
+    
     async fn scp_control_stop_nomination(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_control_update_local_quorum_set(&self, arg0 : SCPQuorumSet) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_control_received_envelope(&self, arg0 : SCPEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_control_set_state_from_envelope(&self, arg0 : SCPSlotIndex, arg1 : SCPEnvelope) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn scp_control_set_qset(&self, arg0 : SCPQuorumSet) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
+    
     async fn scp_control_get_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
+    
     async fn scp_control_remove_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_driver::ProgramError>;
+    
     async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_driver::ProgramError>;
 }
 
@@ -216,3 +224,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SCP_Control_SCP_Con
 //
 // XDR internals below this point
 //
+
+

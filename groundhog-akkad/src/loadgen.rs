@@ -195,9 +195,9 @@ pub enum LoadgenExtensionResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {
+pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {    
     async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::ProgramError>;
-    // arguments:
+        // arguments:
     // LoadgenContextID context_id (a handle returned by generate_experiment)
     // unsigned hyper num_txs (the number of transactions to return)
     // BlockHeight expiry_height (the height at which the transactions will expire)
@@ -308,3 +308,5 @@ impl LoadgenExtensionResult {
         }
     }
 }
+
+

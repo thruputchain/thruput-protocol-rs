@@ -154,8 +154,9 @@ impl core::fmt::Display for ViewGatewayIntroOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait ViewGateway_ViewGateway1: Send + Sync {
+pub trait ViewGateway_ViewGateway1: Send + Sync {    
     async fn viewgateway_intro(&self, arg0 : ProtocolCommit) -> Result<ViewGatewayIntroOutcome, ::rpc_driver::ProgramError>;
+    
     async fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> Result<ViewGatewayResult, ::rpc_driver::ProgramError>;
 }
 
@@ -243,3 +244,5 @@ impl ViewGatewayResult {
         }
     }
 }
+
+

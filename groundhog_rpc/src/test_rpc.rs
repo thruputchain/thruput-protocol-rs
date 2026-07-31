@@ -34,8 +34,9 @@ pub type Data = BytesM;
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait blank_rpc_blank_rpc_v1: Send + Sync {
+pub trait blank_rpc_blank_rpc_v1: Send + Sync {    
     async fn null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn echo(&self, arg0 : Data) -> Result<Data, ::rpc_driver::ProgramError>;
 }
 
@@ -112,3 +113,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for blank_rpc_blank_rpc
 //
 // XDR internals below this point
 //
+
+

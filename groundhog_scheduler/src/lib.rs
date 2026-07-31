@@ -3,8 +3,10 @@
 
 use groundhog_coordinator::*;
 use groundhog_scp::*;
+use groundhog_trace::db_conflict::*;
 use groundhog_xdr::address_auth::*;
 use groundhog_xdr::contract::*;
+use groundhog_xdr::event::*;
 use groundhog_xdr::exec_result::*;
 use groundhog_xdr::genesis::*;
 pub use groundhog_xdr::header::*;
@@ -33,6 +35,10 @@ pub use db_sched::*;
 #[rustfmt::skip]
 pub mod sched_event;
 pub use sched_event::*;
+
+#[rustfmt::skip]
+pub mod event_rpc;
+pub use event_rpc::*;
 
 #[rustfmt::skip]
 pub mod exec_sched;

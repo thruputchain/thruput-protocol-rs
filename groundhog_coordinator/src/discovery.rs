@@ -88,8 +88,9 @@ pub struct KnownQuorumSets {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait Discovery_Discovery1: Send + Sync {
+pub trait Discovery_Discovery1: Send + Sync {    
     async fn discovery_null(&self) -> Result<(), ::rpc_driver::ProgramError>;
+    
     async fn discovery_update_quorums(&self, arg0 : KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_driver::ProgramError>;
 }
 
@@ -167,3 +168,5 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for Discovery_Discovery
 //
 // XDR internals below this point
 //
+
+
