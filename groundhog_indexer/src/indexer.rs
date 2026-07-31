@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -860,20 +860,14 @@ pub enum IndexerBlockApplyResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent1: Send + Sync {        // Event logs and the full transaction bodies for a committed block,
-    // forwarded together and index-aligned: the body at position i is the
-    // transaction whose event log is at position i.  The event server pairs
-    // them at emission, so the indexer never has to re-match bodies to events.
-    //
-    // The bodies travel beside the event log (which is hashed into the
-    // consensus event trie) rather than inside it; the indexer stores them for
-    // block-explorer transaction lookups.
-
-    async fn indexer_event_process_events(&self, arg0 : BlockHeight, arg1 : TxEventLogBatch, arg2 : ProposedTransactionBatch) -> Result<(), ::rpc_driver::ProgramError>;
-        // Best-effort relay (from the event server) of a transaction that failed
-    // nondeterministically at proposal time. The indexer caches it briefly so
-    // get_transaction_info can explain the failure; it may drop reports
-    // freely (cache full) and expires them a few blocks later.
+pub trait IndexerEvent_IndexerEvent1: Send + Sync {    
+    async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::ProgramError>;
+    
+    async fn indexer_event_initialize_epoch(&self, arg0 : IndexerOutboxOrigin) -> Result<IndexerEpochResult, ::rpc_driver::ProgramError>;
+    
+    async fn indexer_event_apply_committed_block(&self, arg0 : IndexerOutboxOrigin, arg1 : IndexerCommittedBlock) -> Result<IndexerBlockApplyResult, ::rpc_driver::ProgramError>;
+        // Diagnostics remain best-effort and are independent of durable block
+    // acknowledgement.
 
     async fn indexer_event_report_tx_failure(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<(), ::rpc_driver::ProgramError>;
 }
@@ -894,90 +888,6 @@ impl IndexerEvent_IndexerEvent1_Dispatcher {
 impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaab, 1)
-    }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
-        match proc {
-            // indexer_event_process_events
-            0 => {
-                let args: (BlockHeight, TxEventLogBatch, ProposedTransactionBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_process_events(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // indexer_event_report_tx_failure
-            1 => {
-                let args: (SignedTransactionHash, TxFailureDiagnostic, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_report_tx_failure(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
-        }
-    }
-}
-
-#[derive(Clone)]
-pub struct IndexerEvent_IndexerEvent1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
-}
-
-impl IndexerEvent_IndexerEvent1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self { handle }
-    }
-
-    fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaab, 1)
-    }
-    pub async fn indexer_event_process_events(&self, arg0 : &BlockHeight, arg1 : &TxEventLogBatch, arg2 : &ProposedTransactionBatch) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn indexer_event_report_tx_failure(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-}
-
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_IndexerEvent1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self::new(handle)
-    }
-}
-
-
-#[allow(non_camel_case_types)]
-#[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent2: Send + Sync {    
-    async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::ProgramError>;
-    
-    async fn indexer_event_initialize_epoch(&self, arg0 : IndexerOutboxOrigin) -> Result<IndexerEpochResult, ::rpc_driver::ProgramError>;
-    
-    async fn indexer_event_apply_committed_block(&self, arg0 : IndexerOutboxOrigin, arg1 : IndexerCommittedBlock) -> Result<IndexerBlockApplyResult, ::rpc_driver::ProgramError>;
-        // Diagnostics remain best-effort and are independent of durable block
-    // acknowledgement.
-
-    async fn indexer_event_report_tx_failure_v2(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<(), ::rpc_driver::ProgramError>;
-}
-
-
-#[allow(non_camel_case_types)]
-pub struct IndexerEvent_IndexerEvent2_Dispatcher {
-  inner: Box<dyn IndexerEvent_IndexerEvent2>,
-}
-
-impl IndexerEvent_IndexerEvent2_Dispatcher {
-  pub fn new(inner: Box<dyn IndexerEvent_IndexerEvent2>) -> Self {
-    Self { inner }
-  }
-}
-
-#[async_trait::async_trait]
-impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent2_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaab, 2)
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
@@ -1002,11 +912,11 @@ impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent2_Dispatcher
                 let res = self.inner.indexer_event_apply_committed_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // indexer_event_report_tx_failure_v2
+            // indexer_event_report_tx_failure
             13 => {
                 let args: (SignedTransactionHash, TxFailureDiagnostic, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_report_tx_failure_v2(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.indexer_event_report_tx_failure(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -1015,17 +925,17 @@ impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent2_Dispatcher
 }
 
 #[derive(Clone)]
-pub struct IndexerEvent_IndexerEvent2_Client {
+pub struct IndexerEvent_IndexerEvent1_Client {
     handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
 }
 
-impl IndexerEvent_IndexerEvent2_Client {
+impl IndexerEvent_IndexerEvent1_Client {
     pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self { handle }
     }
 
     fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaab, 2)
+        ::rpc_driver::ProgVers::new(0x4321aaab, 1)
     }
     pub async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
@@ -1042,20 +952,22 @@ impl IndexerEvent_IndexerEvent2_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 12, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn indexer_event_report_tx_failure_v2(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<(), ::rpc_driver::RpcError> {
+    pub async fn indexer_event_report_tx_failure(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<(), ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 13, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_IndexerEvent2_Client {
+impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_IndexerEvent1_Client {
     fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
 
 
+/// Registration is bound to one indexer process generation and the durable
+/// progress observed immediately before registration.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
@@ -1063,20 +975,6 @@ impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_Indexe
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IndexerCard {
-    pub protocol: ProtocolCommit,
-    pub address_for_event: ServerAddress,
-}
-
-/// V2 registration is bound to one indexer process generation and the durable
-/// progress observed immediately before registration. A later successful
-/// registration replaces the event service's single receiver slot.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct IndexerCardV2 {
     pub protocol: ProtocolCommit,
     pub generation: UPID,
     // Absent for the first durable indexer session. A new session may replace
@@ -1086,54 +984,6 @@ pub struct IndexerCardV2 {
     pub address_for_event: ServerAddress,
     pub progress: IndexerProgress,
 }
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
-#[derive(schemars::JsonSchema)]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[derive(Copy)]
-#[repr(transparent)]
-pub struct EventIndexerIntroOutcome(pub i32);
-
-impl EventIndexerIntroOutcome {
-    pub const EventIntroSuccess: Self = Self(0);
-
-    // The indexer advertised a protocol string the event server does not speak.
-    pub const EventIntroMismatchedProtocol: Self = Self(1);
-
-    // The event server could not dial the indexer's advertised address_for_event
-    // (e.g. a bind/advertise mismatch or a refused connection). The registration
-    // is rejected rather than silently accepted, so the indexer does not mark
-    // itself healthy while the event server has no client for it.
-    pub const EventIntroConnectFailed: Self = Self(2);
-}
-impl From<i32> for EventIndexerIntroOutcome {
-    fn from(v: i32) -> Self {
-        Self(v)
-    }
-}
-#[cfg(feature = "std")]
-impl core::fmt::Display for EventIndexerIntroOutcome {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self.0 {
-            x if x == Self::EventIntroSuccess.0 => {
-                write!(f, "EventIndexerIntroOutcome::EventIntroSuccess")
-            },
-            x if x == Self::EventIntroMismatchedProtocol.0 => {
-                write!(f, "EventIndexerIntroOutcome::EventIntroMismatchedProtocol")
-            },
-            x if x == Self::EventIntroConnectFailed.0 => {
-                write!(f, "EventIndexerIntroOutcome::EventIntroConnectFailed")
-            },
-            _ => {
-                write!(f, "EventIndexerIntroOutcome({})", self.0)
-            }
-        }
-    }
-}
-
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -1199,7 +1049,9 @@ impl core::fmt::Display for EventIndexerRegistrationOutcome {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_intro(&self, arg0 : IndexerCard) -> Result<EventIndexerIntroOutcome, ::rpc_driver::ProgramError>;
+    async fn event_indexer_register(&self, arg0 : IndexerCard) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
+    
+    async fn event_indexer_probe(&self, arg0 : UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
 }
 
 
@@ -1221,11 +1073,18 @@ impl ::rpc_driver::handler::RpcHandler for EventIndexer_EventIndexer1_Dispatcher
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
-            // event_indexer_intro
-            0 => {
+            // event_indexer_register
+            10 => {
                 let args: (IndexerCard, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_intro(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.event_indexer_register(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // event_indexer_probe
+            11 => {
+                let args: (UPID, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.event_indexer_probe(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -1246,80 +1105,7 @@ impl EventIndexer_EventIndexer1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaac, 1)
     }
-    pub async fn event_indexer_intro(&self, arg0 : &IndexerCard) -> Result<EventIndexerIntroOutcome, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-}
-
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for EventIndexer_EventIndexer1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self::new(handle)
-    }
-}
-
-
-#[allow(non_camel_case_types)]
-#[async_trait::async_trait]
-pub trait EventIndexer_EventIndexer2: Send + Sync {    
-    async fn event_indexer_register(&self, arg0 : IndexerCardV2) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
-    
-    async fn event_indexer_probe(&self, arg0 : UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
-}
-
-
-#[allow(non_camel_case_types)]
-pub struct EventIndexer_EventIndexer2_Dispatcher {
-  inner: Box<dyn EventIndexer_EventIndexer2>,
-}
-
-impl EventIndexer_EventIndexer2_Dispatcher {
-  pub fn new(inner: Box<dyn EventIndexer_EventIndexer2>) -> Self {
-    Self { inner }
-  }
-}
-
-#[async_trait::async_trait]
-impl ::rpc_driver::handler::RpcHandler for EventIndexer_EventIndexer2_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaac, 2)
-    }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
-        match proc {
-            // event_indexer_register
-            10 => {
-                let args: (IndexerCardV2, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_register(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // event_indexer_probe
-            11 => {
-                let args: (UPID, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_probe(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
-        }
-    }
-}
-
-#[derive(Clone)]
-pub struct EventIndexer_EventIndexer2_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
-}
-
-impl EventIndexer_EventIndexer2_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self { handle }
-    }
-
-    fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaac, 2)
-    }
-    pub async fn event_indexer_register(&self, arg0 : &IndexerCardV2) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
+    pub async fn event_indexer_register(&self, arg0 : &IndexerCard) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -1331,7 +1117,7 @@ impl EventIndexer_EventIndexer2_Client {
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for EventIndexer_EventIndexer2_Client {
+impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for EventIndexer_EventIndexer1_Client {
     fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self::new(handle)
     }

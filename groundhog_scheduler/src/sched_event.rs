@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -181,10 +181,10 @@ pub enum EventActivationResult {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait SchedEvent_SchedEvent1: Send + Sync {        // [schedevent_intro_event] is called by an event server to introduce itself to
-    // the system.
-
-    async fn schedevent_intro_event(&self, arg0 : EventCard) -> Result<RPCError, ::rpc_driver::ProgramError>;
+pub trait SchedEvent_SchedEvent1: Send + Sync {    
+    async fn schedevent_prepare_event(&self, arg0 : EventCard) -> Result<EventPrepareResult, ::rpc_driver::ProgramError>;
+    
+    async fn schedevent_activate_event(&self, arg0 : EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -206,11 +206,18 @@ impl ::rpc_driver::handler::RpcHandler for SchedEvent_SchedEvent1_Dispatcher {
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
-            // schedevent_intro_event
+            // schedevent_prepare_event
             1 => {
                 let args: (EventCard, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedevent_intro_event(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.schedevent_prepare_event(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // schedevent_activate_event
+            2 => {
+                let args: (EventRegistrationSnapshot, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.schedevent_activate_event(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -231,92 +238,19 @@ impl SchedEvent_SchedEvent1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x7ee79998, 1)
     }
-    pub async fn schedevent_intro_event(&self, arg0 : &EventCard) -> Result<RPCError, ::rpc_driver::RpcError> {
+    pub async fn schedevent_prepare_event(&self, arg0 : &EventCard) -> Result<EventPrepareResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-}
-
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SchedEvent_SchedEvent1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self::new(handle)
-    }
-}
-
-
-#[allow(non_camel_case_types)]
-#[async_trait::async_trait]
-pub trait SchedEvent_SchedEvent2: Send + Sync {    
-    async fn schedevent2_prepare_event(&self, arg0 : EventCard) -> Result<EventPrepareResult, ::rpc_driver::ProgramError>;
-    
-    async fn schedevent2_activate_event(&self, arg0 : EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_driver::ProgramError>;
-}
-
-
-#[allow(non_camel_case_types)]
-pub struct SchedEvent_SchedEvent2_Dispatcher {
-  inner: Box<dyn SchedEvent_SchedEvent2>,
-}
-
-impl SchedEvent_SchedEvent2_Dispatcher {
-  pub fn new(inner: Box<dyn SchedEvent_SchedEvent2>) -> Self {
-    Self { inner }
-  }
-}
-
-#[async_trait::async_trait]
-impl ::rpc_driver::handler::RpcHandler for SchedEvent_SchedEvent2_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x7ee79998, 2)
-    }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
-        match proc {
-            // schedevent2_prepare_event
-            1 => {
-                let args: (EventCard, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedevent2_prepare_event(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // schedevent2_activate_event
-            2 => {
-                let args: (EventRegistrationSnapshot, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedevent2_activate_event(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
-        }
-    }
-}
-
-#[derive(Clone)]
-pub struct SchedEvent_SchedEvent2_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
-}
-
-impl SchedEvent_SchedEvent2_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self { handle }
-    }
-
-    fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x7ee79998, 2)
-    }
-    pub async fn schedevent2_prepare_event(&self, arg0 : &EventCard) -> Result<EventPrepareResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn schedevent2_activate_event(&self, arg0 : &EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_driver::RpcError> {
+    pub async fn schedevent_activate_event(&self, arg0 : &EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SchedEvent_SchedEvent2_Client {
+impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for SchedEvent_SchedEvent1_Client {
     fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
         Self::new(handle)
     }
