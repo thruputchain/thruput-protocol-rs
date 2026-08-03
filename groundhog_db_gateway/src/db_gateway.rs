@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -43,7 +43,7 @@ pub type AddressAndKeyBatch = VecM::<AddressAndKey>;
 /// this program has no cross-dependency on the executor-side RPC.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -62,7 +62,7 @@ pub type DbGatewayItemBatch = VecM::<DbGatewayItemResult>;
 /// Batch-read payload: one BlockHeight applies to every result in the
 /// batch because all reads come from a single committed snapshot.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -76,7 +76,7 @@ pub struct DbGatewayPayload {
 /// Per-item misses live inside the `items` batch as kRPCNotFound.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
@@ -92,7 +92,7 @@ pub enum DbGatewayResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

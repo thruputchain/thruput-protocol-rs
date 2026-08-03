@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e3dda0763ff3fb21779d16b6fa2e130c633911a0
+// Generated from xdrc commit: 
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -38,7 +38,7 @@ use ::serde_arrays;
 ///
 /// Travels on network.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -59,7 +59,7 @@ pub struct ProposalTxs {
 /// the XDR hash of each batch index with its raw bytes removed.
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -101,7 +101,7 @@ impl DerefMut for ProposalTxsHash {
 /// Does not travel on network: nodes reconstruct it from a `ConsensusValue`
 /// and its `ProposalTxs`.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -118,7 +118,7 @@ pub type OptProposal = Option::<Proposal>;
 /// Intentionally carries only the `ConsensusValueHash`: leader-election
 /// pseudorandomness must not depend on transaction-payload availability.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(ReadXDR, WriteXDR)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
