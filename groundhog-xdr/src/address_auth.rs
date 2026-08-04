@@ -175,7 +175,7 @@ pub struct AddressAuthData {
     ///
     /// # TODO
     ///
-    /// (geoff): this can be removed once hogdb has a way to track this directly
+    /// (geoff): this can be removed once hog_db has a way to track this directly
     /// on each db item.
     pub last_written_height: BlockHeight,
 }
