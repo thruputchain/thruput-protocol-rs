@@ -236,7 +236,7 @@ pub enum ContractType {
 #[repr(C)]
 pub struct ContractSignedTokenPreimage {
     // #[rust(box_ptr)], #[cpp(box)]
-    pub preimage_type: Box<ContractType>,
+    pub preimage_type: Option<Box<ContractType>>,
 }
 
 // ---------------------------------------------------------------------------
