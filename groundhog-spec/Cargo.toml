@@ -50,4 +50,4 @@ default-features = false
 
 [dependencies.xdrs]
 workspace = true
-features = ["derive", "int128", "ns", "alloc"]
+features = ["derive", "int128", "alloc"]
