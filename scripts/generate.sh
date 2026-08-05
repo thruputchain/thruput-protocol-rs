@@ -272,8 +272,6 @@ if [[ "${1:-}" == "--check" ]]; then
     printf '%s\n' "$generation_status" >&2
     echo "Tracked diff summary:" >&2
     git diff --stat -- >&2
-    echo "Tracked diff:" >&2
-    git diff -- | head -200 >&2
     exit 1
   fi
 fi
