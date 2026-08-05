@@ -24,7 +24,6 @@ xdrs = []
 serde = [
     "dep:serde",
     "dep:serde_arrays",
-    "dep:serde_with",
     "xdrs/serde",
     "groundhog_scp/serde",
     "groundhog-xdr/serde",
@@ -47,11 +46,6 @@ features = ["derive"]
 optional = true
 workspace = true
 default-features = false
-
-[dependencies.serde_with]
-workspace = true
-optional = true
-features = []
 
 [dependencies.groundhog_scp]
 workspace = true
