@@ -66,8 +66,8 @@ pub mod parallel;
 pub use parallel::*;
 
 #[rustfmt::skip]
-pub mod repair;
-pub use repair::*;
+pub mod repair2;
+pub use repair2::*;
 
 #[rustfmt::skip]
 pub mod sched_coord;

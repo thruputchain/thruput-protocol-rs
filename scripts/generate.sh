@@ -70,7 +70,7 @@ akkads=(
   multiplex.x
   proposal.x
   parallel.x
-  repair.x
+  repair2.x
   rpc_types.x
   sched_coord.x
 )
