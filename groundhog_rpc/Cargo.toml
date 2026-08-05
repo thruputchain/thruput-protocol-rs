@@ -13,7 +13,6 @@ keywords.workspace = true
 categories.workspace = true
 description =  "Bindings for groundhog test rpcs"
 
-
 [lib]
 crate-type = ["rlib"]
 
@@ -22,7 +21,7 @@ default = ["alloc", "std", "xdrs"]
 alloc = ["xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
-serde = ["dep:serde", "dep:serde_arrays", "dep:serde_with", "xdrs/serde"]
+serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde"]
 
 [dependencies]
 async-trait = "0.1.89"
@@ -40,11 +39,6 @@ features = ["derive"]
 optional = true
 workspace = true
 default-features = false
-
-[dependencies.serde_with]
-workspace = true
-optional = true
-features = []
 
 [dependencies.xdrs]
 workspace = true
