@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
+// Generated from xdrc commit: 4c41a69632ca9a40edddfc67892a2d1019173fd6
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -175,7 +175,7 @@ pub struct AddressAuthData {
     ///
     /// # TODO
     ///
-    /// (geoff): this can be removed once hogdb has a way to track this directly
+    /// (geoff): this can be removed once hog_db has a way to track this directly
     /// on each db item.
     pub last_written_height: BlockHeight,
 }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
+// Generated from xdrc commit: 4c41a69632ca9a40edddfc67892a2d1019173fd6
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -41,10 +41,10 @@ pub trait EventExecutor_EventExecutor1: Send + Sync {
     async fn eventexecutor_close_block(&self, arg0 : BlockID) -> Result<RPCError, ::rpc_driver::ProgramError>;
         // Best-effort report that a transaction failed nondeterministically
     // during 2-phase commit and was excluded from the proposal. The event
-    // server relays this immediately to every registered indexer; it touches
-    // no per-block state (the tx will never commit, so it has no place in
-    // the commit pipeline). The executor sends fire-and-forget and ignores
-    // the result.
+    // server places this in a bounded best-effort mailbox for the indexer to
+    // pull; it touches no per-block state (the tx will never commit, so it has
+    // no place in the commit pipeline). The executor sends fire-and-forget and
+    // ignores the result.
 
     async fn eventexecutor_report_tx_failure(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<RPCError, ::rpc_driver::ProgramError>;
         // A transaction should not call this more than once
@@ -195,7 +195,7 @@ pub trait EventSched_EventSched1: Send + Sync {
     
     async fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<RPCError, ::rpc_driver::ProgramError>;
         // Called only after both HogDB and event durable commits succeed. This
-    // releases the committed record for indexer delivery.
+    // makes the committed record admissible to indexer pull requests.
 
     async fn eventsched_confirm_committed_block(&self, arg0 : ConsensusValue) -> Result<RPCError, ::rpc_driver::ProgramError>;
     

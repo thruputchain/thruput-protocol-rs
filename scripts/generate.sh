@@ -70,7 +70,7 @@ akkads=(
   multiplex.x
   proposal.x
   parallel.x
-  repair.x
+  repair2.x
   rpc_types.x
   sched_coord.x
 )
@@ -90,7 +90,26 @@ specs=(
 )
 
 
-[[ -z $XDRC ]] && XDRC="../../hogd/build/x23/x23c/x23c"
+# Without XDRC, download the latest x23c release the way CI does.
+if [[ -z $XDRC ]]; then
+  os=$(uname -s | tr '[:upper:]' '[:lower:]')
+  [[ $os == darwin ]] && os=macos
+  arch=$(uname -m)
+  asset="x23c-${os}-${arch}.tar.gz"
+  xdrc_tmpdir=$(mktemp -d)
+  trap 'rm -rf "$xdrc_tmpdir"' EXIT
+  echo "-- Downloading ${asset} from groundhogchain/hogd latest-x23c release --" >&2
+  if ! gh release download latest-x23c \
+         --repo groundhogchain/hogd \
+         --pattern "${asset}" \
+         --dir "$xdrc_tmpdir"; then
+    echo "error: failed to download ${asset} from the latest-x23c release; set XDRC to a local x23c build" >&2
+    exit 1
+  fi
+  tar xzf "$xdrc_tmpdir/$asset" -C "$xdrc_tmpdir"
+  chmod +x "$xdrc_tmpdir/x23c"
+  XDRC="$xdrc_tmpdir/x23c"
+fi
 
 echo "-- Using XDRC=${XDRC} --" >&2
 

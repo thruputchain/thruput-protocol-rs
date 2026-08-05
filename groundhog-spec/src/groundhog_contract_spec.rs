@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
+// Generated from xdrc commit: 4c41a69632ca9a40edddfc67892a2d1019173fd6
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -236,7 +236,7 @@ pub enum ContractType {
 #[repr(C)]
 pub struct ContractSignedTokenPreimage {
     // #[rust(box_ptr)], #[cpp(box)]
-    pub preimage_type: Box<ContractType>,
+    pub preimage_type: Option<Box<ContractType>>,
 }
 
 // ---------------------------------------------------------------------------

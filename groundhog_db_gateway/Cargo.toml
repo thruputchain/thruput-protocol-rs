@@ -22,7 +22,6 @@ std = ["alloc"]
 serde = [
     "dep:serde",
     "dep:serde_arrays",
-    "dep:serde_with",
     "xdrs/serde",
     "groundhog-xdr/serde",
 ]
@@ -38,7 +37,6 @@ rpc_driver = { workspace = true }
 
 schemars = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }
-serde_with = { workspace = true, optional = true }
 serde_arrays = { workspace = true, optional = true }
 
 [dev-dependencies]

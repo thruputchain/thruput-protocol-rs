@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
+// Generated from xdrc commit: 4c41a69632ca9a40edddfc67892a2d1019173fd6
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -604,7 +604,7 @@ pub struct IndexerOutboxOrigin {
 }
 
 /// Canonical durable outbox payload. This exact XDR value is hashed for
-/// `payload_digest`, stored in the private outbox record, and delivered to the
+/// `payload_digest`, stored in the private outbox record, and returned to the
 /// indexer so both sides use one content identity.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -857,132 +857,29 @@ pub enum IndexerBlockApplyResult {
     #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage },
 }
 
-
-#[allow(non_camel_case_types)]
-#[async_trait::async_trait]
-pub trait IndexerEvent_IndexerEvent1: Send + Sync {    
-    async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::ProgramError>;
-    
-    async fn indexer_event_initialize_epoch(&self, arg0 : IndexerOutboxOrigin) -> Result<IndexerEpochResult, ::rpc_driver::ProgramError>;
-    
-    async fn indexer_event_apply_committed_block(&self, arg0 : IndexerOutboxOrigin, arg1 : IndexerCommittedBlock) -> Result<IndexerBlockApplyResult, ::rpc_driver::ProgramError>;
-        // Diagnostics remain best-effort and are independent of durable block
-    // acknowledgement.
-
-    async fn indexer_event_report_tx_failure(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<(), ::rpc_driver::ProgramError>;
-}
-
-
-#[allow(non_camel_case_types)]
-pub struct IndexerEvent_IndexerEvent1_Dispatcher {
-  inner: Box<dyn IndexerEvent_IndexerEvent1>,
-}
-
-impl IndexerEvent_IndexerEvent1_Dispatcher {
-  pub fn new(inner: Box<dyn IndexerEvent_IndexerEvent1>) -> Self {
-    Self { inner }
-  }
-}
-
-#[async_trait::async_trait]
-impl ::rpc_driver::handler::RpcHandler for IndexerEvent_IndexerEvent1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaab, 1)
-    }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
-        match proc {
-            // indexer_event_get_progress
-            10 => {
-                let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_get_progress().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // indexer_event_initialize_epoch
-            11 => {
-                let args: (IndexerOutboxOrigin, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_initialize_epoch(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // indexer_event_apply_committed_block
-            12 => {
-                let args: (IndexerOutboxOrigin, IndexerCommittedBlock, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_apply_committed_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // indexer_event_report_tx_failure
-            13 => {
-                let args: (SignedTransactionHash, TxFailureDiagnostic, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_event_report_tx_failure(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
-        }
-    }
-}
-
-#[derive(Clone)]
-pub struct IndexerEvent_IndexerEvent1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
-}
-
-impl IndexerEvent_IndexerEvent1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self { handle }
-    }
-
-    fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(0x4321aaab, 1)
-    }
-    pub async fn indexer_event_get_progress(&self) -> Result<IndexerProgress, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn indexer_event_initialize_epoch(&self, arg0 : &IndexerOutboxOrigin) -> Result<IndexerEpochResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn indexer_event_apply_committed_block(&self, arg0 : &IndexerOutboxOrigin, arg1 : &IndexerCommittedBlock) -> Result<IndexerBlockApplyResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 12, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn indexer_event_report_tx_failure(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<(), ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 13, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-}
-
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for IndexerEvent_IndexerEvent1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
-        Self::new(handle)
-    }
-}
-
-
-/// Registration is bound to one indexer process generation and the durable
-/// progress observed immediately before registration.
+/// The indexer's durable progress is its replay cursor. A lost reply is safe:
+/// the next request either repeats the same immutable block or advances from
+/// progress already committed by the indexer.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct IndexerCard {
+pub struct EventIndexerPullRequest {
     pub protocol: ProtocolCommit,
-    pub generation: UPID,
-    // Absent for the first durable indexer session. A new session may replace
-    // only the event slot named by this predecessor. Exact-generation retries
-    // remain heartbeats, including retries after an accepted response was lost.
-    pub predecessor_generation: Option<UPID>,
-    pub address_for_event: ServerAddress,
     pub progress: IndexerProgress,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct EventIndexerPulledBlock {
+    pub origin: IndexerOutboxOrigin,
+    pub block: IndexerCommittedBlock,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -993,65 +890,90 @@ pub struct IndexerCard {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
-pub struct EventIndexerRegistrationOutcome(pub i32);
+pub struct EventIndexerPullOutcome(pub i32);
 
-impl EventIndexerRegistrationOutcome {
-    pub const EventRegistrationAccepted: Self = Self(0);
-    pub const EventRegistrationMismatchedProtocol: Self = Self(1);
-    pub const EventRegistrationConnectFailed: Self = Self(2);
-    pub const EventRegistrationOriginUnavailable: Self = Self(3);
-    pub const EventRegistrationProgressConflict: Self = Self(4);
-    pub const EventRegistrationReplayFailed: Self = Self(5);
-
-    // This process generation previously owned the slot but was superseded by a
-    // later registration. It cannot reclaim ownership by retrying.
-    pub const EventRegistrationStaleGeneration: Self = Self(6);
+impl EventIndexerPullOutcome {
+    pub const EventIndexerPullBlock: Self = Self(0);
+    pub const EventIndexerPullCaughtUp: Self = Self(1);
+    pub const EventIndexerPullNotReady: Self = Self(2);
+    pub const EventIndexerPullMismatchedProtocol: Self = Self(3);
+    pub const EventIndexerPullProgressConflict: Self = Self(4);
+    pub const EventIndexerPullInternalFailure: Self = Self(5);
 }
-impl From<i32> for EventIndexerRegistrationOutcome {
+impl From<i32> for EventIndexerPullOutcome {
     fn from(v: i32) -> Self {
         Self(v)
     }
 }
 #[cfg(feature = "std")]
-impl core::fmt::Display for EventIndexerRegistrationOutcome {
+impl core::fmt::Display for EventIndexerPullOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::EventRegistrationAccepted.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationAccepted")
+            x if x == Self::EventIndexerPullBlock.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullBlock")
             },
-            x if x == Self::EventRegistrationMismatchedProtocol.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationMismatchedProtocol")
+            x if x == Self::EventIndexerPullCaughtUp.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullCaughtUp")
             },
-            x if x == Self::EventRegistrationConnectFailed.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationConnectFailed")
+            x if x == Self::EventIndexerPullNotReady.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullNotReady")
             },
-            x if x == Self::EventRegistrationOriginUnavailable.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationOriginUnavailable")
+            x if x == Self::EventIndexerPullMismatchedProtocol.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullMismatchedProtocol")
             },
-            x if x == Self::EventRegistrationProgressConflict.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationProgressConflict")
+            x if x == Self::EventIndexerPullProgressConflict.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullProgressConflict")
             },
-            x if x == Self::EventRegistrationReplayFailed.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationReplayFailed")
-            },
-            x if x == Self::EventRegistrationStaleGeneration.0 => {
-                write!(f, "EventIndexerRegistrationOutcome::EventRegistrationStaleGeneration")
+            x if x == Self::EventIndexerPullInternalFailure.0 => {
+                write!(f, "EventIndexerPullOutcome::EventIndexerPullInternalFailure")
             },
             _ => {
-                write!(f, "EventIndexerRegistrationOutcome({})", self.0)
+                write!(f, "EventIndexerPullOutcome({})", self.0)
             }
         }
     }
 }
 
 
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum EventIndexerPullResult {
+    // case EventIndexerPullBlock:
+    //   EventIndexerPulledBlock pulled_block;
+    EventIndexerPullBlock { pulled_block: EventIndexerPulledBlock } = EventIndexerPullOutcome::EventIndexerPullBlock.0 as i32,
+    // case EventIndexerPullCaughtUp:
+    //   IndexerOutboxOrigin origin;
+    EventIndexerPullCaughtUp { origin: IndexerOutboxOrigin } = EventIndexerPullOutcome::EventIndexerPullCaughtUp.0 as i32,
+    // default:
+    //   IndexerFailureMessage diagnostic;
+    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage },
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct IndexerTxFailureNotice {
+    pub tx_hash: SignedTransactionHash,
+    pub diagnostic: TxFailureDiagnostic,
+}
+
+pub type IndexerTxFailureNoticeBatch = VecM::<IndexerTxFailureNotice, 256>;
+
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_register(&self, arg0 : IndexerCard) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
+    async fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::rpc_driver::ProgramError>;
     
-    async fn event_indexer_probe(&self, arg0 : UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::ProgramError>;
+    async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_driver::ProgramError>;
 }
 
 
@@ -1073,18 +995,18 @@ impl ::rpc_driver::handler::RpcHandler for EventIndexer_EventIndexer1_Dispatcher
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
         match proc {
-            // event_indexer_register
+            // event_indexer_pull_next
             10 => {
-                let args: (IndexerCard, ) =
+                let args: (EventIndexerPullRequest, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_register(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.event_indexer_pull_next(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // event_indexer_probe
+            // event_indexer_pull_tx_failures
             11 => {
-                let args: (UPID, ) =
+                let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_probe(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.event_indexer_pull_tx_failures().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
@@ -1105,13 +1027,13 @@ impl EventIndexer_EventIndexer1_Client {
     fn prog_vers() -> ::rpc_driver::ProgVers {
         ::rpc_driver::ProgVers::new(0x4321aaac, 1)
     }
-    pub async fn event_indexer_register(&self, arg0 : &IndexerCard) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
+    pub async fn event_indexer_pull_next(&self, arg0 : &EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn event_indexer_probe(&self, arg0 : &UPID) -> Result<EventIndexerRegistrationOutcome, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
@@ -1173,6 +1095,16 @@ impl IndexerBlockApplyResult {
     pub fn outcome(&self) -> IndexerBlockApplyOutcome {
         match self {
             IndexerBlockApplyResult::Default{ outcome,..} => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl EventIndexerPullResult {
+    pub fn outcome(&self) -> EventIndexerPullOutcome {
+        match self {
+            EventIndexerPullResult::Default{ outcome,..} => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }

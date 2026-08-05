@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 442c63216e98dc2fa820f1de01b10774de23a287
+// Generated from xdrc commit: 4c41a69632ca9a40edddfc67892a2d1019173fd6
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -212,7 +212,7 @@ pub enum DbConflictResult {
 
 /// Best-effort diagnostic for a transaction that failed nondeterministically
 /// during two-phase commit at proposal time: the executing block height of
-/// the failed attempt plus the first conflicting storage op hogdb reported.
+/// the failed attempt plus the first conflicting storage op hog_db reported.
 /// Fixed-size by construction; the wire and caches carry exactly one
 /// diagnostic per failure to bound memory end to end.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
