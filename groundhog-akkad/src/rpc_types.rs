@@ -43,6 +43,12 @@ pub struct DbTip {
     pub id: BlockID,
     pub storage_long_hash: StorageLongHash,
     pub value: ConsensusValue,
+    /// The chain-configured contract resolved for a root invocation of an
+    /// address with no deployed contract (see
+    /// SystemCallHandler::resolve_runtime). Set at genesis from
+    /// GenesisConfiguration::default_wallet; carried forward verbatim by
+    /// every subsequent commit.
+    pub default_wallet: DeployedContractHash,
 }
 
 // Internal unique ID describing a transaction.
