@@ -67,6 +67,10 @@ pub type InitialConfigurationList = VecM::<InitialConfigurationEntry>;
 pub struct GenesisConfiguration {
     pub initial_config: InitialConfigurationList,
     pub storage_cost_model: StorageCostModelXdr,
+    /// The contract resolved for root invocations of undeployed addresses.
+    /// Carried into the DbTip at genesis. GenesisConfigurationBuilder
+    /// defaults this to the native default_wallet precompile's record.
+    pub default_wallet: DeployedContractHash,
 }
 
 // These translated into the contract addresses that are initialized
