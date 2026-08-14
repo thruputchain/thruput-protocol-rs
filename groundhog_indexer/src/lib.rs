@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 
 pub use groundhog_scheduler::consensus::ConsensusValue;
+pub use groundhog_scheduler::proposal::ProposalTxs;
 use groundhog_scp::network::*;
 use groundhog_trace::*;
 use groundhog_xdr::event::*;
