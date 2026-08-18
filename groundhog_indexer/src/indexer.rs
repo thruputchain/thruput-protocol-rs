@@ -326,7 +326,7 @@ pub struct TransactionPage {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct TransactionRef {
-    pub tx_hash: SignedTransactionHash,
+    pub tx_hash: TransactionHash,
     pub height: BlockHeight,
 }
 
@@ -430,7 +430,7 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
     async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_driver::ProgramError>;
     
-    async fn get_transaction_info(&self, arg0 : SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
+    async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::rpc_driver::ProgramError>;
         // The canonical consensus value for a retained, indexed height. Unknown,
     // future, and unavailable heights return BlockNotFound; backend failures
     // remain RPC errors.
@@ -483,7 +483,7 @@ impl ::rpc_driver::handler::RpcHandler for IndexerBlockExplorer_IndexerBlockExpl
             }
             // get_transaction_info
             1 => {
-                let args: (SignedTransactionHash, ) =
+                let args: (TransactionHash, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -546,7 +546,7 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn get_transaction_info(&self, arg0 : &SignedTransactionHash) -> Result<TxInfoResult, ::rpc_driver::RpcError> {
+    pub async fn get_transaction_info(&self, arg0 : &TransactionHash) -> Result<TxInfoResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -961,7 +961,7 @@ pub enum EventIndexerPullResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IndexerTxFailureNotice {
-    pub tx_hash: SignedTransactionHash,
+    pub tx_hash: TransactionHash,
     pub diagnostic: TxFailureDiagnostic,
 }
 

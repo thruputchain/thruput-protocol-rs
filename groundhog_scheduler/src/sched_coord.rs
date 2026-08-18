@@ -236,8 +236,8 @@ pub enum SchedulerValidationResult {
     //   SchedulerValidationBlock block;
     SchedulerValidationOK { block: SchedulerValidationBlock } = SchedulerValidationOutcome::SchedulerValidationOK.0 as i32,
     // case SchedulerValidationMissingTxs:
-    //   VecM<SignedTransactionHash> missing_tx_hashes;
-    SchedulerValidationMissingTxs { missing_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
+    //   VecM<TransactionHash> missing_tx_hashes;
+    SchedulerValidationMissingTxs { missing_tx_hashes: VecM<TransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
     // case SchedulerValidationDbFailed:
     // case SchedulerValidationExecutorFailed:
     // case SchedulerValidationInvalid:
@@ -390,7 +390,7 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
         // Returns transactions from the mempool that have not yet been committed in a block.
 
-    async fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::ProgramError>;
+    async fn schedcoord_lookup_transactions(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::ProgramError>;
 }
 
 
@@ -477,7 +477,7 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
             }
             // schedcoord_lookup_transactions
             100 => {
-                let args: (SignedTransactionHashBatch, ) =
+                let args: (TransactionHashBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.schedcoord_lookup_transactions(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -545,7 +545,7 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 8, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn schedcoord_lookup_transactions(&self, arg0 : &SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::RpcError> {
+    pub async fn schedcoord_lookup_transactions(&self, arg0 : &TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)

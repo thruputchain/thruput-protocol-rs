@@ -39,7 +39,7 @@ use ::serde_arrays;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct MissingTxs {
-    pub tx_hashes: VecM<SignedTransactionHash>,
+    pub tx_hashes: VecM<TransactionHash>,
     pub consensus_value: ConsensusValue,
 }
 
