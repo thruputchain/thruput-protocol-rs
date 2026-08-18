@@ -88,15 +88,15 @@ impl DerefMut for ParallelSignedTransactionBatch {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
-pub struct ParallelSignedTransactionHashBatch {
+pub struct ParallelTransactionHashBatch {
     inner: ParallelBatch,
 }
-impl From<ParallelBatch> for ParallelSignedTransactionHashBatch {
+impl From<ParallelBatch> for ParallelTransactionHashBatch {
     fn from(_inner: ParallelBatch) -> Self {
         Self { inner: _inner }
     }
 }
-impl ParallelSignedTransactionHashBatch {
+impl ParallelTransactionHashBatch {
     pub fn into_inner(self) -> ParallelBatch {
         self.inner
     }
@@ -105,14 +105,14 @@ impl ParallelSignedTransactionHashBatch {
     }
 }
 
-impl Deref for ParallelSignedTransactionHashBatch {
+impl Deref for ParallelTransactionHashBatch {
     type Target = ParallelBatch;
 
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
-impl DerefMut for ParallelSignedTransactionHashBatch {
+impl DerefMut for ParallelTransactionHashBatch {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }

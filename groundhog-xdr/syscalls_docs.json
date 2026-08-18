@@ -123,7 +123,7 @@
   },
   "GetSourceTransactionHash": {
     "description": [
-      "Returns the hash of the transaction that initiated the current execution."
+      "Returns the hash of the transaction that initiated the current execution: sha256 of the XDR-encoded Transaction, the same TransactionHash that identifies it network-wide."
     ],
     "errors": []
   },

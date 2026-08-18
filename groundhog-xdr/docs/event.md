@@ -85,7 +85,7 @@ During block execution, the system accumulates events from all transactions. At 
 
 Events are organized per-transaction using the `TxEventLog` structure:
 
-- **Key**: `proposed_tx_hash` - SHA256 hash of the ProposedTransaction
+- **Key**: `tx_hash` - SHA256 hash of the XDR-encoded `Transaction`
 - **Value**: Array of `TxEmittedEvent` structures (all events emitted by that transaction)
 
 This organization allows efficient retrieval of all events emitted by a specific transaction.
@@ -101,7 +101,7 @@ Each individual event contains:
 
 Within each block:
 1. As transactions execute, their events are collected into `TxEventLog` entries
-2. These entries are inserted into a merkle-patricia trie, keyed by `proposed_tx_hash`
+2. These entries are inserted into a merkle-patricia trie, keyed by `tx_hash`
 3. At block close, the trie is finalized and a root hash is computed
 4. This root hash becomes part of the block's cryptographic commitment
 
@@ -110,11 +110,11 @@ Within each block:
 The `IdentifiedEvent` structure is not constructed during the main transaction workflow. Instead, it may be produced by downstream systems (indexers, event explorers, APIs) that cross-reference events across transactions and blocks.
 
 It provides complete identification of a unique event:
-- `proposed_tx_hash`: The transaction that emitted the event
+- `tx_hash`: The transaction that emitted the event
 - `sequence_number`: Distinguishes multiple events from the same transaction (0-indexed)
 - `emitted_event`: The complete event data
 
-The combination of `proposed_tx_hash` and `sequence_number` uniquely identifies any event in the blockchain's history.
+The combination of `tx_hash` and `sequence_number` uniquely identifies any event in the blockchain's history.
 
 ## Contract Developer Guidelines
 

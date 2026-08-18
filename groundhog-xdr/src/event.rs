@@ -149,9 +149,15 @@ pub struct TxEmittedEvent {
 }
 
 /// Event log for a single transaction, stored in the merkle-patricia trie.
-/// The key is the proposed_tx_hash, and the value is the complete list of
+/// The key is the tx_hash, and the value is the complete list of
 /// events emitted by that transaction. This structure enables efficient
 /// querying of all events associated with a specific transaction.
+///
+/// That key is the identity of the transaction the submitter signed, not of
+/// the [`ProposedTransaction`] the proposer assembled from it, so a
+/// submitter can compute it before submission and use it to find its own
+/// events. The nondeterministic proposal data travels alongside the log to
+/// the indexer and is not part of this commitment. See [`TransactionHash`].
 ///
 /// `root_output` carries the InvocationFrameOutput of the transaction's
 /// root frame: the Return buffer on success, the Abort buffer on a
@@ -165,8 +171,8 @@ pub struct TxEmittedEvent {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct TxEventLog {
-    // sha256(ProposedTransaction)
-    pub proposed_tx_hash: SHA256Hash,
+    // sha256(Transaction)
+    pub tx_hash: TransactionHash,
     pub exec_result: ExecResult,
     pub root_output: InvocationFrameOutput,
     pub events: VecM<TxEmittedEvent, kMaxEventsPerTransaction>,
@@ -176,7 +182,7 @@ pub struct TxEventLog {
 /// This structure is not constructed during the main transaction workflow; instead,
 /// it may be produced by downstream systems (indexers, APIs) that cross-reference
 /// events across transactions and blocks.
-/// The combination of proposed_tx_hash and sequence_number uniquely identifies
+/// The combination of tx_hash and sequence_number uniquely identifies
 /// any event. The sequence_number distinguishes multiple events emitted by
 /// the same transaction.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -186,8 +192,8 @@ pub struct TxEventLog {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct IdentifiedEvent {
-    // sha256(ProposedTransaction)
-    pub proposed_tx_hash: SHA256Hash,
+    // sha256(Transaction)
+    pub tx_hash: TransactionHash,
     pub block_height: BlockHeight,
     // uniquifies the event
     pub sequence_number: u32,

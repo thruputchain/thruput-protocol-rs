@@ -45,8 +45,8 @@ use ::serde_arrays;
 #[repr(C)]
 pub struct ProposalTxs {
     pub ext: ExtensionPoint,
-    /// Hashes of the block's signed transactions, in execution order.
-    pub hash: ParallelSignedTransactionHashBatch,
+    /// Hashes of the block's transactions, in execution order.
+    pub hash: ParallelTransactionHashBatch,
     /// Nondeterministic choices captured by the proposer, replayed by
     /// validators so re-execution reproduces the header outputs exactly.
     pub nondeterministic_data: ParallelNondeterministicProposalDataBatch,

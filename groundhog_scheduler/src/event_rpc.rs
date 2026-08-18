@@ -46,7 +46,7 @@ pub trait EventExecutor_EventExecutor1: Send + Sync {
     // no place in the commit pipeline). The executor sends fire-and-forget and
     // ignores the result.
 
-    async fn eventexecutor_report_tx_failure(&self, arg0 : SignedTransactionHash, arg1 : TxFailureDiagnostic) -> Result<RPCError, ::rpc_driver::ProgramError>;
+    async fn eventexecutor_report_tx_failure(&self, arg0 : TransactionHash, arg1 : TxFailureDiagnostic) -> Result<RPCError, ::rpc_driver::ProgramError>;
         // A transaction should not call this more than once
     // We don't technically need the transaction ID here;
     // however, this will help later with tracing RPC calls through the system,
@@ -103,7 +103,7 @@ impl ::rpc_driver::handler::RpcHandler for EventExecutor_EventExecutor1_Dispatch
             }
             // eventexecutor_report_tx_failure
             33 => {
-                let args: (SignedTransactionHash, TxFailureDiagnostic, ) =
+                let args: (TransactionHash, TxFailureDiagnostic, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.eventexecutor_report_tx_failure(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
@@ -148,7 +148,7 @@ impl EventExecutor_EventExecutor1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 32, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn eventexecutor_report_tx_failure(&self, arg0 : &SignedTransactionHash, arg1 : &TxFailureDiagnostic) -> Result<RPCError, ::rpc_driver::RpcError> {
+    pub async fn eventexecutor_report_tx_failure(&self, arg0 : &TransactionHash, arg1 : &TxFailureDiagnostic) -> Result<RPCError, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 33, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
