@@ -1,24 +1,21 @@
 //! # Groundhog syscall dispatch
 //!
 //! The raw guest-exit boundary for groundhog syscalls. This crate contains the
-//! external `fn` imports and the single dispatch chokepoint, `syscall_wrapper`,
-//! which leaves the guest and executes a system call. It speaks only in integer
-//! words (`SyscallWord`) and raw `i32` error codes — the typed `SyscallNo` /
-//! `SysErr` layer lives in `groundhog-xdr`.
+//! single dispatch chokepoint, `syscall_wrapper`, which leaves the guest and
+//! executes a system call. It speaks only in integer words (`SyscallWord`) and
+//! raw `i32` error codes — the typed `SyscallNo` / `SysErr` layer lives in
+//! `groundhog-xdr`.
 //!
-//! A dispatch path exists only when the target is `wasm32`/`riscv32`, or when
-//! the `syscalls_mock` feature is enabled. On any other target (a plain host
+//! A dispatch path exists only when the target is `riscv32`, or when the
+//! `syscalls_mock` feature is enabled. On any other target (a plain host
 //! without the mock) there is no way to leave the guest, so the dispatch
 //! chokepoint `syscall_wrapper` is not exported. This keeps a feature-less host
 //! build (and `cargo build -p`, `cargo hack`, rust-analyzer) clean without a
 //! `compile_error!` guard. The `SyscallWord` type alias, by contrast, is a pure
 //! pointer-width type with no dispatch dependency, so it is always defined.
 //!
-//! There are three guest dispatch paths, selected by target:
+//! There are two guest dispatch paths, selected by target:
 //!
-//! - **wasm32**: `syscall_wrapper` calls a host import — the WebAssembly module
-//!   `marmot`, function name `syscall`. Arguments are encoded as integers or
-//!   pointers into WebAssembly memory.
 //! - **riscv32**: `syscall_wrapper` issues the RISC-V `ecall` trap instruction
 //!   directly, passing the syscall number in `a0` and arguments in `a1..a7`
 //!   (the host returns the error code in `a0`).
@@ -32,20 +29,18 @@
 
 /// The integer width of a single syscall argument slot.
 ///
-/// Syscall arguments are passed as pointer-width words. On `wasm32` each slot is
-/// a 32-bit value, lowered to a wasm `i32` to match the host (`marmot`) ABI. On
-/// `riscv32` each slot is likewise a 32-bit value, carried in a register
-/// (`a1..a7`) across the `ecall` trap. On native targets each slot is a 64-bit
-/// value, wide enough to carry a host pointer (this is the path used by
-/// `native_exec` in the SDK). This happens to equal the platform pointer width,
-/// but is spelled out explicitly so the syscall ABI is decoupled from any
-/// incidental use of `usize` elsewhere.
+/// Syscall arguments are passed as pointer-width words. On `riscv32` each slot
+/// is a 32-bit value, carried in a register (`a1..a7`) across the `ecall` trap.
+/// On native targets each slot is a 64-bit value, wide enough to carry a host
+/// pointer (this is the path used by `native_exec` in the SDK). This happens to
+/// equal the platform pointer width, but is spelled out explicitly so the
+/// syscall ABI is decoupled from any incidental use of `usize` elsewhere.
 ///
 /// This is a pure type alias with no dispatch dependency, so it is always
 /// defined — even on targets where `syscall_wrapper` is unavailable.
-#[cfg(any(target_arch = "wasm32", target_arch = "riscv32"))]
+#[cfg(target_arch = "riscv32")]
 pub type SyscallWord = u32;
-#[cfg(not(any(target_arch = "wasm32", target_arch = "riscv32")))]
+#[cfg(not(target_arch = "riscv32"))]
 pub type SyscallWord = u64;
 
 // On riscv32 the slot must be exactly pointer/register width (32 bits); a 64-bit
@@ -53,18 +48,10 @@ pub type SyscallWord = u64;
 #[cfg(target_arch = "riscv32")]
 const _: () = assert!(core::mem::size_of::<SyscallWord>() == 4);
 
-#[cfg(any(
-    target_arch = "wasm32",
-    target_arch = "riscv32",
-    feature = "syscalls_mock"
-))]
+#[cfg(any(target_arch = "riscv32", feature = "syscalls_mock"))]
 pub use dispatch::syscall_wrapper;
 
-#[cfg(any(
-    target_arch = "wasm32",
-    target_arch = "riscv32",
-    feature = "syscalls_mock"
-))]
+#[cfg(any(target_arch = "riscv32", feature = "syscalls_mock"))]
 mod dispatch {
     use super::SyscallWord;
 
@@ -73,24 +60,6 @@ mod dispatch {
     // `syscall_wrapper` (below) passes `SyscallWord`-typed values into it, any
     // disagreement between these declarations and `SyscallWord` is a compile error
     // at the call site — a tripwire if `SyscallWord` is ever defined incorrectly.
-
-    // wasm32 real import, provided by the host (`marmot`): 32-bit slots, lowered to
-    // wasm `i32`.
-    #[cfg(all(not(feature = "syscalls_mock"), target_arch = "wasm32"))]
-    #[link(wasm_import_module = "marmot")]
-    unsafe extern "C" {
-        #[link_name = "syscall"]
-        fn syscall_wrapper_impl(
-            syscall_no: u32,
-            arg1: u32,
-            arg2: u32,
-            arg3: u32,
-            arg4: u32,
-            arg5: u32,
-            arg6: u32,
-            arg7: u32,
-        ) -> i32;
-    }
 
     // Native mock entrypoint (used by `native_exec` and the syscall tests): always
     // native, so the slots are concretely 64-bit.

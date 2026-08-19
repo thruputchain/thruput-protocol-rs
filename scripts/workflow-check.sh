@@ -24,10 +24,10 @@ CARGO_NET_GIT_FETCH_WITH_CLI=true \
 cargo build -p groundhog-xdr --features=serde
 cargo build -p groundhog-xdr --features=serde,xdrs
 cargo build -p groundhog-xdr --features=serde,alloc
-cargo build -p groundhog-xdr --target=wasm32-unknown-unknown
-cargo build -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
-cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
-cargo build -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
+cargo build -p groundhog-xdr --target=riscv32im-unknown-none-elf
+cargo build -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
+cargo build -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=xdrs
+cargo build -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=alloc
 cargo test --features=std
 cargo build -p groundhog_rpc
 cargo build -p groundhog_scp

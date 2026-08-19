@@ -20,5 +20,5 @@ crate-type = ["rlib"]
 default = []
 # Selects the native "C-unwind" mock import path (used by native_exec / syscall
 # tests), making the dispatch layer available on a host target. Without it, a
-# host build (no wasm32/riscv32) has no dispatch path and the crate is empty.
+# host build (no riscv32) has no dispatch path and the crate is empty.
 syscalls_mock = []

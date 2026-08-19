@@ -21,7 +21,6 @@ kargo() {
 }
 
 # Make sure the cross-compilation targets used by CI are installed.
-rustup target add wasm32-unknown-unknown
 rustup target add riscv32im-unknown-none-elf
 rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component rustfmt
 
@@ -41,12 +40,11 @@ kargo build "${g[@]}" --features=serde
 kargo build "${g[@]}" --features=serde,xdrs
 kargo build "${g[@]}" --features=serde,alloc
 
-# wasm32 / riscv32 cross-compilation
-kargo build "${g[@]}" --target=wasm32-unknown-unknown
-kargo build "${g[@]}" --features=xdrs,syscalls --target=wasm32-unknown-unknown
+# riscv32 cross-compilation
+kargo build "${g[@]}" --target=riscv32im-unknown-none-elf
 kargo build "${g[@]}" --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
-kargo build "${g[@]}" --target=wasm32-unknown-unknown --features=xdrs
-kargo build "${g[@]}" --target=wasm32-unknown-unknown --features=alloc
+kargo build "${g[@]}" --target=riscv32im-unknown-none-elf --features=xdrs
+kargo build "${g[@]}" --target=riscv32im-unknown-none-elf --features=alloc
 
 kargo test --features=std
 

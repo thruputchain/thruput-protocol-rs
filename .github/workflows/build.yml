@@ -41,7 +41,7 @@ jobs:
         with:
           toolchain: 1.96.0
           components: clippy, rustfmt
-          targets: riscv32im-unknown-none-elf, wasm32-unknown-unknown
+          targets: riscv32im-unknown-none-elf
       - name: Set up dated nightly for rustdoc and rustfmt
         uses: dtolnay/rust-toolchain@4fd1da8b0805d2d2e936788875a7d65dbd677dc2 # nightly
         with:
@@ -92,16 +92,14 @@ jobs:
         run: cargo build --locked -p groundhog-xdr --features=serde,xdrs
       - name: cargo build serde alloc
         run: cargo build --locked -p groundhog-xdr --features=serde,alloc
-      - name: cargo build wasm
-        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown
-      - name: cargo build syscalls
-        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls --target=wasm32-unknown-unknown
+      - name: cargo build riscv32
+        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf
       - name: cargo build riscv32 syscalls
         run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
-      - name: cargo build wasm xdrs
-        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown --features=xdrs
-      - name: cargo build wasm alloc
-        run: cargo build --locked -p groundhog-xdr --target=wasm32-unknown-unknown --features=alloc
+      - name: cargo build riscv32 xdrs
+        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=xdrs
+      - name: cargo build riscv32 alloc
+        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=alloc
       - name: run tests
         run: cargo test --locked --features=std
       - name: build rpc

@@ -295,7 +295,7 @@ impl Arg {
     }
 
     /// Lowers this argument into one or more syscall slots, each a
-    /// `SyscallWord` (pointer-width: `u32` on wasm32, `u64` on native). The
+    /// `SyscallWord` (pointer-width: `u32` on riscv32, `u64` on native). The
     /// `SyscallWord` alias is resolved in the consuming crate, so each cast is
     /// correct for the target the bindings are compiled for.
     pub fn to_words(
@@ -338,8 +338,8 @@ impl Arg {
             } else if self.is_primitive(type_map) {
                 if is_input {
                     // A primitive input is passed by value in a single slot, so
-                    // it MUST fit in a `SyscallWord`. On wasm32 that slot is 32
-                    // bits, so this assertion (resolved per-target in the
+                    // it MUST fit in a `SyscallWord`. On riscv32 that slot is
+                    // 32 bits, so this assertion (resolved per-target in the
                     // consuming crate) turns an oversized by-value argument into
                     // a compile error instead of a silent truncation. Wider
                     // values must be passed by reference.
