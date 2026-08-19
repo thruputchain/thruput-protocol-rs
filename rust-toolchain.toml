@@ -2,4 +2,4 @@
 channel = "1.96.0"
 components = ["clippy", "rustfmt"]
 profile = "minimal"
-targets = ["riscv32im-unknown-none-elf", "wasm32-unknown-unknown"]
+targets = ["riscv32im-unknown-none-elf"]

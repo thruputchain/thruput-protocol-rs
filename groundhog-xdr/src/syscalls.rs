@@ -32,21 +32,17 @@
 //! These bindings are a thin wrapper around the dispatch chokepoint
 //! `groundhog_syscall::syscall_wrapper`, which leaves the guest and executes a
 //! system call. See the `groundhog-syscall` crate for the per-target dispatch
-//! paths (wasm `marmot` import, riscv32 `ecall`, native mock).
+//! paths (riscv32 `ecall`, native mock).
 
 use crate::*;
 
 // The `syscalls` feature pulls in `groundhog-syscall`, which only provides a
-// dispatch path on wasm32/riscv32 or under its `syscalls_mock` feature. On any
-// other target it is empty, so guard with a clear message rather than letting
-// the `SyscallWord` / `syscall_wrapper` imports below fail as unresolved.
-#[cfg(not(any(
-    target_arch = "wasm32",
-    target_arch = "riscv32",
-    feature = "syscalls_mock"
-)))]
+// dispatch path on riscv32 or under its `syscalls_mock` feature. On any other
+// target it is empty, so guard with a clear message rather than letting the
+// `SyscallWord` / `syscall_wrapper` imports below fail as unresolved.
+#[cfg(not(any(target_arch = "riscv32", feature = "syscalls_mock")))]
 compile_error!(
-    "the `syscalls` feature has no dispatch path on this target; build for wasm32/riscv32 or enable `syscalls_mock`"
+    "the `syscalls` feature has no dispatch path on this target; build for riscv32 or enable `syscalls_mock`"
 );
 
 pub use groundhog_syscall::SyscallWord;

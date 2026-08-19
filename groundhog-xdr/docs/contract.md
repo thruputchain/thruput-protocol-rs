@@ -6,14 +6,14 @@ This module defines the contract abstraction in Groundhog. Contracts are code th
 
 The `contract` module provides types and structures for contract deployment, execution, and management. These types are generated from the XDR specification in `protocol/contract.x` and include:
 
-- **Contract types**: WebAssembly blobs, native precompiled code, and test mocks
+- **Contract types**: RV32 blobs, native precompiled code, and test mocks
 - **Deployment**: Deterministic address derivation and deployment metadata
 - **Interfaces**: Contract interface identification and entrypoint derivation
 - **Metadata**: Deployed contract information and address metadata
 
 ## Key Concepts
 
-- Contracts can be WebAssembly blobs, native precompiled code, or test mocks
+- Contracts can be RV32 blobs, native precompiled code, or test mocks
 - Contract addresses are deterministically derived from deployment parameters
 - Contract methods are identified by 8-byte entrypoint IDs
 - Entrypoint IDs are derived from interface names and versions
@@ -22,9 +22,15 @@ The `contract` module provides types and structures for contract deployment, exe
 
 Groundhog supports three types of contracts:
 
-- **`kWasmi`**: WebAssembly contracts executed in the Wasmi runtime. This is the standard contract type for user-deployed contracts.
-- **`kNative`**: Precompiled native contracts implemented directly in Rust. Used for system contracts like the native HogToken. More efficient than WASM but cannot be deployed by users.
+- **`kRv32`**: RISC-V contracts executed in the RV32 VM. This is the standard contract type for user-deployed contracts.
+- **`kNative`**: Precompiled native contracts implemented directly in Rust. Used for system contracts like the native HogToken. More efficient than RV32 but cannot be deployed by users.
 - **`kMockTest`**: Mock contracts for local testing. Never deployed on-chain; exists only in the test harness.
+
+A fourth discriminant, `kWasmi`, is a legacy WebAssembly contract type. WebAssembly
+execution has been removed in favor of RV32; the discriminant remains reserved in
+the XDR only so existing encodings stay parseable, and it must not be used for new
+deployments. It will be dropped from `protocol/contract.x` once the on-chain
+migration completes.
 
 ## Contract Deployment
 
