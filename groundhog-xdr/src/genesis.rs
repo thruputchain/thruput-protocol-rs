@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -38,55 +38,11 @@ use ::serde_arrays;
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct PresetDeploymentConfig {
-    pub initial_nonce: SHA256Hash,
-    pub contract_hash: SHA256Hash,
-    pub entrypoint: ContractEntrypointID,
-    pub calldata: Calldata,
-}
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct InitialConfigurationEntry {
-    pub config: PresetDeploymentConfig,
-    pub amount: int128_xdr,
-}
-
-pub type InitialConfigurationList = VecM::<InitialConfigurationEntry>;
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
 pub struct GenesisConfiguration {
-    pub initial_config: InitialConfigurationList,
-    pub storage_cost_model: StorageCostModelXdr,
-    /// The contract resolved for root invocations of undeployed addresses.
-    /// Carried into the DbTip at genesis. GenesisConfigurationBuilder
-    /// defaults this to the native default_wallet precompile's record.
-    pub default_wallet: DeployedContractHash,
-}
-
-/// Minimal genesis state for root-contract chain creation. Token allocation
-/// happens through the root contract in the single ceremony block at height 1.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct GenesisConfigurationV2 {
     pub network_hash: NetworkHash,
     pub storage_cost_model: StorageCostModelXdr,
     pub root_contract: Contract,
-    /// Preserved from V1 so the genesis transition does not implicitly alter
-    /// undeployed-address invocation behavior.
+    /// The contract resolved for root invocations of undeployed addresses.
     pub default_wallet: DeployedContractHash,
 }
 
@@ -109,11 +65,11 @@ impl GenesisContractAddresses {
     // Null address (reserved)
     pub const kAddressNull: Self = Self(0);
 
-    // Precompiled native contract for the HogToken contract
-    pub const kAddressPrecompiledHogToken: Self = Self(1);
+    // Precompiled native-token contract
+    pub const kAddressNativeToken: Self = Self(1);
 
-    // InitialTokenClaim contract, for managing genesis token/contract setup
-    pub const kAddressInitialTokenClaim: Self = Self(2);
+    // Genesis root contract
+    pub const kAddressGenesisRoot: Self = Self(2);
 }
 impl From<i32> for GenesisContractAddresses {
     fn from(v: i32) -> Self {
@@ -127,11 +83,11 @@ impl core::fmt::Display for GenesisContractAddresses {
             x if x == Self::kAddressNull.0 => {
                 write!(f, "GenesisContractAddresses::kAddressNull")
             },
-            x if x == Self::kAddressPrecompiledHogToken.0 => {
-                write!(f, "GenesisContractAddresses::kAddressPrecompiledHogToken")
+            x if x == Self::kAddressNativeToken.0 => {
+                write!(f, "GenesisContractAddresses::kAddressNativeToken")
             },
-            x if x == Self::kAddressInitialTokenClaim.0 => {
-                write!(f, "GenesisContractAddresses::kAddressInitialTokenClaim")
+            x if x == Self::kAddressGenesisRoot.0 => {
+                write!(f, "GenesisContractAddresses::kAddressGenesisRoot")
             },
             _ => {
                 write!(f, "GenesisContractAddresses({})", self.0)

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -253,20 +253,10 @@ pub trait DbSched_DbSched1: Send + Sync {
         // Call to abandon a block.
 
     async fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
-        // Load genesis configuration data into storage. The second argument is the
-    // network ID. The third argument is the txset hash and the third argument
-    // is the events hash. Since the genesis block does not contain any
-    // transactions, both of these hashes will generally be the root hash of an
-    // empty Merkle trie.
-    //
-    // This RPC calculates storage keys and stores allocation amounts as
-    // bytestrings.
-
+    
     async fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
     
     async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_driver::ProgramError>;
-    
-    async fn dbsched_load_genesis_configuration_v2(&self, arg0 : GenesisConfigurationV2, arg1 : ConsensusValue) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
 }
 
 
@@ -358,13 +348,6 @@ impl ::rpc_driver::handler::RpcHandler for DbSched_DbSched1_Dispatcher {
                 let res = self.inner.dbsched_get_tip().await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // dbsched_load_genesis_configuration_v2
-            11 => {
-                let args: (GenesisConfigurationV2, ConsensusValue, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_load_genesis_configuration_v2(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
             _ => Err(::rpc_driver::RpcError::InvalidProcedure),
         }
     }
@@ -431,11 +414,6 @@ impl DbSched_DbSched1_Client {
     pub async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn dbsched_load_genesis_configuration_v2(&self, arg0 : &GenesisConfigurationV2, arg1 : &ConsensusValue) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
 }

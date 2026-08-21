@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -625,47 +625,6 @@ impl Deref for NetworkHash {
     }
 }
 impl DerefMut for NetworkHash {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
-    }
-}
-
-/// SHA-256 of the XDR-encoded genesis configuration loaded by the scheduler.
-/// Carried in every proposal header so the chain's execution prerequisites are
-/// recoverable as part of its consensus identity.
-// 
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(transparent)]
-#[cfg_attr(feature = "serde", serde(transparent))]
-pub struct GenesisConfigurationHash {
-    inner: SHA256Hash,
-}
-impl From<SHA256Hash> for GenesisConfigurationHash {
-    fn from(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-impl GenesisConfigurationHash {
-    pub fn into_inner(self) -> SHA256Hash {
-        self.inner
-    }
-    pub const fn new(_inner: SHA256Hash) -> Self {
-        Self { inner: _inner }
-    }
-}
-
-impl Deref for GenesisConfigurationHash {
-    type Target = SHA256Hash;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-impl DerefMut for GenesisConfigurationHash {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }

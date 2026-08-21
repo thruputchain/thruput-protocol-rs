@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -105,7 +105,7 @@ pub type LoadgenContextID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct LoadgenSuccessResult {
-    pub genesis_configuration: GenesisConfigurationV2,
+    pub genesis_configuration: GenesisConfiguration,
     pub genesis_ceremony_txs: InitializationBlock,
     pub initialization_txs: VecM<InitializationBlock>,
     pub context_id: LoadgenContextID,

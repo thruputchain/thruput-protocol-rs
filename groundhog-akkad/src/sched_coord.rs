@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -473,12 +473,8 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     // If there is no committed block, returns SchedulerGetTipNoGenesisBlock.
 
     async fn schedcoord_get_tip(&self) -> Result<SchedulerGetTipResult, ::rpc_driver::ProgramError>;
-        // TODO(jhumphri): Remove this once we integrate the coordinator into the
-    // loadgen experiment.
-
-    async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
     
-    async fn schedcoord_load_genesis_configuration_v2(&self, arg0 : GenesisConfigurationV2) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
     
     async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_driver::ProgramError>;
         // Returns transactions from the mempool that have not yet been committed in a block.
@@ -568,13 +564,6 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
                 let res = self.inner.schedcoord_load_genesis_configuration(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
-            // schedcoord_load_genesis_configuration_v2
-            9 => {
-                let args: (GenesisConfigurationV2, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.schedcoord_load_genesis_configuration_v2(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
             // schedulercoord_commit_genesis_ceremony
             10 => {
                 let args: (GenesisCeremonyRequest, ) =
@@ -650,11 +639,6 @@ impl SchedulerCoord_SchedulerCoord1_Client {
     pub async fn schedcoord_load_genesis_configuration(&self, arg0 : &GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 8, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn schedcoord_load_genesis_configuration_v2(&self, arg0 : &GenesisConfigurationV2) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 9, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
     pub async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : &GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_driver::RpcError> {

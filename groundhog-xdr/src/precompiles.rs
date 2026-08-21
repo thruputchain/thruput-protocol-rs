@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 003a0d33894e4c7c48474454948073bd6d10da45
+// Generated from xdrc commit: 58301365769c00d43c91f44a53e2148f54fdfa6a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -42,7 +42,8 @@ pub struct HogexecPrecompiledNativeContracts(pub i32);
 
 impl HogexecPrecompiledNativeContracts {
     pub const kNativeContractHogToken: Self = Self(0);
-    pub const kNativeContractInitialTokenClaim: Self = Self(1);
+
+    // Native contract ID 1 is retired and must remain unused.
     pub const kNativeContractDefaultWallet: Self = Self(2);
 }
 impl From<i32> for HogexecPrecompiledNativeContracts {
@@ -56,9 +57,6 @@ impl core::fmt::Display for HogexecPrecompiledNativeContracts {
         match self.0 {
             x if x == Self::kNativeContractHogToken.0 => {
                 write!(f, "HogexecPrecompiledNativeContracts::kNativeContractHogToken")
-            },
-            x if x == Self::kNativeContractInitialTokenClaim.0 => {
-                write!(f, "HogexecPrecompiledNativeContracts::kNativeContractInitialTokenClaim")
             },
             x if x == Self::kNativeContractDefaultWallet.0 => {
                 write!(f, "HogexecPrecompiledNativeContracts::kNativeContractDefaultWallet")
