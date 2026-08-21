@@ -73,6 +73,23 @@ pub struct GenesisConfiguration {
     pub default_wallet: DeployedContractHash,
 }
 
+/// Minimal genesis state for root-contract chain creation. Token allocation
+/// happens through the root contract in the single ceremony block at height 1.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct GenesisConfigurationV2 {
+    pub network_hash: NetworkHash,
+    pub storage_cost_model: StorageCostModelXdr,
+    pub root_contract: Contract,
+    /// Preserved from V1 so the genesis transition does not implicitly alter
+    /// undeployed-address invocation behavior.
+    pub default_wallet: DeployedContractHash,
+}
+
 // These translated into the contract addresses that are initialized
 // at the start of the chain.
 //

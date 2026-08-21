@@ -349,6 +349,95 @@ pub enum SchedulerGetTipResult {
     
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct GenesisCeremonyRequest {
+    pub expected_parent_height: BlockHeight,
+    pub expected_parent_value_hash: ConsensusValueHash,
+    pub context: ProposalContext,
+    pub transactions: ParallelSignedTransactionBatch,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct GenesisCeremonyOutcome(pub i32);
+
+impl GenesisCeremonyOutcome {
+    pub const GenesisCeremonyCommitted: Self = Self(0);
+    pub const GenesisCeremonyParentMismatch: Self = Self(2);
+    pub const GenesisCeremonyBatchMismatch: Self = Self(3);
+    pub const GenesisCeremonyInvalidTransaction: Self = Self(4);
+    pub const GenesisCeremonyExecutionFailed: Self = Self(5);
+}
+impl From<i32> for GenesisCeremonyOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for GenesisCeremonyOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::GenesisCeremonyCommitted.0 => {
+                write!(f, "GenesisCeremonyOutcome::GenesisCeremonyCommitted")
+            },
+            x if x == Self::GenesisCeremonyParentMismatch.0 => {
+                write!(f, "GenesisCeremonyOutcome::GenesisCeremonyParentMismatch")
+            },
+            x if x == Self::GenesisCeremonyBatchMismatch.0 => {
+                write!(f, "GenesisCeremonyOutcome::GenesisCeremonyBatchMismatch")
+            },
+            x if x == Self::GenesisCeremonyInvalidTransaction.0 => {
+                write!(f, "GenesisCeremonyOutcome::GenesisCeremonyInvalidTransaction")
+            },
+            x if x == Self::GenesisCeremonyExecutionFailed.0 => {
+                write!(f, "GenesisCeremonyOutcome::GenesisCeremonyExecutionFailed")
+            },
+            _ => {
+                write!(f, "GenesisCeremonyOutcome({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct GenesisCeremonyCommit {
+    pub db_tip: DbTip,
+    pub proposal_txs: ProposalTxs,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum GenesisCeremonyResult {
+    // case GenesisCeremonyCommitted:
+    //   GenesisCeremonyCommit commit;
+    GenesisCeremonyCommitted { commit: GenesisCeremonyCommit } = GenesisCeremonyOutcome::GenesisCeremonyCommitted.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
@@ -388,6 +477,10 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     // loadgen experiment.
 
     async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    
+    async fn schedcoord_load_genesis_configuration_v2(&self, arg0 : GenesisConfigurationV2) -> Result<DbSchedResult, ::rpc_driver::ProgramError>;
+    
+    async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_driver::ProgramError>;
         // Returns transactions from the mempool that have not yet been committed in a block.
 
     async fn schedcoord_lookup_transactions(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::ProgramError>;
@@ -475,6 +568,20 @@ impl ::rpc_driver::handler::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispat
                 let res = self.inner.schedcoord_load_genesis_configuration(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
+            // schedcoord_load_genesis_configuration_v2
+            9 => {
+                let args: (GenesisConfigurationV2, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.schedcoord_load_genesis_configuration_v2(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
+            // schedulercoord_commit_genesis_ceremony
+            10 => {
+                let args: (GenesisCeremonyRequest, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+                let res = self.inner.schedulercoord_commit_genesis_ceremony(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+            }
             // schedcoord_lookup_transactions
             100 => {
                 let args: (TransactionHashBatch, ) =
@@ -545,6 +652,16 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 8, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
+    pub async fn schedcoord_load_genesis_configuration_v2(&self, arg0 : &GenesisConfigurationV2) -> Result<DbSchedResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 9, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
+    pub async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : &GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+    }
     pub async fn schedcoord_lookup_transactions(&self, arg0 : &TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, &data).await?;
@@ -586,6 +703,16 @@ impl SchedulerGetTipResult {
     pub fn outcome(&self) -> SchedulerGetTipOutcome {
         match self {
             
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl GenesisCeremonyResult {
+    pub fn outcome(&self) -> GenesisCeremonyOutcome {
+        match self {
+            GenesisCeremonyResult::Default{ outcome } => (*outcome).into(),
+
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }

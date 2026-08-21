@@ -75,6 +75,7 @@ impl core::fmt::Display for ExperimentType {
 #[repr(C)]
 pub struct ERC20PaymentsConfig {
     pub num_addresses: u64,
+    pub network_hash: NetworkHash,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -104,7 +105,8 @@ pub type LoadgenContextID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct LoadgenSuccessResult {
-    pub genesis_configuration: GenesisConfiguration,
+    pub genesis_configuration: GenesisConfigurationV2,
+    pub genesis_ceremony_txs: InitializationBlock,
     pub initialization_txs: VecM<InitializationBlock>,
     pub context_id: LoadgenContextID,
 }
