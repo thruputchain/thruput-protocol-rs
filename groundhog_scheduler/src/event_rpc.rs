@@ -191,13 +191,12 @@ pub trait EventSched_EventSched1: Send + Sync {
     
     async fn eventsched_open_block(&self, arg0 : BlockID) -> Result<RPCError, ::rpc_driver::ProgramError>;
     
-    async fn eventsched_close_block(&self, arg0 : BlockID, arg1 : BlockHeight, arg2 : ProposalTxs) -> Result<EventBlockResult, ::rpc_driver::ProgramError>;
-    
-    async fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<RPCError, ::rpc_driver::ProgramError>;
-        // Called only after both HogDB and event durable commits succeed. This
-    // makes the committed record admissible to indexer pull requests.
+    async fn eventsched_close_block(&self, arg0 : BlockID, arg1 : BlockHeight) -> Result<EventBlockResult, ::rpc_driver::ProgramError>;
+        // Called after finalization. Durably publishes the event/indexer record;
+    // the record becomes pullable as soon as this call succeeds, even if the
+    // local HogDB commit running alongside it has not completed yet.
 
-    async fn eventsched_confirm_committed_block(&self, arg0 : ConsensusValue) -> Result<RPCError, ::rpc_driver::ProgramError>;
+    async fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<RPCError, ::rpc_driver::ProgramError>;
     
     async fn eventsched_abandon_block(&self, arg0 : BlockID) -> Result<RPCError, ::rpc_driver::ProgramError>;
 }
@@ -237,9 +236,9 @@ impl ::rpc_driver::handler::RpcHandler for EventSched_EventSched1_Dispatcher {
             }
             // eventsched_close_block
             30 => {
-                let args: (BlockID, BlockHeight, ProposalTxs, ) =
+                let args: (BlockID, BlockHeight, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.eventsched_close_block(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
+                let res = self.inner.eventsched_close_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // eventsched_commit_block
@@ -247,13 +246,6 @@ impl ::rpc_driver::handler::RpcHandler for EventSched_EventSched1_Dispatcher {
                 let args: (BlockID, ConsensusValue, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
                 let res = self.inner.eventsched_commit_block(args.0, args.1).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
-            }
-            // eventsched_confirm_committed_block
-            32 => {
-                let args: (ConsensusValue, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.eventsched_confirm_committed_block(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
             }
             // eventsched_abandon_block
@@ -291,19 +283,14 @@ impl EventSched_EventSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
-    pub async fn eventsched_close_block(&self, arg0 : &BlockID, arg1 : &BlockHeight, arg2 : &ProposalTxs) -> Result<EventBlockResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn eventsched_close_block(&self, arg0 : &BlockID, arg1 : &BlockHeight) -> Result<EventBlockResult, ::rpc_driver::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
     pub async fn eventsched_commit_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<RPCError, ::rpc_driver::RpcError> {
          let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 31, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
-    }
-    pub async fn eventsched_confirm_committed_block(&self, arg0 : &ConsensusValue) -> Result<RPCError, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 32, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
     }
     pub async fn eventsched_abandon_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_driver::RpcError> {
