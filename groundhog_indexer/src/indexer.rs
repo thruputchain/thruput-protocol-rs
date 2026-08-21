@@ -615,7 +615,13 @@ pub struct IndexerOutboxOrigin {
 pub struct IndexerCommittedBlockPayload {
     pub format_version: u32,
     pub consensus_value: ConsensusValue,
-    pub proposal_txs: ProposalTxs,
+    // Both batches are positionally paired; their order is not significant.
+    // Each inner Transaction is bound by consensus_value.proposal_header.txs_hash,
+    // while the corresponding event log and nondeterministic proposal data are
+    // bound together by consensus_value.proposal_header.events_hash. Signature
+    // wrappers are intentionally outside both consensus commitments and remain
+    // trusted internal payload; the outbox digest protects the complete payload
+    // from later corruption at rest.
     pub event_logs: TxEventLogBatch,
     pub tx_bodies: ProposedTransactionBatch,
 }
