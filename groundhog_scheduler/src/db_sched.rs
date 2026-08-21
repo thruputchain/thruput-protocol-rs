@@ -28,8 +28,6 @@ use ::serde_arrays;
 
 
 
-// clang-format on
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
