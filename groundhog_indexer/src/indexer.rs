@@ -603,9 +603,10 @@ pub struct IndexerOutboxOrigin {
     pub first_prev_hash: ConsensusValueHash,
 }
 
-/// Canonical durable outbox payload. This exact XDR value is hashed for
-/// `payload_digest`, stored in the private outbox record, and returned to the
-/// indexer so both sides use one content identity.
+/// Canonical committed-block payload returned to the indexer. The durable
+/// outbox record stores only `format_version` and `consensus_value`; the two
+/// batches live in the block's content-addressed events file, named by
+/// `consensus_value.proposal_header.events_hash`, and are reassembled on load.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 
@@ -618,10 +619,12 @@ pub struct IndexerCommittedBlockPayload {
     // Both batches are positionally paired; their order is not significant.
     // Each inner Transaction is bound by consensus_value.proposal_header.txs_hash,
     // while the corresponding event log and nondeterministic proposal data are
-    // bound together by consensus_value.proposal_header.events_hash. Signature
+    // bound together by consensus_value.proposal_header.events_hash. Both roots
+    // are recomputed whenever the payload is loaded from disk. Signature
     // wrappers are intentionally outside both consensus commitments and remain
-    // trusted internal payload; the outbox digest protects the complete payload
-    // from later corruption at rest.
+    // trusted internal payload: any wrapper satisfying the transaction's auth
+    // claim is equally valid, so which one a block carries is not observable to
+    // anything that validates against the header.
     pub event_logs: TxEventLogBatch,
     pub tx_bodies: ProposedTransactionBatch,
 }
@@ -634,7 +637,6 @@ pub struct IndexerCommittedBlockPayload {
 #[repr(C)]
 pub struct IndexerCommittedBlockIdentity {
     pub consensus_hash: ConsensusValueHash,
-    pub payload_digest: SHA256Hash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -658,7 +660,6 @@ pub struct IndexerInitializedProgress {
     pub origin: IndexerOutboxOrigin,
     pub contiguous_height: BlockHeight,
     pub last_consensus_hash: ConsensusValueHash,
-    pub last_payload_digest: SHA256Hash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
