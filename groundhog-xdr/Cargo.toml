@@ -77,6 +77,14 @@ optional = true
 [dependencies.xdr-common]
 workspace = true
 
+[dev-dependencies.xdrs]
+workspace = true
+features = ["alloc"]
+
 [[test]]
 name = "syscall_no_display"
 required-features = ["std"]
+
+[[test]]
+name = "roundtrip"
+required-features = ["std", "xdrs"]

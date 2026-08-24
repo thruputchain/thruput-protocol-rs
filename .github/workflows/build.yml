@@ -102,6 +102,8 @@ jobs:
         run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=alloc
       - name: run tests
         run: cargo test --locked --features=std
+      - name: run xdrs tests
+        run: cargo test --locked -p groundhog-xdr --features=std,xdrs
       - name: build rpc
         run: cargo build --locked -p groundhog_rpc
       - name: build scp
