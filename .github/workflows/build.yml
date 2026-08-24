@@ -70,52 +70,10 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/protocol-rs-generator"
           "$RUNNER_TEMP/protocol-rs-generator/bin/pip" install 'PyYAML==6.0.3'
           echo "$RUNNER_TEMP/protocol-rs-generator/bin" >> "$GITHUB_PATH"
-      - name: Check generated sources
-        run: XDRC="$RUNNER_TEMP/x23c" ./scripts/generate.sh --check
       - name: Setup environment
         uses: ./.github/actions/setup
-      - name: cargo build default
-        run: cargo build --locked -p groundhog-xdr
-      - name: cargo build alloc
-        run: cargo build --locked -p groundhog-xdr --features=alloc
-      - name: cargo build std
-        run: cargo build --locked -p groundhog-xdr --features=std
-      - name: cargo build xdrs
-        run: cargo build --locked -p groundhog-xdr --features=xdrs
-      - name: cargo build syscalls mock
-        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls_mock
-      - name: cargo doc
-        run: CARGO_NET_GIT_FETCH_WITH_CLI=true cargo +nightly-2026-05-26 doc --locked -F syscalls_mock --no-deps -p groundhog-xdr
-      - name: cargo build serde
-        run: cargo build --locked -p groundhog-xdr --features=serde
-      - name: cargo build serde xdrs
-        run: cargo build --locked -p groundhog-xdr --features=serde,xdrs
-      - name: cargo build serde alloc
-        run: cargo build --locked -p groundhog-xdr --features=serde,alloc
-      - name: cargo build riscv32
-        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf
-      - name: cargo build riscv32 syscalls
-        run: cargo build --locked -p groundhog-xdr --features=xdrs,syscalls --target=riscv32im-unknown-none-elf
-      - name: cargo build riscv32 xdrs
-        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=xdrs
-      - name: cargo build riscv32 alloc
-        run: cargo build --locked -p groundhog-xdr --target=riscv32im-unknown-none-elf --features=alloc
-      - name: run tests
-        run: cargo test --locked --features=std
-      - name: run xdrs tests
-        run: cargo test --locked -p groundhog-xdr --features=std,xdrs
-      - name: build rpc
-        run: cargo build --locked -p groundhog_rpc
-      - name: build scp
-        run: cargo build --locked -p groundhog_scp
-      - name: build trace
-        run: cargo build --locked -p groundhog-trace
-      - name: format checks
-        run: cargo +nightly-2026-05-26 fmt --check
-      - name: build spec
-        run: cargo build --locked -p groundhog-spec
-      - name: clippy macros
-        run: cargo clippy --locked -p groundhog-xdr-macros -- -D warnings
+      - name: Run CI checks
+        run: XDRC="$RUNNER_TEMP/x23c" ./scripts/ci-check.sh
 
   stable-compat:
     name: Current stable compatibility
