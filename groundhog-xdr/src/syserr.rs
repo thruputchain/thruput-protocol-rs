@@ -15,25 +15,38 @@ use core::fmt;
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 #[cfg_attr(feature = "std", error("{:?}", self))]
 #[repr(transparent)]
+/// Raw error code returned across the syscall boundary.
+///
+/// Wraps the `i32` produced by a syscall; the known values are the
+/// [`SyscallErrorCode`] constants, with
+/// `kSyscallErrorCodeNone` (0) meaning success. Unknown codes are
+/// preserved as-is, so `Debug` falls back to the numeric value.
 pub struct SysErr(pub i32);
 
 impl SysErr {
+    /// Returns whether this error carries exactly `code`.
     pub fn is_code(&self, code: SyscallErrorCode) -> bool {
         self.0 == code.0
     }
 
+    /// Returns whether this is the success code (`kSyscallErrorCodeNone`).
     pub fn is_none(&self) -> bool {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeNone)
     }
 
+    /// Returns whether this is any code other than success.
     pub fn is_some(&self) -> bool {
         !self.is_none()
     }
 
+    /// Returns whether the syscall failed because the storage key does
+    /// not exist (`kSyscallErrorCodeStorageKeyNotExist`).
     pub fn is_storage_key_not_exist(self) -> bool {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeStorageKeyNotExist)
     }
 
+    /// Returns whether the syscall rejected its input
+    /// (`kSyscallErrorCodeInvalidSyscallInput`).
     pub fn is_invalid_input(self) -> bool {
         self.is_code(SyscallErrorCode::kSyscallErrorCodeInvalidSyscallInput)
     }

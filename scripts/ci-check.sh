@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Check that the repo is CI-clean.
-# This must be kept in sync with .github/workflows/build.yml
+# This is the single source of truth for CI checks:
+# .github/workflows/build.yml runs this script, and
+# scripts/workflow-check.sh is a thin wrapper around it.
 
 set -e # exit on error
 set -o xtrace
@@ -47,15 +49,25 @@ kargo build "${g[@]}" --target=riscv32im-unknown-none-elf --features=xdrs
 kargo build "${g[@]}" --target=riscv32im-unknown-none-elf --features=alloc
 
 kargo test --features=std
+kargo test "${g[@]}" --features=std,xdrs
 
 # Other workspace crates
 kargo build -p groundhog_rpc
 kargo build -p groundhog_scp
 kargo build -p groundhog-trace
 kargo build -p groundhog-spec
+kargo build -p groundhog_view
 
 cargo +"$NIGHTLY_TOOLCHAIN" fmt --check
 
 kargo clippy -p groundhog-xdr-macros -- -D warnings
+
+# Clippy over groundhog-xdr, including tests. The two allowed lints
+# (match_single_binding, large_enum_variant) fire only inside the
+# x23c-generated sources, which must not be edited by hand.
+kargo clippy -p groundhog-xdr --all-targets --features=std,xdrs,serde -- \
+    -D warnings \
+    -A clippy::match-single-binding \
+    -A clippy::large-enum-variant
 
 echo ">> CI clean!"

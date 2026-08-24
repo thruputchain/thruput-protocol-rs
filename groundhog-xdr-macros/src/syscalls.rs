@@ -236,8 +236,8 @@ impl Arg {
                 let err = syn::Error::new(
                     e.span(),
                     format!(
-                        "Couldn't parse `typename` field as a type expression: \"{}\"",
-                        typename
+                        "syscall arg `{}`: couldn't parse `typename` field as a type expression: \"{}\"",
+                        self.name, typename
                     ),
                 );
                 Some(err.into_compile_error())
@@ -290,8 +290,24 @@ impl Arg {
                 is_optional: self.optional,
             }
         } else {
-            unimplemented!("Unknown arg type");
+            panic!("{}", self.unknown_type_message());
         }
+    }
+
+    /// Diagnostic for an arg that is neither a span argument nor has a
+    /// resolvable `typename`. Kept in one place so every rejection site
+    /// names the offending arg the same way.
+    fn unknown_type_message(&self) -> String {
+        format!(
+            "syscall arg `{}` has unknown type: `span_argument` is false and \
+             `typename` is {}; add a `typename` (or a type_mappings entry \
+             for it) in syscalls.yaml",
+            self.name,
+            match self.typename.as_deref() {
+                Some(t) => format!("\"{t}\""),
+                None => "missing".to_string(),
+            }
+        )
     }
 
     /// Lowers this argument into one or more syscall slots, each a
@@ -380,7 +396,7 @@ impl Arg {
 
             vec![arg]
         } else {
-            unimplemented!("Unknown arg type");
+            panic!("{}", self.unknown_type_message());
         }
     }
 
@@ -444,7 +460,7 @@ impl Arg {
             };
         }
 
-        unimplemented!("Unknown arg type");
+        panic!("{}", self.unknown_type_message());
     }
 }
 
@@ -608,7 +624,11 @@ fn generate_syscall_uninit_decl(
         );
         add_error_section(&mut doc_lines, &doc.errors);
     } else {
-        panic!("No documentation found for syscall {}", &syscall.name);
+        panic!(
+            "No documentation found for syscall `{}` in syscalls_docs.json; \
+             regenerate it with scripts/generate.sh (protocol/generate_syscalls_doc.py)",
+            &syscall.name
+        );
     }
 
     let doc_comment = generate_doc_comment(&doc_lines);
@@ -670,7 +690,11 @@ fn generate_syscall_raw_decl(
 
         add_error_section(&mut doc_lines, &doc.errors);
     } else {
-        panic!("No documentation found for syscall {}", &syscall.name);
+        panic!(
+            "No documentation found for syscall `{}` in syscalls_docs.json; \
+             regenerate it with scripts/generate.sh (protocol/generate_syscalls_doc.py)",
+            &syscall.name
+        );
     }
 
     let doc_comment = generate_doc_comment(&doc_lines);
@@ -744,7 +768,11 @@ fn generate_syscall_result_decl(
                 &syscall.name, &syscall.name
             ));
         } else {
-            panic!("No documentation found for syscall {}", &syscall.name);
+            panic!(
+                "No documentation found for syscall `{}` in syscalls_docs.json; \
+             regenerate it with scripts/generate.sh (protocol/generate_syscalls_doc.py)",
+                &syscall.name
+            );
         }
         let doc_comment = generate_doc_comment(&doc_lines);
 
@@ -808,7 +836,11 @@ fn generate_syscall_result_decl(
 
         add_error_section(&mut doc_lines, &doc.errors);
     } else {
-        panic!("No documentation found for syscall {}", &syscall.name);
+        panic!(
+            "No documentation found for syscall `{}` in syscalls_docs.json; \
+             regenerate it with scripts/generate.sh (protocol/generate_syscalls_doc.py)",
+            &syscall.name
+        );
     }
 
     let doc_comment = generate_doc_comment(&doc_lines);
@@ -838,10 +870,13 @@ fn load_syscall_yaml(file_path: String) -> SyscallSpec {
         .expect("CARGO_MANIFEST_DIR not set");
     let yaml_path = std::path::PathBuf::from(manifest_dir).join(&file_path);
 
-    let content = std::fs::read_to_string(&yaml_path)
-        .unwrap_or_else(|_| panic!("Failed to read {}", yaml_path.display()));
+    let content = std::fs::read_to_string(&yaml_path).unwrap_or_else(|e| {
+        panic!("Failed to read {}: {e}", yaml_path.display())
+    });
 
-    serde_yaml::from_str(&content).unwrap()
+    serde_yaml::from_str(&content).unwrap_or_else(|e| {
+        panic!("Failed to parse syscall spec {}: {e}", yaml_path.display())
+    })
 }
 
 fn load_syscall_docs(json_path: String) -> BTreeMap<String, SyscallDoc> {
@@ -854,11 +889,16 @@ fn load_syscall_docs(json_path: String) -> BTreeMap<String, SyscallDoc> {
         return BTreeMap::new();
     }
 
-    let content = std::fs::read_to_string(&docs_path)
-        .unwrap_or_else(|_| panic!("Failed to read {}", docs_path.display()));
+    let content = std::fs::read_to_string(&docs_path).unwrap_or_else(|e| {
+        panic!("Failed to read {}: {e}", docs_path.display())
+    });
 
-    serde_json::from_str(&content).unwrap_or_else(|_| {
-        eprintln!("Warning: Failed to parse syscall docs JSON, continuing without docs");
+    serde_json::from_str(&content).unwrap_or_else(|e| {
+        eprintln!(
+            "Warning: failed to parse syscall docs {}: {e}; continuing \
+             without docs",
+            docs_path.display()
+        );
         BTreeMap::new()
     })
 }
@@ -1000,9 +1040,32 @@ fn add_raw_arguments_section(
     doc_lines.push(String::new());
 }
 
+/// Fails fast, naming the syscall and arg, when an arg can never be
+/// lowered. The later per-arg panics cannot see the enclosing syscall,
+/// so this pass turns spec mistakes into a diagnostic that names both.
+fn validate_spec_args(spec: &SyscallSpec, file_path: &str) {
+    for syscall in &spec.syscalls {
+        let args = syscall
+            .inputs
+            .iter()
+            .map(|arg| ("input", arg))
+            .chain(syscall.outputs.iter().map(|arg| ("output", arg)));
+        for (kind, arg) in args {
+            if !arg.is_span_argument() && arg.typename.is_none() {
+                panic!(
+                    "in {file_path}: syscall `{}` {kind}: {}",
+                    syscall.name,
+                    arg.unknown_type_message()
+                );
+            }
+        }
+    }
+}
+
 pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path.clone());
+    validate_spec_args(&spec, &file_path);
     let type_map = spec.get_type_map();
 
     // Try to load documentation JSON (from the crate directory)
@@ -1043,7 +1106,12 @@ fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
 
 fn generate_syscall_no_display_line(syscall: &Syscall) -> TokenStream2 {
     let name = syscall.name.as_str();
-    let num: u32 = syscall.number.try_into().unwrap();
+    let num: u32 = syscall.number.try_into().unwrap_or_else(|_| {
+        panic!(
+            "syscall `{}` has negative number {}; syscall numbers must fit in u32",
+            syscall.name, syscall.number
+        )
+    });
     quote! {
         #num => Some(#name),
     }

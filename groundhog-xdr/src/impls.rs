@@ -41,7 +41,7 @@ impl BitXor<&Self> for SHA256Hash {
     type Output = Self;
 
     fn bitxor(mut self, rhs: &Self) -> Self::Output {
-        let rhs: &[u8; 32] = &*rhs;
+        let rhs: &[u8; 32] = rhs;
 
         self ^= rhs;
 
@@ -69,7 +69,7 @@ impl BitXor<&Self> for StorageKeyContractData {
     type Output = Self;
 
     fn bitxor(mut self, rhs: &Self) -> Self::Output {
-        let rhs: &[u8; 32] = &*rhs;
+        let rhs: &[u8; 32] = rhs;
 
         self ^= rhs;
 
@@ -94,47 +94,10 @@ fn bitxor_assign_bytes<const N: usize>(lhs: &mut [u8; N], rhs: &[u8; N]) {
         .iter_mut()
         .zip(rchunks.iter())
         .for_each(|(lbytes, rbytes)| {
-            let l = u32::from_le_bytes(lbytes.clone());
-            let r = u32::from_le_bytes(rbytes.clone());
+            let l = u32::from_le_bytes(*lbytes);
+            let r = u32::from_le_bytes(*rbytes);
             *lbytes = (l ^ r).to_le_bytes();
         });
-}
-
-#[cfg(test)]
-mod xor_test {
-    use super::*;
-    use std::ops::Range;
-    use std::vec::Vec;
-
-    #[test]
-    fn sk_bit_xor() {
-        let l: Vec<u8> = Range::from(0..32).into_iter().collect();
-        let l: &[u8; 32] = l.as_slice().try_into().unwrap();
-        let l: StorageKeyContractData = l.clone().into();
-
-        let rv: Vec<u8> = Range::from(107..139).into_iter().rev().collect();
-        let rs: &[u8; 32] = rv.as_slice().try_into().unwrap();
-        let r: StorageKeyContractData = rs.clone().into();
-
-        let expected = xor_arrays(&*l, &*r);
-
-        let x: StorageKeyContractData = l ^ r;
-        assert_eq!(*x, expected);
-
-        let x: StorageKeyContractData = l ^ &r;
-        assert_eq!(*x, expected);
-
-        let mut x: StorageKeyContractData = l;
-        x ^= rs;
-        assert_eq!(*x, expected);
-    }
-
-    fn xor_arrays(a: &[u8; 32], b: &[u8; 32]) -> [u8; 32] {
-        let out: Vec<_> =
-            a.iter().zip(b.iter()).map(|(a, b)| *a ^ *b).collect();
-        let out: &[u8; 32] = out.as_slice().try_into().unwrap();
-        out.clone()
-    }
 }
 
 // arrays with size above 32 don't implement Default, so we can't derive it
@@ -161,16 +124,22 @@ impl Default for StorageKey {
 }
 
 impl ContractAddress {
+    /// Returns the all-zero address, useful as a placeholder where no
+    /// real contract address exists yet.
     pub const fn zero() -> Self {
         Self::new([0; 32])
     }
 }
 
 impl ContractEntrypointID {
+    /// Builds an entrypoint ID from its numeric form, storing `n` as
+    /// the ID's 8 big-endian bytes.
     pub const fn from_u64(n: u64) -> Self {
         Self::new(n.to_be_bytes())
     }
 
+    /// Returns the numeric form of this ID, reading its 8 bytes as a
+    /// big-endian `u64`. Inverse of [`Self::from_u64`].
     pub fn into_u64(self) -> u64 {
         u64::from_be_bytes(self.into_inner())
     }
@@ -182,11 +151,11 @@ impl From<uint128_xdr> for u128 {
     }
 }
 
-impl Into<uint128_xdr> for u128 {
-    fn into(self: u128) -> uint128_xdr {
+impl From<u128> for uint128_xdr {
+    fn from(n: u128) -> Self {
         uint128_xdr {
-            lowbits: (self & 0xffff_ffff_ffff_ffff) as u64,
-            highbits: (self >> 64) as u64,
+            lowbits: (n & 0xffff_ffff_ffff_ffff) as u64,
+            highbits: (n >> 64) as u64,
         }
     }
 }
@@ -197,11 +166,11 @@ impl From<int128_xdr> for i128 {
     }
 }
 
-impl Into<int128_xdr> for i128 {
-    fn into(self: i128) -> int128_xdr {
+impl From<i128> for int128_xdr {
+    fn from(n: i128) -> Self {
         int128_xdr {
-            lowbits: (self & 0xffff_ffff_ffff_ffff) as u64,
-            highbits: (self >> 64) as i64,
+            lowbits: (n & 0xffff_ffff_ffff_ffff) as u64,
+            highbits: (n >> 64) as i64,
         }
     }
 }
@@ -209,5 +178,43 @@ impl Into<int128_xdr> for i128 {
 impl Default for StorageLongHash {
     fn default() -> Self {
         Self::new([0; 2048])
+    }
+}
+
+#[cfg(test)]
+mod xor_test {
+    use super::*;
+    use std::vec::Vec;
+
+    #[test]
+    fn sk_bit_xor() {
+        let l: Vec<u8> = (0..32).collect();
+        let l: &[u8; 32] = l.as_slice().try_into().unwrap();
+        let l: StorageKeyContractData = (*l).into();
+
+        let rv: Vec<u8> = (107..139).rev().collect();
+        let rs: &[u8; 32] = rv.as_slice().try_into().unwrap();
+        let r: StorageKeyContractData = (*rs).into();
+
+        let expected = xor_arrays(&l, &r);
+
+        let x: StorageKeyContractData = l ^ r;
+        assert_eq!(*x, expected);
+
+        // Exercise the by-reference operator impl on purpose.
+        #[allow(clippy::op_ref)]
+        let x: StorageKeyContractData = l ^ &r;
+        assert_eq!(*x, expected);
+
+        let mut x: StorageKeyContractData = l;
+        x ^= rs;
+        assert_eq!(*x, expected);
+    }
+
+    fn xor_arrays(a: &[u8; 32], b: &[u8; 32]) -> [u8; 32] {
+        let out: Vec<_> =
+            a.iter().zip(b.iter()).map(|(a, b)| *a ^ *b).collect();
+        let out: &[u8; 32] = out.as_slice().try_into().unwrap();
+        *out
     }
 }
