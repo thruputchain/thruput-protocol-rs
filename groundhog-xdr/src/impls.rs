@@ -124,16 +124,22 @@ impl Default for StorageKey {
 }
 
 impl ContractAddress {
+    /// Returns the all-zero address, useful as a placeholder where no
+    /// real contract address exists yet.
     pub const fn zero() -> Self {
         Self::new([0; 32])
     }
 }
 
 impl ContractEntrypointID {
+    /// Builds an entrypoint ID from its numeric form, storing `n` as
+    /// the ID's 8 big-endian bytes.
     pub const fn from_u64(n: u64) -> Self {
         Self::new(n.to_be_bytes())
     }
 
+    /// Returns the numeric form of this ID, reading its 8 bytes as a
+    /// big-endian `u64`. Inverse of [`Self::from_u64`].
     pub fn into_u64(self) -> u64 {
         u64::from_be_bytes(self.into_inner())
     }

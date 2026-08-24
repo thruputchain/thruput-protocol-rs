@@ -25,6 +25,9 @@ Each module in `groundhog-xdr` can have a corresponding markdown file in this di
 - `contract.md` - Documentation for the contract deployment and execution module
 - `address_auth.md` - Documentation for the address authorization module
 - `auth_claim.md` - Documentation for the authentication claims module
+- `event.md` - Documentation for the event emission and indexing module
+- `storage_item.md` - Documentation for the storage items and deltas module
+- `transaction.md` - Documentation for the transaction module
 
 ## Notes
 
