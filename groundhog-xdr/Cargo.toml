@@ -30,6 +30,12 @@ std = ["alloc", "dep:thiserror"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
 # Additionally, the serde_arrays::hex feature requires an allocator
 serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde", "serde_arrays/alloc"]
+# `xdrs` deliberately does not imply `alloc`: rv32 contract builds use
+# `xdrs` without an allocator for encoding and fixed-size decoding.
+# Decoding variable-length types (VecM/BytesM/StringM) requires `alloc`;
+# without it, the xdrs crate's no-alloc `ReadXDR` impls for those types
+# panic with `unimplemented!()` at runtime. Enable `alloc` (or use the
+# heapless containers from `xdrs`) anywhere such values are decoded.
 xdrs = []
 spec = ["std", "xdrs", "xdrs/repr"]
 schema = ["dep:schemars", "xdrs/schemars", "std"]
