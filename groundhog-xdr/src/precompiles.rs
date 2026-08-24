@@ -42,7 +42,8 @@ pub struct HogexecPrecompiledNativeContracts(pub i32);
 
 impl HogexecPrecompiledNativeContracts {
     pub const kNativeContractHogToken: Self = Self(0);
-    pub const kNativeContractInitialTokenClaim: Self = Self(1);
+
+    // Native contract ID 1 is retired and must remain unused.
     pub const kNativeContractDefaultWallet: Self = Self(2);
 }
 impl From<i32> for HogexecPrecompiledNativeContracts {
@@ -56,9 +57,6 @@ impl core::fmt::Display for HogexecPrecompiledNativeContracts {
         match self.0 {
             x if x == Self::kNativeContractHogToken.0 => {
                 write!(f, "HogexecPrecompiledNativeContracts::kNativeContractHogToken")
-            },
-            x if x == Self::kNativeContractInitialTokenClaim.0 => {
-                write!(f, "HogexecPrecompiledNativeContracts::kNativeContractInitialTokenClaim")
             },
             x if x == Self::kNativeContractDefaultWallet.0 => {
                 write!(f, "HogexecPrecompiledNativeContracts::kNativeContractDefaultWallet")

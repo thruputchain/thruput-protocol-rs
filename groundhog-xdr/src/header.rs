@@ -71,8 +71,6 @@ pub struct ProposalHeader {
     /// The hash of the network name, separating this network's blocks from
     /// those of other networks.
     pub network_hash: NetworkHash,
-    /// Hash of the exact genesis configuration that initialized this chain.
-    pub genesis_configuration_hash: GenesisConfigurationHash,
     /// Block proposer. Nodes missing block data fetch it from the proposer.
     pub proposer: ValidatorID,
     /// The block's timepoint, fixed by the coordinator before execution begins.

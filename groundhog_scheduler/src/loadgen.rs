@@ -105,7 +105,7 @@ pub type LoadgenContextID = u64;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct LoadgenSuccessResult {
-    pub genesis_configuration: GenesisConfigurationV2,
+    pub genesis_configuration: GenesisConfiguration,
     pub genesis_ceremony_txs: InitializationBlock,
     pub initialization_txs: VecM<InitializationBlock>,
     pub context_id: LoadgenContextID,
