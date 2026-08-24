@@ -28,7 +28,6 @@ use types::*;
 
 #[doc(hidden)]
 pub mod impls;
-pub use impls::AddressAuthError;
 use impls::*;
 
 /// Contract deployment, execution, and interface management.
