@@ -862,7 +862,7 @@ impl DerefMut for ProposalHeaderHash {
 }
 
 /// Represents a 256-bit contract address.
-/// In the groundhog storage model, each contract is deployed at a 
+/// In the groundhog storage model, each contract is deployed at a
 /// 32-byte unique `ContractAddress`.
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
