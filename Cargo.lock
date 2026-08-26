@@ -101,7 +101,7 @@ dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "xdrs",
@@ -179,7 +179,7 @@ dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "xdrs",
@@ -194,7 +194,7 @@ dependencies = [
  "groundhog-xdr",
  "groundhog_scheduler",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "serde_json",
@@ -211,7 +211,7 @@ dependencies = [
  "groundhog-xdr",
  "groundhog_coordinator",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "xdrs",
@@ -227,7 +227,7 @@ dependencies = [
  "groundhog-xdr",
  "groundhog_scheduler",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "serde_json",
@@ -241,7 +241,7 @@ version = "0.23.0"
 dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "xdr-common",
@@ -258,7 +258,7 @@ dependencies = [
  "groundhog-xdr",
  "groundhog_coordinator",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "serde_json",
@@ -273,7 +273,7 @@ dependencies = [
  "async-trait",
  "groundhog-serde_arrays",
  "groundhog-xdr",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "xdr-common",
@@ -288,7 +288,7 @@ dependencies = [
  "groundhog-serde_arrays",
  "groundhog-xdr",
  "groundhog_scp",
- "rpc_driver",
+ "rpc_api",
  "schemars",
  "serde",
  "serde_json",
@@ -454,13 +454,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "rpc_driver"
-version = "0.10.1"
+name = "rpc_api"
+version = "0.1.0"
 source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
-checksum = "4c3a0c2319ede82758d2a89258e3c6eeae27070ba7a5451d1faa7220ad86952c"
+checksum = "8b1a1ff7e8bdd81bf972e8adb961c2b5a2ec1c65667ddca00d5d7e491c30bb64"
+dependencies = [
+ "async-trait",
+ "thiserror",
+]
+
+[[package]]
+name = "rpc_driver"
+version = "0.10.2"
+source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+checksum = "56fe2b3910bd1a96612914737fed698b665f81eaa036bb6cce8bbdffb4276898"
 dependencies = [
  "async-trait",
  "libc",
+ "rpc_api",
  "thiserror",
  "tokio",
  "tracing",
