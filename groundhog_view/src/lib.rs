@@ -18,9 +18,7 @@ pub use view_gateway::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rpc_driver::{
-        ProgVers, ProgramError, RpcError, RpcResponse, RpcSender,
-    };
+    use rpc_api::{ProgVers, ProgramError, RpcError, RpcResponse, RpcSender};
     use std::sync::{Arc, Mutex};
     use xdr_common::{BytesM, StringM, VecM};
 
@@ -63,7 +61,7 @@ mod tests {
     }
 
     struct LocalSender {
-        handler: Arc<dyn rpc_driver::handler::RpcHandler>,
+        handler: Arc<dyn rpc_api::RpcHandler>,
         calls: Arc<Mutex<Vec<(ProgVers, u32)>>>,
     }
 

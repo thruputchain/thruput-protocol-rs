@@ -44,7 +44,7 @@ default-features = false
 workspace = true
 features = ["derive", "int128", "alloc", "schemars"]
 
-[dependencies.rpc_driver]
+[dependencies.rpc_api]
 workspace = true
 
 [dependencies.xdr-common]

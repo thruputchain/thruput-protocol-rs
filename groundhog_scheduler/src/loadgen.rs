@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7cc13390a06c0d4590a76fcc35ad15f6b499f050
+// Generated from xdrc commit: 2e4a036fedc030a6b85f9a332168a704249e03f5
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -198,13 +198,13 @@ pub enum LoadgenExtensionResult {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {    
-    async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::ProgramError>;
+    async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_api::ProgramError>;
         // arguments:
     // LoadgenContextID context_id (a handle returned by generate_experiment)
     // unsigned hyper num_txs (the number of transactions to return)
     // BlockHeight expiry_height (the height at which the transactions will expire)
 
-    async fn extend_experiment(&self, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_driver::ProgramError>;
+    async fn extend_experiment(&self, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_api::ProgramError>;
 }
 
 
@@ -220,58 +220,58 @@ impl LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_driver::handler::RpcHandler for LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(12341234, 1)
+impl ::rpc_api::RpcHandler for LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
+    fn prog_vers(&self) -> ::rpc_api::ProgVers {
+        ::rpc_api::ProgVers::new(12341234, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_driver::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
         match proc {
             // generate_experiment
             0 => {
                 let args: (ExperimentConfig, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.generate_experiment(args.0).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.generate_experiment(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             // extend_experiment
             1 => {
                 let args: (LoadgenContextID, u64, BlockHeight, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
-                let res = self.inner.extend_experiment(args.0, args.1, args.2).await.map_err(|_| ::rpc_driver::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_driver::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.extend_experiment(args.0, args.1, args.2).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_driver::RpcError::InvalidProcedure),
+            _ => Err(::rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct LoadgenInterface_LoadgenInterfaceV1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
 }
 
 impl LoadgenInterface_LoadgenInterfaceV1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_driver::ProgVers {
-        ::rpc_driver::ProgVers::new(12341234, 1)
+    fn prog_vers() -> ::rpc_api::ProgVers {
+        ::rpc_api::ProgVers::new(12341234, 1)
     }
-    pub async fn generate_experiment(&self, arg0 : &ExperimentConfig) -> Result<LoadgenResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn generate_experiment(&self, arg0 : &ExperimentConfig) -> Result<LoadgenResult, ::rpc_api::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn extend_experiment(&self, arg0 : &LoadgenContextID, arg1 : u64, arg2 : &BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_driver::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, arg1, &arg2)).map_err(|_| ::rpc_driver::RpcError::GarbageArguments)?;
+    pub async fn extend_experiment(&self, arg0 : &LoadgenContextID, arg1 : u64, arg2 : &BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_api::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, arg1, &arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_driver::RpcError::SystemError)
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_driver::RpcSender>> for LoadgenInterface_LoadgenInterfaceV1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_driver::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for LoadgenInterface_LoadgenInterfaceV1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
