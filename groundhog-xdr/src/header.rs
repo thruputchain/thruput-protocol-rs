@@ -71,6 +71,8 @@ pub struct ProposalHeader {
     /// The hash of the network name, separating this network's blocks from
     /// those of other networks.
     pub network_hash: NetworkHash,
+    /// The hash of the post-block network configuration.
+    pub config_hash: ConfigHash,
     /// Block proposer. Nodes missing block data fetch it from the proposer.
     pub proposer: ValidatorID,
     /// The block's timepoint, fixed by the coordinator before execution begins.

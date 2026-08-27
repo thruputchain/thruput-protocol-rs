@@ -134,6 +134,7 @@ pub enum DbAddressAuthDataBatchResult {
 pub struct DbBlockOk {
     pub storage_hash: StorageShortHash,
     pub storage_long_hash: StorageLongHash,
+    pub config_hash_preimage: ConfigHashPreimage,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]

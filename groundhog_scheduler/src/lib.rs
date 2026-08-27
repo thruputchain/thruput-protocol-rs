@@ -11,6 +11,7 @@ use groundhog_xdr::exec_result::*;
 use groundhog_xdr::genesis::*;
 pub use groundhog_xdr::header::*;
 use groundhog_xdr::retrocausal_queue::*;
+use groundhog_xdr::storage_cost::*;
 use groundhog_xdr::storage_item::*;
 use groundhog_xdr::transaction::*;
 use groundhog_xdr::types::*;

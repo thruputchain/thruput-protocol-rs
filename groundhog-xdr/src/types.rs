@@ -630,6 +630,45 @@ impl DerefMut for NetworkHash {
     }
 }
 
+/// SHA-256 of the XDR-encoded ConfigHashPreimage.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "spec", derive(XDR))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct ConfigHash {
+    inner: SHA256Hash,
+}
+impl From<SHA256Hash> for ConfigHash {
+    fn from(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl ConfigHash {
+    pub fn into_inner(self) -> SHA256Hash {
+        self.inner
+    }
+    pub const fn new(_inner: SHA256Hash) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for ConfigHash {
+    type Target = SHA256Hash;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for ConfigHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 /// Hash of the groundhog database contents.
 /// Format is a 2048-byte LtHash16 hash.
 // 
