@@ -28,6 +28,9 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           persist-credentials: true
+          # Full history and tags: the semver baseline below is a git checkout
+          # of the previous release tag.
+          fetch-depth: 0
 
       - name: Configure git to use SSH
         run: |
@@ -38,13 +41,25 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: 6661fedc744b057368d7ecb0127aece0aa12b426
+          # TODO: repoint to a main SHA once groundhogchain/actions#8 merges.
+          ref: 68164b608a746b681cb82086c72d6d2f134b4af2
 
       - name: dry run
         uses: ./actions/cargo-publish-dry-run
         with:
           skip-clippy: true
           cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
+
+      # Must run before the tag step: once vX.Y.Z exists at HEAD, the baseline
+      # would resolve to that new tag and compare the release against itself.
+      # Here the workspace version is already bumped, so this validates that the
+      # bump is large enough for the API changes since the previous release.
+      - name: semver check
+        uses: ./actions/cargo-semver-checks
+        with:
+          semver-checks-version: '0.50.0'
+          registry-name: groundhog
+          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
       - name: tag commit with version
         id: publish-tag
