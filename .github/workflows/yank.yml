@@ -1,0 +1,57 @@
+name: Yank package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to yank (e.g. 0.24.1)'
+        required: true
+        type: string
+      undo:
+        description: 'Un-yank (restore) instead of yank'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+jobs:
+  yank:
+    permissions:
+      contents: read
+    runs-on: hog1
+
+    steps:
+      - name: Clean up .gitconfig
+        run: |
+            echo "Cleaning up .gitconfig"
+            rm -f /home/hogci/.gitconfig
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.ACTIONS_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - name: Configure git to use SSH
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+
+      - name: Checkout actions repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          repository: groundhogchain/actions
+          path: actions
+          ref: 104eba38ba3680fcf33e3f436a08404542550635
+
+      - name: yank
+        uses: ./actions/cargo-yank
+        with:
+          version: ${{ inputs.version }}
+          undo: ${{ inputs.undo }}
+          registry-name: groundhog
+          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
