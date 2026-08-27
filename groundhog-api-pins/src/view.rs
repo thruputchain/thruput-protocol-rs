@@ -1,0 +1,40 @@
+//! Signature pins for `groundhog_view` (generated: src/view_gateway.rs).
+
+use groundhog_view::{
+    ViewGateway_ViewGateway1, ViewGateway_ViewGateway1_Client,
+    ViewGatewayIntroOutcome, ViewGatewayResult,
+};
+use groundhog_xdr::network::ProtocolCommit;
+use groundhog_xdr::view::TransactionViewQuery;
+use rpc_api::{ProgramError, RpcError};
+
+pub mod view_gateway {
+    use super::*;
+    type S = ViewGateway_ViewGateway1_Client;
+
+    pub async fn client_viewgateway_intro(
+        c: &S,
+        arg0: &ProtocolCommit,
+    ) -> Result<ViewGatewayIntroOutcome, RpcError> {
+        c.viewgateway_intro(arg0).await
+    }
+    pub async fn client_viewgateway_view(
+        c: &S,
+        arg0: &TransactionViewQuery,
+    ) -> Result<ViewGatewayResult, RpcError> {
+        c.viewgateway_view(arg0).await
+    }
+
+    pub async fn trait_viewgateway_intro<T: ViewGateway_ViewGateway1>(
+        t: &T,
+        arg0: ProtocolCommit,
+    ) -> Result<ViewGatewayIntroOutcome, ProgramError> {
+        t.viewgateway_intro(arg0).await
+    }
+    pub async fn trait_viewgateway_view<T: ViewGateway_ViewGateway1>(
+        t: &T,
+        arg0: TransactionViewQuery,
+    ) -> Result<ViewGatewayResult, ProgramError> {
+        t.viewgateway_view(arg0).await
+    }
+}
