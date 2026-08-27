@@ -65,6 +65,14 @@ jobs:
           registry-name: groundhog
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
+      # The dry-run action never compiles publish=false crates (cargo-hack
+      # runs with --ignore-private and clippy is skipped here), so the API
+      # signature pins must be checked explicitly. See groundhog-api-pins.
+      - name: API signature pins
+        run: |
+          source "$HOME/.cargo/env"
+          cargo check --package groundhog-api-pins --locked
+
       - name: dry run
         uses: ./actions/cargo-publish-dry-run
         with:
