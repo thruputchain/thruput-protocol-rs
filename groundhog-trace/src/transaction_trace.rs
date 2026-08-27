@@ -1069,6 +1069,37 @@ pub struct SyscallConsumeAuthTokenTrace {
     pub outputs: Option<SyscallConsumeAuthTokenOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSHA256CopyInputs {
+    pub src_index: u32,
+    pub dst_index: u32,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSHA256CopyOutputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSHA256CopyTrace {
+    pub inputs: SyscallSHA256CopyInputs,
+    pub outputs: Option<SyscallSHA256CopyOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1178,6 +1209,9 @@ pub enum SyscallTraceBody {
     // case kConsumeAuthToken:
     //   SyscallConsumeAuthTokenTrace consume_auth_token;
     kConsumeAuthToken { consume_auth_token: SyscallConsumeAuthTokenTrace } = SyscallNo::kConsumeAuthToken.0 as i32,
+    // case kSHA256Copy:
+    //   SyscallSHA256CopyTrace sha256_copy;
+    kSHA256Copy { sha256_copy: SyscallSHA256CopyTrace } = SyscallNo::kSHA256Copy.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },
