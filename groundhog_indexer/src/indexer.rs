@@ -387,6 +387,106 @@ pub struct TransactionRefPage {
     pub oldest_block: BlockHeight,
 }
 
+/// Backend disposition of a block-explorer page query.  Distinguishes
+/// "the query ran and matched nothing" (IndexerQueryOk with an empty
+/// page) from "the indexer could not run the query at all", so a
+/// broken or still-opening node is not rendered as an empty chain.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct IndexerQueryOutcome(pub i32);
+
+impl IndexerQueryOutcome {
+    pub const IndexerQueryOk: Self = Self(0);
+
+    /// The indexer's database is not open (still starting up, or shut
+    /// down).  Transient from the cluster's point of view: retry, or ask
+    /// a healthy node.
+    pub const IndexerQueryNotReady: Self = Self(1);
+
+    /// Unrecoverable backend failure (corrupt record, storage error).
+    /// Details are in the indexer's logs.
+    pub const IndexerQueryInternalFailure: Self = Self(2);
+}
+impl From<i32> for IndexerQueryOutcome {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for IndexerQueryOutcome {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::IndexerQueryOk.0 => {
+                write!(f, "IndexerQueryOutcome::IndexerQueryOk")
+            },
+            x if x == Self::IndexerQueryNotReady.0 => {
+                write!(f, "IndexerQueryOutcome::IndexerQueryNotReady")
+            },
+            x if x == Self::IndexerQueryInternalFailure.0 => {
+                write!(f, "IndexerQueryOutcome::IndexerQueryInternalFailure")
+            },
+            _ => {
+                write!(f, "IndexerQueryOutcome({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum EventPageResult {
+    // case IndexerQueryOk:
+    //   EventPage page;
+    IndexerQueryOk { page: EventPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum TransactionPageResult {
+    // case IndexerQueryOk:
+    //   TransactionPage page;
+    IndexerQueryOk { page: TransactionPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum TransactionRefPageResult {
+    // case IndexerQueryOk:
+    //   TransactionRefPage page;
+    IndexerQueryOk { page: TransactionRefPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -441,18 +541,18 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     // across filters, AND within each filter).  Supports the wallet
     // "transfers to OR from me" case in a single call.
 
-    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPage, ::rpc_api::ProgramError>;
+    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPageResult, ::rpc_api::ProgramError>;
         // Paginated transactions, whole-chain, in block order.
 
-    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPage, ::rpc_api::ProgramError>;
+    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPageResult, ::rpc_api::ProgramError>;
         // Paginated transaction refs whose root invoked address == the query
     // address (account transaction history).  Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_api::ProgramError>;
+    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
         // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPage, ::rpc_api::ProgramError>;
+    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
 }
 
 
@@ -556,22 +656,22 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPage, ::rpc_api::RpcError> {
+    pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPageResult, ::rpc_api::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions(&self, arg0 : &TransactionQuery) -> Result<TransactionPage, ::rpc_api::RpcError> {
+    pub async fn get_transactions(&self, arg0 : &TransactionQuery) -> Result<TransactionPageResult, ::rpc_api::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_address(&self, arg0 : &AddressTransactionQuery) -> Result<TransactionRefPage, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_address(&self, arg0 : &AddressTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_block(&self, arg0 : &BlockTransactionQuery) -> Result<TransactionRefPage, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_block(&self, arg0 : &BlockTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
@@ -1072,6 +1172,36 @@ impl BlockLookupResult {
     pub fn outcome(&self) -> BlockLookupOutcome {
         match self {
             BlockLookupResult::Default{ outcome } => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl EventPageResult {
+    pub fn outcome(&self) -> IndexerQueryOutcome {
+        match self {
+            EventPageResult::Default{ outcome } => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl TransactionPageResult {
+    pub fn outcome(&self) -> IndexerQueryOutcome {
+        match self {
+            TransactionPageResult::Default{ outcome } => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl TransactionRefPageResult {
+    pub fn outcome(&self) -> IndexerQueryOutcome {
+        match self {
+            TransactionRefPageResult::Default{ outcome } => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
