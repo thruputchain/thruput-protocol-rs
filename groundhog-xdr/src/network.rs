@@ -19,8 +19,7 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 #[cfg(feature = "xdrs")]
 use xdrs::*;
-#[cfg(feature = "spec")]
-use xdrs::xdr_repr::*;
+
 
 
 #[cfg(feature = "serde")]

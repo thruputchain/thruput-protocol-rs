@@ -10,7 +10,6 @@ use core::fmt;
         xdrs::ConstXDRSize
     )
 )]
-#[cfg_attr(feature = "spec", derive(xdrs::XDR))]
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(thiserror::Error))]
 #[cfg_attr(feature = "std", error("{:?}", self))]
