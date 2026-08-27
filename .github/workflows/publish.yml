@@ -49,22 +49,27 @@ jobs:
           # TODO: repoint to a main SHA once groundhogchain/actions#8 merges.
           ref: 24b9a6deffa8065cfa2ba70f8a5e0132f389a892
 
-      - name: dry run
-        uses: ./actions/cargo-publish-dry-run
-        with:
-          skip-clippy: true
-          cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
-
-      # Must run before the tag step: once vX.Y.Z exists at HEAD, the baseline
-      # would resolve to that new tag and compare the release against itself.
-      # Here the workspace version is already bumped, so this validates that the
-      # bump is large enough for the API changes since the previous release.
+      # Must run before the dry-run step: cargo-publish-dry-run extracts every
+      # workspace crate into ./vendor/, and cargo-semver-checks then sees each
+      # package defined by two manifests ("package is ambiguous") and errors out
+      # before running any semver checks.
+      # Must also run before the tag step: once vX.Y.Z exists at HEAD, the
+      # baseline would resolve to that new tag and compare the release against
+      # itself. Here the workspace version is already bumped, so this validates
+      # that the bump is large enough for the API changes since the previous
+      # release.
       - name: semver check
         uses: ./actions/cargo-semver-checks
         with:
           semver-checks-version: '0.50.0'
           registry-name: groundhog
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+
+      - name: dry run
+        uses: ./actions/cargo-publish-dry-run
+        with:
+          skip-clippy: true
+          cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
 
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
