@@ -41,8 +41,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          # TODO: repoint to a main SHA once groundhogchain/actions#8 merges.
-          ref: 24b9a6deffa8065cfa2ba70f8a5e0132f389a892
+          ref: 0eba1de0b06cee579933906953120a04afa03e59
 
       - name: dry run
         uses: ./actions/cargo-publish-dry-run
