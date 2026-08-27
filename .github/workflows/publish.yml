@@ -2,6 +2,11 @@ name: Release package
 
 on:
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run publish checks only; skip tagging and publishing'
+        type: boolean
+        default: false
 
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
@@ -62,10 +67,12 @@ jobs:
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
       - name: tag commit with version
+        if: ${{ !inputs.dry-run }}
         id: publish-tag
         uses: ./actions/cargo-version-tag
 
       - name: push tag
+        if: ${{ !inputs.dry-run }}
         run: |
           git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
           TAG="${{ steps.publish-tag.outputs.tag }}"
@@ -89,6 +96,7 @@ jobs:
           git remote set-url origin git@github.com:${{ github.repository }}.git
 
       - name: publish
+        if: ${{ !inputs.dry-run }}
         uses: ./actions/cargo-publish
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
@@ -98,6 +106,7 @@ jobs:
       # Build and upload rustdoc to groundhog.dev/docs, after the crates publish.
       # HEAD is the freshly-tagged commit, so expected-tag validates cleanly.
       - name: publish docs
+        if: ${{ !inputs.dry-run }}
         uses: ./actions/cargo-doc
         with:
           version: ${{ steps.publish-tag.outputs.version }}
