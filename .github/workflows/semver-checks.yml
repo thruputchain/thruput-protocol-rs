@@ -1,0 +1,62 @@
+# .github/workflows/semver-checks.yml
+name: Semver checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+jobs:
+  semver-checks:
+    name: API compatibility vs last release
+    runs-on: self-hosted
+    env:
+      CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+      CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+
+    steps:
+      - name: Clean up .gitconfig
+        run: |
+          echo "Cleaning up .gitconfig"
+          rm -f /home/hogci/.gitconfig
+
+      # fetch-depth: 0 for the release tags and history the git baseline is
+      # built from. The protocol submodule is deliberately not checked out:
+      # the x23c-generated sources are committed, so nothing in the workspace
+      # needs it to build.
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # cargo-semver-checks reads rustdoc JSON from this toolchain, so it is
+      # pinned to the same version the build workflow uses. No nightly needed.
+      - name: Set up Rust 1.96
+        uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+        with:
+          toolchain: 1.96.0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Checkout actions repository
+        uses: actions/checkout@v6
+        with:
+          repository: groundhogchain/actions
+          path: actions
+          ref: main
+
+      # Baseline defaults to the nearest v* tag reachable from HEAD, so this
+      # compares the workspace against the last release. Crates with
+      # publish = false are skipped by cargo-semver-checks itself.
+      - name: Check semver compatibility
+        uses: ./actions/cargo-semver-checks
+        with:
+          semver-checks-version: '0.50.0'
+          registry-name: groundhog
+          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
