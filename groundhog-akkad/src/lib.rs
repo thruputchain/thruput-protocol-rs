@@ -9,8 +9,8 @@ pub use groundhog_scp::*;
 // refreshes.
 pub use groundhog_xdr::{
     address_auth::*, auth_claim::*, contract::*, genesis::*, header::*,
-    precompiles::*, retrocausal_queue::*, storage_cost::*, transaction::*,
-    types::*, validator::*,
+    network_config::*, precompiles::*, retrocausal_queue::*, storage_cost::*,
+    transaction::*, types::*, validator::*,
 };
 
 #[rustfmt::skip]

@@ -12,6 +12,7 @@ protos=(
   invoke_args.x
   retrocausal_queue.x
   storage_cost.x
+  network_config.x
   syscall_error.x
   auth_claim.x
   standard_asset_events.x

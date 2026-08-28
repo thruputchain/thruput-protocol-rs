@@ -38,6 +38,9 @@ use ::serde_arrays;
 pub struct GenesisConfiguration {
     pub network_hash: NetworkHash,
     pub storage_cost_model: StorageCostModelXdr,
+    /// The execution parameters block 0 runs under, in canonical form. Carried
+    /// into the DbTip at genesis load and forward by every later commit.
+    pub network_config: NetworkConfig,
     pub root_contract: Contract,
     /// The contract resolved for root invocations of undeployed addresses.
     pub default_wallet: DeployedContractHash,
