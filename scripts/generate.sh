@@ -128,14 +128,14 @@ generate() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
 generate_no_schema() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-no-feature schema -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-no-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
 generate_rpc() {

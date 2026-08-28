@@ -1131,7 +1131,6 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         #[cfg_attr(feature = "serde", derive(::serde::Serialize, ::serde::Deserialize))]
         #[cfg_attr(feature = "serde", serde(transparent))]
         #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR, xdrs::ConstWriteXDR, xdrs::ConstXDRSize))]
-        #[cfg_attr(feature = "spec", derive(xdrs::XDR))]
         #[derive(Eq,PartialEq,Copy,Debug,Clone,Hash)]
         #[repr(transparent)]
         pub struct SyscallNo(pub u32);

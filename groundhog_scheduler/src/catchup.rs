@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
+// Generated from xdrc commit: 14959ad52a564640d44d7079849fb9f146d330c0
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,7 +20,6 @@ use std::io::{Read, Write};
 use xdrs::*;
 
 
-
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
@@ -30,7 +29,6 @@ use ::serde_arrays;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -41,7 +39,6 @@ pub struct CatchupBlock {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -53,7 +50,6 @@ pub struct CatchupSpan {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -64,7 +60,6 @@ pub struct CatchupBlocksRequest {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -76,7 +71,6 @@ pub struct SignedCatchupBlocksRequest {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -87,7 +81,6 @@ pub struct CatchupBlocksResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]

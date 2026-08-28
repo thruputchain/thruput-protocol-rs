@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
+// Generated from xdrc commit: 14959ad52a564640d44d7079849fb9f146d330c0
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -19,8 +19,6 @@ use core::ops::{Deref, DerefMut};
 use std::io::{Read, Write};
 #[cfg(feature = "xdrs")]
 use xdrs::*;
-#[cfg(feature = "spec")]
-use xdrs::xdr_repr::*;
 
 
 #[cfg(feature = "serde")]
@@ -37,7 +35,6 @@ pub const kQueueEntryMaxLen : u32 = 256;
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(transparent)]
@@ -96,7 +93,6 @@ pub const kRetrocausalQueueBlockEntriesMaxLen : u32 = 250;
 // block Block numbers are monotonically increasing
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -113,7 +109,6 @@ pub struct RetrocausalQueueBlock {
 // block number max_fully_consumed_block_number + 1.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -126,7 +121,6 @@ pub struct RetrocausalQueuePastBlockConsumeDelta {
 // Tracks both head (consume state) and tail (production state).
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -143,7 +137,6 @@ pub struct RetrocausalQueueMetadata {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -154,7 +147,6 @@ pub struct RetrocausalQueueConsumeDelta {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -164,7 +156,6 @@ pub struct RetrocausalQueueInsertDelta {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]

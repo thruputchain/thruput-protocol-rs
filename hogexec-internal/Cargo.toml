@@ -21,7 +21,6 @@ default = []
 alloc = ["xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
-spec = ["std", "xdrs", "xdrs/repr"]
 
 [dependencies.xdrs]
 workspace = true

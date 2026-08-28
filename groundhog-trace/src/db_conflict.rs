@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
+// Generated from xdrc commit: 14959ad52a564640d44d7079849fb9f146d330c0
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -18,7 +18,6 @@ use core::ops::{Deref, DerefMut};
 #[cfg(feature = "std")]
 use std::io::{Read, Write};
 use xdrs::*;
-
 
 
 #[cfg(feature = "serde")]
@@ -38,7 +37,6 @@ use ::serde_arrays;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
@@ -128,7 +126,6 @@ impl core::fmt::Display for DbConflictCode {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
@@ -176,7 +173,6 @@ impl core::fmt::Display for DbDiagnosticLevel {
 /// fixed-size StorageKey plus the code — no heap allocation.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -193,7 +189,6 @@ pub struct DbConflictDiagnostic {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -217,7 +212,6 @@ pub enum DbConflictResult {
 /// diagnostic per failure to bound memory end to end.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]

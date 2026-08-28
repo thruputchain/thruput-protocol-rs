@@ -57,7 +57,6 @@ xdrs = { registry = "groundhog", version = "0.8", default-features = false, feat
     "derive",
 ] }
 xdr-common = { version = "0.8.4", registry = "groundhog" }
-xdr-repr = { version = "0.8.4", registry = "groundhog" }
 xdr-derive = { version = "0.8.4", registry = "groundhog" }
 rpc_api = { version = "0.1", registry = "groundhog" }
 rpc_driver = { version = "0.10.2", registry = "groundhog" }

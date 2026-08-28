@@ -38,7 +38,6 @@ serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde", "serde_arrays/alloc"]
 # panic with `unimplemented!()` at runtime. Enable `alloc` (or use the
 # heapless containers from `xdrs`) anywhere such values are decoded.
 xdrs = []
-spec = ["std", "xdrs", "xdrs/repr"]
 schema = ["dep:schemars", "xdrs/schemars", "std"]
 syscalls = ["dep:groundhog-syscall"]
 syscalls_mock = ["syscalls", "groundhog-syscall/syscalls_mock", "std"]   # required for native_exec integration

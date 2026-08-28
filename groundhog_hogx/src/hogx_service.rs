@@ -21,9 +21,6 @@ use std::io::{Read, Write};
 
 #[cfg(feature="xdrs")]
 use xdrs::*;
-#[cfg(feature="spec")]
-use xdrs::xdr_repr::*;
-
 
 #[cfg(not(feature="xdrs"))]
 use xdr_common::*;
@@ -33,7 +30,6 @@ use xdr_common::*;
 // clang-format on
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ServiceID {
@@ -46,7 +42,6 @@ pub struct ServiceID {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ServiceBuild {
@@ -55,7 +50,6 @@ pub struct ServiceBuild {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ServiceAgreement {
@@ -66,7 +60,6 @@ pub struct ServiceAgreement {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct Command {
@@ -79,7 +72,6 @@ pub struct Command {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ServiceDef {
@@ -90,7 +82,6 @@ pub struct ServiceDef {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ProcessState {
@@ -99,7 +90,6 @@ pub struct ProcessState {
 }
 
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR))]
-#[cfg_attr(feature = "spec", derive(XDR))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ServiceState {

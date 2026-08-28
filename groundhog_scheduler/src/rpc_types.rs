@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
+// Generated from xdrc commit: 14959ad52a564640d44d7079849fb9f146d330c0
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,7 +20,6 @@ use std::io::{Read, Write};
 use xdrs::*;
 
 
-
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
@@ -35,7 +34,6 @@ pub type BlockID = u64;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -63,7 +61,6 @@ pub type TransactionID = u64;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
@@ -134,7 +131,6 @@ impl core::fmt::Display for RPCError {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
@@ -181,7 +177,6 @@ pub type StorageCost = int128_xdr;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -198,7 +193,6 @@ pub enum ExpectedStorageCost {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -214,7 +208,6 @@ pub enum ExpectedContract {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -230,7 +223,6 @@ pub enum ExpectedDeployment {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -246,7 +238,6 @@ pub enum ExpectedProposalData {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -262,7 +253,6 @@ pub enum ExpectedRetrocausalQueueBlock {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -278,7 +268,6 @@ pub enum ExpectedQueueEntry {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -293,7 +282,6 @@ pub enum ExpectedDBTip {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -305,7 +293,6 @@ pub struct ViewingSnapshot {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]

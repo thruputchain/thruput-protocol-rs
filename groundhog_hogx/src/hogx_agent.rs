@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c8016676bb386e74e12bd0288ca7a8acefc115f
+// Generated from xdrc commit: 14959ad52a564640d44d7079849fb9f146d330c0
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -20,7 +20,6 @@ use std::io::{Read, Write};
 use xdrs::*;
 
 
-
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
 #[cfg(feature = "serde")]
@@ -33,7 +32,6 @@ use ::serde_arrays;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
@@ -70,7 +68,6 @@ impl core::fmt::Display for HogxOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -87,7 +84,6 @@ pub enum HogxHostConfigureResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -104,7 +100,6 @@ pub enum HogxHostQueryResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -121,7 +116,6 @@ pub enum HogxUnitStartResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -138,7 +132,6 @@ pub enum HogxUnitStopResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -155,7 +148,6 @@ pub enum HogxUnitQueryResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -172,7 +164,6 @@ pub enum HogxUnitListResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -189,7 +180,6 @@ pub enum HogxUnitClearResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -205,7 +195,6 @@ pub enum HogxUnitTailResult {
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
@@ -394,7 +383,6 @@ impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for HogxAgent_HogxAgent1_C
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
