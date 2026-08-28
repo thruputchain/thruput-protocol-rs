@@ -10,6 +10,7 @@ use groundhog_xdr::event::*;
 use groundhog_xdr::exec_result::*;
 use groundhog_xdr::genesis::*;
 pub use groundhog_xdr::header::*;
+use groundhog_xdr::network_config::*;
 use groundhog_xdr::retrocausal_queue::*;
 use groundhog_xdr::storage_cost::*;
 use groundhog_xdr::storage_item::*;

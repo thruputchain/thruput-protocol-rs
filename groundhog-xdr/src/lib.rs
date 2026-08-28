@@ -57,6 +57,11 @@ use syscall_error::*;
 pub mod storage_cost;
 use storage_cost::*;
 
+/// Consensus-critical execution parameters and the configuration hash preimage.
+#[rustfmt::skip]
+pub mod network_config;
+use network_config::*;
+
 /// Transaction construction, signing, and parallel execution with nondeterministic replay.
 #[doc = include_str!("../docs/transaction.md")]
 #[rustfmt::skip]
