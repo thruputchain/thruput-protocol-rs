@@ -47,6 +47,10 @@ pub struct DbTip {
     /// GenesisConfiguration::default_wallet; carried forward verbatim by
     /// every subsequent commit.
     pub default_wallet: DeployedContractHash,
+    /// The execution parameters in force for the block that follows this tip.
+    /// Set at genesis from GenesisConfiguration::network_config; carried forward
+    /// verbatim by every commit that does not apply a [`ConfigUpgrade`].
+    pub network_config: NetworkConfig,
 }
 
 // Internal unique ID describing a transaction.

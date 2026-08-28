@@ -45,17 +45,6 @@ pub struct StorageCostModelXdr {
     pub balance_cost: u64,
 }
 
-/// The network configuration committed to by ProposalHeader::config_hash.
-/// New consensus-critical configuration belongs in this preimage.
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct ConfigHashPreimage {
-    pub storage_cost_model: StorageCostModelXdr,
-}
-
 
 //
 // XDR internals below this point
