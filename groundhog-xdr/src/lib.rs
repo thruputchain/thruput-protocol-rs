@@ -12,7 +12,7 @@ extern crate alloc;
 pub use xdr_common::*;
 
 mod protocol_version;
-pub use protocol_version::{PROTOCOL_COMMIT, PROTOCOL_VERSION};
+pub use protocol_version::PROTOCOL_VERSION;
 
 #[cfg(feature = "xdrs")]
 mod const_size_guard;
