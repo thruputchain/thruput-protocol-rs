@@ -2,11 +2,11 @@
 use crate::network::ProtocolCommit;
 
 /// Protocol version string identifying the protocol submodule revision.
-pub const PROTOCOL_VERSION: &str = "hogp/bd860533b6e27bb";
+pub const PROTOCOL_VERSION: &str = "hogp/9925e9f66699dbd";
 
 /// The same token in the fixed-width form peers exchange over XDR.
 ///
 /// Typing this as [ProtocolCommit] makes the width a compile error rather
 /// than a runtime rejection: shortening the hash below what fills the array
 /// stops this crate building instead of emitting a token peers refuse.
-pub const PROTOCOL_COMMIT: ProtocolCommit = *b"hogp/bd860533b6e27bb";
+pub const PROTOCOL_COMMIT: ProtocolCommit = *b"hogp/9925e9f66699dbd";
