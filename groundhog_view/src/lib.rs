@@ -24,6 +24,9 @@ mod tests {
 
     const VIEW_GATEWAY_PROG_VERS: ProgVers = ProgVers::new(0x56475759, 1);
 
+    /// Stand-in protocol token. Fixed width, so it has to fill the array.
+    const TEST_PROTOCOL: ProtocolCommit = *b"hogp/0123456789abcde";
+
     struct ScriptedViewGateway;
 
     #[async_trait::async_trait]
@@ -32,7 +35,7 @@ mod tests {
             &self,
             protocol: ProtocolCommit,
         ) -> Result<ViewGatewayIntroOutcome, ProgramError> {
-            assert_eq!(protocol.0, b"hogp/test".to_vec());
+            assert_eq!(protocol, TEST_PROTOCOL);
             Ok(ViewGatewayIntroOutcome::ViewGatewayIntroSuccess)
         }
 
@@ -179,7 +182,7 @@ mod tests {
             }));
 
         let intro = client
-            .viewgateway_intro(&StringM(b"hogp/test".to_vec()))
+            .viewgateway_intro(&TEST_PROTOCOL)
             .await
             .expect("intro should round-trip through dispatcher");
         assert_eq!(intro, ViewGatewayIntroOutcome::ViewGatewayIntroSuccess);
