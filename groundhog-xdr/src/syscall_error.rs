@@ -84,6 +84,15 @@ impl SyscallErrorCode {
     /// a contract may use it as a stop condition (e.g. drain a queue until it
     /// returns this).
     pub const kSyscallErrorCodeRetrocausalQueueReadLimitReached: Self = Self(10);
+
+    /// The invocation would exceed the network's cross-invoke depth bound
+    /// (kConfigParamMaxCrossInvokeDepth), which limits how many invocation
+    /// frames one transaction may hold open at once. Like the retrocausal-queue
+    /// read limit this is a resource limit, not a malformed call: the same
+    /// invocation succeeds from a shallower frame. It is reported before any
+    /// child frame runs, so the syscall is a complete no-op and the caller's
+    /// invoke outputs are left untouched.
+    pub const kSyscallErrorCodeInvokeDepthExceeded: Self = Self(11);
 }
 impl From<i32> for SyscallErrorCode {
     fn from(v: i32) -> Self {
@@ -126,6 +135,9 @@ impl core::fmt::Display for SyscallErrorCode {
             },
             x if x == Self::kSyscallErrorCodeRetrocausalQueueReadLimitReached.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeRetrocausalQueueReadLimitReached")
+            },
+            x if x == Self::kSyscallErrorCodeInvokeDepthExceeded.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeInvokeDepthExceeded")
             },
             _ => {
                 write!(f, "SyscallErrorCode({})", self.0)
