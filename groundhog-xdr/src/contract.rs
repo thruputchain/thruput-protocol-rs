@@ -47,7 +47,7 @@ use ::serde_arrays;
 
 /// An opaque blob of executable code.
 ///
-/// This is the raw binary that will be executed as a (wasm or riscv) contract.
+/// This is the raw binary that will be executed as an RV32 contract.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -58,6 +58,11 @@ pub struct ContractBlob {
 }
 
 /// The execution environment for a contract.
+///
+/// Discriminant 0 is retired. It selected the Wasmi runtime, which was
+/// removed once RV32 became the only deployable execution environment.
+/// Do not reuse the value: old encodings that carry it must fail to parse
+/// rather than silently decode as a live contract type.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -68,15 +73,11 @@ pub struct ContractBlob {
 pub struct ContractType(pub i32);
 
 impl ContractType {
-    /// WebAssembly contract executed in the Wasmi runtime.
-    ///
-    /// This is the standard contract type for user-deployed contracts.
-    pub const kWasmi: Self = Self(0);
-
     /// Precompiled native contract implemented directly in Rust.
     ///
     /// Used for system contracts like the native HogToken.
-    /// More efficient than WASM but cannot be deployed by users.
+    /// Cheaper to invoke than a deployed RV32 contract, but users cannot
+    /// deploy new ones.
     pub const kNative: Self = Self(1);
 
     /// Mock contract for local testing.
@@ -98,9 +99,6 @@ impl From<i32> for ContractType {
 impl core::fmt::Display for ContractType {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::kWasmi.0 => {
-                write!(f, "ContractType::kWasmi")
-            },
             x if x == Self::kNative.0 => {
                 write!(f, "ContractType::kNative")
             },
@@ -125,7 +123,7 @@ impl core::fmt::Display for ContractType {
 /// to execute their methods (entrypoints).
 ///
 /// The three contract types serve different purposes:
-/// - `kWasmi`: User-deployed contracts (most common)
+/// - `kRv32`: User-deployed contracts (most common)
 /// - `kNative`: System contracts with privileged access
 /// - `kMockTest`: Test contracts for local development
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -135,9 +133,6 @@ impl core::fmt::Display for ContractType {
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Contract {
-    // case kWasmi:
-    //   ContractBlob wasmi_contract;
-    kWasmi { wasmi_contract: ContractBlob } = ContractType::kWasmi.0 as i32,
     /// Identifier for which native contract this is.
     ///
     /// Native contracts are hard-coded in the runtime.
@@ -178,7 +173,7 @@ pub enum Contract {
 ///
 /// ```text
 /// Contract A address:  0x1234...
-/// Contract B hash:     0xabcd...
+/// Contract B hash:     0xabcd...   (= SHA256(XDR(Contract B)))
 /// Deployment nonce:    0x5678...
 /// Result: SHA256(0x1234... || 0x5678... || 0xabcd...) = Contract B address
 /// ```
@@ -195,10 +190,24 @@ pub struct ContractDeploymentHashPreimage {
     /// Allows creating multiple instances of the same contract code
     /// at different addresses.
     pub nonce: SHA256Hash,
-    /// SHA-256 hash of the contract code being deployed.
+    /// SHA-256 hash of the XDR-encoded `Contract` being deployed.
     ///
-    /// For WASM contracts, this is `SHA256(wasm_blob)`.
-    /// For native contracts, this is a predefined hash.
+    /// This hashes the entire union, not the bare code blob:
+    ///
+    /// ```text
+    /// contract_hash = SHA256(XDR(Contract))
+    /// ```
+    ///
+    /// The encoding covers the 4-byte `ContractType` discriminant followed by
+    /// the selected arm, so identical code deployed under a different contract
+    /// type yields a different hash. For `kRv32` the arm is a `ContractBlob`,
+    /// which is itself a 4-byte length prefix followed by the code padded to a
+    /// 4-byte boundary -- hashing the raw code alone does not reproduce this
+    /// value.
+    ///
+    /// Native and mock contracts are hashed the same way, over a union whose
+    /// arm holds a contract identifier instead of a blob. They do not use
+    /// separately predefined hash constants.
     pub contract_hash: SHA256Hash,
 }
 
@@ -383,14 +392,19 @@ impl schemars::JsonSchema for ContractEntrypointID {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct DeployedContractHash {
-    /// SHA-256 hash of the deployed contract code.
+    /// SHA-256 hash of the XDR-encoded `Contract` deployed at this address.
+    ///
+    /// Computed as `SHA256(XDR(Contract))`, identically to the `contract_hash`
+    /// field of `ContractDeploymentHashPreimage`.
     pub hash: SHA256Hash,
-    /// Size of the contract in bytes.
+    /// Size of the contract code in bytes.
+    ///
+    /// Always 0 for `kNative` and `kMockTest`, which carry no deployable blob.
     ///
     /// Optimization: allows computing and updating storage costs without
     /// loading the full contract from storage.
     pub contract_size: u32,
-    /// The type of contract (e.g., Wasm, native, etc.).
+    /// The type of contract: RV32, native, or mock.
     ///
     /// Optimization: allows the executor to determine which runtime to
     /// instantiate without a database lookup. When the contract module is
