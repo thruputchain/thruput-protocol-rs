@@ -187,11 +187,6 @@ fn signed_transaction_roundtrip() {
 
 #[test]
 fn contract_variants_roundtrip() {
-    roundtrip(&Contract::kWasmi {
-        wasmi_contract: ContractBlob {
-            data: b"\0asm".as_slice().try_into().unwrap(),
-        },
-    });
     roundtrip(&Contract::kRv32 {
         rv32_contract: ContractBlob {
             data: b"rv32 code".as_slice().try_into().unwrap(),
@@ -203,6 +198,32 @@ fn contract_variants_roundtrip() {
     roundtrip(&Contract::kNative {
         native_contract_id: 0.into(),
     });
+}
+
+/// Discriminant 0 selected the retired Wasmi arm. Encodings that still
+/// carry it must fail to decode rather than resolve to a live contract
+/// type.
+#[test]
+fn retired_contract_discriminant_rejected() {
+    let contract = Contract::kRv32 {
+        rv32_contract: ContractBlob {
+            data: b"rv32 code".as_slice().try_into().unwrap(),
+        },
+    };
+
+    let mut txs_bytes = xdrs::txs::encode(&contract).expect("txs encode");
+    txs_bytes[..4].copy_from_slice(&0i32.to_be_bytes());
+    assert!(
+        xdrs::txs::decode::<Contract>(&txs_bytes).is_err(),
+        "retired discriminant unexpectedly decoded from txs"
+    );
+
+    let mut cxs_bytes = xdrs::cxs::encode(&contract).expect("cxs encode");
+    cxs_bytes[0] = 0;
+    assert!(
+        xdrs::cxs::decode::<Contract>(&cxs_bytes).is_err(),
+        "retired discriminant unexpectedly decoded from cxs"
+    );
 }
 
 #[test]
