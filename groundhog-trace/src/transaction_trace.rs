@@ -997,6 +997,60 @@ pub struct SyscallSHA256CopyTrace {
     pub outputs: Option<SyscallSHA256CopyOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetNetworkHashInputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetNetworkHashOutputs {
+    pub network_hash: NetworkHash,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetNetworkHashTrace {
+    pub inputs: SyscallGetNetworkHashInputs,
+    pub outputs: Option<SyscallGetNetworkHashOutputs>,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetBlockTimepointInputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetBlockTimepointOutputs {
+    pub block_timepoint: TimePoint,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetBlockTimepointTrace {
+    pub inputs: SyscallGetBlockTimepointInputs,
+    pub outputs: Option<SyscallGetBlockTimepointOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1108,6 +1162,12 @@ pub enum SyscallTraceBody {
     // case kSHA256Copy:
     //   SyscallSHA256CopyTrace sha256_copy;
     kSHA256Copy { sha256_copy: SyscallSHA256CopyTrace } = SyscallNo::kSHA256Copy.0 as i32,
+    // case kGetNetworkHash:
+    //   SyscallGetNetworkHashTrace get_network_hash;
+    kGetNetworkHash { get_network_hash: SyscallGetNetworkHashTrace } = SyscallNo::kGetNetworkHash.0 as i32,
+    // case kGetBlockTimepoint:
+    //   SyscallGetBlockTimepointTrace get_block_timepoint;
+    kGetBlockTimepoint { get_block_timepoint: SyscallGetBlockTimepointTrace } = SyscallNo::kGetBlockTimepoint.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },

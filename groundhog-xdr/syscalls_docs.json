@@ -432,5 +432,17 @@
         ]
       }
     ]
+  },
+  "GetNetworkHash": {
+    "description": [
+      "Returns the hash of the network name, the identifier that separates this network's blocks from those of every other network. It is fixed for the life of the network, so it is constant across every block and every invocation.\nTransaction signatures already commit to this value (the signature preimage is `cxs(DomainSeparator(\"Transaction\")) || network_hash || xdr(tx)`). Exposing it to contracts lets a contract bind its own off-chain signed messages to this network the same way, so a message signed for one network cannot be replayed against a contract at the same address on another."
+    ],
+    "errors": []
+  },
+  "GetBlockTimepoint": {
+    "description": [
+      "Returns the timepoint of the block currently executing. The value is fixed by the coordinator before execution begins and is carried in the block's ProposalHeader, so it is part of the block identity and is identical for every invocation in the block.\nLike a block height, this is consensus data rather than a trusted clock: it is chosen by the proposer within whatever bounds the network's validators enforce. Contracts should treat it as coarse-grained wall-clock time -- suitable for expiries, vesting schedules and deadlines -- and must not rely on it for fine-grained ordering or as a source of randomness."
+    ],
+    "errors": []
   }
 }
