@@ -82,13 +82,13 @@ impl core::fmt::Display for SchedGatewayIntroOutcome {
 pub struct SchedGatewaySubmitOutcome(pub i32);
 
 impl SchedGatewaySubmitOutcome {
-    // The transaction was admitted, or the same transaction body was already
-    // pending.
-    pub const SchedGatewaySubmitAccepted: Self = Self(0);
+    // The transaction was admitted to the mempool, or the same transaction body
+    // was already pending. This does not mean it was nominated or committed.
+    pub const SchedGatewaySubmitAdmitted: Self = Self(0);
 
-    // This request definitely did not admit the transaction because transaction
-    // or auth validation failed against the state observed for this request.
-    pub const SchedGatewaySubmitRejected: Self = Self(1);
+    // This request definitely did not admit the transaction because
+    // authentication failed against the state observed for this request.
+    pub const SchedGatewaySubmitAuthenticationRejected: Self = Self(1);
 
     // This request definitely did not admit the transaction because of a
     // transient admission condition; retrying it unchanged may succeed.
@@ -107,11 +107,11 @@ impl From<i32> for SchedGatewaySubmitOutcome {
 impl core::fmt::Display for SchedGatewaySubmitOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::SchedGatewaySubmitAccepted.0 => {
-                write!(f, "SchedGatewaySubmitOutcome::SchedGatewaySubmitAccepted")
+            x if x == Self::SchedGatewaySubmitAdmitted.0 => {
+                write!(f, "SchedGatewaySubmitOutcome::SchedGatewaySubmitAdmitted")
             },
-            x if x == Self::SchedGatewaySubmitRejected.0 => {
-                write!(f, "SchedGatewaySubmitOutcome::SchedGatewaySubmitRejected")
+            x if x == Self::SchedGatewaySubmitAuthenticationRejected.0 => {
+                write!(f, "SchedGatewaySubmitOutcome::SchedGatewaySubmitAuthenticationRejected")
             },
             x if x == Self::SchedGatewaySubmitRetryable.0 => {
                 write!(f, "SchedGatewaySubmitOutcome::SchedGatewaySubmitRetryable")
