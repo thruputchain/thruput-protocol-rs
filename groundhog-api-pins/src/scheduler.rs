@@ -1,6 +1,7 @@
 //! Signature pins for `groundhog_scheduler` (generated: src/catchup.rs,
 //! src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs, src/exec_sched.rs,
-//! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_event.rs).
+//! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_event.rs,
+//! src/sched_gateway.rs).
 
 use groundhog_scheduler::{
     BlockExecutionContext, BlockExecutionMode, BlockID, Catchup_Catchup1,
@@ -13,15 +14,17 @@ use groundhog_scheduler::{
     EventPrepareResult, EventRegistrationSnapshot, EventSched_EventSched1,
     EventSched_EventSched1_Client, ExecProposeBatchResult, ExecProposeResult,
     ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
-    ExecutorSched_ExecutorSched1_Client, ExperimentConfig,
+    ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
     GenesisCeremonyRequest, GenesisCeremonyResult, HogAgeBatch, HogAgeResults,
     LoadgenContextID, LoadgenExtensionResult,
     LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
     MissingTransactionsEnvelope, OptProposal, ParallelSignedTransactionBatch,
-    Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
+    PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
     RepairedTransactions, SchedEvent_SchedEvent1,
-    SchedEvent_SchedEvent1_Client, SchedulerCommitOutcome,
+    SchedEvent_SchedEvent1_Client, SchedGateway_SchedGateway1,
+    SchedGateway_SchedGateway1_Client, SchedGatewayIntroOutcome,
+    SchedGatewaySubmitOutcomeBatch, SchedulerCommitOutcome,
     SchedulerCoord_SchedulerCoord1, SchedulerCoord_SchedulerCoord1_Client,
     SchedulerGetTipResult, SchedulerProposalResult, SchedulerValidationResult,
     SignedCatchupBlocksRequest, SignedCatchupBlocksResult, TransactionID,
@@ -32,6 +35,7 @@ use groundhog_xdr::event::TxEventLog;
 use groundhog_xdr::exec_result::ExecResult;
 use groundhog_xdr::genesis::GenesisConfiguration;
 use groundhog_xdr::header::ProposalContext;
+use groundhog_xdr::network::ProtocolCommit;
 use groundhog_xdr::transaction::{
     OptSignedTransactionBatch, ProposedTransaction, ProposedTransactionBatch,
     SignedTransaction, SignedTransactionBatch, TransactionHash,
@@ -641,6 +645,89 @@ pub mod sched_event {
         arg0: EventRegistrationSnapshot,
     ) -> Result<EventActivationResult, ProgramError> {
         t.schedevent_activate_event(arg0).await
+    }
+}
+
+pub mod sched_gateway {
+    use super::*;
+    type S = SchedGateway_SchedGateway1_Client;
+
+    pub async fn client_schedgateway_intro(
+        c: &S,
+        arg0: &ProtocolCommit,
+    ) -> Result<SchedGatewayIntroOutcome, RpcError> {
+        c.schedgateway_intro(arg0).await
+    }
+    pub async fn client_schedgateway_submit_tx_batch(
+        c: &S,
+        arg0: &ParallelSignedTransactionBatch,
+    ) -> Result<(), RpcError> {
+        c.schedgateway_submit_tx_batch(arg0).await
+    }
+    pub async fn client_schedgateway_submit_tx_batch_with_outcomes(
+        c: &S,
+        arg0: &ParallelSignedTransactionBatch,
+    ) -> Result<SchedGatewaySubmitOutcomeBatch, RpcError> {
+        c.schedgateway_submit_tx_batch_with_outcomes(arg0).await
+    }
+    pub async fn client_schedgateway_get_tip(
+        c: &S,
+    ) -> Result<ExpectedDBTip, RpcError> {
+        c.schedgateway_get_tip().await
+    }
+    pub async fn client_schedgateway_lookup_tx(
+        c: &S,
+        arg0: &TransactionHashBatch,
+    ) -> Result<OptSignedTransactionBatch, RpcError> {
+        c.schedgateway_lookup_tx(arg0).await
+    }
+    pub async fn client_schedgateway_pending_tx_count(
+        c: &S,
+    ) -> Result<PendingTxCount, RpcError> {
+        c.schedgateway_pending_tx_count().await
+    }
+
+    pub async fn trait_schedgateway_intro<T: SchedGateway_SchedGateway1>(
+        t: &T,
+        arg0: ProtocolCommit,
+    ) -> Result<SchedGatewayIntroOutcome, ProgramError> {
+        t.schedgateway_intro(arg0).await
+    }
+    pub async fn trait_schedgateway_submit_tx_batch<
+        T: SchedGateway_SchedGateway1,
+    >(
+        t: &T,
+        arg0: ParallelSignedTransactionBatch,
+    ) -> Result<(), ProgramError> {
+        t.schedgateway_submit_tx_batch(arg0).await
+    }
+    pub async fn trait_schedgateway_submit_tx_batch_with_outcomes<
+        T: SchedGateway_SchedGateway1,
+    >(
+        t: &T,
+        arg0: ParallelSignedTransactionBatch,
+    ) -> Result<SchedGatewaySubmitOutcomeBatch, ProgramError> {
+        t.schedgateway_submit_tx_batch_with_outcomes(arg0).await
+    }
+    pub async fn trait_schedgateway_get_tip<T: SchedGateway_SchedGateway1>(
+        t: &T,
+    ) -> Result<ExpectedDBTip, ProgramError> {
+        t.schedgateway_get_tip().await
+    }
+    pub async fn trait_schedgateway_lookup_tx<
+        T: SchedGateway_SchedGateway1,
+    >(
+        t: &T,
+        arg0: TransactionHashBatch,
+    ) -> Result<OptSignedTransactionBatch, ProgramError> {
+        t.schedgateway_lookup_tx(arg0).await
+    }
+    pub async fn trait_schedgateway_pending_tx_count<
+        T: SchedGateway_SchedGateway1,
+    >(
+        t: &T,
+    ) -> Result<PendingTxCount, ProgramError> {
+        t.schedgateway_pending_tx_count().await
     }
 }
 

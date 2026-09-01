@@ -222,6 +222,7 @@ scheduler_deps=(
 
 schedulers=(
   sched_coord.x
+  sched_gateway.x
   coord_sched.x
   catchup.x
   repair.x

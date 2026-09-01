@@ -59,6 +59,10 @@ pub mod sched_coord;
 pub use sched_coord::*;
 
 #[rustfmt::skip]
+pub mod sched_gateway;
+pub use sched_gateway::*;
+
+#[rustfmt::skip]
 pub mod coord_sched;
 pub use coord_sched::*;
 
