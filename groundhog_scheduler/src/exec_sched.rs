@@ -72,10 +72,27 @@ pub trait ExecutorSched_ExecutorSched1: Send + Sync {
     // if executor has already opened a block.
     // finish_block() blocks until all running executor threads are finished,
     // and stops the executor from accepting new transactions.
+    //
+    // Both open_xyz_block() methods take the same BlockExecutionContext, so
+    // the executor sees an identical view of the block whether it is
+    // proposing or validating, and everything a contract can observe about
+    // the current block (its height, and the GetBlockTimepoint syscall)
+    // comes from one place instead of being inferred from the parent tip.
+    //
+    // The scheduler builds the context from whichever side it is on:
+    //   - proposing:  from the coordinator's ProposalContext, passed to
+    //                 schedulercoord_propose_block.
+    //   - validating: from the ProposalHeader of the proposal under
+    //                 validation.
+    //
+    // A validator MUST take these values from the proposal it is validating
+    // and never regenerate them locally: the proposer's values are the ones
+    // its execution committed to, so any divergence here diverges execution
+    // and splits consensus.
 
-    async fn executorsched_open_proposal_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    async fn executorsched_open_proposal_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> Result<ExecResult, ::rpc_api::ProgramError>;
     
-    async fn executorsched_open_validation_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    async fn executorsched_open_validation_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> Result<ExecResult, ::rpc_api::ProgramError>;
     
     async fn executorsched_finish_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_api::ProgramError>;
         // Scheduler should call this to shutdown the executor.
@@ -148,16 +165,16 @@ impl ::rpc_api::RpcHandler for ExecutorSched_ExecutorSched1_Dispatcher {
             }
             // executorsched_open_proposal_block
             30 => {
-                let args: (BlockID, ) =
+                let args: (BlockID, BlockExecutionContext, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_open_proposal_block(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.executorsched_open_proposal_block(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             // executorsched_open_validation_block
             40 => {
-                let args: (BlockID, ) =
+                let args: (BlockID, BlockExecutionContext, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.executorsched_open_validation_block(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.executorsched_open_validation_block(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             // executorsched_finish_block
@@ -222,13 +239,13 @@ impl ExecutorSched_ExecutorSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 21, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn executorsched_open_proposal_block(&self, arg0 : &BlockID) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+    pub async fn executorsched_open_proposal_block(&self, arg0 : &BlockID, arg1 : &BlockExecutionContext) -> Result<ExecResult, ::rpc_api::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn executorsched_open_validation_block(&self, arg0 : &BlockID) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+    pub async fn executorsched_open_validation_block(&self, arg0 : &BlockID, arg1 : &BlockExecutionContext) -> Result<ExecResult, ::rpc_api::RpcError> {
+         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 40, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

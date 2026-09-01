@@ -3,8 +3,8 @@
 //! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_event.rs).
 
 use groundhog_scheduler::{
-    BlockExecutionMode, BlockID, Catchup_Catchup1, Catchup_Catchup1_Client,
-    ConsensusValue, ContractAddressBatch, CoordCard,
+    BlockExecutionContext, BlockExecutionMode, BlockID, Catchup_Catchup1,
+    Catchup_Catchup1_Client, ConsensusValue, ContractAddressBatch, CoordCard,
     CoordScheduler_CoordScheduler1, CoordScheduler_CoordScheduler1_Client,
     CoordinatorRegistrationOutcome, DbAddressAuthDataBatchResult,
     DbBlockResult, DbSched_DbSched1, DbSched_DbSched1_Client, DbSchedResult,
@@ -421,14 +421,16 @@ pub mod executor_sched {
     pub async fn client_executorsched_open_proposal_block(
         c: &S,
         arg0: &BlockID,
+        arg1: &BlockExecutionContext,
     ) -> Result<ExecResult, RpcError> {
-        c.executorsched_open_proposal_block(arg0).await
+        c.executorsched_open_proposal_block(arg0, arg1).await
     }
     pub async fn client_executorsched_open_validation_block(
         c: &S,
         arg0: &BlockID,
+        arg1: &BlockExecutionContext,
     ) -> Result<ExecResult, RpcError> {
-        c.executorsched_open_validation_block(arg0).await
+        c.executorsched_open_validation_block(arg0, arg1).await
     }
     pub async fn client_executorsched_finish_block(
         c: &S,
@@ -491,16 +493,18 @@ pub mod executor_sched {
     >(
         t: &T,
         arg0: BlockID,
+        arg1: BlockExecutionContext,
     ) -> Result<ExecResult, ProgramError> {
-        t.executorsched_open_proposal_block(arg0).await
+        t.executorsched_open_proposal_block(arg0, arg1).await
     }
     pub async fn trait_executorsched_open_validation_block<
         T: ExecutorSched_ExecutorSched1,
     >(
         t: &T,
         arg0: BlockID,
+        arg1: BlockExecutionContext,
     ) -> Result<ExecResult, ProgramError> {
-        t.executorsched_open_validation_block(arg0).await
+        t.executorsched_open_validation_block(arg0, arg1).await
     }
     pub async fn trait_executorsched_finish_block<
         T: ExecutorSched_ExecutorSched1,

@@ -32,6 +32,40 @@ use ::serde_arrays;
 // An internal unique ID describing a block.
 pub type BlockID = u64;
 
+/// The contract-visible facts about the block an executor is running.
+///
+/// Passed to both executor open-block calls so that a block looks identical
+/// to the executor whether it is being proposed or validated, and so that
+/// everything a contract can observe about "the current block" comes from
+/// one place rather than being inferred from the parent tip.
+///
+/// This is deliberately not `ProposalContext` (its `protocol` and `proposer`
+/// are scheduler concerns, and `protocol` is not recoverable from a
+/// `ProposalHeader` when validating) and not `ProposalHeader` (whose txs,
+/// storage, events and config hashes are outputs of executing the block, so
+/// they do not exist when it is opened).
+///
+/// Does not travel on network: the scheduler builds it per block, from the
+/// coordinator's `ProposalContext` when proposing and from the proposal's
+/// `ProposalHeader` when validating. A validator must take these values from
+/// the proposal it is validating rather than regenerating them, or its
+/// execution diverges from the proposer's and consensus splits.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct BlockExecutionContext {
+    /// Height of the block being executed -- the parent tip's height plus one.
+    /// Supplied rather than derived so that height and timepoint have a single
+    /// source; the executor is expected to check it against the tip it reads.
+    pub block_height: BlockHeight,
+    /// The block's timepoint, fixed before execution begins. Unlike the
+    /// height there is no way to recover this from the parent tip: the
+    /// parent's timepoint is the previous block's.
+    pub block_timepoint: TimePoint,
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
