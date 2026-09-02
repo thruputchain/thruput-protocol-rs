@@ -56,6 +56,19 @@ pub struct NetworkConfig {
     /// runtime, so this is what stops a recursive call chain from growing until
     /// the executor runs out of room for it.
     pub max_cross_invoke_depth: u32,
+    /// Contracts one transaction may attach in `contracts_to_deploy`.
+    ///
+    /// Counted over what is attached rather than what a contract goes on to
+    /// deploy: the executor holds every attached contract for the whole
+    /// transaction, and the ones deployed are a subset chosen during execution.
+    /// Attaching the same contract twice is rejected outright, so the count is
+    /// over distinct contracts either way.
+    ///
+    /// Together with the per-contract blob size cap this is what bounds the
+    /// transaction's final commit batch, which the executor sends to storage as
+    /// a single message. A chain must set it low enough that the largest batch
+    /// it admits still fits that message; hogd rejects a genesis that does not.
+    pub max_new_contracts_per_tx: u32,
 }
 
 /// Names one consensus-critical configuration parameter.
@@ -71,6 +84,7 @@ pub struct ConfigParamID(pub i32);
 impl ConfigParamID {
     pub const kConfigParamMaxSHA256Buffers: Self = Self(0);
     pub const kConfigParamMaxCrossInvokeDepth: Self = Self(1);
+    pub const kConfigParamMaxNewContractsPerTx: Self = Self(2);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -86,6 +100,9 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxCrossInvokeDepth.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxCrossInvokeDepth")
+            },
+            x if x == Self::kConfigParamMaxNewContractsPerTx.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxNewContractsPerTx")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -118,6 +135,9 @@ pub enum ConfigUpgrade {
     // case kConfigParamMaxCrossInvokeDepth:
     //   u32 max_cross_invoke_depth;
     kConfigParamMaxCrossInvokeDepth { max_cross_invoke_depth: u32 } = ConfigParamID::kConfigParamMaxCrossInvokeDepth.0 as i32,
+    // case kConfigParamMaxNewContractsPerTx:
+    //   u32 max_new_contracts_per_tx;
+    kConfigParamMaxNewContractsPerTx { max_new_contracts_per_tx: u32 } = ConfigParamID::kConfigParamMaxNewContractsPerTx.0 as i32,
     
 }
 
