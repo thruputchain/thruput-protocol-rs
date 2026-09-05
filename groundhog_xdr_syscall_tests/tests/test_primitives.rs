@@ -89,6 +89,7 @@ fn test_invoke_primitive_inputs() {
         entrypoint_id: 0x1234567890ABCDEF,
         gas_limit: 1000000,
         flags: 0x01,
+        reserved: 0,
     };
     let mut outputs = CopyableInvokeOutputs {
         return_buffer_len: 0,
