@@ -89,10 +89,19 @@ impl core::fmt::Display for StorageItemType {
 }
 
 
-pub const kBytestringMaxLen : u32 = 1024;
+/// The largest bytestring the wire format admits, and so the ceiling on
+/// `kConfigParamMaxBytestringLen`. Raising this is a protocol upgrade;
+/// raising the configured limit is not.
+pub const kBytestringCeilingLen : u32 = 65000;
+
+/// The limit in force when a configuration does not state one.
+pub const kDefaultMaxBytestringLen : u32 = 1024;
 
 /// An arbitrary value, stored as an opaque string of bytes.
-pub type Bytestring = BytesM::<kBytestringMaxLen>;
+///
+/// Bounded by the ceiling, not by the limit in force: what a chain permits is
+/// enforced where a bytestring is written rather than where it is decoded.
+pub type Bytestring = BytesM::<kBytestringCeilingLen>;
 
 /// The value at every storage key is one of the following data types.
 ///
