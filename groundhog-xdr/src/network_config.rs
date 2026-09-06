@@ -47,6 +47,7 @@ impl ConfigParamID {
     pub const kConfigParamMaxSHA256Buffers: Self = Self(0);
     pub const kConfigParamMaxCrossInvokeDepth: Self = Self(1);
     pub const kConfigParamMaxNewContractsPerTx: Self = Self(2);
+    pub const kConfigParamMaxBytestringLen: Self = Self(3);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -65,6 +66,9 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxNewContractsPerTx.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxNewContractsPerTx")
+            },
+            x if x == Self::kConfigParamMaxBytestringLen.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxBytestringLen")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -120,6 +124,16 @@ pub enum ConfigParam {
     // case kConfigParamMaxNewContractsPerTx:
     //   u32 max_new_contracts_per_tx;
     kConfigParamMaxNewContractsPerTx { max_new_contracts_per_tx: u32 } = ConfigParamID::kConfigParamMaxNewContractsPerTx.0 as i32,
+    /// Bytes one bytestring storage item may hold, checked where a contract
+    /// writes one rather than where one is read, so that lowering it leaves
+    /// existing items readable instead of stranding state.
+    ///
+    /// `kBytestringCeilingLen` bounds this. A chain must also keep it low
+    /// enough that its own storage engine handles the largest item it thereby
+    /// admits; the ceiling does not guarantee that.
+    // case kConfigParamMaxBytestringLen:
+    //   u32 max_bytestring_len;
+    kConfigParamMaxBytestringLen { max_bytestring_len: u32 } = ConfigParamID::kConfigParamMaxBytestringLen.0 as i32,
     
 }
 
