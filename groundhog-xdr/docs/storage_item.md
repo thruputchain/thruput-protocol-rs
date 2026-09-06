@@ -21,7 +21,7 @@ The `StorageItem` enum defines the types of values that can exist at a storage k
 
 ```rust,ignore
 StorageItem::kItemTypeBytestring {
-    bytestring: BytesM<kBytestringMaxLen>
+    bytestring: BytesM<kBytestringCeilingLen>
 }
 ```
 

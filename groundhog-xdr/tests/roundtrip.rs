@@ -19,7 +19,7 @@ use groundhog_xdr::event::{TxEmittedEvent, TxEventLog};
 use groundhog_xdr::exec_result::ExecResult;
 use groundhog_xdr::storage_item::{
     AuthDataChangeArgs, AuthDataChangeSigner, Bytestring, StorageDelta,
-    StorageItem, kBytestringMaxLen,
+    StorageItem, kBytestringCeilingLen,
 };
 use groundhog_xdr::transaction::{
     DecoratedSignature, Invocation, InvocationFrameOutput, SignedTransaction,
@@ -317,14 +317,15 @@ fn empty_containers_roundtrip() {
 #[test]
 fn bytestring_at_limit_accepted_over_limit_rejected() {
     // At the limit: accepted and roundtrips.
-    let max: Bytestring =
-        vec![0xA5; kBytestringMaxLen as usize].try_into().unwrap();
+    let max: Bytestring = vec![0xA5; kBytestringCeilingLen as usize]
+        .try_into()
+        .unwrap();
     roundtrip(&max);
 
     // One past the limit: encode through a wider bound, decode as the
     // bounded type. Must fail cleanly, not panic.
-    let over: BytesM<{ kBytestringMaxLen * 2 }> =
-        vec![0xA5; kBytestringMaxLen as usize + 1]
+    let over: BytesM<{ kBytestringCeilingLen * 2 }> =
+        vec![0xA5; kBytestringCeilingLen as usize + 1]
             .try_into()
             .unwrap();
     let bytes = xdrs::txs::encode(&over).unwrap();
@@ -354,7 +355,7 @@ fn signer_vec_at_limit_accepted_over_limit_rejected() {
 #[test]
 fn oversized_length_prefixes_error_without_panicking() {
     // A bounded bytestring whose length prefix exceeds the bound.
-    let mut bytes = (kBytestringMaxLen + 1).to_be_bytes().to_vec();
+    let mut bytes = (kBytestringCeilingLen + 1).to_be_bytes().to_vec();
     bytes.extend_from_slice(&[0u8; 16]);
     assert!(xdrs::txs::decode::<Bytestring>(&bytes).is_err());
 
