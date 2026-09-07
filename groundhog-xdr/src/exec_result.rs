@@ -66,6 +66,14 @@ impl ExecResult {
     // block from a malicious proposer.
     pub const ExecResultTxValidationFailure: Self = Self(200);
 
+    // The transaction is malformed: a structural check rejected it before
+    // execution, on its contents alone and independent of ledger state.
+    // This error code is only returned during proposal, where the scheduler
+    // drops the transaction instead of including it in the block. The same
+    // defect during validation is ExecResultTxValidationFailure, since a
+    // malformed transaction inside a proposed block is the proposer's fault.
+    pub const ExecResultMalformedTransaction: Self = Self(201);
+
     // System error; network connection broke, etc.
     // Executor can recover from this error to continue execution of other
     // transactions.
@@ -101,6 +109,9 @@ impl core::fmt::Display for ExecResult {
             },
             x if x == Self::ExecResultTxValidationFailure.0 => {
                 write!(f, "ExecResult::ExecResultTxValidationFailure")
+            },
+            x if x == Self::ExecResultMalformedTransaction.0 => {
+                write!(f, "ExecResult::ExecResultMalformedTransaction")
             },
             x if x == Self::ExecResultSystemError.0 => {
                 write!(f, "ExecResult::ExecResultSystemError")
