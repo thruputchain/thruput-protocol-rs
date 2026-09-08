@@ -736,6 +736,7 @@ pub struct IndexerInitializedProgress {
     pub last_consensus_hash: ConsensusValueHash,
 }
 
+/// Where the indexer stands, as its pull request states it.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -746,8 +747,21 @@ pub struct IndexerInitializedProgress {
 pub struct IndexerProgressState(pub i32);
 
 impl IndexerProgressState {
+    /// No origin adopted yet. The server answers with the oldest retained
+    /// origin, or its first block; never held.
     pub const IndexerProgressUninitialized: Self = Self(0);
+
+    /// Applied everything through `initialized`; asks what comes next. Answered
+    /// at once: the next block, `EventIndexerPullCaughtUp` when there is none,
+    /// or a conflict. The first pull of every connection is this, since the
+    /// caught-up reply is the indexer's readiness signal.
     pub const IndexerProgressInitialized: Self = Self(1);
+
+    /// Same cursor, and already answered caught up on this connection. Asks the
+    /// server to hold the request until the next publication and answer with
+    /// it, so a block is pulled the moment it is committed rather than when the
+    /// indexer next asks. Request-only: an indexer never persists this state.
+    pub const IndexerProgressCaughtUp: Self = Self(2);
 }
 impl From<i32> for IndexerProgressState {
     fn from(v: i32) -> Self {
@@ -763,6 +777,9 @@ impl core::fmt::Display for IndexerProgressState {
             },
             x if x == Self::IndexerProgressInitialized.0 => {
                 write!(f, "IndexerProgressState::IndexerProgressInitialized")
+            },
+            x if x == Self::IndexerProgressCaughtUp.0 => {
+                write!(f, "IndexerProgressState::IndexerProgressCaughtUp")
             },
             _ => {
                 write!(f, "IndexerProgressState({})", self.0)
@@ -780,8 +797,10 @@ impl core::fmt::Display for IndexerProgressState {
 #[non_exhaustive]
 pub enum IndexerProgress {
     // case IndexerProgressInitialized:
+    // case IndexerProgressCaughtUp:
     //   IndexerInitializedProgress initialized;
     IndexerProgressInitialized { initialized: IndexerInitializedProgress } = IndexerProgressState::IndexerProgressInitialized.0 as i32,
+    IndexerProgressCaughtUp { initialized: IndexerInitializedProgress } = IndexerProgressState::IndexerProgressCaughtUp.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { state: i32 },

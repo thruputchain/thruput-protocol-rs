@@ -137,17 +137,13 @@ pub type PendingTxCount = i64;
 #[async_trait::async_trait]
 pub trait SchedGateway_SchedGateway1: Send + Sync {    
     async fn schedgateway_intro(&self, arg0 : ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::rpc_api::ProgramError>;
-        // Submit a batch of wallet-originated transactions to the
-    // mempool.  Wallet clients learn about commit via
-    // getTransactionStatus / getTransactionReceipt polling.
-
-    async fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::ProgramError>;
-        // Like schedgateway_submit_tx_batch, but returns the request-scoped,
+        // Submit wallet-originated transactions and return the request-scoped,
     // exact-cardinality admission outcomes described above. A malformed batch
     // fails at the RPC level because its transactions cannot be identified
-    // reliably.
+    // reliably. Admission does not imply commitment; clients learn about commit
+    // via getTransactionStatus / getTransactionReceipt polling.
 
-    async fn schedgateway_submit_tx_batch_with_outcomes(&self, arg0 : ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::ProgramError>;
+    async fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::ProgramError>;
         // Current committed tip.  Returns kRPCNotFound when the node
     // has no committed block yet (pre-genesis bootstrap).
 
@@ -194,13 +190,6 @@ impl ::rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher {
                 let res = self.inner.schedgateway_submit_tx_batch(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            // schedgateway_submit_tx_batch_with_outcomes
-            5 => {
-                let args: (ParallelSignedTransactionBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_submit_tx_batch_with_outcomes(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
-            }
             // schedgateway_get_tip
             2 => {
                 let args: () =
@@ -245,14 +234,9 @@ impl SchedGateway_SchedGateway1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_submit_tx_batch(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn schedgateway_submit_tx_batch(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::RpcError> {
          let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
-    }
-    pub async fn schedgateway_submit_tx_batch_with_outcomes(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 5, &data).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::RpcError> {

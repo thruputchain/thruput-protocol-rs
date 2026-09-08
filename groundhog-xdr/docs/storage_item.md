@@ -21,11 +21,14 @@ The `StorageItem` enum defines the types of values that can exist at a storage k
 
 ```rust,ignore
 StorageItem::kItemTypeBytestring {
-    bytestring: BytesM<kBytestringMaxLen>
+    bytestring: BytesM<kBytestringCeilingLen>
 }
 ```
 
-An arbitrary value stored as an opaque string of bytes (up to 1024 bytes).
+An arbitrary value stored as an opaque string of bytes. The wire type accepts
+up to 65,000 bytes (`kBytestringCeilingLen`), while execution enforces the
+chain's `kConfigParamMaxBytestringLen` setting, which defaults to 1,024 bytes.
+Values that fit the wire type can still exceed the configured execution limit.
 
 This is the most generic storage type, allowing contracts to store any serialized data structure.  Contracts can read and write strings with
 the `BytestringGet` and `BytestringSet` system calls, respectively.

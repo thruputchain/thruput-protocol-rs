@@ -82,6 +82,14 @@ impl ContractTypeKind {
     pub const U8: Self = Self(15);
     pub const Array: Self = Self(16);
     pub const SignedToken: Self = Self(17);
+
+    // Contract values are exactly 32 bytes, most-significant byte first.
+    // Event topics use the same bytes directly, without hashing.
+    pub const U256: Self = Self(18);
+
+    // Contract values are exactly 32 bytes, most-significant byte first, in
+    // two's-complement representation. Event topics use the same bytes directly.
+    pub const I256: Self = Self(19);
 }
 impl From<i32> for ContractTypeKind {
     fn from(v: i32) -> Self {
@@ -145,6 +153,12 @@ impl core::fmt::Display for ContractTypeKind {
             },
             x if x == Self::SignedToken.0 => {
                 write!(f, "ContractTypeKind::SignedToken")
+            },
+            x if x == Self::U256.0 => {
+                write!(f, "ContractTypeKind::U256")
+            },
+            x if x == Self::I256.0 => {
+                write!(f, "ContractTypeKind::I256")
             },
             _ => {
                 write!(f, "ContractTypeKind({})", self.0)
@@ -216,6 +230,12 @@ pub enum ContractType {
     // case SignedToken:
     //   ContractSignedTokenPreimage signed_token_preimage;
     SignedToken { signed_token_preimage: ContractSignedTokenPreimage } = ContractTypeKind::SignedToken.0 as i32,
+    // case U256:
+    //   void;
+    U256 = ContractTypeKind::U256.0 as i32,
+    // case I256:
+    //   void;
+    I256 = ContractTypeKind::I256.0 as i32,
     
 }
 

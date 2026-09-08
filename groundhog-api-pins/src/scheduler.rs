@@ -661,14 +661,8 @@ pub mod sched_gateway {
     pub async fn client_schedgateway_submit_tx_batch(
         c: &S,
         arg0: &ParallelSignedTransactionBatch,
-    ) -> Result<(), RpcError> {
-        c.schedgateway_submit_tx_batch(arg0).await
-    }
-    pub async fn client_schedgateway_submit_tx_batch_with_outcomes(
-        c: &S,
-        arg0: &ParallelSignedTransactionBatch,
     ) -> Result<SchedGatewaySubmitOutcomeBatch, RpcError> {
-        c.schedgateway_submit_tx_batch_with_outcomes(arg0).await
+        c.schedgateway_submit_tx_batch(arg0).await
     }
     pub async fn client_schedgateway_get_tip(
         c: &S,
@@ -698,16 +692,8 @@ pub mod sched_gateway {
     >(
         t: &T,
         arg0: ParallelSignedTransactionBatch,
-    ) -> Result<(), ProgramError> {
-        t.schedgateway_submit_tx_batch(arg0).await
-    }
-    pub async fn trait_schedgateway_submit_tx_batch_with_outcomes<
-        T: SchedGateway_SchedGateway1,
-    >(
-        t: &T,
-        arg0: ParallelSignedTransactionBatch,
     ) -> Result<SchedGatewaySubmitOutcomeBatch, ProgramError> {
-        t.schedgateway_submit_tx_batch_with_outcomes(arg0).await
+        t.schedgateway_submit_tx_batch(arg0).await
     }
     pub async fn trait_schedgateway_get_tip<T: SchedGateway_SchedGateway1>(
         t: &T,

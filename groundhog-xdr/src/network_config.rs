@@ -30,35 +30,10 @@ use ::serde_arrays;
 
 // clang-format on
 
-/// The consensus-critical execution parameters a block executes under.
-///
-/// Every parameter is a named field, so a configuration is structurally
-/// complete: it cannot omit one, repeat one, or order them differently. The
-/// protocol blesses no value for any of them either -- a chain states all of
-/// them at genesis, so there is nothing a node can silently inherit and no way
-/// for two node versions to disagree about what is in force.
-///
-/// Adding a parameter means adding a field here and an arm to
-/// [`ConfigUpgrade`].
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct NetworkConfig {
-    pub ext: ExtensionPoint,
-    /// Concurrently open incremental SHA-256 buffers permitted per invocation
-    /// frame (`SHA256Update`, `SHA256Copy`, `SHA256Finalize`).
-    pub max_sha256_buffers: u32,
-    /// Invocation frames one transaction may have open at once, counting every
-    /// invoke rather than only the savepoint-pushing ones that
-    /// `kMaxSavepointDepth` bounds. Each open frame holds a live contract
-    /// runtime, so this is what stops a recursive call chain from growing until
-    /// the executor runs out of room for it.
-    pub max_cross_invoke_depth: u32,
-}
-
 /// Names one consensus-critical configuration parameter.
+///
+/// Append-only: an id, once assigned, means that parameter forever, and a
+/// retired parameter keeps its id rather than freeing it for reuse.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -71,6 +46,8 @@ pub struct ConfigParamID(pub i32);
 impl ConfigParamID {
     pub const kConfigParamMaxSHA256Buffers: Self = Self(0);
     pub const kConfigParamMaxCrossInvokeDepth: Self = Self(1);
+    pub const kConfigParamMaxNewContractsPerTx: Self = Self(2);
+    pub const kConfigParamMaxBytestringLen: Self = Self(3);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -87,6 +64,12 @@ impl core::fmt::Display for ConfigParamID {
             x if x == Self::kConfigParamMaxCrossInvokeDepth.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxCrossInvokeDepth")
             },
+            x if x == Self::kConfigParamMaxNewContractsPerTx.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxNewContractsPerTx")
+            },
+            x if x == Self::kConfigParamMaxBytestringLen.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxBytestringLen")
+            },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
             }
@@ -95,29 +78,116 @@ impl core::fmt::Display for ConfigParamID {
 }
 
 
-/// A change to one network configuration parameter.
+/// One configuration parameter and the value in force for it.
 ///
-/// Consensus carries these in `ConsensusValue::upgrades`, so a block that
-/// changes several parameters carries one per parameter and everything it does
-/// not name keeps the value it already has. The encoding is 8 bytes, well
-/// inside the `Upgrade` that holds it.
+/// Serves both uses of that pairing: `NetworkConfigV0` states a chain's
+/// configuration as a list of these, and consensus carries one per parameter
+/// being changed in `ConsensusValue::upgrades`, where everything a block does
+/// not name keeps the value it already has. Each arm carries its own type, so
+/// a future parameter need not be an `unsigned int`.
 ///
 /// There is no `default` arm on purpose: a node that cannot name a parameter
-/// cannot apply a change to it, so an unrecognized id must fail to decode
-/// rather than decode to something the node then ignores.
+/// cannot know what value is in force for it, so an unrecognized id must fail
+/// to decode rather than decode to something the node then ignores.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
-pub enum ConfigUpgrade {
+pub enum ConfigParam {
+    /// Concurrently open incremental SHA-256 buffers permitted per invocation
+    /// frame (`SHA256Update`, `SHA256Copy`, `SHA256Finalize`).
     // case kConfigParamMaxSHA256Buffers:
     //   u32 max_sha256_buffers;
     kConfigParamMaxSHA256Buffers { max_sha256_buffers: u32 } = ConfigParamID::kConfigParamMaxSHA256Buffers.0 as i32,
+    /// Invocation frames one transaction may have open at once, counting every
+    /// invoke rather than only the savepoint-pushing ones that
+    /// `kMaxSavepointDepth` bounds. Each open frame holds a live contract
+    /// runtime, so this is what stops a recursive call chain from growing until
+    /// the executor runs out of room for it.
     // case kConfigParamMaxCrossInvokeDepth:
     //   u32 max_cross_invoke_depth;
     kConfigParamMaxCrossInvokeDepth { max_cross_invoke_depth: u32 } = ConfigParamID::kConfigParamMaxCrossInvokeDepth.0 as i32,
+    /// Contracts one transaction may attach in `contracts_to_deploy`.
+    ///
+    /// Counted over what is attached rather than what a contract goes on to
+    /// deploy: the executor holds every attached contract for the whole
+    /// transaction, and the ones deployed are a subset chosen during execution.
+    /// Attaching the same contract twice is rejected outright, so the count is
+    /// over distinct contracts either way.
+    ///
+    /// Together with the per-contract blob size cap this is what bounds the
+    /// transaction's final commit batch, which the executor sends to storage as
+    /// a single message. A chain must set it low enough that the largest batch
+    /// it admits still fits that message; hogd rejects a genesis that does not.
+    // case kConfigParamMaxNewContractsPerTx:
+    //   u32 max_new_contracts_per_tx;
+    kConfigParamMaxNewContractsPerTx { max_new_contracts_per_tx: u32 } = ConfigParamID::kConfigParamMaxNewContractsPerTx.0 as i32,
+    /// Bytes one bytestring storage item may hold, checked where a contract
+    /// writes one rather than where one is read, so that lowering it leaves
+    /// existing items readable instead of stranding state.
+    ///
+    /// `kBytestringCeilingLen` bounds this. A chain must also keep it low
+    /// enough that its own storage engine handles the largest item it thereby
+    /// admits; the ceiling does not guarantee that.
+    // case kConfigParamMaxBytestringLen:
+    //   u32 max_bytestring_len;
+    kConfigParamMaxBytestringLen { max_bytestring_len: u32 } = ConfigParamID::kConfigParamMaxBytestringLen.0 as i32,
+    
+}
+
+/// The parameters a chain states, as a list rather than fixed fields. A new
+/// parameter is then an id and a [`ConfigParam`] arm, with no new version here
+/// and no change to the layout of anything embedding one.
+///
+/// `params` MUST be a prefix of the id space: ids run 0, 1, 2, ... in order,
+/// with no gaps. The encoding is hashed into `ProposalHeader::config_hash`, so
+/// permitting one arrangement per configuration is what gives it one hash. A
+/// list that is unordered, repeats an id, or skips one must fail validation
+/// rather than resolve to one of the values. The rule also bounds the list: a
+/// prefix cannot be longer than the number of parameters that exist.
+///
+/// Ascending order alone would leave interior gaps legal, and a gap is what
+/// makes the encoding ambiguous: a parameter at its default value could be
+/// written down or left out. A prefix settles which -- below the list's length
+/// a parameter is stated, past it it is not -- and makes resolving one an
+/// index rather than a search.
+///
+/// A parameter absent from the list takes the value the protocol defines for
+/// it. Absence says nothing about why: the list may be short because the
+/// configuration predates the parameter, or because its creator declined to
+/// state one it knew, and nothing on the wire tells those apart. A creator
+/// SHOULD state every parameter it knows; a verifier cannot check that.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct NetworkConfigV0 {
+    pub params: VecM<ConfigParam>,
+}
+
+/// The consensus-critical execution parameters a block executes under.
+///
+/// The protocol blesses no value for any parameter: a chain states its
+/// configuration at genesis, so there is nothing a node silently inherits.
+///
+/// One version, because `v0` states its parameters as a list: a new parameter
+/// is an id and a [`ConfigParam`] arm, not a new arm here. The discriminant is
+/// kept so that if a change ever does need one, it is a new case rather than a
+/// silent reinterpretation of these bytes. A node meeting a version it cannot
+/// name must fail to decode rather than guess what is in force.
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum NetworkConfig {
+    // case 0:
+    //   NetworkConfigV0 v0;
+    _0 { v0: NetworkConfigV0 } = 0 as i32,
     
 }
 
@@ -138,11 +208,20 @@ pub struct ConfigHashPreimage {
 // XDR internals below this point
 //
 
-impl ConfigUpgrade {
+impl ConfigParam {
     pub fn param(&self) -> ConfigParamID {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl NetworkConfig {
+    pub fn v(&self) -> i32 {
+        match self {
+            
+            _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
 }
