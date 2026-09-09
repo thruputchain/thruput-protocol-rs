@@ -43,6 +43,9 @@ pub struct GenesisConfiguration {
     pub network_config: NetworkConfig,
     pub root_contract: Contract,
     /// The contract resolved for root invocations of undeployed addresses.
+    /// Committed to by `ProposalHeader::config_hash` through
+    /// `ConfigHashPreimage`, so a node cannot run under a different one than
+    /// the chain agreed.
     pub default_wallet: DeployedContractHash,
 }
 

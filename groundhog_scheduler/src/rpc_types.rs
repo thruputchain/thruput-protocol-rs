@@ -79,7 +79,8 @@ pub struct DbTip {
     /// address with no deployed contract (see
     /// SystemCallHandler::resolve_runtime). Set at genesis from
     /// GenesisConfiguration::default_wallet; carried forward verbatim by
-    /// every subsequent commit.
+    /// every subsequent commit, and committed to by this tip's own
+    /// ProposalHeader::config_hash through ConfigHashPreimage.
     pub default_wallet: DeployedContractHash,
     /// The execution parameters in force for the block that follows this tip.
     /// Set at genesis from GenesisConfiguration::network_config; carried forward
