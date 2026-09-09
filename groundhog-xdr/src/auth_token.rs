@@ -29,6 +29,8 @@ use ::serde_arrays;
 
 
 // 
+/// Levels of node nesting a token may carry when a configuration does not
+/// state `kConfigParamMaxAuthTokenDepth`. Consensus-critical, so frozen.
 pub const kAuthTokenMaxLen : u32 = 256;
 
 // 

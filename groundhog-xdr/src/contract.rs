@@ -45,9 +45,18 @@ use ::serde_arrays;
 // Contract Types and Code
 //------------------------------------------------------------------------------
 
+/// The largest contract code blob a chain admits when its configuration does
+/// not state `kConfigParamMaxContractSizeBytes`. Consensus-critical, so
+/// frozen: every chain predating the parameter ran under it.
+pub const kDefaultMaxContractSizeBytes : u32 = 262144;
+
 /// An opaque blob of executable code.
 ///
 /// This is the raw binary that will be executed as an RV32 contract.
+///
+/// Unbounded on the wire: the size a chain admits is a configuration
+/// parameter (`kConfigParamMaxContractSizeBytes`), enforced where a
+/// transaction attaches a contract rather than where one is decoded.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
