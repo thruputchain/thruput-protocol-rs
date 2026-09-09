@@ -48,6 +48,12 @@ impl ConfigParamID {
     pub const kConfigParamMaxCrossInvokeDepth: Self = Self(1);
     pub const kConfigParamMaxNewContractsPerTx: Self = Self(2);
     pub const kConfigParamMaxBytestringLen: Self = Self(3);
+    pub const kConfigParamMaxContractSizeBytes: Self = Self(4);
+    pub const kConfigParamMaxSavepointDepth: Self = Self(5);
+    pub const kConfigParamMaxSHA256BufferBytes: Self = Self(6);
+    pub const kConfigParamMaxAuthTokenDepth: Self = Self(7);
+    pub const kConfigParamMaxRv32CodeBytes: Self = Self(8);
+    pub const kConfigParamMaxRv32MemoryBytes: Self = Self(9);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -69,6 +75,24 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxBytestringLen.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxBytestringLen")
+            },
+            x if x == Self::kConfigParamMaxContractSizeBytes.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxContractSizeBytes")
+            },
+            x if x == Self::kConfigParamMaxSavepointDepth.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxSavepointDepth")
+            },
+            x if x == Self::kConfigParamMaxSHA256BufferBytes.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxSHA256BufferBytes")
+            },
+            x if x == Self::kConfigParamMaxAuthTokenDepth.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxAuthTokenDepth")
+            },
+            x if x == Self::kConfigParamMaxRv32CodeBytes.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxRv32CodeBytes")
+            },
+            x if x == Self::kConfigParamMaxRv32MemoryBytes.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxRv32MemoryBytes")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -103,7 +127,7 @@ pub enum ConfigParam {
     kConfigParamMaxSHA256Buffers { max_sha256_buffers: u32 } = ConfigParamID::kConfigParamMaxSHA256Buffers.0 as i32,
     /// Invocation frames one transaction may have open at once, counting every
     /// invoke rather than only the savepoint-pushing ones that
-    /// `kMaxSavepointDepth` bounds. Each open frame holds a live contract
+    /// `kConfigParamMaxSavepointDepth` bounds. Each open frame holds a live contract
     /// runtime, so this is what stops a recursive call chain from growing until
     /// the executor runs out of room for it.
     // case kConfigParamMaxCrossInvokeDepth:
@@ -117,10 +141,11 @@ pub enum ConfigParam {
     /// Attaching the same contract twice is rejected outright, so the count is
     /// over distinct contracts either way.
     ///
-    /// Together with the per-contract blob size cap this is what bounds the
+    /// Together with `kConfigParamMaxContractSizeBytes` this is what bounds the
     /// transaction's final commit batch, which the executor sends to storage as
-    /// a single message. A chain must set it low enough that the largest batch
-    /// it admits still fits that message; hogd rejects a genesis that does not.
+    /// a single message. A chain must set the pair low enough that the largest
+    /// batch it admits still fits that message; hogd rejects a genesis that
+    /// does not.
     // case kConfigParamMaxNewContractsPerTx:
     //   u32 max_new_contracts_per_tx;
     kConfigParamMaxNewContractsPerTx { max_new_contracts_per_tx: u32 } = ConfigParamID::kConfigParamMaxNewContractsPerTx.0 as i32,
@@ -134,6 +159,75 @@ pub enum ConfigParam {
     // case kConfigParamMaxBytestringLen:
     //   u32 max_bytestring_len;
     kConfigParamMaxBytestringLen { max_bytestring_len: u32 } = ConfigParamID::kConfigParamMaxBytestringLen.0 as i32,
+    /// Bytes one attached contract's code blob (`ContractBlob.data`) may hold,
+    /// checked before any attached contract is verified or executed. It is
+    /// the same quantity `contract_deployment_cost_per_byte` charges for.
+    ///
+    /// `kDefaultMaxContractSizeBytes` is the value in force for a
+    /// configuration that does not state one. The wire format does not bound
+    /// `ContractBlob`, so nothing here caps what a chain may state: a chain
+    /// must keep it low enough that its own storage engine stores the largest
+    /// contract it thereby admits, that every attached contract still fits a
+    /// transaction (`kMaxBytesSignedTransaction`), and that the commit batch
+    /// `kConfigParamMaxNewContractsPerTx` bounds fits one storage message.
+    /// hogd rejects a genesis that does not.
+    // case kConfigParamMaxContractSizeBytes:
+    //   u32 max_contract_size_bytes;
+    kConfigParamMaxContractSizeBytes { max_contract_size_bytes: u32 } = ConfigParamID::kConfigParamMaxContractSizeBytes.0 as i32,
+    /// Storage savepoints one transaction may have open at once: one per
+    /// `TryInvoke` frame still executing, plus the one the root commit takes.
+    /// A `TryInvoke` past the limit fails as the guest would see any other
+    /// refused call. `kMaxSavepointDepth` is the value in force for a
+    /// configuration that does not state one.
+    ///
+    /// Every open savepoint is a live nested VM on one executor thread, so a
+    /// chain must keep this within what its executors' stacks hold; hogd
+    /// rejects a genesis above its build ceiling.
+    // case kConfigParamMaxSavepointDepth:
+    //   u32 max_savepoint_depth;
+    kConfigParamMaxSavepointDepth { max_savepoint_depth: u32 } = ConfigParamID::kConfigParamMaxSavepointDepth.0 as i32,
+    /// Bytes one incremental SHA-256 buffer may absorb between resets
+    /// (`SHA256Update`), the per-buffer companion of
+    /// `kConfigParamMaxSHA256Buffers`. `kSHA256BufferMaxSize` is the value in
+    /// force for a configuration that does not state one. Only the byte count
+    /// is bounded: the hasher state is constant-size, so nothing else scales
+    /// with it.
+    // case kConfigParamMaxSHA256BufferBytes:
+    //   u32 max_sha256_buffer_bytes;
+    kConfigParamMaxSHA256BufferBytes { max_sha256_buffer_bytes: u32 } = ConfigParamID::kConfigParamMaxSHA256BufferBytes.0 as i32,
+    /// Levels of `AuthTokenNode` nesting an auth token may carry, counted from
+    /// its root, checked where a token is minted or forwarded into a view.
+    /// `kAuthTokenMaxDepth` is the value in force for a configuration that
+    /// does not state one. The wire type bounds a node's payload and its
+    /// direct children (`kAuthTokenMaxLen`, `kAuthTokenMaxChildNodes`) but not
+    /// the depth, so this is what bounds a token's total size.
+    // case kConfigParamMaxAuthTokenDepth:
+    //   u32 max_auth_token_depth;
+    kConfigParamMaxAuthTokenDepth { max_auth_token_depth: u32 } = ConfigParamID::kConfigParamMaxAuthTokenDepth.0 as i32,
+    /// Bytes of code (`code_size` in the artifact header) an RV32 artifact may
+    /// carry to be admitted as an attached contract.
+    /// `kDefaultMaxRv32CodeBytes` is the value in force for a configuration
+    /// that does not state one.
+    ///
+    /// Checked where a contract is attached, not where a deployed one is
+    /// instantiated, so lowering it leaves deployed contracts runnable. The
+    /// artifact format itself does not bound the field; hogd rejects a genesis
+    /// above what its VM can translate.
+    // case kConfigParamMaxRv32CodeBytes:
+    //   u32 max_rv32_code_bytes;
+    kConfigParamMaxRv32CodeBytes { max_rv32_code_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32CodeBytes.0 as i32,
+    /// Bytes of guest data memory (`memory_bytes` in the artifact header) an
+    /// RV32 artifact may declare to be admitted as an attached contract.
+    /// `kDefaultMaxRv32MemoryBytes` is the value in force for a configuration
+    /// that does not state one.
+    ///
+    /// Checked at attachment like `kConfigParamMaxRv32CodeBytes`. Every
+    /// invocation provisions and seeds the declared memory outside gas, so a
+    /// chain raising this accepts that per-call cost; hogd rejects a genesis
+    /// above what its VM provisions.
+    // case kConfigParamMaxRv32MemoryBytes:
+    //   u32 max_rv32_memory_bytes;
+    kConfigParamMaxRv32MemoryBytes { max_rv32_memory_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32MemoryBytes.0 as i32,
     
 }
 
