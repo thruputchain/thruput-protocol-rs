@@ -128,7 +128,7 @@ dependencies = [
 [[package]]
 name = "groundhog-serde_arrays"
 version = "0.2.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "5f38492b48f71b7723c02af35531586816c22057e25c3acf173ef8a9b878ecbf"
 dependencies = [
  "serde",
@@ -474,7 +474,7 @@ dependencies = [
 [[package]]
 name = "rpc_api"
 version = "0.1.0"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "8b1a1ff7e8bdd81bf972e8adb961c2b5a2ec1c65667ddca00d5d7e491c30bb64"
 dependencies = [
  "async-trait",
@@ -484,7 +484,7 @@ dependencies = [
 [[package]]
 name = "rpc_driver"
 version = "0.10.2"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "56fe2b3910bd1a96612914737fed698b665f81eaa036bb6cce8bbdffb4276898"
 dependencies = [
  "async-trait",
@@ -756,7 +756,7 @@ dependencies = [
 [[package]]
 name = "xdr-common"
 version = "0.8.4"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "5cee9738fb4d060b6a837069f6f17acd7c412d17b23511885e1eb6d46e554519"
 dependencies = [
  "escape-bytes",
@@ -767,7 +767,7 @@ dependencies = [
 [[package]]
 name = "xdr-derive"
 version = "0.8.4"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "4c8ce96e0f62491296572d532636006038773fb46a551497092129588d41929b"
 dependencies = [
  "darling",
@@ -779,7 +779,7 @@ dependencies = [
 [[package]]
 name = "xdr-repr"
 version = "0.8.4"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "78cc7c1b3b2a5f2d6174edb672dae952590691ae0ce747048811b45ba40ab44d"
 dependencies = [
  "xdr-common",
@@ -788,7 +788,7 @@ dependencies = [
 [[package]]
 name = "xdrs"
 version = "0.8.4"
-source = "sparse+https://groundhog.dev/crates/api/v1/crates/"
+source = "sparse+https://thruput.network/crates/api/v1/crates/"
 checksum = "b368ace8933c092c6c27e1c4407b019ee74ae262176a1112b5f92bee34529654"
 dependencies = [
  "xdr-common",
