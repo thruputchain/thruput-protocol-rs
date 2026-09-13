@@ -46,8 +46,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          # TODO: repoint to a main SHA once groundhogchain/actions#8 merges.
-          ref: 24b9a6deffa8065cfa2ba70f8a5e0132f389a892
+          ref: b2409b8655be03b1a8667b7cf7e8b31bfe311e07 # main
 
       # Must run before the dry-run step: cargo-publish-dry-run extracts every
       # workspace crate into ./vendor/, and cargo-semver-checks then sees each

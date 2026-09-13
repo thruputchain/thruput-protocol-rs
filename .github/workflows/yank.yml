@@ -46,7 +46,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: 104eba38ba3680fcf33e3f436a08404542550635
+          ref: b2409b8655be03b1a8667b7cf7e8b31bfe311e07 # main
 
       - name: yank
         uses: ./actions/cargo-yank
