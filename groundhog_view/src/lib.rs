@@ -74,7 +74,7 @@ mod tests {
             &self,
             progvers: ProgVers,
             proc: u32,
-            data: &[u8],
+            call: rpc_api::CallBuf,
         ) -> Result<RpcResponse, RpcError> {
             self.calls
                 .lock()
@@ -83,7 +83,7 @@ mod tests {
             if progvers != self.handler.prog_vers() {
                 return Err(RpcError::ProgUnavail);
             }
-            let payload = self.handler.dispatch(proc, data).await?;
+            let payload = self.handler.dispatch(proc, call.payload()).await?;
             Ok(RpcResponse::from_payload(payload))
         }
     }

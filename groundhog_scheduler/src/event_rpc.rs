@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ecaf232903ce409121e6a42607860a6a0db767e8
+// Generated from xdrc commit: 4191665d9425e58c121d3cbb5a413a3ae736c24f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -133,28 +133,33 @@ impl EventExecutor_EventExecutor1_Client {
         ::rpc_api::ProgVers::new(0x8aa81224, 1)
     }
     pub async fn eventexecutor_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventexecutor_open_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 31, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 31, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventexecutor_close_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 32, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 32, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventexecutor_report_tx_failure(&self, arg0 : &TransactionHash, arg1 : &TxFailureDiagnostic) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 33, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 33, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventexecutor_emit_event(&self, arg0 : &BlockID, arg1 : &TransactionID, arg2 : &TxEventLog, arg3 : &ProposedTransaction) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1, &arg2, &arg3)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1, &arg2, &arg3), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 30, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
@@ -272,28 +277,33 @@ impl EventSched_EventSched1_Client {
         ::rpc_api::ProgVers::new(0x8aa81226, 1)
     }
     pub async fn eventsched_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventsched_open_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 10, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventsched_close_block(&self, arg0 : &BlockID, arg1 : &BlockHeight) -> Result<EventBlockResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 30, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventsched_commit_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 31, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 31, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn eventsched_abandon_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 40, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 40, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

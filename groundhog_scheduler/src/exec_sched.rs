@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ecaf232903ce409121e6a42607860a6a0db767e8
+// Generated from xdrc commit: 4191665d9425e58c121d3cbb5a413a3ae736c24f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -210,53 +210,63 @@ impl ExecutorSched_ExecutorSched1_Client {
         ::rpc_api::ProgVers::new(0x7ee79999, 1)
     }
     pub async fn executorsched_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_ready(&self) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 1, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_propose_transaction(&self, arg0 : &BlockID, arg1 : &SignedTransaction) -> Result<ExecProposeResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 10, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_validate_transaction(&self, arg0 : &BlockID, arg1 : &ProposedTransaction) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 20, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 20, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_propose_batch(&self, arg0 : &BlockID, arg1 : &SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 11, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 11, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_validate_batch(&self, arg0 : &BlockID, arg1 : &ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 21, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 21, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_open_proposal_block(&self, arg0 : &BlockID, arg1 : &BlockExecutionContext) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 30, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 30, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_open_validation_block(&self, arg0 : &BlockID, arg1 : &BlockExecutionContext) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 40, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0, &arg1), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 40, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_finish_block(&self, arg0 : &BlockID) -> Result<ExecResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 50, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 50, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn executorsched_shutdown(&self) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 60, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 60, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

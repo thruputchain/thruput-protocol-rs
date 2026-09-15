@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ecaf232903ce409121e6a42607860a6a0db767e8
+// Generated from xdrc commit: 4191665d9425e58c121d3cbb5a413a3ae736c24f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -236,13 +236,15 @@ impl Dogwood_Dogwood1_Client {
         ::rpc_api::ProgVers::new(0x8ee82002, 1)
     }
     pub async fn dogwood_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dogwood_deliver(&self, arg0 : &DogwoodDeliveryEnvelope) -> Result<(), ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 10, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 10, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

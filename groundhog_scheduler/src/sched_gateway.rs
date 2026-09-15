@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ecaf232903ce409121e6a42607860a6a0db767e8
+// Generated from xdrc commit: 4191665d9425e58c121d3cbb5a413a3ae736c24f
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -230,28 +230,33 @@ impl SchedGateway_SchedGateway1_Client {
         ::rpc_api::ProgVers::new(0x7ee7aaaa, 1)
     }
     pub async fn schedgateway_intro(&self, arg0 : &ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_submit_tx_batch(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 1, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_lookup_tx(&self, arg0 : &TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 3, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 3, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 4, &data).await?;
+         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
+         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 4, ::rpc_api::CallBuf::from_vec(call.into())).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
