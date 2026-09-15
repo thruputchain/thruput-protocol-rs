@@ -70,6 +70,10 @@ mod tests {
 
     #[async_trait::async_trait]
     impl RpcSender for LocalSender {
+        fn call_buf(&self) -> rpc_api::CallBuf {
+            rpc_api::CallBuf::new()
+        }
+
         async fn send_call(
             &self,
             progvers: ProgVers,
