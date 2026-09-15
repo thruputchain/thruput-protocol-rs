@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7a24a50a5c49393107462758d58c7d6ff8d891c1
+// Generated from xdrc commit: 658b4a40c8451ea28d2bddb17f52ee1d5c485c65
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -230,31 +230,31 @@ impl SchedGateway_SchedGateway1_Client {
         ::rpc_api::ProgVers::new(0x7ee7aaaa, 1)
     }
     pub async fn schedgateway_intro(&self, arg0 : &ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_submit_tx_batch(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_lookup_tx(&self, arg0 : &TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)

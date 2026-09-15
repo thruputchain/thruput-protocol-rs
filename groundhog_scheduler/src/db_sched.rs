@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7a24a50a5c49393107462758d58c7d6ff8d891c1
+// Generated from xdrc commit: 658b4a40c8451ea28d2bddb17f52ee1d5c485c65
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -357,61 +357,61 @@ impl DbSched_DbSched1_Client {
         ::rpc_api::ProgVers::new(0x88887ee7, 1)
     }
     pub async fn dbsched_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_get_address_auth_data(&self, arg0 : &BlockID, arg1 : &ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_get_hog_ages(&self, arg0 : &ContractAddressBatch) -> Result<HogAgeResults, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_write_hog_ages(&self, arg0 : &HogAgeBatch) -> Result<DbSchedResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_create_snapshot(&self, arg0 : &BlockID, arg1 : &BlockID, arg2 : &BlockExecutionMode) -> Result<DbSchedResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_commit_snapshot(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<DbBlockResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_close_snapshot(&self, arg0 : &BlockID) -> Result<DbBlockResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 7, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_abandon_snapshot(&self, arg0 : &BlockID) -> Result<DbSchedResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 8, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_load_genesis_configuration(&self, arg0 : &GenesisConfiguration, arg1 : &ConsensusValue) -> Result<DbSchedResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 9, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)

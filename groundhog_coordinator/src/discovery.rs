@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 7a24a50a5c49393107462758d58c7d6ff8d891c1
+// Generated from xdrc commit: 658b4a40c8451ea28d2bddb17f52ee1d5c485c65
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -140,13 +140,13 @@ impl Discovery_Discovery1_Client {
         ::rpc_api::ProgVers::new(0x3eef0505, 1)
     }
     pub async fn discovery_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn discovery_update_quorums(&self, arg0 : &KnownQuorumSets) -> Result<KnownQuorumSets, ::rpc_api::RpcError> {
-         let mut call = ::rpc_api::CallBuf::new();
+         let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
