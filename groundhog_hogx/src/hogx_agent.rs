@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4191665d9425e58c121d3cbb5a413a3ae736c24f
+// Generated from xdrc commit: 7a24a50a5c49393107462758d58c7d6ff8d891c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -328,57 +328,57 @@ impl HogxAgent_HogxAgent1_Client {
         ::rpc_api::ProgVers::new(0x20011004, 1)
     }
     pub async fn hogxagent_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_host_configure(&self, arg0 : &HostConfig) -> Result<HogxHostConfigureResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 100, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_host_query(&self) -> Result<HogxHostQueryResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 110, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 110, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_start(&self, arg0 : &UnitDef) -> Result<HogxUnitStartResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 200, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 200, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_stop(&self, arg0 : &UnitID) -> Result<HogxUnitStopResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 210, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 210, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_query(&self, arg0 : &UnitID) -> Result<HogxUnitQueryResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 220, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 220, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_list(&self) -> Result<HogxUnitListResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 230, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 230, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_clear(&self, arg0 : &UnitID) -> Result<HogxUnitClearResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 240, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 240, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxagent_unit_tail(&self, arg0 : &HogxTailKick) -> Result<HogxUnitTailResult, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 300, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 300, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
@@ -463,15 +463,15 @@ impl HogxTail_HogxTail1_Client {
         ::rpc_api::ProgVers::new(0x20015004, 1)
     }
     pub async fn hogxtail_null(&self) -> Result<(), ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn hogxtail_deliver(&self, arg0 : &HogxTailChunk) -> Result<bool, ::rpc_api::RpcError> {
-         let mut call = xdrs::txs::buf_writer::BufWriter::from(::rpc_api::CallBuf::new().into_vec());
-         xdrs::write_xdr(&(&arg0), &mut call).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 100, ::rpc_api::CallBuf::from_vec(call.into())).await?;
+         let mut call = ::rpc_api::CallBuf::new();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

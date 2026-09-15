@@ -58,7 +58,7 @@ xdrs = { registry = "groundhog", version = "0.10.1", default-features = false, f
 ] }
 xdr-common = { version = "0.10.1", registry = "groundhog" }
 xdr-derive = { version = "0.10.1", registry = "groundhog" }
-rpc_api = { version = "0.2", registry = "groundhog" }
+rpc_api = { version = "0.2", registry = "groundhog", features = ["xdrs"] }
 rpc_driver = { version = "0.11", registry = "groundhog" }
 schemars = { version = "1" }
 serde_arrays = { package = "groundhog-serde_arrays", version = "0.2.0", registry = "groundhog", default-features = false }
