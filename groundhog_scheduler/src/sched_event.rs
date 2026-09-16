@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ecaf232903ce409121e6a42607860a6a0db767e8
+// Generated from xdrc commit: 5135a63d54ca836265b87b8475a9c06f4d4624e4
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -231,13 +231,15 @@ impl SchedEvent_SchedEvent1_Client {
         ::rpc_api::ProgVers::new(0x7ee79998, 1)
     }
     pub async fn schedevent_prepare_event(&self, arg0 : &EventCard) -> Result<EventPrepareResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, &data).await?;
+         let mut call = self.handle.call_buf();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedevent_activate_event(&self, arg0 : &EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_api::RpcError> {
-         let data = xdrs::txs::encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, &data).await?;
+         let mut call = self.handle.call_buf();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

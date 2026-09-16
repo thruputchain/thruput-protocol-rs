@@ -70,11 +70,15 @@ mod tests {
 
     #[async_trait::async_trait]
     impl RpcSender for LocalSender {
+        fn call_buf(&self) -> rpc_api::CallBuf {
+            rpc_api::CallBuf::new()
+        }
+
         async fn send_call(
             &self,
             progvers: ProgVers,
             proc: u32,
-            data: &[u8],
+            call: rpc_api::CallBuf,
         ) -> Result<RpcResponse, RpcError> {
             self.calls
                 .lock()
@@ -83,7 +87,7 @@ mod tests {
             if progvers != self.handler.prog_vers() {
                 return Err(RpcError::ProgUnavail);
             }
-            let payload = self.handler.dispatch(proc, data).await?;
+            let payload = self.handler.dispatch(proc, call.payload()).await?;
             Ok(RpcResponse::from_payload(payload))
         }
     }
