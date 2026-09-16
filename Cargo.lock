@@ -473,23 +473,25 @@ dependencies = [
 
 [[package]]
 name = "rpc_api"
-version = "0.1.0"
+version = "0.2.0"
 source = "sparse+https://crates.thruput.network/api/v1/crates/"
-checksum = "8b1a1ff7e8bdd81bf972e8adb961c2b5a2ec1c65667ddca00d5d7e491c30bb64"
+checksum = "f036fb03367c01b1361848588f9872d20af205bf89b0ad2d484cf9ea194bac6d"
 dependencies = [
  "async-trait",
  "thiserror",
+ "xdrs",
 ]
 
 [[package]]
 name = "rpc_driver"
-version = "0.10.5"
+version = "0.11.0"
 source = "sparse+https://crates.thruput.network/api/v1/crates/"
-checksum = "7e5c5d0554994b5b027d1f9c7bc6b63109d302ad278a6eba7edc75c55e069a68"
+checksum = "36c76f4c2e85722d2cd082c8e38c2faeaa1c8c0a30dcb2f17b9ae73b7fb99b9d"
 dependencies = [
  "async-trait",
  "libc",
  "rpc_api",
+ "socket2",
  "thiserror",
  "tokio",
  "tracing",
