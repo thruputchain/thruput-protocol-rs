@@ -258,6 +258,7 @@ impl SchedulerCommitOutcome {
     pub const SchedulerCommitOK: Self = Self(0);
     pub const SchedulerCommitBlockNotFound: Self = Self(1);
     pub const SchedulerCommitInvalidConsensusValue: Self = Self(2);
+    pub const SchedulerConcurrentCommit: Self = Self(3);
 }
 impl From<i32> for SchedulerCommitOutcome {
     fn from(v: i32) -> Self {
@@ -276,6 +277,9 @@ impl core::fmt::Display for SchedulerCommitOutcome {
             },
             x if x == Self::SchedulerCommitInvalidConsensusValue.0 => {
                 write!(f, "SchedulerCommitOutcome::SchedulerCommitInvalidConsensusValue")
+            },
+            x if x == Self::SchedulerConcurrentCommit.0 => {
+                write!(f, "SchedulerCommitOutcome::SchedulerConcurrentCommit")
             },
             _ => {
                 write!(f, "SchedulerCommitOutcome({})", self.0)
