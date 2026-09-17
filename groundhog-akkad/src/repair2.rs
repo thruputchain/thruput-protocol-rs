@@ -79,7 +79,8 @@ pub struct SignedRepairedTxs {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct MissingProposal {
-    pub consensus_value: ConsensusValue,
+    pub block_height: BlockHeight,
+    pub value_hash: ConsensusValueHash,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -99,7 +100,7 @@ pub struct SignedMissingProposal {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct RepairedProposal {
-    pub proposal: Option<Proposal>,
+    pub basis: Option<ConsensusBasis>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
