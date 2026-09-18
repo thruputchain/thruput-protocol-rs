@@ -186,12 +186,9 @@ pub enum ConfigParam {
     // case kConfigParamMaxSavepointDepth:
     //   u32 max_savepoint_depth;
     kConfigParamMaxSavepointDepth { max_savepoint_depth: u32 } = ConfigParamID::kConfigParamMaxSavepointDepth.0 as i32,
-    /// Bytes one incremental SHA-256 buffer may absorb between resets
-    /// (`SHA256Update`), the per-buffer companion of
-    /// `kConfigParamMaxSHA256Buffers`. `kSHA256BufferMaxSize` is the value in
-    /// force for a configuration that does not state one. Only the byte count
-    /// is bounded: the hasher state is constant-size, so nothing else scales
-    /// with it.
+    /// Legacy cumulative SHA-256 byte limit. Retained for wire compatibility
+    /// and configuration hashing; no longer enforced. SHA256Update checks gas
+    /// before processing input and keeps constant-size incremental state.
     // case kConfigParamMaxSHA256BufferBytes:
     //   u32 max_sha256_buffer_bytes;
     kConfigParamMaxSHA256BufferBytes { max_sha256_buffer_bytes: u32 } = ConfigParamID::kConfigParamMaxSHA256BufferBytes.0 as i32,
