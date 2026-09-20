@@ -269,6 +269,7 @@ fn tx_event_log_roundtrip() {
         root_output: InvocationFrameOutput::Return {
             return_buffer: b"ret".as_slice().try_into().unwrap(),
         },
+        gas_consumed: 12_345,
         events: vec![TxEmittedEvent {
             contract_address: ContractAddress::new([0x77; 32]),
             num_topics: 2,
