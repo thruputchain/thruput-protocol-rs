@@ -167,6 +167,12 @@ pub struct TxEmittedEvent {
 /// deterministic revert, or the Fault variant when no root output was
 /// produced (e.g., non-deterministic failure).  Downstream indexers and
 /// the receipt-read paths surface this as `return_data`/`abort_data`.
+///
+/// `gas_consumed` is the gas the whole transaction consumed: the root frame,
+/// every frame it invoked, and the pre-execution validation of attached
+/// contracts. On an out-of-gas fault it is the transaction's gas limit. It
+/// is part of the leaf, so the events root commits to it and every
+/// validator's re-execution must reproduce it.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -177,6 +183,7 @@ pub struct TxEventLog {
     pub tx_hash: TransactionHash,
     pub exec_result: ExecResult,
     pub root_output: InvocationFrameOutput,
+    pub gas_consumed: GasAmount,
     pub events: VecM<TxEmittedEvent, kMaxEventsPerTransaction>,
 }
 
