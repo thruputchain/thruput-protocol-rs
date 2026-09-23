@@ -48,35 +48,42 @@ impl DbConflictCode {
     /// transaction (committed or concurrent), an exclusive lock could not be
     /// acquired because other transactions hold the key, or an exclusive-lock
     /// flag was used on a key type that does not support it.
-    pub const kDbConflictExclusiveLock: Self = Self(0);
+    pub const ExclusiveLockDenied: Self = Self(0);
 
     /// Two transactions created different item types at the same key.
-    pub const kDbConflictTypeMismatch: Self = Self(1);
+    pub const TypeMismatch: Self = Self(1);
 
     /// Two transactions wrote irreconcilable values of the same type at the
     /// same key: different bytestrings, different nnint base values,
     /// different auth-data bases, or different contract / deployment hashes.
-    pub const kDbConflictValueMismatch: Self = Self(2);
+    pub const ValueMismatch: Self = Self(2);
 
-    /// A nonnegative int (or balance) would go below zero given the deltas
-    /// in this block, or a newly created balance item cannot cover its own
-    /// storage cost.
-    pub const kDbConflictBoundsExceeded: Self = Self(3);
+    /// A nonnegative int would go below zero given the deltas in this block.
+    /// A native HOG balance that cannot cover its debits reports
+    /// InsufficientFunds instead.
+    pub const BoundsExceeded: Self = Self(3);
 
     /// Integer overflow combining deltas on a nonnegative int or balance.
-    pub const kDbConflictOverflow: Self = Self(4);
+    pub const Overflow: Self = Self(4);
 
     /// Replay-protection conflict: uniquifier expired, already consumed (in
     /// a prior block or by a concurrent transaction), or consumed twice by
     /// this transaction.
-    pub const kDbConflictReplayProtection: Self = Self(5);
+    pub const ReplayProtection: Self = Self(5);
 
     /// A retrocausal queue already has a consumer in this block.
-    pub const kDbConflictQueueConsumer: Self = Self(6);
+    pub const QueueConsumer: Self = Self(6);
 
     /// A per-item capacity limit was hit: replay-cache active heights or
     /// nonces, retrocausal-queue block entries, or auth signer slots.
-    pub const kDbConflictCapacityExceeded: Self = Self(7);
+    pub const CapacityExceeded: Self = Self(7);
+
+    /// The native HOG balance at the diagnostic's address cannot cover the
+    /// debits in this block, or a newly created balance item cannot cover
+    /// its own storage cost. Storage written under a contract's address is
+    /// charged to that contract's balance, so a deployment reports this at
+    /// the new contract's address when it holds no HOG.
+    pub const InsufficientFunds: Self = Self(8);
 }
 impl From<i32> for DbConflictCode {
     fn from(v: i32) -> Self {
@@ -87,29 +94,32 @@ impl From<i32> for DbConflictCode {
 impl core::fmt::Display for DbConflictCode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::kDbConflictExclusiveLock.0 => {
-                write!(f, "DbConflictCode::kDbConflictExclusiveLock")
+            x if x == Self::ExclusiveLockDenied.0 => {
+                write!(f, "DbConflictCode::ExclusiveLockDenied")
             },
-            x if x == Self::kDbConflictTypeMismatch.0 => {
-                write!(f, "DbConflictCode::kDbConflictTypeMismatch")
+            x if x == Self::TypeMismatch.0 => {
+                write!(f, "DbConflictCode::TypeMismatch")
             },
-            x if x == Self::kDbConflictValueMismatch.0 => {
-                write!(f, "DbConflictCode::kDbConflictValueMismatch")
+            x if x == Self::ValueMismatch.0 => {
+                write!(f, "DbConflictCode::ValueMismatch")
             },
-            x if x == Self::kDbConflictBoundsExceeded.0 => {
-                write!(f, "DbConflictCode::kDbConflictBoundsExceeded")
+            x if x == Self::BoundsExceeded.0 => {
+                write!(f, "DbConflictCode::BoundsExceeded")
             },
-            x if x == Self::kDbConflictOverflow.0 => {
-                write!(f, "DbConflictCode::kDbConflictOverflow")
+            x if x == Self::Overflow.0 => {
+                write!(f, "DbConflictCode::Overflow")
             },
-            x if x == Self::kDbConflictReplayProtection.0 => {
-                write!(f, "DbConflictCode::kDbConflictReplayProtection")
+            x if x == Self::ReplayProtection.0 => {
+                write!(f, "DbConflictCode::ReplayProtection")
             },
-            x if x == Self::kDbConflictQueueConsumer.0 => {
-                write!(f, "DbConflictCode::kDbConflictQueueConsumer")
+            x if x == Self::QueueConsumer.0 => {
+                write!(f, "DbConflictCode::QueueConsumer")
             },
-            x if x == Self::kDbConflictCapacityExceeded.0 => {
-                write!(f, "DbConflictCode::kDbConflictCapacityExceeded")
+            x if x == Self::CapacityExceeded.0 => {
+                write!(f, "DbConflictCode::CapacityExceeded")
+            },
+            x if x == Self::InsufficientFunds.0 => {
+                write!(f, "DbConflictCode::InsufficientFunds")
             },
             _ => {
                 write!(f, "DbConflictCode({})", self.0)
