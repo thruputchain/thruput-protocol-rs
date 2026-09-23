@@ -46,9 +46,9 @@ use ::serde_arrays;
 //------------------------------------------------------------------------------
 
 /// The largest contract code blob a chain admits when its configuration does
-/// not state `kConfigParamMaxContractSizeBytes`. Consensus-critical, so
-/// frozen: every chain predating the parameter ran under it.
-pub const kDefaultMaxContractSizeBytes : u32 = 262144;
+/// not state `kConfigParamMaxContractSizeBytes`. Includes the artifact header,
+/// code, and initial memory.
+pub const kDefaultMaxContractSizeBytes : u32 = 524288;
 
 /// An opaque blob of executable code.
 ///
