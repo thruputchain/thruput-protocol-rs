@@ -30,6 +30,55 @@ use ::serde_arrays;
 // RFC 4506: string types must declare a max length; `<>` is unbounded (max 2^32-1 bytes).
 pub type ContractSpecString = StringM;
 
+// ---------------------------------------------------------------------------
+// Spec ids
+// ---------------------------------------------------------------------------
+
+/// The identity of a user-defined type or event.
+///
+/// Every spec-named item — a `#[contract_type]`, a `#[contract_exception]`, a
+/// `#[derive(Event)]` — is named by one of these, and every reference to one
+/// resolves through it. A bare identifier cannot tell two of them apart: two
+/// crates, two modules of one crate, or two major versions of one crate may
+/// each declare a `Transfer`, and a spec naming both could not say which is
+/// which.
+///
+/// The segments are carried apart rather than joined into
+/// `CRATE@MAJOR::module::path::Name`, because the joined form cannot be split
+/// back. `name = "..."` on a spec-named item substitutes its value verbatim —
+/// a value carrying `::` spells its own segments and nothing rejects it — so
+/// the boundary between the module path and the declared name is not
+/// recoverable from the string. Consumers that need a display name or a
+/// target-language identifier read `declared` directly; how an id is shortened
+/// for display stays each codegen's business.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractSpecId {
+    // Declaring crate, as Cargo names the package (`CARGO_PKG_NAME`, so
+    // hyphenated). This is the spelling event signatures already hash and the
+    // spelling RPC reports as an exception's crate.
+    pub crate_name: ContractSpecString,
+    // Identity version: the leftmost non-zero component of the declaring
+    // crate's semver ("0.1" before 1.0, "1" after), or of the item's own
+    // `version = "..."` where it pins one. Semver-compatible releases share an
+    // id; only a breaking release changes it.
+    pub major: ContractSpecString,
+    // `module_path!()` at the declaration, verbatim -- so it leads with the
+    // crate as a Rust ident (underscored), unlike `crate_name` above. Kept
+    // whole because that is the one string the compiler hands the macro; the
+    // generator splits nothing to fill this in. Compiler-generated, so a
+    // consumer that wants the segments apart can split it safely, which is not
+    // true of `declared`.
+    pub module_path: ContractSpecString,
+    // The declared name. Substituted verbatim from `name = "..."` where an item
+    // pins one, so it may itself contain `::` -- which is why it has its own
+    // field rather than being the last `::` separated segment of a joined id.
+    pub declared: ContractSpecString,
+}
+
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -219,8 +268,8 @@ pub enum ContractType {
     //   VecM<ContractType> tuple;
     Tuple { tuple: VecM<ContractType> } = ContractTypeKind::Tuple.0 as i32,
     // case Named:
-    //   ContractSpecString named;
-    Named { named: ContractSpecString } = ContractTypeKind::Named.0 as i32,
+    //   ContractSpecId named;
+    Named { named: ContractSpecId } = ContractTypeKind::Named.0 as i32,
     // case U8:
     //   void;
     U8 = ContractTypeKind::U8.0 as i32,
@@ -314,7 +363,7 @@ pub struct ContractSpecInterface {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractStructDef {
-    pub name: ContractSpecString,
+    pub name: ContractSpecId,
     pub fields: VecM<ContractField>,
 }
 
@@ -334,7 +383,7 @@ pub struct ContractEnumVariant {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractEnumDef {
-    pub name: ContractSpecString,
+    pub name: ContractSpecId,
     pub variants: VecM<ContractEnumVariant>,
 }
 
@@ -416,7 +465,7 @@ pub struct ContractUnionCase {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractUnionDef {
-    pub name: ContractSpecString,
+    pub name: ContractSpecId,
     pub cases: VecM<ContractUnionCase>,
 }
 
@@ -496,7 +545,7 @@ pub enum ContractTypeDef {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractEventDef {
-    pub name: ContractSpecString,
+    pub name: ContractSpecId,
     // topic 0
     pub signature: Topic,
     // topics 1.. ; at most kMaxTopics-1 entries
