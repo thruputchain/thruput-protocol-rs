@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: f27320c047dfcf1f7a5d07bad6be0e729285152d
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1051,6 +1051,34 @@ pub struct SyscallGetBlockTimepointTrace {
     pub outputs: Option<SyscallGetBlockTimepointOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageWriteFlagsInputs {
+    pub key: StorageKeyContractData,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageWriteFlagsOutputs {
+    pub flags: StorageDeltaFlagSet,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageWriteFlagsTrace {
+    pub inputs: SyscallGetStorageWriteFlagsInputs,
+    pub outputs: Option<SyscallGetStorageWriteFlagsOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1168,6 +1196,9 @@ pub enum SyscallTraceBody {
     // case kGetBlockTimepoint:
     //   SyscallGetBlockTimepointTrace get_block_timepoint;
     kGetBlockTimepoint { get_block_timepoint: SyscallGetBlockTimepointTrace } = SyscallNo::kGetBlockTimepoint.0 as i32,
+    // case kGetStorageWriteFlags:
+    //   SyscallGetStorageWriteFlagsTrace get_storage_write_flags;
+    kGetStorageWriteFlags { get_storage_write_flags: SyscallGetStorageWriteFlagsTrace } = SyscallNo::kGetStorageWriteFlags.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },
