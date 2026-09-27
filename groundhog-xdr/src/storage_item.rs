@@ -494,7 +494,10 @@ impl core::fmt::Display for StorageDeltaFlags {
 
 
 /// A bitset of StorageDeltaFlags values.
-pub type StorageDeltaFlagSet = i32;
+///
+/// Unsigned because it holds bits, not a number, even though
+/// StorageDeltaFlags, like every XDR enum, is a signed int.
+pub type StorageDeltaFlagSet = u32;
 
 /// The combined unit of storage modification sent to the database from the executor.
 /// A delta with a set of flags, applied to a specific entry in the database.
