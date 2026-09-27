@@ -17,8 +17,6 @@ description =  "Bindings for groundhog specs"
 crate-type = ["rlib"]
 
 [features]
-default = ["std"]
-std = []
 serde = [
     "dep:serde",
     "dep:serde_arrays",
