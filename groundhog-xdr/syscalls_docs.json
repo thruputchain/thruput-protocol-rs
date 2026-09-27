@@ -192,7 +192,7 @@
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The bytestring is too long, or the input storage flags are invalid."
+          "The bytestring is too long."
         ]
       }
     ]
@@ -224,7 +224,7 @@
       {
         "code": "kSyscallErrorCodeInvalidSyscallInput",
         "description": [
-          "The operation would always result in a negative value (i.e. set_add(1, -2)), or the storage flags are invalid."
+          "The operation would always result in a negative value (i.e. set_add(1, -2))."
         ]
       }
     ]
@@ -233,14 +233,7 @@
     "description": [
       "Deletes the object at the specified storage key."
     ],
-    "errors": [
-      {
-        "code": "kSyscallErrorCodeInvalidSyscallInput",
-        "description": [
-          "The storage flags are invalid or incompatible with the current storage state."
-        ]
-      }
-    ]
+    "errors": []
   },
   "GetCurrentAddress": {
     "description": [
@@ -442,6 +435,31 @@
   "GetBlockTimepoint": {
     "description": [
       "Returns the timepoint of the block currently executing. The value is fixed by the coordinator before execution begins and is carried in the block's ProposalHeader, so it is part of the block identity and is identical for every invocation in the block.\nLike a block height, this is consensus data rather than a trusted clock: it is chosen by the proposer within whatever bounds the network's validators enforce. Contracts should treat it as coarse-grained wall-clock time -- suitable for expiries, vesting schedules and deadlines -- and must not rely on it for fine-grained ordering or as a source of randomness."
+    ],
+    "errors": []
+  },
+  "SetStorageFlags": {
+    "description": [
+      "Adds flags (a bitwise OR) to the storage flags the current transaction requests for the key. Writes never change a key's flags: every change the transaction commits on the key carries the flags accumulated here, whichever write produced it. ClearStorageFlags removes them.\nA write to the key must be pending in the current call frame's view of the transaction: one made earlier in this frame, or inherited from a caller or from a successful callee. A pending deletion qualifies; a value that exists only in the block snapshot does not. Flags set in a frame that aborts are discarded along with that frame's writes."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "The flags are invalid, or no write to the key is pending in the current call frame's view of the transaction."
+        ]
+      }
+    ]
+  },
+  "GetStorageFlags": {
+    "description": [
+      "Returns the storage flags the current transaction requests for the key, as visible in the current call frame. A key with no pending write has no flags, so it reads as StorageDeltaFlags::None, the same as a pending write without flags."
+    ],
+    "errors": []
+  },
+  "ClearStorageFlags": {
+    "description": [
+      "Clears every storage flag the current transaction requests for the key, as visible in the current call frame. Does nothing if no write to the key is pending, since such a key has no flags. As with SetStorageFlags, a clear made in a frame that aborts is discarded with that frame."
     ],
     "errors": []
   }

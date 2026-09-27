@@ -461,7 +461,6 @@ pub struct SyscallBytestringGetTrace {
 pub struct SyscallBytestringSetInputs {
     pub key: StorageKeyContractData,
     pub bytestring: BytesM,
-    pub flags: StorageDeltaFlagSet,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -521,7 +520,6 @@ pub struct SyscallNonnegativeIntSetAddInputs {
     pub key: StorageKeyContractData,
     pub set_value: Option<int128_xdr>,
     pub add_value: int128_xdr,
-    pub flags: StorageDeltaFlagSet,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -549,7 +547,6 @@ pub struct SyscallNonnegativeIntSetAddTrace {
 #[repr(C)]
 pub struct SyscallDeleteObjectInputs {
     pub key: StorageKeyContractData,
-    pub flags: i32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1051,6 +1048,89 @@ pub struct SyscallGetBlockTimepointTrace {
     pub outputs: Option<SyscallGetBlockTimepointOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSetStorageFlagsInputs {
+    pub key: StorageKeyContractData,
+    pub flags: StorageDeltaFlagSet,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSetStorageFlagsOutputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallSetStorageFlagsTrace {
+    pub inputs: SyscallSetStorageFlagsInputs,
+    pub outputs: Option<SyscallSetStorageFlagsOutputs>,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageFlagsInputs {
+    pub key: StorageKeyContractData,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageFlagsOutputs {
+    pub flags: StorageDeltaFlagSet,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetStorageFlagsTrace {
+    pub inputs: SyscallGetStorageFlagsInputs,
+    pub outputs: Option<SyscallGetStorageFlagsOutputs>,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallClearStorageFlagsInputs {
+    pub key: StorageKeyContractData,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallClearStorageFlagsOutputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallClearStorageFlagsTrace {
+    pub inputs: SyscallClearStorageFlagsInputs,
+    pub outputs: Option<SyscallClearStorageFlagsOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1168,6 +1248,15 @@ pub enum SyscallTraceBody {
     // case kGetBlockTimepoint:
     //   SyscallGetBlockTimepointTrace get_block_timepoint;
     kGetBlockTimepoint { get_block_timepoint: SyscallGetBlockTimepointTrace } = SyscallNo::kGetBlockTimepoint.0 as i32,
+    // case kSetStorageFlags:
+    //   SyscallSetStorageFlagsTrace set_storage_flags;
+    kSetStorageFlags { set_storage_flags: SyscallSetStorageFlagsTrace } = SyscallNo::kSetStorageFlags.0 as i32,
+    // case kGetStorageFlags:
+    //   SyscallGetStorageFlagsTrace get_storage_flags;
+    kGetStorageFlags { get_storage_flags: SyscallGetStorageFlagsTrace } = SyscallNo::kGetStorageFlags.0 as i32,
+    // case kClearStorageFlags:
+    //   SyscallClearStorageFlagsTrace clear_storage_flags;
+    kClearStorageFlags { clear_storage_flags: SyscallClearStorageFlagsTrace } = SyscallNo::kClearStorageFlags.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },

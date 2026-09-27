@@ -144,7 +144,7 @@ fn test_bytestring_set_fixed_size_input() {
     let key = StorageKeyContractData::from([0xBB; 32]);
     let bytestring = b"storage value";
 
-    let result = raw_BytestringSet(&key, bytestring, 12);
+    let result = raw_BytestringSet(&key, bytestring);
 
     assert!(result.is_ok());
 
@@ -160,10 +160,8 @@ fn test_bytestring_set_fixed_size_input() {
     assert_eq!(invocations[0].args[1], bytestring.as_ptr() as u64);
     // arg3: bytestring length
     assert_eq!(invocations[0].args[2], bytestring.len() as u64);
-    // arg4: flags
-    assert_eq!(invocations[0].args[3], 12 as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[4..], [0; 3]);
+    assert_eq!(invocations[0].args[3..], [0; 4]);
 }
 
 #[test]
