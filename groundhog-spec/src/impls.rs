@@ -50,7 +50,11 @@ fn write_lossy(
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
+
     use super::*;
+    use std::format;
+    use std::string::{String, ToString};
 
     fn s(bytes: &[u8]) -> ContractSpecString {
         ContractSpecString::try_from(bytes).unwrap()

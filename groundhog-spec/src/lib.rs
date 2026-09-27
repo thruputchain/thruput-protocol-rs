@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
 
 // Brings types from %#include'd .x files (event.hh) into scope for the
 // generated module, which imports them via `use crate::*`.

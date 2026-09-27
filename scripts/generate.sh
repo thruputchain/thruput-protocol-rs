@@ -153,11 +153,13 @@ generate_trace() {
   $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
+# groundhog-spec is always no_std and has no `std` feature, so leave out what
+# x23c would otherwise gate on one.
 generate_contract_spec() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-feature xdrs --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature std -o "${package}/src/${name}.rs" "${proto}"
 }
 
 for proto in "${protos[@]}"; do
