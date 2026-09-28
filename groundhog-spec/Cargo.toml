@@ -19,7 +19,6 @@ crate-type = ["rlib"]
 [features]
 serde = [
     "dep:serde",
-    "dep:serde_arrays",
     "xdrs/serde",
     "groundhog-xdr/serde",
 ]
@@ -41,10 +40,6 @@ version = "1.0.219"
 default-features = false
 features = ["derive"]
 
-[dependencies.serde_arrays]
-optional = true
-workspace = true
-default-features = false
 
 [dependencies.xdrs]
 workspace = true

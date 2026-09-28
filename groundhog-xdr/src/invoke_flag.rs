@@ -23,8 +23,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 /// Flags that modify the behavior of a contract invocation.

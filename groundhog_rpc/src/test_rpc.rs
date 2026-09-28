@@ -22,8 +22,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 // A program to test the rpc driver, used in {s}rpcthroughput.
 // This file is present in protocol/ to support cross-language RPC testing.

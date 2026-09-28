@@ -23,8 +23,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 // These define the native contract IDs within the Contract struct.

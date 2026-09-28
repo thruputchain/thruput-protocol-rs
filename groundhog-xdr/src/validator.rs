@@ -23,8 +23,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 
@@ -36,7 +34,7 @@ use ::serde_arrays;
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct ValidatorID {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for ValidatorID {

@@ -22,8 +22,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 // Common definitions of default ports used within hogd
