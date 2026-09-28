@@ -22,7 +22,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.41.0"
+version = "0.42.0"
 edition = "2024"
 rust-version = "1.96"
 authors = ["Groundhog Team"]
@@ -36,22 +36,22 @@ categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-groundhog-syscall = { path = "groundhog-syscall", version = "=0.41.0", registry = "groundhog" }
-groundhog-xdr = { path = "groundhog-xdr", version = "=0.41.0", registry = "groundhog" }
-groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.41.0", registry = "groundhog" }
-groundhog-trace = { path = "groundhog-trace", version = "=0.41.0", registry = "groundhog" }
-groundhog_scp = { path = "groundhog_scp", version = "=0.41.0", registry = "groundhog" }
-groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.41.0", registry = "groundhog" }
-groundhog-akkad = { path = "groundhog-akkad", version = "=0.41.0", registry = "groundhog" }
-groundhog_hogx = { path = "groundhog_hogx", version = "=0.41.0", registry = "groundhog" }
-groundhog_rpc = { path = "groundhog_rpc", version = "=0.41.0", registry = "groundhog" }
-groundhog_scheduler = { path = "groundhog_scheduler", version = "=0.41.0", registry = "groundhog" }
-groundhog_indexer = { path = "groundhog_indexer", version = "=0.41.0", registry = "groundhog" }
-groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.41.0", registry = "groundhog" }
-groundhog_view = { path = "groundhog_view", version = "=0.41.0", registry = "groundhog" }
-hogexec-internal = { path = "hogexec-internal", version = "=0.41.0", registry = "groundhog" }
-macros = { path = "macros", version = "=0.41.0", registry = "groundhog" }
-groundhog-spec = { path = "groundhog-spec", version = "=0.41.0", registry = "groundhog" }
+groundhog-syscall = { path = "groundhog-syscall", version = "=0.42.0", registry = "groundhog" }
+groundhog-xdr = { path = "groundhog-xdr", version = "=0.42.0", registry = "groundhog" }
+groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.42.0", registry = "groundhog" }
+groundhog-trace = { path = "groundhog-trace", version = "=0.42.0", registry = "groundhog" }
+groundhog_scp = { path = "groundhog_scp", version = "=0.42.0", registry = "groundhog" }
+groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.42.0", registry = "groundhog" }
+groundhog-akkad = { path = "groundhog-akkad", version = "=0.42.0", registry = "groundhog" }
+groundhog_hogx = { path = "groundhog_hogx", version = "=0.42.0", registry = "groundhog" }
+groundhog_rpc = { path = "groundhog_rpc", version = "=0.42.0", registry = "groundhog" }
+groundhog_scheduler = { path = "groundhog_scheduler", version = "=0.42.0", registry = "groundhog" }
+groundhog_indexer = { path = "groundhog_indexer", version = "=0.42.0", registry = "groundhog" }
+groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.42.0", registry = "groundhog" }
+groundhog_view = { path = "groundhog_view", version = "=0.42.0", registry = "groundhog" }
+hogexec-internal = { path = "hogexec-internal", version = "=0.42.0", registry = "groundhog" }
+macros = { path = "macros", version = "=0.42.0", registry = "groundhog" }
+groundhog-spec = { path = "groundhog-spec", version = "=0.42.0", registry = "groundhog" }
 xdrs = { registry = "groundhog", version = "0.10.1", default-features = false, features = [
     "int128",
     "derive",

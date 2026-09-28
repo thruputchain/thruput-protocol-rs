@@ -115,7 +115,10 @@ impl core::fmt::Display for InvokeFlag {
 ///
 /// Multiple flags can be combined using bitwise OR. For example:
 /// `ReadOnly | TryInvoke`
-pub type InvokeFlagSet = i32;
+///
+/// Unsigned because it holds bits, not a number, even though InvokeFlag,
+/// like every XDR enum, is a signed int.
+pub type InvokeFlagSet = u32;
 
 
 //

@@ -292,7 +292,7 @@ No special flags (default).
 Forces the delta to acquire an exclusive lock on the storage key, overriding normal conflict resolution rules. When this flag is set, the delta conflicts with any other delta targeting the same key, regardless of type-specific merge rules.
 
 ```rust,ignore
-pub type StorageDeltaFlagSet = i32;  // Bitset of flags
+pub type StorageDeltaFlagSet = u32;  // Bitset of flags
 ```
 
 **Use case**: When a contract needs to ensure no other transaction modifies a key in the same block, even if the modifications would normally be mergeable.
