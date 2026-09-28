@@ -50,7 +50,6 @@ groundhog_indexer = { path = "groundhog_indexer", version = "=0.42.0", registry 
 groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.42.0", registry = "groundhog" }
 groundhog_view = { path = "groundhog_view", version = "=0.42.0", registry = "groundhog" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.42.0", registry = "groundhog" }
-macros = { path = "macros", version = "=0.42.0", registry = "groundhog" }
 groundhog-spec = { path = "groundhog-spec", version = "=0.42.0", registry = "groundhog" }
 xdrs = { registry = "groundhog", version = "0.10.1", default-features = false, features = [
     "int128",

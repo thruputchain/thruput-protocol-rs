@@ -40,7 +40,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: main
+          ref: b2409b8655be03b1a8667b7cf7e8b31bfe311e07 # main
 
       - name: Check for changes since last nightly
         id: changed
