@@ -143,7 +143,7 @@ generate_rpc() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec --rust-no-feature serde-arrays -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
 generate_trace() {
