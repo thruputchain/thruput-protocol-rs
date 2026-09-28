@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: auto-update-protocol
@@ -13,28 +12,36 @@ concurrency:
 
 jobs:
   update:
+    permissions:
+      contents: write # pushes the auto-update branch
+      pull-requests: write # opens/merges the PR
     runs-on: namespace-profile-hogd-linux-2604
     steps:
       - name: Generate hogd read token
         id: hogd-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
           owner: groundhogchain
           repositories: hogd
+          # Without this the token inherits every permission the installation
+          # holds on hogd; the step only downloads a release asset.
+          permission-contents: read
 
       - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.10.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
             ${{ secrets.PROT_RS_WRITE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           submodules: recursive
+          # The push below uses this key.
+          persist-credentials: true
           ssh-key: ${{ secrets.PROT_RS_WRITE_KEY }}
 
       - name: Update protocol submodule to latest main
