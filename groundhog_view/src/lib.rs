@@ -55,7 +55,10 @@ mod tests {
                 Some(ContractAddress::from([6u8; 32]))
             );
             assert_eq!(query.forwarded_tokens.0.len(), 0);
-            assert_eq!(query.invoke_flags, InvokeFlag::ReadOnly.0);
+            assert_eq!(
+                query.invoke_flags,
+                InvokeFlag::ReadOnly.0.cast_unsigned()
+            );
 
             Ok(ok(InvocationFrameOutput::Return {
                 return_buffer: BytesM(vec![1, 2, 3]),
@@ -126,7 +129,7 @@ mod tests {
                 },
             },
             forwarded_tokens: VecM(vec![]),
-            invoke_flags: InvokeFlag::ReadOnly.0,
+            invoke_flags: InvokeFlag::ReadOnly.0.cast_unsigned(),
         }
     }
 
