@@ -15,8 +15,6 @@ use crate::*;
 use core::option::Option;
 use core::ops::{Deref, DerefMut};
 
-#[cfg(feature = "std")]
-use std::io::{Read, Write};
 use xdrs::*;
 
 
@@ -143,76 +141,6 @@ impl ContractTypeKind {
 impl From<i32> for ContractTypeKind {
     fn from(v: i32) -> Self {
         Self(v)
-    }
-}
-#[cfg(feature = "std")]
-impl core::fmt::Display for ContractTypeKind {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self.0 {
-            x if x == Self::Void.0 => {
-                write!(f, "ContractTypeKind::Void")
-            },
-            x if x == Self::Bool.0 => {
-                write!(f, "ContractTypeKind::Bool")
-            },
-            x if x == Self::U32.0 => {
-                write!(f, "ContractTypeKind::U32")
-            },
-            x if x == Self::I32.0 => {
-                write!(f, "ContractTypeKind::I32")
-            },
-            x if x == Self::U64.0 => {
-                write!(f, "ContractTypeKind::U64")
-            },
-            x if x == Self::I64.0 => {
-                write!(f, "ContractTypeKind::I64")
-            },
-            x if x == Self::U128.0 => {
-                write!(f, "ContractTypeKind::U128")
-            },
-            x if x == Self::I128.0 => {
-                write!(f, "ContractTypeKind::I128")
-            },
-            x if x == Self::String.0 => {
-                write!(f, "ContractTypeKind::String")
-            },
-            x if x == Self::Bytes.0 => {
-                write!(f, "ContractTypeKind::Bytes")
-            },
-            x if x == Self::Address.0 => {
-                write!(f, "ContractTypeKind::Address")
-            },
-            x if x == Self::Option.0 => {
-                write!(f, "ContractTypeKind::Option")
-            },
-            x if x == Self::Vector.0 => {
-                write!(f, "ContractTypeKind::Vector")
-            },
-            x if x == Self::Tuple.0 => {
-                write!(f, "ContractTypeKind::Tuple")
-            },
-            x if x == Self::Named.0 => {
-                write!(f, "ContractTypeKind::Named")
-            },
-            x if x == Self::U8.0 => {
-                write!(f, "ContractTypeKind::U8")
-            },
-            x if x == Self::Array.0 => {
-                write!(f, "ContractTypeKind::Array")
-            },
-            x if x == Self::SignedToken.0 => {
-                write!(f, "ContractTypeKind::SignedToken")
-            },
-            x if x == Self::U256.0 => {
-                write!(f, "ContractTypeKind::U256")
-            },
-            x if x == Self::I256.0 => {
-                write!(f, "ContractTypeKind::I256")
-            },
-            _ => {
-                write!(f, "ContractTypeKind({})", self.0)
-            }
-        }
     }
 }
 
@@ -408,25 +336,6 @@ impl From<i32> for ContractUnionCaseKind {
         Self(v)
     }
 }
-#[cfg(feature = "std")]
-impl core::fmt::Display for ContractUnionCaseKind {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self.0 {
-            x if x == Self::UnionCaseVoid.0 => {
-                write!(f, "ContractUnionCaseKind::UnionCaseVoid")
-            },
-            x if x == Self::UnionCaseTuple.0 => {
-                write!(f, "ContractUnionCaseKind::UnionCaseTuple")
-            },
-            x if x == Self::UnionCaseStruct.0 => {
-                write!(f, "ContractUnionCaseKind::UnionCaseStruct")
-            },
-            _ => {
-                write!(f, "ContractUnionCaseKind({})", self.0)
-            }
-        }
-    }
-}
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -486,25 +395,6 @@ impl ContractTypeDefKind {
 impl From<i32> for ContractTypeDefKind {
     fn from(v: i32) -> Self {
         Self(v)
-    }
-}
-#[cfg(feature = "std")]
-impl core::fmt::Display for ContractTypeDefKind {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        match self.0 {
-            x if x == Self::TypeDefStruct.0 => {
-                write!(f, "ContractTypeDefKind::TypeDefStruct")
-            },
-            x if x == Self::TypeDefEnum.0 => {
-                write!(f, "ContractTypeDefKind::TypeDefEnum")
-            },
-            x if x == Self::TypeDefUnion.0 => {
-                write!(f, "ContractTypeDefKind::TypeDefUnion")
-            },
-            _ => {
-                write!(f, "ContractTypeDefKind({})", self.0)
-            }
-        }
     }
 }
 
