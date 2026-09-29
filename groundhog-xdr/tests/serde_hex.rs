@@ -10,8 +10,8 @@ use groundhog_xdr::contract::ContractEntrypointID;
 use groundhog_xdr::event::Topic;
 use groundhog_xdr::transaction::DecoratedSignature;
 use groundhog_xdr::types::{
-    ContractAddress, Ed25519PublicKey, Ed25519Signature, SHA256Hash,
-    Signature, StorageKeyContractData, StorageLongHash,
+    ContractAddress, Ed25519PublicKey, Ed25519SecretKey, Ed25519Signature,
+    SHA256Hash, Signature, StorageKeyContractData, StorageLongHash,
 };
 use groundhog_xdr::validator::ValidatorID;
 use serde::Serialize;
@@ -96,6 +96,12 @@ fn ed25519_signature_is_128_hex_digits() {
 fn ed25519_public_key_is_64_hex_digits() {
     let bytes = sample::<32>();
     assert_hex_string(&Ed25519PublicKey::new(bytes), &bytes);
+}
+
+#[test]
+fn ed25519_secret_key_is_128_hex_digits() {
+    let bytes = sample::<64>();
+    assert_hex_string(&Ed25519SecretKey::new(bytes), &bytes);
 }
 
 #[test]
