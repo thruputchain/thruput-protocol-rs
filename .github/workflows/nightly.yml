@@ -8,10 +8,13 @@ on:
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
 
+permissions:
+  contents: read
+
 jobs:
   nightly:
     permissions:
-      contents: write
+      contents: write # force-pushes the nightly tag
     runs-on: hog1
 
     steps:
@@ -21,26 +24,27 @@ jobs:
           rm -f /home/hogci/.gitconfig
 
       - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.10.0
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: |
             ${{ secrets.ACTIONS_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Configure git to use SSH
         run: |
           git config --global url."git@github.com:".insteadOf "https://github.com/"
 
       - name: Checkout actions repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: b2409b8655be03b1a8667b7cf7e8b31bfe311e07 # main
+          ref: af074672d3a6f3ddedcacd758224ea5a5cf2a8f3 # v0
+          persist-credentials: false
 
       - name: Check for changes since last nightly
         id: changed
@@ -80,13 +84,18 @@ jobs:
 
       - name: Move nightly tag
         if: steps.changed.outputs.should_publish == 'true'
+        env:
+          BASE_SHA: ${{ steps.changed.outputs.head_sha }}
+          VERSION: ${{ steps.version.outputs.version }}
+          ACTOR: ${{ github.actor }}
+          TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
           # Tag the ORIGINAL pre-bump commit (captured before the ephemeral local
           # version commit), which is the commit actually on the remote.
-          BASE_SHA="${{ steps.changed.outputs.head_sha }}"
-          echo "Tagging $BASE_SHA as nightly ${{ steps.version.outputs.version }}"
+          echo "Tagging $BASE_SHA as nightly $VERSION"
           git tag -f nightly "$BASE_SHA"
-          git remote set-url origin https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
+          git remote set-url origin "https://$ACTOR:$TOKEN@github.com/$REPOSITORY.git"
           git push -f origin refs/tags/nightly
-          git remote set-url origin git@github.com:${{ github.repository }}.git
+          git remote set-url origin "git@github.com:$REPOSITORY.git"

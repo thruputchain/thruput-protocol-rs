@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: 445ff7bb6fa8c182d33ef0d939ea8c869b7bf4ce
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -23,8 +23,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 /// Encodes a 128-bit unsigned integer as two 64-bit unsigned integers.
@@ -149,7 +147,7 @@ pub type GasAmount = u64;
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519Signature {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 64 as usize],
 }
 impl From<[u8; 64 as usize]> for Ed25519Signature {
@@ -225,7 +223,7 @@ impl schemars::JsonSchema for Ed25519Signature {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519PublicKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for Ed25519PublicKey {
@@ -300,7 +298,7 @@ impl schemars::JsonSchema for Ed25519PublicKey {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct Ed25519SecretKey {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 64 as usize],
 }
 impl From<[u8; 64 as usize]> for Ed25519SecretKey {
@@ -470,7 +468,7 @@ pub enum ExtensionPoint {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct SHA256Hash {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for SHA256Hash {
@@ -660,7 +658,7 @@ impl DerefMut for ConfigHash {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct StorageLongHash {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 2048 as usize],
 }
 impl From<[u8; 2048 as usize]> for StorageLongHash {
@@ -886,7 +884,7 @@ impl DerefMut for ProposalHeaderHash {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct ContractAddress {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for ContractAddress {
@@ -1042,7 +1040,7 @@ impl core::fmt::Display for StorageKeyType {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct StorageKeyContractData {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 32 as usize],
 }
 impl From<[u8; 32 as usize]> for StorageKeyContractData {

@@ -23,7 +23,6 @@ std = ["alloc"]
 xdrs = []
 serde = [
     "dep:serde",
-    "dep:serde_arrays",
     "xdrs/serde",
     "groundhog_scp/serde",
     "groundhog-xdr/serde",
@@ -41,11 +40,6 @@ optional = true
 version = "1.0.219"
 default-features = false
 features = ["derive"]
-
-[dependencies.serde_arrays]
-optional = true
-workspace = true
-default-features = false
 
 [dependencies.groundhog_scp]
 workspace = true

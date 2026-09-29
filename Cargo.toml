@@ -51,16 +51,15 @@ groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.42.0", reg
 groundhog_view = { path = "groundhog_view", version = "=0.42.0", registry = "groundhog" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.42.0", registry = "groundhog" }
 groundhog-spec = { path = "groundhog-spec", version = "=0.42.0", registry = "groundhog" }
-xdrs = { registry = "groundhog", version = "0.10.1", default-features = false, features = [
+xdrs = { registry = "groundhog", version = "0.10.2", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { version = "0.10.1", registry = "groundhog" }
-xdr-derive = { version = "0.10.1", registry = "groundhog" }
+xdr-common = { version = "0.10.2", registry = "groundhog" }
+xdr-derive = { version = "0.10.2", registry = "groundhog" }
 rpc_api = { version = "0.2", registry = "groundhog" }
 rpc_driver = { version = "0.11", registry = "groundhog" }
 schemars = { version = "1" }
-serde_arrays = { package = "groundhog-serde_arrays", version = "0.2.0", registry = "groundhog", default-features = false }
 
 [profile.dev]
 opt-level = 3

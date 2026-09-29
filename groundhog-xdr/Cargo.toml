@@ -26,11 +26,11 @@ crate-type = ["rlib"]
 
 [features]
 default = []
-alloc = ["serde?/alloc", "serde_arrays?/alloc", "xdrs/alloc"]
+alloc = ["serde?/alloc", "xdrs/alloc"]
 std = ["alloc", "dep:thiserror"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
-# Additionally, the serde_arrays::hex feature requires an allocator
-serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde", "serde_arrays/alloc"]
+# Fixed-size byte arrays serialize as hex strings through `xdr_common::serde_hex`.
+serde = ["dep:serde", "xdrs/serde"]
 # `xdrs` deliberately does not imply `alloc`: rv32 contract builds use
 # `xdrs` without an allocator for encoding and fixed-size decoding.
 # Decoding variable-length types (VecM/BytesM/StringM) requires `alloc`;
@@ -51,11 +51,6 @@ optional = true
 version = "1.0.219"
 default-features = false
 features = ["derive"]
-
-[dependencies.serde_arrays]
-optional = true
-workspace = true
-default-features = false
 
 [dependencies.groundhog-syscall]
 workspace = true
@@ -80,6 +75,9 @@ workspace = true
 workspace = true
 features = ["alloc"]
 
+[dev-dependencies.serde_json]
+version = "1"
+
 [[test]]
 name = "syscall_no_display"
 required-features = ["std"]
@@ -87,3 +85,7 @@ required-features = ["std"]
 [[test]]
 name = "roundtrip"
 required-features = ["std", "xdrs"]
+
+[[test]]
+name = "serde_hex"
+required-features = ["std", "serde"]

@@ -16,6 +16,9 @@ on:
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
 
+permissions:
+  contents: read
+
 jobs:
   yank:
     permissions:
@@ -36,6 +39,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
 
       - name: Configure git to use SSH
         run: |
@@ -46,7 +51,8 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: b2409b8655be03b1a8667b7cf7e8b31bfe311e07 # main
+          ref: af074672d3a6f3ddedcacd758224ea5a5cf2a8f3 # v0
+          persist-credentials: false
 
       - name: yank
         uses: ./actions/cargo-yank

@@ -22,7 +22,6 @@ alloc = ["xdrs/alloc", "groundhog-xdr/alloc"]
 std = ["alloc"]
 serde = [
     "dep:serde",
-    "dep:serde_arrays",
     "xdrs/serde",
     "groundhog-xdr/serde",
     "groundhog_scheduler/serde",
@@ -41,7 +40,6 @@ rpc_api = { workspace = true }
 
 schemars = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }
-serde_arrays = { workspace = true, optional = true }
 
 [dev-dependencies]
 serde_json = "1"

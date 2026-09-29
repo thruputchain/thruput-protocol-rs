@@ -1,0 +1,12 @@
+# zizmor configuration
+#   https://docs.zizmor.sh/configuration/
+
+rules:
+  # Style: prefers '$/...' over './...' for same-repo actions. Cannot be
+  # adopted yet -- actionlint 1.7.12 predates the syntax and rejects it.
+  self-repository:
+    ignore:
+      - build.yml
+      - nightly.yml
+      - publish.yml
+      - yank.yml
