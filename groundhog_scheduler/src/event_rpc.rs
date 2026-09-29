@@ -36,12 +36,13 @@ pub trait EventExecutor_EventExecutor1: Send + Sync {
         // Called when executor closes its handle to a block - decrements count
 
     async fn eventexecutor_close_block(&self, arg0 : BlockID) -> Result<RPCError, ::rpc_api::ProgramError>;
-        // Best-effort report that a transaction failed nondeterministically
-    // during 2-phase commit and was excluded from the proposal. The event
-    // server places this in a bounded best-effort mailbox for the indexer to
-    // pull; it touches no per-block state (the tx will never commit, so it has
-    // no place in the commit pipeline). The executor sends fire-and-forget and
-    // ignores the result.
+        // Best-effort report that a transaction was excluded from the proposal:
+    // it failed nondeterministically during 2-phase commit, or the executor
+    // refused one of its contract attachments. The event server places this
+    // in a bounded best-effort mailbox for the indexer to pull; it touches no
+    // per-block state (this attempt will never commit, so it has no place in
+    // the commit pipeline). The executor sends fire-and-forget and ignores
+    // the result.
 
     async fn eventexecutor_report_tx_failure(&self, arg0 : TransactionHash, arg1 : TxFailureDiagnostic) -> Result<RPCError, ::rpc_api::ProgramError>;
         // A transaction should not call this more than once
