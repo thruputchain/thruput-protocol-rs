@@ -101,9 +101,9 @@ impl schemars::JsonSchema for ValidatorID {
 
 
 
-pub type ValidatorPublicKey = Ed25519PublicKey;
+pub type ValidatorPublicKey = PublicKey;
 
-pub type ValidatorSecretKey = Ed25519SecretKey;
+pub type ValidatorSecretKey = SecretKey;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]

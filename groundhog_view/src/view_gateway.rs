@@ -60,6 +60,14 @@ impl ViewGatewayOutcome {
 
     // Server-side invariant failure or unavailable execution dependency.
     pub const ViewGatewayInternalError: Self = Self(2);
+
+    // The request was rejected before any frame output existed: forwarded
+    // tokens without a parent address or deeper than the network allows, an
+    // invocation the executor would not admit, or a root frame that failed on a
+    // syscall error before it returned, aborted, or faulted. Deterministic for
+    // the same request against the same state, so retrying does not help. The
+    // error_code arm carries the SyscallErrorCode the executor reported.
+    pub const ViewGatewayInvalidInput: Self = Self(3);
 }
 impl From<i32> for ViewGatewayOutcome {
     fn from(v: i32) -> Self {
@@ -78,6 +86,9 @@ impl core::fmt::Display for ViewGatewayOutcome {
             },
             x if x == Self::ViewGatewayInternalError.0 => {
                 write!(f, "ViewGatewayOutcome::ViewGatewayInternalError")
+            },
+            x if x == Self::ViewGatewayInvalidInput.0 => {
+                write!(f, "ViewGatewayOutcome::ViewGatewayInvalidInput")
             },
             _ => {
                 write!(f, "ViewGatewayOutcome({})", self.0)
@@ -103,6 +114,9 @@ pub enum ViewGatewayResult {
     // case ViewGatewayInternalError:
     //   void;
     ViewGatewayInternalError = ViewGatewayOutcome::ViewGatewayInternalError.0 as i32,
+    // case ViewGatewayInvalidInput:
+    //   SyscallErrorCode error_code;
+    ViewGatewayInvalidInput { error_code: SyscallErrorCode } = ViewGatewayOutcome::ViewGatewayInvalidInput.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { outcome: i32 },
