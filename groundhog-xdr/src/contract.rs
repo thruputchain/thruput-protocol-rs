@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: 445ff7bb6fa8c182d33ef0d939ea8c869b7bf4ce
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -23,8 +23,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-#[cfg(feature = "serde")]
-use ::serde_arrays;
 
 
 
@@ -320,7 +318,7 @@ pub struct ContractInterfaceIDPreimage {
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
 pub struct ContractEntrypointID {
-    #[cfg_attr(feature = "serde", serde(with = "serde_arrays::hex"))]
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
     inner: [u8; 8 as usize],
 }
 impl From<[u8; 8 as usize]> for ContractEntrypointID {
