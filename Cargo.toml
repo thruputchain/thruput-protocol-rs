@@ -61,7 +61,6 @@ xdr-derive = { version = "0.10.2", registry = "groundhog" }
 rpc_api = { version = "0.2", registry = "groundhog" }
 rpc_driver = { version = "0.11", registry = "groundhog" }
 schemars = { version = "1" }
-serde_arrays = { package = "groundhog-serde_arrays", version = "0.2.0", registry = "groundhog", default-features = false }
 
 [profile.dev]
 opt-level = 3

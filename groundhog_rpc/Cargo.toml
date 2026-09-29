@@ -21,7 +21,7 @@ default = ["alloc", "std", "xdrs"]
 alloc = ["xdrs/alloc"]
 std = ["alloc"]
 xdrs = []
-serde = ["dep:serde", "dep:serde_arrays", "xdrs/serde"]
+serde = ["dep:serde", "xdrs/serde"]
 
 [dependencies]
 async-trait = "0.1.89"
@@ -34,11 +34,6 @@ optional = true
 version = "1.0.219"
 default-features = false
 features = ["derive"]
-
-[dependencies.serde_arrays]
-optional = true
-workspace = true
-default-features = false
 
 [dependencies.xdrs]
 workspace = true
