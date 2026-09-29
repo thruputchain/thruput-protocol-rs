@@ -2,16 +2,16 @@
 name = "groundhog-xdr"
 version.workspace = true
 rust-version.workspace = true
-edition = "2024"
-authors = ["Groundhog Team"]
-license = "Apache-2.0"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
 publish.workspace = true
 description = "Bindings for groundhog protocol structures"
-repository = "https://github.com/groundhogchain/protocol-rs"
-homepage = "https://github.com/groundhogchain/protocol-rs"
-readme = "../README.md"
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
 keywords = ["xdr", "blockchain", "groundhog"]
-categories = ["blockchain"]
+categories.workspace = true
 include = [
     "**/*.rs",
     "build.rs",
