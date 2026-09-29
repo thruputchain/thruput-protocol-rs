@@ -7,6 +7,7 @@ use groundhog_xdr::auth_token::*;
 use groundhog_xdr::contract::*;
 use groundhog_xdr::event::*;
 use groundhog_xdr::invoke_flag::*;
+use groundhog_xdr::syscall_error::*;
 use groundhog_xdr::transaction::*;
 use groundhog_xdr::types::*;
 use groundhog_xdr::view::*;
