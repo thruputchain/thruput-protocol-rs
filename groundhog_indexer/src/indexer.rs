@@ -54,8 +54,9 @@ impl TxInfoOutcome {
     pub const TxInfoFound: Self = Self(0);
     pub const TxInfoNotFound: Self = Self(1);
 
-    /// No committed record, but the transaction failed nondeterministically
-    /// within the last few blocks and the indexer still holds the diagnostic.
+    /// No committed record, but a proposer excluded the transaction within the
+    /// last few blocks (a two-phase-commit conflict or a refused contract
+    /// attachment) and the indexer still holds the diagnostic.
     /// Best-effort and advisory: reports are dropped freely under load, only
     /// the proposing node's indexers hear them, and a later retry of the same
     /// tx may still commit (at which point TxInfoFound wins). Absence of this
