@@ -80,3 +80,7 @@ pub use rpc_types::*;
 #[rustfmt::skip]
 pub mod db_sched;
 pub use db_sched::*;
+
+#[rustfmt::skip]
+pub mod bristlecone;
+pub use bristlecone::*;
