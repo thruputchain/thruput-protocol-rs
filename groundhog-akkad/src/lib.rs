@@ -54,8 +54,8 @@ pub mod loadgen;
 pub use loadgen::*;
 
 #[rustfmt::skip]
-pub mod multiplex;
-pub use multiplex::*;
+pub mod multiplex2;
+pub use multiplex2::*;
 
 #[rustfmt::skip]
 pub mod proposal;
