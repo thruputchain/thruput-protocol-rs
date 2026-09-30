@@ -64,7 +64,7 @@ akkads=(
   consensus.x
   coord_sched.x
   db_sched.x
-  discovery.x
+  discovery2.x
   dogwood_kit.x
   dogwood.x
   integration.x

@@ -34,8 +34,8 @@ pub mod coord_sched;
 pub use coord_sched::*;
 
 #[rustfmt::skip]
-pub mod discovery;
-pub use discovery::*;
+pub mod discovery2;
+pub use discovery2::*;
 
 #[rustfmt::skip]
 pub mod dogwood_kit;
