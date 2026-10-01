@@ -1129,6 +1129,33 @@ pub struct SyscallClearStorageFlagsTrace {
     pub outputs: Option<SyscallClearStorageFlagsOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressAuthDataInputs (
+);
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressAuthDataOutputs {
+    pub auth_data: AddressAuthData,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressAuthDataTrace {
+    pub inputs: SyscallGetAddressAuthDataInputs,
+    pub outputs: Option<SyscallGetAddressAuthDataOutputs>,
+}
+
 // === Main Trace Body ===
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -1255,6 +1282,9 @@ pub enum SyscallTraceBody {
     // case kClearStorageFlags:
     //   SyscallClearStorageFlagsTrace clear_storage_flags;
     kClearStorageFlags { clear_storage_flags: SyscallClearStorageFlagsTrace } = SyscallNo::kClearStorageFlags.0 as i32,
+    // case kGetAddressAuthData:
+    //   SyscallGetAddressAuthDataTrace get_address_auth_data;
+    kGetAddressAuthData { get_address_auth_data: SyscallGetAddressAuthDataTrace } = SyscallNo::kGetAddressAuthData.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },
