@@ -49,6 +49,7 @@ pub struct TransactionViewQuery {
 pub struct TransactionViewResult {
     // The result of the invocation
     pub output: InvocationFrameOutput,
+    pub gas_consumed: GasAmount,
     pub events: VecM<TxEmittedEvent>,
 }
 
