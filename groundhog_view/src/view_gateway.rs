@@ -30,7 +30,8 @@ use ::serde::{{Serialize, Deserialize}};
 /// Successful view payload returned by ViewGateway1::viewgateway_view.
 ///
 /// The height is the committed snapshot height used for the full view
-/// execution, not a post-execution tip sample.
+/// execution, not a post-execution tip sample. gas_consumed is
+/// TransactionViewResult::gas_consumed for that execution.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -39,6 +40,7 @@ use ::serde::{{Serialize, Deserialize}};
 pub struct ViewGatewayPayload {
     pub height: BlockHeight,
     pub output: InvocationFrameOutput,
+    pub gas_consumed: GasAmount,
     pub events: VecM<TxEmittedEvent>,
 }
 

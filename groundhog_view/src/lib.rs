@@ -109,6 +109,7 @@ mod tests {
             payload: ViewGatewayPayload {
                 height: BlockHeight::from(42),
                 output,
+                gas_consumed: 77,
                 events: VecM(vec![]),
             },
         }
