@@ -82,6 +82,12 @@ impl DbConflictCode {
     /// charged to that contract's balance, so a deployment reports this at
     /// the new contract's address when it holds no HOG.
     pub const InsufficientFunds: Self = Self(8);
+
+    /// An auth-data change would register a public key in a slot while
+    /// another slot of the same address already holds that key, whether
+    /// committed or set by the same change. The table would count one
+    /// key's weight twice, so the change is refused.
+    pub const DuplicateSigner: Self = Self(9);
 }
 impl From<i32> for DbConflictCode {
     fn from(v: i32) -> Self {
@@ -118,6 +124,9 @@ impl core::fmt::Display for DbConflictCode {
             },
             x if x == Self::InsufficientFunds.0 => {
                 write!(f, "DbConflictCode::InsufficientFunds")
+            },
+            x if x == Self::DuplicateSigner.0 => {
+                write!(f, "DbConflictCode::DuplicateSigner")
             },
             _ => {
                 write!(f, "DbConflictCode({})", self.0)
