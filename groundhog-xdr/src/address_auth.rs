@@ -173,6 +173,88 @@ pub struct AddressAuthData {
     pub last_written_height: BlockHeight,
 }
 
+//------------------------------------------------------------------------------
+// Address Authorization Summary
+//------------------------------------------------------------------------------
+
+/// What `GetAddressAuthSummary` reports about one occupied key slot: the
+/// key's scheme and weight, without the key itself.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct PublicKeyConfigSummary {
+    /// The scheme of the registered key. The key's bytes are read through
+    /// `GetAddressPublicKey`.
+    pub scheme: CryptographicScheme,
+    /// The weight of this key in multi-signature calculations, as in
+    /// `PublicKeyConfig`.
+    pub max_weight: Weight,
+}
+
+/// Optional `PublicKeyConfigSummary`, used in the `public_keys` array.
+///
+/// A null value indicates that key slot is unoccupied.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct PublicKeyConfigSummaryOpt {
+    inner: Option<PublicKeyConfigSummary>,
+}
+impl From<Option<PublicKeyConfigSummary>> for PublicKeyConfigSummaryOpt {
+    fn from(_inner: Option<PublicKeyConfigSummary>) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl PublicKeyConfigSummaryOpt {
+    pub fn into_inner(self) -> Option<PublicKeyConfigSummary> {
+        self.inner
+    }
+    pub const fn new(_inner: Option<PublicKeyConfigSummary>) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for PublicKeyConfigSummaryOpt {
+    type Target = Option<PublicKeyConfigSummary>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for PublicKeyConfigSummaryOpt {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+/// `AddressAuthData` without the keys: what a contract reads back through
+/// `GetAddressAuthSummary`.
+///
+/// Its encoding is bounded (264 bytes) whatever key schemes are in use,
+/// where a full `AddressAuthData` grows with the largest scheme's key size.
+/// The keys themselves are read one slot at a time through
+/// `GetAddressPublicKey`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct AddressAuthSummary {
+    /// One entry per `AddressAuthData.public_keys` slot, null where that slot
+    /// is unoccupied.
+    pub public_keys: [PublicKeyConfigSummaryOpt; kMaxSigners as usize],
+    /// `AddressAuthData.required_weight`.
+    pub required_weight: Weight,
+    /// `AddressAuthData.last_written_height`.
+    pub last_written_height: BlockHeight,
+}
+
 
 //
 // XDR internals below this point

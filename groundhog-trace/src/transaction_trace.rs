@@ -1134,7 +1134,7 @@ pub struct SyscallClearStorageFlagsTrace {
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallGetAddressAuthDataInputs (
+pub struct SyscallGetAddressAuthSummaryInputs (
 );
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1142,8 +1142,8 @@ pub struct SyscallGetAddressAuthDataInputs (
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallGetAddressAuthDataOutputs {
-    pub auth_data: AddressAuthData,
+pub struct SyscallGetAddressAuthSummaryOutputs {
+    pub summary: AddressAuthSummary,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1151,9 +1151,37 @@ pub struct SyscallGetAddressAuthDataOutputs {
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct SyscallGetAddressAuthDataTrace {
-    pub inputs: SyscallGetAddressAuthDataInputs,
-    pub outputs: Option<SyscallGetAddressAuthDataOutputs>,
+pub struct SyscallGetAddressAuthSummaryTrace {
+    pub inputs: SyscallGetAddressAuthSummaryInputs,
+    pub outputs: Option<SyscallGetAddressAuthSummaryOutputs>,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressPublicKeyInputs {
+    pub key_index: u32,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressPublicKeyOutputs {
+    pub key: PublicKey,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallGetAddressPublicKeyTrace {
+    pub inputs: SyscallGetAddressPublicKeyInputs,
+    pub outputs: Option<SyscallGetAddressPublicKeyOutputs>,
 }
 
 // === Main Trace Body ===
@@ -1282,9 +1310,12 @@ pub enum SyscallTraceBody {
     // case kClearStorageFlags:
     //   SyscallClearStorageFlagsTrace clear_storage_flags;
     kClearStorageFlags { clear_storage_flags: SyscallClearStorageFlagsTrace } = SyscallNo::kClearStorageFlags.0 as i32,
-    // case kGetAddressAuthData:
-    //   SyscallGetAddressAuthDataTrace get_address_auth_data;
-    kGetAddressAuthData { get_address_auth_data: SyscallGetAddressAuthDataTrace } = SyscallNo::kGetAddressAuthData.0 as i32,
+    // case kGetAddressAuthSummary:
+    //   SyscallGetAddressAuthSummaryTrace get_address_auth_summary;
+    kGetAddressAuthSummary { get_address_auth_summary: SyscallGetAddressAuthSummaryTrace } = SyscallNo::kGetAddressAuthSummary.0 as i32,
+    // case kGetAddressPublicKey:
+    //   SyscallGetAddressPublicKeyTrace get_address_public_key;
+    kGetAddressPublicKey { get_address_public_key: SyscallGetAddressPublicKeyTrace } = SyscallNo::kGetAddressPublicKey.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { syscall_number: i32 },
