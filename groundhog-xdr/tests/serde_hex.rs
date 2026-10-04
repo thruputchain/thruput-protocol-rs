@@ -79,6 +79,15 @@ where
         serde_json::from_str::<T>(&format!("\"{invalid}\"")).is_err(),
         "non-hex digits unexpectedly accepted"
     );
+    // Right byte length, but the three-byte '€' straddles the first digit
+    // pair: a decoder that slices the str rather than its bytes would panic.
+    let mut multibyte = expected.clone();
+    multibyte.replace_range(0..3, "€");
+    assert_eq!(multibyte.len(), expected.len(), "same byte length");
+    assert!(
+        serde_json::from_str::<T>(&format!("\"{multibyte}\"")).is_err(),
+        "multi-byte UTF-8 unexpectedly accepted"
+    );
     let array = serde_json::to_string(bytes).expect("serialize array");
     assert!(
         serde_json::from_str::<T>(&array).is_err(),
