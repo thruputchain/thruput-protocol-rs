@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -101,9 +101,9 @@ impl schemars::JsonSchema for ValidatorID {
 
 
 
-pub type ValidatorPublicKey = Ed25519PublicKey;
+pub type ValidatorPublicKey = PublicKey;
 
-pub type ValidatorSecretKey = Ed25519SecretKey;
+pub type ValidatorSecretKey = SecretKey;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]

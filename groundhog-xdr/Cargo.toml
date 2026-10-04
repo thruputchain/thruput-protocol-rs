@@ -2,16 +2,16 @@
 name = "groundhog-xdr"
 version.workspace = true
 rust-version.workspace = true
-edition = "2024"
-authors = ["Groundhog Team"]
-license = "Apache-2.0"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
 publish.workspace = true
 description = "Bindings for groundhog protocol structures"
-repository = "https://github.com/groundhogchain/protocol-rs"
-homepage = "https://github.com/groundhogchain/protocol-rs"
-readme = "../README.md"
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
 keywords = ["xdr", "blockchain", "groundhog"]
-categories = ["blockchain"]
+categories.workspace = true
 include = [
     "**/*.rs",
     "build.rs",
@@ -29,6 +29,7 @@ default = []
 alloc = ["serde?/alloc", "xdrs/alloc"]
 std = ["alloc", "dep:thiserror"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
+# Fixed-size byte arrays serialize as hex strings through `xdr_common::serde_hex`.
 serde = ["dep:serde", "xdrs/serde"]
 # `xdrs` deliberately does not imply `alloc`: rv32 contract builds use
 # `xdrs` without an allocator for encoding and fixed-size decoding.
@@ -50,7 +51,6 @@ optional = true
 version = "1.0.219"
 default-features = false
 features = ["derive"]
-
 
 [dependencies.groundhog-syscall]
 workspace = true
@@ -75,6 +75,9 @@ workspace = true
 workspace = true
 features = ["alloc"]
 
+[dev-dependencies.serde_json]
+version = "1"
+
 [[test]]
 name = "syscall_no_display"
 required-features = ["std"]
@@ -83,5 +86,6 @@ required-features = ["std"]
 name = "roundtrip"
 required-features = ["std", "xdrs"]
 
-[dev-dependencies.serde_json]
-version = "1.0"
+[[test]]
+name = "serde_hex"
+required-features = ["std", "serde"]

@@ -1,7 +1,11 @@
 # protocol-rs
 
-Protocol bindings for Rust, generated via `x23c` from the XDR files in
-`protocol/`.
+Rust bindings generated from the Groundhog protocol XDR definitions in
+`protocol/` (a submodule of [groundhogchain/protocol]). The sources under each
+crate's `src/` are emitted by hogd's `x23c` compiler and are not edited by
+hand.
+
+[groundhogchain/protocol]: https://github.com/groundhogchain/protocol
 
 ## Generation prerequisites
 

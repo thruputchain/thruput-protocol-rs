@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -82,6 +82,12 @@ impl DbConflictCode {
     /// charged to that contract's balance, so a deployment reports this at
     /// the new contract's address when it holds no HOG.
     pub const InsufficientFunds: Self = Self(8);
+
+    /// An auth-data change would register a public key in a slot while
+    /// another slot of the same address already holds that key, whether
+    /// committed or set by the same change. The table would count one
+    /// key's weight twice, so the change is refused.
+    pub const DuplicateSigner: Self = Self(9);
 }
 impl From<i32> for DbConflictCode {
     fn from(v: i32) -> Self {
@@ -118,6 +124,9 @@ impl core::fmt::Display for DbConflictCode {
             },
             x if x == Self::InsufficientFunds.0 => {
                 write!(f, "DbConflictCode::InsufficientFunds")
+            },
+            x if x == Self::DuplicateSigner.0 => {
+                write!(f, "DbConflictCode::DuplicateSigner")
             },
             _ => {
                 write!(f, "DbConflictCode({})", self.0)
@@ -213,9 +222,197 @@ pub enum DbConflictResult {
     
 }
 
-/// Best-effort diagnostic for a transaction that failed nondeterministically
-/// during two-phase commit at proposal time: the executing block height of
-/// the failed attempt plus the first conflicting storage op hog_db reported.
+/// Reason the executor refused a transaction's contract attachments
+/// (Transaction.contracts_to_deploy) at proposal time. Any of them drops the
+/// transaction from the proposal; none is a contract fault. The RV32 codes
+/// name which check of the artifact failed, so an author can tell a
+/// toolchain/node mismatch from an oversized or corrupt build.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct ContractRejectCode(pub i32);
+
+impl ContractRejectCode {
+    /// The transaction attaches more contracts than the chain's
+    /// max_new_contracts_per_tx permits.
+    pub const ContractRejectTooMany: Self = Self(0);
+
+    /// The contract blob exceeds the chain's max_contract_size_bytes.
+    pub const ContractRejectBlobTooLarge: Self = Self(1);
+
+    /// The attachment is not an RV32 contract. Native contracts are registered
+    /// at genesis; RV32 is the only deployable type.
+    pub const ContractRejectNotDeployable: Self = Self(2);
+
+    /// The same contract is attached more than once.
+    pub const ContractRejectDuplicate: Self = Self(3);
+
+    /// The blob is not a readable RV32 artifact: too short, wrong magic, wrong
+    /// header size, or its length disagrees with the section sizes the header
+    /// declares.
+    pub const ContractRejectMalformedArtifact: Self = Self(4);
+
+    /// The artifact's format version is not the one this node reads.
+    pub const ContractRejectUnsupportedFormat: Self = Self(5);
+
+    /// The artifact's VM profile, flags, entry ABI, or syscall ABI is not one
+    /// this node runs.
+    pub const ContractRejectUnsupportedAbi: Self = Self(6);
+
+    /// The gas schedule (version, digest) stamped into the artifact is not one
+    /// the node accepts: the artifact was lowered by a toolchain whose gas
+    /// schedule differs from the node's.
+    pub const ContractRejectGasScheduleMismatch: Self = Self(7);
+
+    /// The declared guest memory exceeds the chain's max_rv32_memory_bytes.
+    pub const ContractRejectMemoryTooLarge: Self = Self(8);
+
+    /// The code section is empty or exceeds the chain's max_rv32_code_bytes.
+    pub const ContractRejectCodeSizeInvalid: Self = Self(9);
+
+    /// The initial memory image does not fit in the declared guest memory, or
+    /// an empty image declares a nonzero load address.
+    pub const ContractRejectInitialMemoryInvalid: Self = Self(10);
+
+    /// A section's bytes do not match the SHA-256 digest the header records.
+    pub const ContractRejectDigestMismatch: Self = Self(11);
+
+    /// The code does not translate: it contains an unsupported or malformed
+    /// instruction.
+    pub const ContractRejectInvalidProgram: Self = Self(12);
+}
+impl From<i32> for ContractRejectCode {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for ContractRejectCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::ContractRejectTooMany.0 => {
+                write!(f, "ContractRejectCode::ContractRejectTooMany")
+            },
+            x if x == Self::ContractRejectBlobTooLarge.0 => {
+                write!(f, "ContractRejectCode::ContractRejectBlobTooLarge")
+            },
+            x if x == Self::ContractRejectNotDeployable.0 => {
+                write!(f, "ContractRejectCode::ContractRejectNotDeployable")
+            },
+            x if x == Self::ContractRejectDuplicate.0 => {
+                write!(f, "ContractRejectCode::ContractRejectDuplicate")
+            },
+            x if x == Self::ContractRejectMalformedArtifact.0 => {
+                write!(f, "ContractRejectCode::ContractRejectMalformedArtifact")
+            },
+            x if x == Self::ContractRejectUnsupportedFormat.0 => {
+                write!(f, "ContractRejectCode::ContractRejectUnsupportedFormat")
+            },
+            x if x == Self::ContractRejectUnsupportedAbi.0 => {
+                write!(f, "ContractRejectCode::ContractRejectUnsupportedAbi")
+            },
+            x if x == Self::ContractRejectGasScheduleMismatch.0 => {
+                write!(f, "ContractRejectCode::ContractRejectGasScheduleMismatch")
+            },
+            x if x == Self::ContractRejectMemoryTooLarge.0 => {
+                write!(f, "ContractRejectCode::ContractRejectMemoryTooLarge")
+            },
+            x if x == Self::ContractRejectCodeSizeInvalid.0 => {
+                write!(f, "ContractRejectCode::ContractRejectCodeSizeInvalid")
+            },
+            x if x == Self::ContractRejectInitialMemoryInvalid.0 => {
+                write!(f, "ContractRejectCode::ContractRejectInitialMemoryInvalid")
+            },
+            x if x == Self::ContractRejectDigestMismatch.0 => {
+                write!(f, "ContractRejectCode::ContractRejectDigestMismatch")
+            },
+            x if x == Self::ContractRejectInvalidProgram.0 => {
+                write!(f, "ContractRejectCode::ContractRejectInvalidProgram")
+            },
+            _ => {
+                write!(f, "ContractRejectCode({})", self.0)
+            }
+        }
+    }
+}
+
+
+/// The first contract attachment the executor refused.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractRejectDiagnostic {
+    /// Position in Transaction.contracts_to_deploy of the refused contract.
+    /// For ContractRejectTooMany, the first position past the limit.
+    pub contract_index: u32,
+    pub code: ContractRejectCode,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct TxFailureKind(pub i32);
+
+impl TxFailureKind {
+    /// Two-phase commit could not apply the transaction's storage deltas.
+    pub const TxFailureDbConflict: Self = Self(0);
+
+    /// The executor refused a contract attachment before execution.
+    pub const TxFailureContractRejected: Self = Self(1);
+}
+impl From<i32> for TxFailureKind {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for TxFailureKind {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::TxFailureDbConflict.0 => {
+                write!(f, "TxFailureKind::TxFailureDbConflict")
+            },
+            x if x == Self::TxFailureContractRejected.0 => {
+                write!(f, "TxFailureKind::TxFailureContractRejected")
+            },
+            _ => {
+                write!(f, "TxFailureKind({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum TxFailureCause {
+    // case TxFailureDbConflict:
+    //   DbConflictDiagnostic conflict;
+    TxFailureDbConflict { conflict: DbConflictDiagnostic } = TxFailureKind::TxFailureDbConflict.0 as i32,
+    // case TxFailureContractRejected:
+    //   ContractRejectDiagnostic contract;
+    TxFailureContractRejected { contract: ContractRejectDiagnostic } = TxFailureKind::TxFailureContractRejected.0 as i32,
+    
+}
+
+/// Best-effort diagnostic for a transaction the proposer excluded from a
+/// proposal: the executing block height of the failed attempt plus why it
+/// failed -- the first conflicting storage op hog_db reported during
+/// two-phase commit, or the first contract attachment the executor refused.
 /// Fixed-size by construction; the wire and caches carry exactly one
 /// diagnostic per failure to bound memory end to end.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -225,7 +422,7 @@ pub enum DbConflictResult {
 #[repr(C)]
 pub struct TxFailureDiagnostic {
     pub attempt_height: BlockHeight,
-    pub conflict: DbConflictDiagnostic,
+    pub cause: TxFailureCause,
 }
 
 
@@ -235,6 +432,15 @@ pub struct TxFailureDiagnostic {
 
 impl DbConflictResult {
     pub fn level(&self) -> DbDiagnosticLevel {
+        match self {
+            
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl TxFailureCause {
+    pub fn kind(&self) -> TxFailureKind {
         match self {
             
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),

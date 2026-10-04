@@ -34,7 +34,6 @@ version = "1.0.219"
 default-features = false
 features = ["derive"]
 
-
 [dependencies.groundhog-xdr]
 workspace = true
 features = ["xdrs", "alloc", "schema"]

@@ -3,15 +3,15 @@
 //! src/dogwood.rs).
 
 use groundhog_akkad::{
-    BlockExecutionMode, BlockHeight, BlockID, Catchup_Catchup1,
-    Catchup_Catchup1_Client, ConsensusValue, ContractAddressBatch, CoordCard,
-    CoordScheduler_CoordScheduler1, CoordScheduler_CoordScheduler1_Client,
-    CoordinatorRegistrationOutcome, DbAddressAuthDataBatchResult,
-    DbBlockResult, DbSched_DbSched1, DbSched_DbSched1_Client, DbSchedResult,
-    DbTipResult, Discovery_Discovery1, Discovery_Discovery1_Client,
-    Dogwood_Dogwood1, Dogwood_Dogwood1_Client, DogwoodDeliveryEnvelope,
-    ExperimentConfig, GenesisCeremonyRequest, GenesisCeremonyResult,
-    GenesisConfiguration, HogAgeBatch, HogAgeResults, KnownQuorumSets,
+    BlockExecutionMode, BlockHeight, BlockID, BristleconeKnownQuorumSets,
+    Catchup_Catchup1, Catchup_Catchup1_Client, ConsensusValue,
+    ContractAddressBatch, CoordCard, CoordScheduler_CoordScheduler1,
+    CoordScheduler_CoordScheduler1_Client, CoordinatorRegistrationOutcome,
+    DbAddressAuthDataBatchResult, DbBlockResult, DbSched_DbSched1,
+    DbSched_DbSched1_Client, DbSchedResult, DbTipResult, Discovery_Discovery2,
+    Discovery_Discovery2_Client, Dogwood_Dogwood1, Dogwood_Dogwood1_Client,
+    DogwoodDeliveryEnvelope, ExperimentConfig, GenesisCeremonyRequest,
+    GenesisCeremonyResult, GenesisConfiguration, HogAgeBatch, HogAgeResults,
     LoadgenContextID, LoadgenExtensionResult,
     LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
@@ -59,27 +59,27 @@ pub mod coord_scheduler {
 
 pub mod discovery {
     use super::*;
-    type S = Discovery_Discovery1_Client;
+    type S = Discovery_Discovery2_Client;
 
     pub async fn client_discovery_null(c: &S) -> Result<(), RpcError> {
         c.discovery_null().await
     }
     pub async fn client_discovery_update_quorums(
         c: &S,
-        arg0: &KnownQuorumSets,
-    ) -> Result<KnownQuorumSets, RpcError> {
+        arg0: &BristleconeKnownQuorumSets,
+    ) -> Result<BristleconeKnownQuorumSets, RpcError> {
         c.discovery_update_quorums(arg0).await
     }
 
-    pub async fn trait_discovery_null<T: Discovery_Discovery1>(
+    pub async fn trait_discovery_null<T: Discovery_Discovery2>(
         t: &T,
     ) -> Result<(), ProgramError> {
         t.discovery_null().await
     }
-    pub async fn trait_discovery_update_quorums<T: Discovery_Discovery1>(
+    pub async fn trait_discovery_update_quorums<T: Discovery_Discovery2>(
         t: &T,
-        arg0: KnownQuorumSets,
-    ) -> Result<KnownQuorumSets, ProgramError> {
+        arg0: BristleconeKnownQuorumSets,
+    ) -> Result<BristleconeKnownQuorumSets, ProgramError> {
         t.discovery_update_quorums(arg0).await
     }
 }

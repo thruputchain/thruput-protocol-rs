@@ -34,8 +34,8 @@ pub mod coord_sched;
 pub use coord_sched::*;
 
 #[rustfmt::skip]
-pub mod discovery;
-pub use discovery::*;
+pub mod discovery2;
+pub use discovery2::*;
 
 #[rustfmt::skip]
 pub mod dogwood_kit;
@@ -54,8 +54,8 @@ pub mod loadgen;
 pub use loadgen::*;
 
 #[rustfmt::skip]
-pub mod multiplex;
-pub use multiplex::*;
+pub mod multiplex2;
+pub use multiplex2::*;
 
 #[rustfmt::skip]
 pub mod proposal;
@@ -80,3 +80,7 @@ pub use rpc_types::*;
 #[rustfmt::skip]
 pub mod db_sched;
 pub use db_sched::*;
+
+#[rustfmt::skip]
+pub mod bristlecone;
+pub use bristlecone::*;

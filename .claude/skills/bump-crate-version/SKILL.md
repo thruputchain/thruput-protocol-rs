@@ -47,7 +47,7 @@ groundhog-xdr = { path = "groundhog-xdr", version = "=X.Y.Z", ... }
 
 **Internal deps** (bump these): `groundhog-xdr`, `groundhog-xdr-macros`, `groundhog-trace`, `groundhog_scp`, `groundhog_coordinator`, `groundhog_hogx`, `groundhog_rpc`, `groundhog_scheduler`, `hogexec-internal`, `macros`
 
-**External deps** (DO NOT bump): `xdrs`, `rpc_driver`, `xdr-common`, `xdr-repr`, `xdr-derive`, `serde_with`, `serde_arrays`
+**External deps** (DO NOT bump): `xdrs`, `rpc_driver`, `xdr-common`, `xdr-repr`, `xdr-derive`, `serde_with`
 
 ## 3. Verify
 

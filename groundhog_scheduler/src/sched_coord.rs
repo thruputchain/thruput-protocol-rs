@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -409,6 +409,198 @@ pub struct GenesisCeremonyCommit {
     pub proposal_txs: ProposalTxs,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct SchedulerTransactionStatus(pub i32);
+
+impl SchedulerTransactionStatus {
+    // The transaction is not pending and has no retained outcome. Note that the
+    // tx *may* have existed at some point in the past, but has since been dropped
+    // altogether from the mempool since the bounded queue filled. This not-found
+    // status does not necessarily mean the tx has never existed at all.
+    pub const SchedulerTransactionNotFound: Self = Self(0);
+
+    // The transaction is currently pending in the mempool.
+    pub const SchedulerTransactionPending: Self = Self(1);
+
+    // The transaction was successfully committed in a block. This status does
+    // *not* mean that the tx was successfully included in a proposed block or a
+    // verified block--the block needs to go on to actually be committed.
+    pub const SchedulerTransactionSucceeded: Self = Self(2);
+
+    // Processing failed for a retryable reason; the transaction may be
+    // resubmitted. Note that it is the responsibility of the wallet owner to
+    // resubmit the tx--the mempool will not retry the tx on its own.
+    pub const SchedulerTransactionRetry: Self = Self(3);
+
+    // Processing failed permanently; the transaction should not be resubmitted
+    // because the error is irrecoverable (e.g., failed authentication). The tx
+    // needs to be modified in some way before it can be successfully processed.
+    pub const SchedulerTransactionDropped: Self = Self(4);
+}
+impl From<i32> for SchedulerTransactionStatus {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerTransactionStatus {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerTransactionNotFound.0 => {
+                write!(f, "SchedulerTransactionStatus::SchedulerTransactionNotFound")
+            },
+            x if x == Self::SchedulerTransactionPending.0 => {
+                write!(f, "SchedulerTransactionStatus::SchedulerTransactionPending")
+            },
+            x if x == Self::SchedulerTransactionSucceeded.0 => {
+                write!(f, "SchedulerTransactionStatus::SchedulerTransactionSucceeded")
+            },
+            x if x == Self::SchedulerTransactionRetry.0 => {
+                write!(f, "SchedulerTransactionStatus::SchedulerTransactionRetry")
+            },
+            x if x == Self::SchedulerTransactionDropped.0 => {
+                write!(f, "SchedulerTransactionStatus::SchedulerTransactionDropped")
+            },
+            _ => {
+                write!(f, "SchedulerTransactionStatus({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct SchedulerTransactionErrorSource(pub i32);
+
+impl SchedulerTransactionErrorSource {
+    // There is no error to report.
+    pub const SchedulerTransactionErrorNone: Self = Self(0);
+
+    // The error was triggered by the authentication subsystem (hog-auth).
+    pub const SchedulerTransactionErrorAuth: Self = Self(1);
+
+    // The error was triggered by the mempool (hog-mempool).
+    pub const SchedulerTransactionErrorScheduler: Self = Self(2);
+
+    // The error was triggered by an executor (hog-exec).
+    pub const SchedulerTransactionErrorExecutor: Self = Self(3);
+}
+impl From<i32> for SchedulerTransactionErrorSource {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerTransactionErrorSource {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerTransactionErrorNone.0 => {
+                write!(f, "SchedulerTransactionErrorSource::SchedulerTransactionErrorNone")
+            },
+            x if x == Self::SchedulerTransactionErrorAuth.0 => {
+                write!(f, "SchedulerTransactionErrorSource::SchedulerTransactionErrorAuth")
+            },
+            x if x == Self::SchedulerTransactionErrorScheduler.0 => {
+                write!(f, "SchedulerTransactionErrorSource::SchedulerTransactionErrorScheduler")
+            },
+            x if x == Self::SchedulerTransactionErrorExecutor.0 => {
+                write!(f, "SchedulerTransactionErrorSource::SchedulerTransactionErrorExecutor")
+            },
+            _ => {
+                write!(f, "SchedulerTransactionErrorSource({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct SchedulerErrorCode(pub i32);
+
+impl SchedulerErrorCode {
+    // The mempool had no capacity to admit the transaction.
+    pub const SchedulerErrorCapacity: Self = Self(1);
+
+    // The scheduler could not obtain the account's average hog age.
+    pub const SchedulerErrorHogAgeUnavailable: Self = Self(2);
+
+    // The transaction's expiry block height is earlier than the current block.
+    pub const SchedulerErrorExpired: Self = Self(3);
+
+    // The transaction's gas limit exceeds all hogs available to the account.
+    pub const SchedulerErrorInsufficientHogs: Self = Self(4);
+}
+impl From<i32> for SchedulerErrorCode {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for SchedulerErrorCode {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::SchedulerErrorCapacity.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorCapacity")
+            },
+            x if x == Self::SchedulerErrorHogAgeUnavailable.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorHogAgeUnavailable")
+            },
+            x if x == Self::SchedulerErrorExpired.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorExpired")
+            },
+            x if x == Self::SchedulerErrorInsufficientHogs.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorInsufficientHogs")
+            },
+            _ => {
+                write!(f, "SchedulerErrorCode({})", self.0)
+            }
+        }
+    }
+}
+
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SchedulerTransactionOutcome {
+    // The tx status. If the status is an error, then [error_source] and
+    // [error_code] are filled in below. If the status is not an error, then
+    // [error_source] and [error_code] have unspecified values.
+    pub status: SchedulerTransactionStatus,
+    // Identifies the enum represented by [error_code] below.
+    //
+    // - None ([SchedulerTransactionErrorNone]): there was no error and
+    //   [error_code] has an unspecified value.
+    //
+    // - Auth, Scheduler, and Executor: [error_code] is an [AuthErrorCode],
+    //   [SchedulerErrorCode], or [ExecResult], respectively.
+    pub error_source: SchedulerTransactionErrorSource,
+    // The actual error.
+    pub error_code: i32,
+}
+
+pub type SchedulerTransactionOutcomeBatch = VecM::<SchedulerTransactionOutcome>;
+
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -466,6 +658,9 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
         // Returns transactions from the mempool that have not yet been committed in a block.
 
     async fn schedcoord_lookup_transactions(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
+        // Returns one pending or recent outcome per input hash (same order).
+
+    async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
 }
 
 
@@ -564,6 +759,13 @@ impl ::rpc_api::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispatcher {
                 let res = self.inner.schedcoord_lookup_transactions(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
+            // schedcoord_lookup_transaction_outcomes
+            101 => {
+                let args: (TransactionHashBatch, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedcoord_lookup_transaction_outcomes(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+            }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
         }
     }
@@ -646,6 +848,12 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let mut call = self.handle.call_buf();
          call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+    }
+    pub async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : &TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
+         let mut call = self.handle.call_buf();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 101, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

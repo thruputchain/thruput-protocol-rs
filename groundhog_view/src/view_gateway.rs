@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -30,7 +30,8 @@ use ::serde::{{Serialize, Deserialize}};
 /// Successful view payload returned by ViewGateway1::viewgateway_view.
 ///
 /// The height is the committed snapshot height used for the full view
-/// execution, not a post-execution tip sample.
+/// execution, not a post-execution tip sample. gas_consumed is
+/// TransactionViewResult::gas_consumed for that execution.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -39,6 +40,7 @@ use ::serde::{{Serialize, Deserialize}};
 pub struct ViewGatewayPayload {
     pub height: BlockHeight,
     pub output: InvocationFrameOutput,
+    pub gas_consumed: GasAmount,
     pub events: VecM<TxEmittedEvent>,
 }
 
@@ -60,6 +62,14 @@ impl ViewGatewayOutcome {
 
     // Server-side invariant failure or unavailable execution dependency.
     pub const ViewGatewayInternalError: Self = Self(2);
+
+    // The request was rejected before any frame output existed: forwarded
+    // tokens without a parent address or deeper than the network allows, an
+    // invocation the executor would not admit, or a root frame that failed on a
+    // syscall error before it returned, aborted, or faulted. Deterministic for
+    // the same request against the same state, so retrying does not help. The
+    // error_code arm carries the SyscallErrorCode the executor reported.
+    pub const ViewGatewayInvalidInput: Self = Self(3);
 }
 impl From<i32> for ViewGatewayOutcome {
     fn from(v: i32) -> Self {
@@ -78,6 +88,9 @@ impl core::fmt::Display for ViewGatewayOutcome {
             },
             x if x == Self::ViewGatewayInternalError.0 => {
                 write!(f, "ViewGatewayOutcome::ViewGatewayInternalError")
+            },
+            x if x == Self::ViewGatewayInvalidInput.0 => {
+                write!(f, "ViewGatewayOutcome::ViewGatewayInvalidInput")
             },
             _ => {
                 write!(f, "ViewGatewayOutcome({})", self.0)
@@ -103,6 +116,9 @@ pub enum ViewGatewayResult {
     // case ViewGatewayInternalError:
     //   void;
     ViewGatewayInternalError = ViewGatewayOutcome::ViewGatewayInternalError.0 as i32,
+    // case ViewGatewayInvalidInput:
+    //   SyscallErrorCode error_code;
+    ViewGatewayInvalidInput { error_code: SyscallErrorCode } = ViewGatewayOutcome::ViewGatewayInvalidInput.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { outcome: i32 },

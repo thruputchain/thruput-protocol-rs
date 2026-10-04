@@ -55,15 +55,16 @@ coordinators=(
   dogwood.x
 )
 
-# dependencies for the wip rust coordinator
+# dependencies for the rust coordinator
 akkads=(
   batch.x
+  bristlecone.x
   catchup.x
   config.x
   consensus.x
   coord_sched.x
   db_sched.x
-  discovery.x
+  discovery2.x
   dogwood_kit.x
   dogwood.x
   integration.x

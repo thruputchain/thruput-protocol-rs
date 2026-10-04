@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: e671a3694d7312d78364456bb86ee8a18de1502d
+// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -49,6 +49,7 @@ pub struct TransactionViewQuery {
 pub struct TransactionViewResult {
     // The result of the invocation
     pub output: InvocationFrameOutput,
+    pub gas_consumed: GasAmount,
     pub events: VecM<TxEmittedEvent>,
 }
 

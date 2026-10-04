@@ -50,7 +50,7 @@ kargo build "${g[@]}" --target=riscv32im-unknown-none-elf --features=alloc
 
 kargo test --features=std
 kargo test "${g[@]}" --features=std,xdrs
-kargo test "${g[@]}" --features=std,xdrs,serde --test serde_hex
+kargo test "${g[@]}" --features=std,serde
 
 # Other workspace crates
 kargo build -p groundhog_rpc
