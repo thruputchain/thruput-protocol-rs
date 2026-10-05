@@ -35,6 +35,10 @@ pub mod db_sched;
 pub use db_sched::*;
 
 #[rustfmt::skip]
+pub mod sched_db;
+pub use sched_db::*;
+
+#[rustfmt::skip]
 pub mod sched_event;
 pub use sched_event::*;
 

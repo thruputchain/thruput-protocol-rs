@@ -217,6 +217,7 @@ scheduler_deps=(
   parallel.x
   proposal.x
   db_sched.x
+  sched_db.x
   sched_event.x
   event_rpc.x
   exec_sched.x
