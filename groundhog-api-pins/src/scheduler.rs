@@ -21,7 +21,7 @@ use groundhog_scheduler::{
     ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
     ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
     GenesisCeremonyRequest, GenesisCeremonyResult, HogAgeBatch, HogAgeResults,
-    HogsTransferred, IntroAuthResult, KeyChangeBatch, LoadgenContextID,
+    HogsTransferredChunk, IntroAuthResult, KeyChangeBatch, LoadgenContextID,
     LoadgenExtensionResult, LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
     MempoolAuth_MempoolAuth1, MempoolAuth_MempoolAuth1_Client,
@@ -776,11 +776,11 @@ pub mod sched_db {
     ) -> Result<(), RpcError> {
         c.scheddb_intro_shard(arg0).await
     }
-    pub async fn client_scheddb_hogs_transferred(
+    pub async fn client_scheddb_hogs_transferred_chunk(
         c: &S,
-        arg0: &HogsTransferred,
+        arg0: &HogsTransferredChunk,
     ) -> Result<(), RpcError> {
-        c.scheddb_hogs_transferred(arg0).await
+        c.scheddb_hogs_transferred_chunk(arg0).await
     }
 
     pub async fn trait_scheddb_intro_shard<T: SchedDb_SchedDb1>(
@@ -789,11 +789,11 @@ pub mod sched_db {
     ) -> Result<(), ProgramError> {
         t.scheddb_intro_shard(arg0).await
     }
-    pub async fn trait_scheddb_hogs_transferred<T: SchedDb_SchedDb1>(
+    pub async fn trait_scheddb_hogs_transferred_chunk<T: SchedDb_SchedDb1>(
         t: &T,
-        arg0: HogsTransferred,
+        arg0: HogsTransferredChunk,
     ) -> Result<(), ProgramError> {
-        t.scheddb_hogs_transferred(arg0).await
+        t.scheddb_hogs_transferred_chunk(arg0).await
     }
 }
 
