@@ -58,6 +58,16 @@ jobs:
         with:
           submodules: recursive
           persist-credentials: false
+      - name: Install rustup if needed
+        run: |
+          if ! command -v rustup >/dev/null 2>&1; then
+            CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+            curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused \
+              --location --silent --show-error --fail https://sh.rustup.rs \
+              | sh -s -- --default-toolchain none --profile minimal -y
+            echo "CARGO_HOME=$CARGO_HOME" >> "$GITHUB_ENV"
+            echo "$CARGO_HOME/bin" >> "$GITHUB_PATH"
+          fi
       - name: Set up Rust 1.96
         run: |
           rustup toolchain install 1.96.0 --profile minimal --component clippy,rustfmt --target riscv32im-unknown-none-elf --no-self-update
@@ -109,6 +119,16 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           persist-credentials: false
+      - name: Install rustup if needed
+        run: |
+          if ! command -v rustup >/dev/null 2>&1; then
+            CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+            curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused \
+              --location --silent --show-error --fail https://sh.rustup.rs \
+              | sh -s -- --default-toolchain none --profile minimal -y
+            echo "CARGO_HOME=$CARGO_HOME" >> "$GITHUB_ENV"
+            echo "$CARGO_HOME/bin" >> "$GITHUB_PATH"
+          fi
       - name: Set up current stable Rust
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
