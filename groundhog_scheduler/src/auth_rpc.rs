@@ -181,12 +181,47 @@ pub struct KeyChange {
 
 pub type KeyChangeBatch = VecM::<KeyChange>;
 
+// A committed block's auth-data changes reach the auth server as a run of
+// chunks, each a KeyChangeChunk, because the one-record form grew with the
+// number of accounts whose auth data a block changed (hogd#3146). hog_db
+// chooses the chunk size; the wire bounds a chunk only by the link's record
+// cap. The chunks of a run may be sent concurrently and over several
+// connections, so they can arrive in any order, and hog_db may have the runs
+// of several heights in flight at once, so the chunks of different heights
+// can interleave. The auth server treats a height's changes as complete only
+// once every chunk of its run has arrived, and applies heights in order.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct KeyChangeChunk {
+    // The height of the block that made these changes.
+    pub height: BlockHeight,
+    // This chunk's position in the height's run, from 0, and the run's length.
+    // Every chunk of a run carries the same chunk_count, and each index in
+    // [0, chunk_count) is sent exactly once. A block that changed no auth data
+    // is a run of one empty chunk, so every committed block still sends a run
+    // and the auth server's height advances with every block.
+    pub chunk_index: u32,
+    pub chunk_count: u32,
+    pub changes: VecM<KeyChange>,
+}
+
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait AuthDB_AuthDB1: Send + Sync {        // Forward updated key changes to the auth server
+pub trait AuthDB_AuthDB1: Send + Sync {        // Retired number, never to be reused, so that a peer built against it
+    // fails to dispatch rather than misparse a newer payload:
+    //   1: authdb_forward_key_changes(BlockHeight, KeyChangeBatch), a block's
+    //      auth-data changes in one unbounded record, which a block that
+    //      changes enough accounts' auth data grows past any single-record
+    //      cap (hogd#3146).
 
-    async fn authdb_forward_key_changes(&self, arg0 : BlockHeight, arg1 : KeyChangeBatch) -> Result<(), ::rpc_api::ProgramError>;
+    // Deliver one chunk of a committed block's auth-data changes to the auth
+    // server.
+
+    async fn authdb_forward_key_changes_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
 }
 
 
@@ -208,11 +243,11 @@ impl ::rpc_api::RpcHandler for AuthDB_AuthDB1_Dispatcher {
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
         match proc {
-            // authdb_forward_key_changes
-            1 => {
-                let args: (BlockHeight, KeyChangeBatch, ) =
+            // authdb_forward_key_changes_chunk
+            2 => {
+                let args: (KeyChangeChunk, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authdb_forward_key_changes(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.authdb_forward_key_changes_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
@@ -233,10 +268,10 @@ impl AuthDB_AuthDB1_Client {
     fn prog_vers() -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x8aa87aa8, 1)
     }
-    pub async fn authdb_forward_key_changes(&self, arg0 : &BlockHeight, arg1 : &KeyChangeBatch) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn authdb_forward_key_changes_chunk(&self, arg0 : &KeyChangeChunk) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
