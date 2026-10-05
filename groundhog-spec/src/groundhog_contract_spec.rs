@@ -256,6 +256,39 @@ pub struct ContractField {
     pub ty: ContractType,
 }
 
+/// Author-declared effects of the whole invocation, including nested calls.
+/// These declarations are not compiler or runtime guarantees. They do not
+/// select an execution path, change entrypoint IDs, or guarantee success.
+/// Application effects include storage deltas, events, transfers and deployment.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct ContractMethodEffect(pub i32);
+
+impl ContractMethodEffect {
+    // No declaration; never assume read-only.
+    pub const EffectUnknown: Self = Self(0);
+
+    // Arguments and constants only: no state or execution-context reads or effects.
+    pub const EffectPure: Self = Self(1);
+
+    // May read state and execution context; no application effects.
+    pub const EffectReadOnly: Self = Self(2);
+
+    // May produce application effects; need not change state on every invocation.
+    pub const EffectStateChanging: Self = Self(3);
+}
+impl From<i32> for ContractMethodEffect {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -265,6 +298,7 @@ pub struct ContractSpecMethod {
     pub name: ContractSpecString,
     pub args: VecM<ContractField>,
     pub return_type: ContractType,
+    pub effect: ContractMethodEffect,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
