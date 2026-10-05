@@ -49,7 +49,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: af074672d3a6f3ddedcacd758224ea5a5cf2a8f3 # v0
+          ref: v1
           persist-credentials: false
 
       # Must run before the dry-run step: cargo-publish-dry-run extracts every
