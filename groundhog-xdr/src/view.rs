@@ -26,6 +26,10 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 
+// An XDR-encoded AuthToken, left opaque so hogd decodes it under the chain's
+// max_auth_token_depth, as it does a token MintAuthToken mints.
+pub type SerializedAuthToken = BytesM;
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -37,7 +41,7 @@ pub struct TransactionViewQuery {
     // Context around the invocation
     pub parent_address: Option<ContractAddress>,
     pub auth_claim: AuthClaim,
-    pub forwarded_tokens: VecM<AuthToken>,
+    pub forwarded_tokens: VecM<SerializedAuthToken>,
     pub invoke_flags: InvokeFlagSet,
 }
 
