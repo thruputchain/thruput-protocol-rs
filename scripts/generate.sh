@@ -218,6 +218,8 @@ scheduler_deps=(
   proposal.x
   db_sched.x
   sched_db.x
+  auth_card.x
+  auth_rpc.x
   sched_event.x
   event_rpc.x
   exec_sched.x
