@@ -39,6 +39,14 @@ pub mod sched_db;
 pub use sched_db::*;
 
 #[rustfmt::skip]
+pub mod auth_card;
+pub use auth_card::*;
+
+#[rustfmt::skip]
+pub mod auth_rpc;
+pub use auth_rpc::*;
+
+#[rustfmt::skip]
 pub mod sched_event;
 pub use sched_event::*;
 

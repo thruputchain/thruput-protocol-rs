@@ -1,24 +1,30 @@
-//! Signature pins for `groundhog_scheduler` (generated: src/catchup.rs,
-//! src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs, src/exec_sched.rs,
-//! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_db.rs,
-//! src/sched_event.rs, src/sched_gateway.rs).
+//! Signature pins for `groundhog_scheduler` (generated: src/auth_rpc.rs,
+//! src/catchup.rs, src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs,
+//! src/exec_sched.rs, src/loadgen.rs, src/repair.rs, src/sched_coord.rs,
+//! src/sched_db.rs, src/sched_event.rs, src/sched_gateway.rs).
 
 use groundhog_scheduler::{
-    BlockExecutionContext, BlockExecutionMode, BlockID, Catchup_Catchup1,
-    Catchup_Catchup1_Client, ConsensusValue, ContractAddressBatch, CoordCard,
+    AuthCard, AuthDB_AuthDB1, AuthDB_AuthDB1_Client, AuthErrorCode,
+    AuthErrorCodeBatch, AuthMempool_AuthMempool1,
+    AuthMempool_AuthMempool1_Client, BlockExecutionContext,
+    BlockExecutionMode, BlockID, Catchup_Catchup1, Catchup_Catchup1_Client,
+    ConsensusValue, ContractAddressBatch, CoordCard,
     CoordScheduler_CoordScheduler1, CoordScheduler_CoordScheduler1_Client,
-    CoordinatorRegistrationOutcome, DbAddressAuthDataBatchResult,
-    DbBlockResult, DbSched_DbSched1, DbSched_DbSched1_Client, DbSchedResult,
-    DbTipResult, EventActivationResult, EventBlockResult, EventCard,
+    CoordinatorRegistrationOutcome, DBAuth_DBAuth1, DBAuth_DBAuth1_Client,
+    DBAuthIntroResult, DBAuthResult, DBAuthResultBatch,
+    DbAddressAuthDataBatchResult, DbBlockResult, DbSched_DbSched1,
+    DbSched_DbSched1_Client, DbSchedResult, DbTipResult,
+    EventActivationResult, EventBlockResult, EventCard,
     EventExecutor_EventExecutor1, EventExecutor_EventExecutor1_Client,
     EventPrepareResult, EventRegistrationSnapshot, EventSched_EventSched1,
     EventSched_EventSched1_Client, ExecProposeBatchResult, ExecProposeResult,
     ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
     ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
     GenesisCeremonyRequest, GenesisCeremonyResult, HogAgeBatch, HogAgeResults,
-    HogsTransferred, LoadgenContextID, LoadgenExtensionResult,
-    LoadgenInterface_LoadgenInterfaceV1,
+    HogsTransferred, IntroAuthResult, KeyChangeBatch, LoadgenContextID,
+    LoadgenExtensionResult, LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
+    MempoolAuth_MempoolAuth1, MempoolAuth_MempoolAuth1_Client,
     MissingTransactionsEnvelope, OptProposal, ParallelSignedTransactionBatch,
     PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
     RepairedTransactions, SchedDb_SchedDb1, SchedDb_SchedDb1_Client,
@@ -42,9 +48,69 @@ use groundhog_xdr::transaction::{
     SignedTransaction, SignedTransactionBatch, TransactionHash,
     TransactionHashBatch,
 };
-use groundhog_xdr::types::BlockHeight;
+use groundhog_xdr::types::{BlockHeight, ContractAddress};
 use groundhog_xdr::validator::ValidatorID;
 use rpc_api::{ProgramError, RpcError};
+
+pub mod auth_db {
+    use super::*;
+    type S = AuthDB_AuthDB1_Client;
+
+    pub async fn client_authdb_forward_key_changes(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &KeyChangeBatch,
+    ) -> Result<(), RpcError> {
+        c.authdb_forward_key_changes(arg0, arg1).await
+    }
+
+    pub async fn trait_authdb_forward_key_changes<T: AuthDB_AuthDB1>(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: KeyChangeBatch,
+    ) -> Result<(), ProgramError> {
+        t.authdb_forward_key_changes(arg0, arg1).await
+    }
+}
+
+pub mod auth_mempool {
+    use super::*;
+    type S = AuthMempool_AuthMempool1_Client;
+
+    pub async fn client_authmempool_verify_transactions(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &SignedTransactionBatch,
+    ) -> Result<AuthErrorCodeBatch, RpcError> {
+        c.authmempool_verify_transactions(arg0, arg1).await
+    }
+    pub async fn client_authmempool_verify_batch(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &SignedTransactionBatch,
+    ) -> Result<AuthErrorCode, RpcError> {
+        c.authmempool_verify_batch(arg0, arg1).await
+    }
+
+    pub async fn trait_authmempool_verify_transactions<
+        T: AuthMempool_AuthMempool1,
+    >(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: SignedTransactionBatch,
+    ) -> Result<AuthErrorCodeBatch, ProgramError> {
+        t.authmempool_verify_transactions(arg0, arg1).await
+    }
+    pub async fn trait_authmempool_verify_batch<
+        T: AuthMempool_AuthMempool1,
+    >(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: SignedTransactionBatch,
+    ) -> Result<AuthErrorCode, ProgramError> {
+        t.authmempool_verify_batch(arg0, arg1).await
+    }
+}
 
 pub mod catchup {
     use super::*;
@@ -101,6 +167,53 @@ pub mod coord_scheduler {
         arg0: ParallelSignedTransactionBatch,
     ) -> Result<(), ProgramError> {
         t.coordscheduler_notify_vetted(arg0).await
+    }
+}
+
+pub mod db_auth {
+    use super::*;
+    type S = DBAuth_DBAuth1_Client;
+
+    pub async fn client_authdb_get_auth_data(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &ContractAddress,
+    ) -> Result<DBAuthResult, RpcError> {
+        c.authdb_get_auth_data(arg0, arg1).await
+    }
+    pub async fn client_authdb_get_auth_data_batch(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &ContractAddressBatch,
+    ) -> Result<DBAuthResultBatch, RpcError> {
+        c.authdb_get_auth_data_batch(arg0, arg1).await
+    }
+    pub async fn client_dbauth_intro(
+        c: &S,
+        arg0: &AuthCard,
+    ) -> Result<DBAuthIntroResult, RpcError> {
+        c.dbauth_intro(arg0).await
+    }
+
+    pub async fn trait_authdb_get_auth_data<T: DBAuth_DBAuth1>(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: ContractAddress,
+    ) -> Result<DBAuthResult, ProgramError> {
+        t.authdb_get_auth_data(arg0, arg1).await
+    }
+    pub async fn trait_authdb_get_auth_data_batch<T: DBAuth_DBAuth1>(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: ContractAddressBatch,
+    ) -> Result<DBAuthResultBatch, ProgramError> {
+        t.authdb_get_auth_data_batch(arg0, arg1).await
+    }
+    pub async fn trait_dbauth_intro<T: DBAuth_DBAuth1>(
+        t: &T,
+        arg0: AuthCard,
+    ) -> Result<DBAuthIntroResult, ProgramError> {
+        t.dbauth_intro(arg0).await
     }
 }
 
@@ -564,6 +677,41 @@ pub mod loadgen_interface {
         arg2: BlockHeight,
     ) -> Result<LoadgenExtensionResult, ProgramError> {
         t.extend_experiment(arg0, arg1, arg2).await
+    }
+}
+
+pub mod mempool_auth {
+    use super::*;
+    type S = MempoolAuth_MempoolAuth1_Client;
+
+    pub async fn client_mempoolauth_intro_auth(
+        c: &S,
+        arg0: &AuthCard,
+    ) -> Result<IntroAuthResult, RpcError> {
+        c.mempoolauth_intro_auth(arg0).await
+    }
+    pub async fn client_mempoolauth_auth_data_changed(
+        c: &S,
+        arg0: &BlockHeight,
+        arg1: &KeyChangeBatch,
+    ) -> Result<(), RpcError> {
+        c.mempoolauth_auth_data_changed(arg0, arg1).await
+    }
+
+    pub async fn trait_mempoolauth_intro_auth<T: MempoolAuth_MempoolAuth1>(
+        t: &T,
+        arg0: AuthCard,
+    ) -> Result<IntroAuthResult, ProgramError> {
+        t.mempoolauth_intro_auth(arg0).await
+    }
+    pub async fn trait_mempoolauth_auth_data_changed<
+        T: MempoolAuth_MempoolAuth1,
+    >(
+        t: &T,
+        arg0: BlockHeight,
+        arg1: KeyChangeBatch,
+    ) -> Result<(), ProgramError> {
+        t.mempoolauth_auth_data_changed(arg0, arg1).await
     }
 }
 
