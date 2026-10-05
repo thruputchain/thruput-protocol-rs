@@ -153,6 +153,9 @@ pub trait SchedGateway_SchedGateway1: Send + Sync {
         // Number of transactions currently pending in the mempool.
 
     async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::ProgramError>;
+        // Returns one pending or recent outcome per input hash (same order).
+
+    async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
 }
 
 
@@ -209,6 +212,13 @@ impl ::rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher {
                 let res = self.inner.schedgateway_pending_tx_count().await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
+            // schedgateway_lookup_transaction_outcomes
+            5 => {
+                let args: (TransactionHashBatch, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_lookup_transaction_outcomes(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+            }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
         }
     }
@@ -255,6 +265,12 @@ impl SchedGateway_SchedGateway1_Client {
          let mut call = self.handle.call_buf();
          call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+    }
+    pub async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : &TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
+         let mut call = self.handle.call_buf();
+         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }
