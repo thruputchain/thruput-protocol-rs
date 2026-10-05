@@ -44,12 +44,14 @@ mod tests {
                     height: BlockHeight::from(42),
                     results: VecM(vec![
                         TransactionViewResult {
+                            gas_consumed: 17,
                             output: InvocationFrameOutput::Return {
                                 return_buffer: BytesM(vec![1]),
                             },
                             events: VecM(vec![]),
                         },
                         TransactionViewResult {
+                            gas_consumed: 23,
                             output: InvocationFrameOutput::Fault,
                             events: VecM(vec![]),
                         },
