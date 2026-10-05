@@ -1,7 +1,7 @@
 //! Signature pins for `groundhog_scheduler` (generated: src/catchup.rs,
 //! src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs, src/exec_sched.rs,
-//! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_event.rs,
-//! src/sched_gateway.rs).
+//! src/loadgen.rs, src/repair.rs, src/sched_coord.rs, src/sched_db.rs,
+//! src/sched_event.rs, src/sched_gateway.rs).
 
 use groundhog_scheduler::{
     BlockExecutionContext, BlockExecutionMode, BlockID, Catchup_Catchup1,
@@ -16,17 +16,18 @@ use groundhog_scheduler::{
     ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
     ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
     GenesisCeremonyRequest, GenesisCeremonyResult, HogAgeBatch, HogAgeResults,
-    LoadgenContextID, LoadgenExtensionResult,
+    HogsTransferred, LoadgenContextID, LoadgenExtensionResult,
     LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
     MissingTransactionsEnvelope, OptProposal, ParallelSignedTransactionBatch,
     PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
-    RepairedTransactions, SchedEvent_SchedEvent1,
-    SchedEvent_SchedEvent1_Client, SchedGateway_SchedGateway1,
-    SchedGateway_SchedGateway1_Client, SchedGatewayIntroOutcome,
-    SchedGatewaySubmitOutcomeBatch, SchedulerCommitOutcome,
-    SchedulerCoord_SchedulerCoord1, SchedulerCoord_SchedulerCoord1_Client,
-    SchedulerGetTipResult, SchedulerProposalResult, SchedulerValidationResult,
+    RepairedTransactions, SchedDb_SchedDb1, SchedDb_SchedDb1_Client,
+    SchedEvent_SchedEvent1, SchedEvent_SchedEvent1_Client,
+    SchedGateway_SchedGateway1, SchedGateway_SchedGateway1_Client,
+    SchedGatewayIntroOutcome, SchedGatewaySubmitOutcomeBatch,
+    SchedulerCommitOutcome, SchedulerCoord_SchedulerCoord1,
+    SchedulerCoord_SchedulerCoord1_Client, SchedulerGetTipResult,
+    SchedulerProposalResult, SchedulerValidationResult, ShardCard,
     SignedCatchupBlocksRequest, SignedCatchupBlocksResult, TransactionID,
 };
 use groundhog_scp::scp::{SCPEnvelopes, SCPSlotIndex};
@@ -614,6 +615,37 @@ pub mod repair {
         arg0: SCPSlotIndex,
     ) -> Result<SCPEnvelopes, ProgramError> {
         t.repair_missing_scp_envelopes(arg0).await
+    }
+}
+
+pub mod sched_db {
+    use super::*;
+    type S = SchedDb_SchedDb1_Client;
+
+    pub async fn client_scheddb_intro_shard(
+        c: &S,
+        arg0: &ShardCard,
+    ) -> Result<(), RpcError> {
+        c.scheddb_intro_shard(arg0).await
+    }
+    pub async fn client_scheddb_hogs_transferred(
+        c: &S,
+        arg0: &HogsTransferred,
+    ) -> Result<(), RpcError> {
+        c.scheddb_hogs_transferred(arg0).await
+    }
+
+    pub async fn trait_scheddb_intro_shard<T: SchedDb_SchedDb1>(
+        t: &T,
+        arg0: ShardCard,
+    ) -> Result<(), ProgramError> {
+        t.scheddb_intro_shard(arg0).await
+    }
+    pub async fn trait_scheddb_hogs_transferred<T: SchedDb_SchedDb1>(
+        t: &T,
+        arg0: HogsTransferred,
+    ) -> Result<(), ProgramError> {
+        t.scheddb_hogs_transferred(arg0).await
     }
 }
 
