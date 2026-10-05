@@ -84,6 +84,42 @@ pub enum DbGatewayResult {
     #[xdr(default_variant)] Default { error: i32 },
 }
 
+/// Network-supplied execution and storage rules read at one committed tip.
+/// `tip.network_config` preserves the parameters explicitly stated by the chain.
+/// `effective_config` states every parameter understood by the serving runtime,
+/// resolving omitted values through the same rules used by execution. It is a
+/// resolved reading, not a replacement for the hashed network configuration.
+/// The rules apply to execution following `tip`; they are not a promise about
+/// the block in which a subsequently submitted transaction will be included.
+/// Storage prices are integer native-HOG base units (10^7 units per HOG).
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct DbGatewayConfig {
+    pub tip: DbTip,
+    pub effective_config: NetworkConfig,
+    pub storage_cost_model: StorageCostModelXdr,
+}
+
+/// No committed tip: kRPCNotFound. Unreadable rules: kRPCUnrecoverable.
+/// A missing reading must never be represented as zero prices or empty rules.
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum DbGatewayConfigResult {
+    // case kRPCNone:
+    //   DbGatewayConfig config;
+    kRPCNone { config: DbGatewayConfig } = RPCError::kRPCNone.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { error: i32 },
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -123,10 +159,12 @@ impl core::fmt::Display for DbGatewayIntroOutcome {
 
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
-pub trait DbGateway_DbGateway1: Send + Sync {    
+pub trait DbGateway_DbGateway1: Send + Sync {
     async fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::rpc_api::ProgramError>;
-    
+
     async fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> Result<DbGatewayResult, ::rpc_api::ProgramError>;
+
+    async fn dbgateway_get_config(&self) -> Result<DbGatewayConfigResult, ::rpc_api::ProgramError>;
 }
 
 
@@ -162,6 +200,13 @@ impl ::rpc_api::RpcHandler for DbGateway_DbGateway1_Dispatcher {
                 let res = self.inner.dbgateway_get_items(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
+            // dbgateway_get_config
+            2 => {
+                let args: () =
+                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.dbgateway_get_config().await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+            }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
         }
     }
@@ -192,6 +237,12 @@ impl DbGateway_DbGateway1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
+    pub async fn dbgateway_get_config(&self) -> Result<DbGatewayConfigResult, ::rpc_api::RpcError> {
+         let mut call = self.handle.call_buf();
+         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
+         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+    }
 }
 
 impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for DbGateway_DbGateway1_Client {
@@ -220,6 +271,16 @@ impl DbGatewayResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayResult::Default{ error } => (*error).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl DbGatewayConfigResult {
+    pub fn error(&self) -> RPCError {
+        match self {
+            DbGatewayConfigResult::Default{ error } => (*error).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }

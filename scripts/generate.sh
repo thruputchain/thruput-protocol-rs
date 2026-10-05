@@ -250,6 +250,8 @@ db_gateways=(
 for dg in "${db_gateways[@]}"; do
   generate_rpc "protocol/${dg}" "groundhog_db_gateway"
 done
+# Keep the generated gateway additions clean under git's whitespace check.
+perl -pi -e 's/[\t ]+$//' groundhog_db_gateway/src/db_gateway.rs
 
 views=(
   view_gateway.x
