@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -164,57 +164,57 @@ impl SCP_Control_SCP_Control1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_nominate(&self, arg0 : &SCPSlotIndex, arg1 : &SCPValue, arg2 : &SCPValue) -> Result<bool, ::rpc_api::RpcError> {
+    pub async fn scp_control_nominate(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SCPValue> + ?Sized), arg2 : &(impl xdrs::EncodesAs<SCPValue> + ?Sized)) -> Result<bool, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1, arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_stop_nomination(&self, arg0 : &SCPSlotIndex) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scp_control_stop_nomination(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_update_local_quorum_set(&self, arg0 : &SCPQuorumSet) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scp_control_update_local_quorum_set(&self, arg0 : &(impl xdrs::EncodesAs<SCPQuorumSet> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_received_envelope(&self, arg0 : &SCPEnvelope) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scp_control_received_envelope(&self, arg0 : &(impl xdrs::EncodesAs<SCPEnvelope> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 200, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_set_state_from_envelope(&self, arg0 : &SCPSlotIndex, arg1 : &SCPEnvelope) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scp_control_set_state_from_envelope(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SCPEnvelope> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 201, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_set_qset(&self, arg0 : &SCPQuorumSet) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
+    pub async fn scp_control_set_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPQuorumSet> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 300, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_get_qset(&self, arg0 : &SCPHash) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
+    pub async fn scp_control_get_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPHash> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 301, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_remove_qset(&self, arg0 : &SCPHash) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
+    pub async fn scp_control_remove_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPHash> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 302, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : &SCPSlotIndex) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 400, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

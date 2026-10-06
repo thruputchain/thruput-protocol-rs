@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -331,9 +331,9 @@ impl HogxAgent_HogxAgent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_host_configure(&self, arg0 : &HostConfig) -> Result<HogxHostConfigureResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_host_configure(&self, arg0 : &(impl xdrs::EncodesAs<HostConfig> + ?Sized)) -> Result<HogxHostConfigureResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -343,21 +343,21 @@ impl HogxAgent_HogxAgent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 110, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_start(&self, arg0 : &UnitDef) -> Result<HogxUnitStartResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_unit_start(&self, arg0 : &(impl xdrs::EncodesAs<UnitDef> + ?Sized)) -> Result<HogxUnitStartResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 200, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_stop(&self, arg0 : &UnitID) -> Result<HogxUnitStopResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_unit_stop(&self, arg0 : &(impl xdrs::EncodesAs<UnitID> + ?Sized)) -> Result<HogxUnitStopResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 210, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_query(&self, arg0 : &UnitID) -> Result<HogxUnitQueryResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_unit_query(&self, arg0 : &(impl xdrs::EncodesAs<UnitID> + ?Sized)) -> Result<HogxUnitQueryResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 220, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -367,15 +367,15 @@ impl HogxAgent_HogxAgent1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 230, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_clear(&self, arg0 : &UnitID) -> Result<HogxUnitClearResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_unit_clear(&self, arg0 : &(impl xdrs::EncodesAs<UnitID> + ?Sized)) -> Result<HogxUnitClearResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 240, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxagent_unit_tail(&self, arg0 : &HogxTailKick) -> Result<HogxUnitTailResult, ::rpc_api::RpcError> {
+    pub async fn hogxagent_unit_tail(&self, arg0 : &(impl xdrs::EncodesAs<HogxTailKick> + ?Sized)) -> Result<HogxUnitTailResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 300, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -466,9 +466,9 @@ impl HogxTail_HogxTail1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn hogxtail_deliver(&self, arg0 : &HogxTailChunk) -> Result<bool, ::rpc_api::RpcError> {
+    pub async fn hogxtail_deliver(&self, arg0 : &(impl xdrs::EncodesAs<HogxTailChunk> + ?Sized)) -> Result<bool, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

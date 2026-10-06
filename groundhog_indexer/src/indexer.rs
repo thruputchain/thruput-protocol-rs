@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -619,45 +619,45 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     fn prog_vers() -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x4321aaaa, 1)
     }
-    pub async fn indexer_block_explorer_intro(&self, arg0 : &ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::RpcError> {
+    pub async fn indexer_block_explorer_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transaction_info(&self, arg0 : &TransactionHash) -> Result<TxInfoResult, ::rpc_api::RpcError> {
+    pub async fn get_transaction_info(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHash> + ?Sized)) -> Result<TxInfoResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_block_by_height(&self, arg0 : &BlockHeight) -> Result<BlockLookupResult, ::rpc_api::RpcError> {
+    pub async fn get_block_by_height(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<BlockLookupResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_events(&self, arg0 : &EventQuery) -> Result<EventPageResult, ::rpc_api::RpcError> {
+    pub async fn get_events(&self, arg0 : &(impl xdrs::EncodesAs<EventQuery> + ?Sized)) -> Result<EventPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions(&self, arg0 : &TransactionQuery) -> Result<TransactionPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionQuery> + ?Sized)) -> Result<TransactionPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_address(&self, arg0 : &AddressTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_block(&self, arg0 : &BlockTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -1121,9 +1121,9 @@ impl EventIndexer_EventIndexer1_Client {
     fn prog_vers() -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x4321aaac, 1)
     }
-    pub async fn event_indexer_pull_next(&self, arg0 : &EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::rpc_api::RpcError> {
+    pub async fn event_indexer_pull_next(&self, arg0 : &(impl xdrs::EncodesAs<EventIndexerPullRequest> + ?Sized)) -> Result<EventIndexerPullResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

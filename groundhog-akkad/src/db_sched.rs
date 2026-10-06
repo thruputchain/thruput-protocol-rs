@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -360,51 +360,51 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_get_address_auth_data(&self, arg0 : &BlockID, arg1 : &ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_get_address_auth_data(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<DbAddressAuthDataBatchResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_get_hog_ages(&self, arg0 : &ContractAddressBatch) -> Result<HogAgeResults, ::rpc_api::RpcError> {
+    pub async fn dbsched_get_hog_ages(&self, arg0 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<HogAgeResults, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_write_hog_ages(&self, arg0 : &HogAgeBatch) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_write_hog_ages(&self, arg0 : &(impl xdrs::EncodesAs<HogAgeBatch> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_create_snapshot(&self, arg0 : &BlockID, arg1 : &BlockID, arg2 : &BlockExecutionMode) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_create_snapshot(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg2 : &(impl xdrs::EncodesAs<BlockExecutionMode> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1, &arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1, arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_commit_snapshot(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<DbBlockResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_commit_snapshot(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ConsensusValue> + ?Sized)) -> Result<DbBlockResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_close_snapshot(&self, arg0 : &BlockID) -> Result<DbBlockResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_close_snapshot(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<DbBlockResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 7, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_abandon_snapshot(&self, arg0 : &BlockID) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_abandon_snapshot(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 8, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_load_genesis_configuration(&self, arg0 : &GenesisConfiguration, arg1 : &ConsensusValue) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_load_genesis_configuration(&self, arg0 : &(impl xdrs::EncodesAs<GenesisConfiguration> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ConsensusValue> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 9, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

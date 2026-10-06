@@ -52,6 +52,7 @@ use groundhog_xdr::transaction::{
 use groundhog_xdr::types::{BlockHeight, ContractAddress};
 use groundhog_xdr::validator::ValidatorID;
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod auth_db {
     use super::*;
@@ -59,7 +60,7 @@ pub mod auth_db {
 
     pub async fn client_authdb_forward_key_changes_chunk(
         c: &S,
-        arg0: &KeyChangeChunk,
+        arg0: &(impl EncodesAs<KeyChangeChunk> + ?Sized),
     ) -> Result<(), RpcError> {
         c.authdb_forward_key_changes_chunk(arg0).await
     }
@@ -78,15 +79,15 @@ pub mod auth_mempool {
 
     pub async fn client_authmempool_verify_transactions(
         c: &S,
-        arg0: &BlockHeight,
-        arg1: &SignedTransactionBatch,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
+        arg1: &(impl EncodesAs<SignedTransactionBatch> + ?Sized),
     ) -> Result<AuthErrorCodeBatch, RpcError> {
         c.authmempool_verify_transactions(arg0, arg1).await
     }
     pub async fn client_authmempool_verify_batch(
         c: &S,
-        arg0: &BlockHeight,
-        arg1: &SignedTransactionBatch,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
+        arg1: &(impl EncodesAs<SignedTransactionBatch> + ?Sized),
     ) -> Result<AuthErrorCode, RpcError> {
         c.authmempool_verify_batch(arg0, arg1).await
     }
@@ -120,7 +121,7 @@ pub mod catchup {
     }
     pub async fn client_catchup_solicit(
         c: &S,
-        arg0: &SignedCatchupBlocksRequest,
+        arg0: &(impl EncodesAs<SignedCatchupBlocksRequest> + ?Sized),
     ) -> Result<SignedCatchupBlocksResult, RpcError> {
         c.catchup_solicit(arg0).await
     }
@@ -147,7 +148,7 @@ pub mod coord_scheduler {
     }
     pub async fn client_coordscheduler_notify_vetted(
         c: &S,
-        arg0: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.coordscheduler_notify_vetted(arg0).await
     }
@@ -175,21 +176,21 @@ pub mod db_auth {
 
     pub async fn client_authdb_get_auth_data(
         c: &S,
-        arg0: &BlockHeight,
-        arg1: &ContractAddress,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
+        arg1: &(impl EncodesAs<ContractAddress> + ?Sized),
     ) -> Result<DBAuthResult, RpcError> {
         c.authdb_get_auth_data(arg0, arg1).await
     }
     pub async fn client_authdb_get_auth_data_batch(
         c: &S,
-        arg0: &BlockHeight,
-        arg1: &ContractAddressBatch,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
+        arg1: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
     ) -> Result<DBAuthResultBatch, RpcError> {
         c.authdb_get_auth_data_batch(arg0, arg1).await
     }
     pub async fn client_dbauth_intro(
         c: &S,
-        arg0: &AuthCard,
+        arg0: &(impl EncodesAs<AuthCard> + ?Sized),
     ) -> Result<DBAuthIntroResult, RpcError> {
         c.dbauth_intro(arg0).await
     }
@@ -225,54 +226,54 @@ pub mod db_sched {
     }
     pub async fn client_dbsched_get_address_auth_data(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ContractAddressBatch,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
     ) -> Result<DbAddressAuthDataBatchResult, RpcError> {
         c.dbsched_get_address_auth_data(arg0, arg1).await
     }
     pub async fn client_dbsched_get_hog_ages(
         c: &S,
-        arg0: &ContractAddressBatch,
+        arg0: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
     ) -> Result<HogAgeResults, RpcError> {
         c.dbsched_get_hog_ages(arg0).await
     }
     pub async fn client_dbsched_write_hog_ages(
         c: &S,
-        arg0: &HogAgeBatch,
+        arg0: &(impl EncodesAs<HogAgeBatch> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_write_hog_ages(arg0).await
     }
     pub async fn client_dbsched_create_snapshot(
         c: &S,
-        arg0: &BlockID,
-        arg1: &BlockID,
-        arg2: &BlockExecutionMode,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<BlockID> + ?Sized),
+        arg2: &(impl EncodesAs<BlockExecutionMode> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_create_snapshot(arg0, arg1, arg2).await
     }
     pub async fn client_dbsched_commit_snapshot(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<DbBlockResult, RpcError> {
         c.dbsched_commit_snapshot(arg0, arg1).await
     }
     pub async fn client_dbsched_close_snapshot(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<DbBlockResult, RpcError> {
         c.dbsched_close_snapshot(arg0).await
     }
     pub async fn client_dbsched_abandon_snapshot(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_abandon_snapshot(arg0).await
     }
     pub async fn client_dbsched_load_genesis_configuration(
         c: &S,
-        arg0: &GenesisConfiguration,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<GenesisConfiguration> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_load_genesis_configuration(arg0, arg1).await
     }
@@ -358,29 +359,29 @@ pub mod event_executor {
     }
     pub async fn client_eventexecutor_open_block(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventexecutor_open_block(arg0).await
     }
     pub async fn client_eventexecutor_close_block(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventexecutor_close_block(arg0).await
     }
     pub async fn client_eventexecutor_report_tx_failure(
         c: &S,
-        arg0: &TransactionHash,
-        arg1: &TxFailureDiagnostic,
+        arg0: &(impl EncodesAs<TransactionHash> + ?Sized),
+        arg1: &(impl EncodesAs<TxFailureDiagnostic> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventexecutor_report_tx_failure(arg0, arg1).await
     }
     pub async fn client_eventexecutor_emit_event(
         c: &S,
-        arg0: &BlockID,
-        arg1: &TransactionID,
-        arg2: &TxEventLog,
-        arg3: &ProposedTransaction,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<TransactionID> + ?Sized),
+        arg2: &(impl EncodesAs<TxEventLog> + ?Sized),
+        arg3: &(impl EncodesAs<ProposedTransaction> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventexecutor_emit_event(arg0, arg1, arg2, arg3).await
     }
@@ -437,27 +438,27 @@ pub mod event_sched {
     }
     pub async fn client_eventsched_open_block(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventsched_open_block(arg0).await
     }
     pub async fn client_eventsched_close_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &BlockHeight,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<BlockHeight> + ?Sized),
     ) -> Result<EventBlockResult, RpcError> {
         c.eventsched_close_block(arg0, arg1).await
     }
     pub async fn client_eventsched_commit_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventsched_commit_block(arg0, arg1).await
     }
     pub async fn client_eventsched_abandon_block(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<RPCError, RpcError> {
         c.eventsched_abandon_block(arg0).await
     }
@@ -509,49 +510,49 @@ pub mod executor_sched {
     }
     pub async fn client_executorsched_propose_transaction(
         c: &S,
-        arg0: &BlockID,
-        arg1: &SignedTransaction,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<SignedTransaction> + ?Sized),
     ) -> Result<ExecProposeResult, RpcError> {
         c.executorsched_propose_transaction(arg0, arg1).await
     }
     pub async fn client_executorsched_validate_transaction(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ProposedTransaction,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ProposedTransaction> + ?Sized),
     ) -> Result<ExecResult, RpcError> {
         c.executorsched_validate_transaction(arg0, arg1).await
     }
     pub async fn client_executorsched_propose_batch(
         c: &S,
-        arg0: &BlockID,
-        arg1: &SignedTransactionBatch,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<SignedTransactionBatch> + ?Sized),
     ) -> Result<ExecProposeBatchResult, RpcError> {
         c.executorsched_propose_batch(arg0, arg1).await
     }
     pub async fn client_executorsched_validate_batch(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ProposedTransactionBatch,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ProposedTransactionBatch> + ?Sized),
     ) -> Result<ExecValidateBatchResult, RpcError> {
         c.executorsched_validate_batch(arg0, arg1).await
     }
     pub async fn client_executorsched_open_proposal_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &BlockExecutionContext,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<BlockExecutionContext> + ?Sized),
     ) -> Result<ExecResult, RpcError> {
         c.executorsched_open_proposal_block(arg0, arg1).await
     }
     pub async fn client_executorsched_open_validation_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &BlockExecutionContext,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<BlockExecutionContext> + ?Sized),
     ) -> Result<ExecResult, RpcError> {
         c.executorsched_open_validation_block(arg0, arg1).await
     }
     pub async fn client_executorsched_finish_block(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<ExecResult, RpcError> {
         c.executorsched_finish_block(arg0).await
     }
@@ -646,15 +647,15 @@ pub mod loadgen_interface {
 
     pub async fn client_generate_experiment(
         c: &S,
-        arg0: &ExperimentConfig,
+        arg0: &(impl EncodesAs<ExperimentConfig> + ?Sized),
     ) -> Result<LoadgenResult, RpcError> {
         c.generate_experiment(arg0).await
     }
     pub async fn client_extend_experiment(
         c: &S,
-        arg0: &LoadgenContextID,
+        arg0: &(impl EncodesAs<LoadgenContextID> + ?Sized),
         arg1: u64,
-        arg2: &BlockHeight,
+        arg2: &(impl EncodesAs<BlockHeight> + ?Sized),
     ) -> Result<LoadgenExtensionResult, RpcError> {
         c.extend_experiment(arg0, arg1, arg2).await
     }
@@ -685,14 +686,14 @@ pub mod mempool_auth {
 
     pub async fn client_mempoolauth_intro_auth(
         c: &S,
-        arg0: &AuthCard,
+        arg0: &(impl EncodesAs<AuthCard> + ?Sized),
     ) -> Result<IntroAuthResult, RpcError> {
         c.mempoolauth_intro_auth(arg0).await
     }
     pub async fn client_mempoolauth_auth_data_changed(
         c: &S,
-        arg0: &BlockHeight,
-        arg1: &KeyChangeBatch,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
+        arg1: &(impl EncodesAs<KeyChangeBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.mempoolauth_auth_data_changed(arg0, arg1).await
     }
@@ -723,19 +724,19 @@ pub mod repair {
     }
     pub async fn client_repair_missing_txs(
         c: &S,
-        arg0: &MissingTransactionsEnvelope,
+        arg0: &(impl EncodesAs<MissingTransactionsEnvelope> + ?Sized),
     ) -> Result<RepairedTransactions, RpcError> {
         c.repair_missing_txs(arg0).await
     }
     pub async fn client_repair_missing_proposal(
         c: &S,
-        arg0: &ConsensusValue,
+        arg0: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<OptProposal, RpcError> {
         c.repair_missing_proposal(arg0).await
     }
     pub async fn client_repair_missing_scp_envelopes(
         c: &S,
-        arg0: &SCPSlotIndex,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
     ) -> Result<SCPEnvelopes, RpcError> {
         c.repair_missing_scp_envelopes(arg0).await
     }
@@ -771,13 +772,13 @@ pub mod sched_db {
 
     pub async fn client_scheddb_intro_shard(
         c: &S,
-        arg0: &ShardCard,
+        arg0: &(impl EncodesAs<ShardCard> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scheddb_intro_shard(arg0).await
     }
     pub async fn client_scheddb_hogs_transferred_chunk(
         c: &S,
-        arg0: &HogsTransferredChunk,
+        arg0: &(impl EncodesAs<HogsTransferredChunk> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scheddb_hogs_transferred_chunk(arg0).await
     }
@@ -802,13 +803,13 @@ pub mod sched_event {
 
     pub async fn client_schedevent_prepare_event(
         c: &S,
-        arg0: &EventCard,
+        arg0: &(impl EncodesAs<EventCard> + ?Sized),
     ) -> Result<EventPrepareResult, RpcError> {
         c.schedevent_prepare_event(arg0).await
     }
     pub async fn client_schedevent_activate_event(
         c: &S,
-        arg0: &EventRegistrationSnapshot,
+        arg0: &(impl EncodesAs<EventRegistrationSnapshot> + ?Sized),
     ) -> Result<EventActivationResult, RpcError> {
         c.schedevent_activate_event(arg0).await
     }
@@ -833,13 +834,13 @@ pub mod sched_gateway {
 
     pub async fn client_schedgateway_intro(
         c: &S,
-        arg0: &ProtocolCommit,
+        arg0: &(impl EncodesAs<ProtocolCommit> + ?Sized),
     ) -> Result<SchedGatewayIntroOutcome, RpcError> {
         c.schedgateway_intro(arg0).await
     }
     pub async fn client_schedgateway_submit_tx_batch(
         c: &S,
-        arg0: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<SchedGatewaySubmitOutcomeBatch, RpcError> {
         c.schedgateway_submit_tx_batch(arg0).await
     }
@@ -850,7 +851,7 @@ pub mod sched_gateway {
     }
     pub async fn client_schedgateway_lookup_tx(
         c: &S,
-        arg0: &TransactionHashBatch,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
     ) -> Result<OptSignedTransactionBatch, RpcError> {
         c.schedgateway_lookup_tx(arg0).await
     }
@@ -905,41 +906,41 @@ pub mod scheduler_coord {
     }
     pub async fn client_schedulercoord_intro_coord(
         c: &S,
-        arg0: &CoordCard,
+        arg0: &(impl EncodesAs<CoordCard> + ?Sized),
     ) -> Result<CoordinatorRegistrationOutcome, RpcError> {
         c.schedulercoord_intro_coord(arg0).await
     }
     pub async fn client_schedulercoord_submit_unvetted(
         c: &S,
-        arg0: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.schedulercoord_submit_unvetted(arg0).await
     }
     pub async fn client_schedulercoord_submit_vetted(
         c: &S,
-        arg0: &ValidatorID,
-        arg1: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ValidatorID> + ?Sized),
+        arg1: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.schedulercoord_submit_vetted(arg0, arg1).await
     }
     pub async fn client_schedulercoord_propose_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ProposalContext,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ProposalContext> + ?Sized),
     ) -> Result<SchedulerProposalResult, RpcError> {
         c.schedulercoord_propose_block(arg0, arg1).await
     }
     pub async fn client_schedulercoord_validate_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &Proposal,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<Proposal> + ?Sized),
     ) -> Result<SchedulerValidationResult, RpcError> {
         c.schedulercoord_validate_block(arg0, arg1).await
     }
     pub async fn client_schedulercoord_commit_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<SchedulerCommitOutcome, RpcError> {
         c.schedulercoord_commit_block(arg0, arg1).await
     }
@@ -950,19 +951,19 @@ pub mod scheduler_coord {
     }
     pub async fn client_schedcoord_load_genesis_configuration(
         c: &S,
-        arg0: &GenesisConfiguration,
+        arg0: &(impl EncodesAs<GenesisConfiguration> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.schedcoord_load_genesis_configuration(arg0).await
     }
     pub async fn client_schedulercoord_commit_genesis_ceremony(
         c: &S,
-        arg0: &GenesisCeremonyRequest,
+        arg0: &(impl EncodesAs<GenesisCeremonyRequest> + ?Sized),
     ) -> Result<GenesisCeremonyResult, RpcError> {
         c.schedulercoord_commit_genesis_ceremony(arg0).await
     }
     pub async fn client_schedcoord_lookup_transactions(
         c: &S,
-        arg0: &TransactionHashBatch,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
     ) -> Result<OptSignedTransactionBatch, RpcError> {
         c.schedcoord_lookup_transactions(arg0).await
     }

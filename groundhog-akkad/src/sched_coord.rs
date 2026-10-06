@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -790,39 +790,39 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_intro_coord(&self, arg0 : &CoordCard) -> Result<CoordinatorRegistrationOutcome, ::rpc_api::RpcError> {
+    pub async fn schedulercoord_intro_coord(&self, arg0 : &(impl xdrs::EncodesAs<CoordCard> + ?Sized)) -> Result<CoordinatorRegistrationOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_submit_unvetted(&self, arg0 : &ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn schedulercoord_submit_unvetted(&self, arg0 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_submit_vetted(&self, arg0 : &ValidatorID, arg1 : &ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn schedulercoord_submit_vetted(&self, arg0 : &(impl xdrs::EncodesAs<ValidatorID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_propose_block(&self, arg0 : &BlockID, arg1 : &ProposalContext) -> Result<SchedulerProposalResult, ::rpc_api::RpcError> {
+    pub async fn schedulercoord_propose_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ProposalContext> + ?Sized)) -> Result<SchedulerProposalResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_validate_block(&self, arg0 : &BlockID, arg1 : &Proposal) -> Result<SchedulerValidationResult, ::rpc_api::RpcError> {
+    pub async fn schedulercoord_validate_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<Proposal> + ?Sized)) -> Result<SchedulerValidationResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_commit_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<SchedulerCommitOutcome, ::rpc_api::RpcError> {
+    pub async fn schedulercoord_commit_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ConsensusValue> + ?Sized)) -> Result<SchedulerCommitOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -832,27 +832,27 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 7, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedcoord_load_genesis_configuration(&self, arg0 : &GenesisConfiguration) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn schedcoord_load_genesis_configuration(&self, arg0 : &(impl xdrs::EncodesAs<GenesisConfiguration> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 8, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : &GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_api::RpcError> {
+    pub async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : &(impl xdrs::EncodesAs<GenesisCeremonyRequest> + ?Sized)) -> Result<GenesisCeremonyResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedcoord_lookup_transactions(&self, arg0 : &TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
+    pub async fn schedcoord_lookup_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : &TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
+    pub async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 101, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

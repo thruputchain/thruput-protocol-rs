@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -288,27 +288,27 @@ impl Repair_Repair2_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn repair_missing_txs(&self, arg0 : &SignedMissingTxs) -> Result<RepairedTxs, ::rpc_api::RpcError> {
+    pub async fn repair_missing_txs(&self, arg0 : &(impl xdrs::EncodesAs<SignedMissingTxs> + ?Sized)) -> Result<RepairedTxs, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn repair_missing_proposal(&self, arg0 : &SignedMissingProposal) -> Result<RepairedProposal, ::rpc_api::RpcError> {
+    pub async fn repair_missing_proposal(&self, arg0 : &(impl xdrs::EncodesAs<SignedMissingProposal> + ?Sized)) -> Result<RepairedProposal, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn repair_missing_slot(&self, arg0 : &SignedMissingSlot) -> Result<RepairedSlot, ::rpc_api::RpcError> {
+    pub async fn repair_missing_slot(&self, arg0 : &(impl xdrs::EncodesAs<SignedMissingSlot> + ?Sized)) -> Result<RepairedSlot, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn repair_missing_blocks(&self, arg0 : &SignedMissingBlocks) -> Result<RepairedBlocks, ::rpc_api::RpcError> {
+    pub async fn repair_missing_blocks(&self, arg0 : &(impl xdrs::EncodesAs<SignedMissingBlocks> + ?Sized)) -> Result<RepairedBlocks, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 40, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

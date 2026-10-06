@@ -14,6 +14,7 @@ use groundhog_xdr::network::ProtocolCommit;
 use groundhog_xdr::transaction::TransactionHash;
 use groundhog_xdr::types::BlockHeight;
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod indexer_block_explorer {
     use super::*;
@@ -21,43 +22,43 @@ pub mod indexer_block_explorer {
 
     pub async fn client_indexer_block_explorer_intro(
         c: &S,
-        arg0: &ProtocolCommit,
+        arg0: &(impl EncodesAs<ProtocolCommit> + ?Sized),
     ) -> Result<IndexerBlockExplorerIntroOutcome, RpcError> {
         c.indexer_block_explorer_intro(arg0).await
     }
     pub async fn client_get_transaction_info(
         c: &S,
-        arg0: &TransactionHash,
+        arg0: &(impl EncodesAs<TransactionHash> + ?Sized),
     ) -> Result<TxInfoResult, RpcError> {
         c.get_transaction_info(arg0).await
     }
     pub async fn client_get_block_by_height(
         c: &S,
-        arg0: &BlockHeight,
+        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
     ) -> Result<BlockLookupResult, RpcError> {
         c.get_block_by_height(arg0).await
     }
     pub async fn client_get_events(
         c: &S,
-        arg0: &EventQuery,
+        arg0: &(impl EncodesAs<EventQuery> + ?Sized),
     ) -> Result<EventPageResult, RpcError> {
         c.get_events(arg0).await
     }
     pub async fn client_get_transactions(
         c: &S,
-        arg0: &TransactionQuery,
+        arg0: &(impl EncodesAs<TransactionQuery> + ?Sized),
     ) -> Result<TransactionPageResult, RpcError> {
         c.get_transactions(arg0).await
     }
     pub async fn client_get_transactions_by_address(
         c: &S,
-        arg0: &AddressTransactionQuery,
+        arg0: &(impl EncodesAs<AddressTransactionQuery> + ?Sized),
     ) -> Result<TransactionRefPageResult, RpcError> {
         c.get_transactions_by_address(arg0).await
     }
     pub async fn client_get_transactions_by_block(
         c: &S,
-        arg0: &BlockTransactionQuery,
+        arg0: &(impl EncodesAs<BlockTransactionQuery> + ?Sized),
     ) -> Result<TransactionRefPageResult, RpcError> {
         c.get_transactions_by_block(arg0).await
     }
@@ -126,7 +127,7 @@ pub mod event_indexer {
 
     pub async fn client_event_indexer_pull_next(
         c: &S,
-        arg0: &EventIndexerPullRequest,
+        arg0: &(impl EncodesAs<EventIndexerPullRequest> + ?Sized),
     ) -> Result<EventIndexerPullResult, RpcError> {
         c.event_indexer_pull_next(arg0).await
     }
