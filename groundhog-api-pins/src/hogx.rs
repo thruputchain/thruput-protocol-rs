@@ -9,6 +9,7 @@ use groundhog_hogx::{
     UnitDef, UnitID,
 };
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod hogx_agent {
     use super::*;
@@ -19,7 +20,7 @@ pub mod hogx_agent {
     }
     pub async fn client_hogxagent_host_configure(
         c: &S,
-        arg0: &HostConfig,
+        arg0: &(impl EncodesAs<HostConfig> + ?Sized),
     ) -> Result<HogxHostConfigureResult, RpcError> {
         c.hogxagent_host_configure(arg0).await
     }
@@ -30,19 +31,19 @@ pub mod hogx_agent {
     }
     pub async fn client_hogxagent_unit_start(
         c: &S,
-        arg0: &UnitDef,
+        arg0: &(impl EncodesAs<UnitDef> + ?Sized),
     ) -> Result<HogxUnitStartResult, RpcError> {
         c.hogxagent_unit_start(arg0).await
     }
     pub async fn client_hogxagent_unit_stop(
         c: &S,
-        arg0: &UnitID,
+        arg0: &(impl EncodesAs<UnitID> + ?Sized),
     ) -> Result<HogxUnitStopResult, RpcError> {
         c.hogxagent_unit_stop(arg0).await
     }
     pub async fn client_hogxagent_unit_query(
         c: &S,
-        arg0: &UnitID,
+        arg0: &(impl EncodesAs<UnitID> + ?Sized),
     ) -> Result<HogxUnitQueryResult, RpcError> {
         c.hogxagent_unit_query(arg0).await
     }
@@ -53,13 +54,13 @@ pub mod hogx_agent {
     }
     pub async fn client_hogxagent_unit_clear(
         c: &S,
-        arg0: &UnitID,
+        arg0: &(impl EncodesAs<UnitID> + ?Sized),
     ) -> Result<HogxUnitClearResult, RpcError> {
         c.hogxagent_unit_clear(arg0).await
     }
     pub async fn client_hogxagent_unit_tail(
         c: &S,
-        arg0: &HogxTailKick,
+        arg0: &(impl EncodesAs<HogxTailKick> + ?Sized),
     ) -> Result<HogxUnitTailResult, RpcError> {
         c.hogxagent_unit_tail(arg0).await
     }
@@ -126,7 +127,7 @@ pub mod hogx_tail {
     }
     pub async fn client_hogxtail_deliver(
         c: &S,
-        arg0: &HogxTailChunk,
+        arg0: &(impl EncodesAs<HogxTailChunk> + ?Sized),
     ) -> Result<bool, RpcError> {
         c.hogxtail_deliver(arg0).await
     }

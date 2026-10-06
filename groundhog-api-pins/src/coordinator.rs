@@ -5,6 +5,7 @@ use groundhog_coordinator::{
     Dogwood_Dogwood1_Client, DogwoodDeliveryEnvelope, KnownQuorumSets,
 };
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod discovery {
     use super::*;
@@ -15,7 +16,7 @@ pub mod discovery {
     }
     pub async fn client_discovery_update_quorums(
         c: &S,
-        arg0: &KnownQuorumSets,
+        arg0: &(impl EncodesAs<KnownQuorumSets> + ?Sized),
     ) -> Result<KnownQuorumSets, RpcError> {
         c.discovery_update_quorums(arg0).await
     }
@@ -42,7 +43,7 @@ pub mod dogwood {
     }
     pub async fn client_dogwood_deliver(
         c: &S,
-        arg0: &DogwoodDeliveryEnvelope,
+        arg0: &(impl EncodesAs<DogwoodDeliveryEnvelope> + ?Sized),
     ) -> Result<(), RpcError> {
         c.dogwood_deliver(arg0).await
     }

@@ -7,6 +7,7 @@ use groundhog_scp::{
     SCPSlotIndex, SCPValidationLevel, SCPValue, SCPValues,
 };
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod scp_control {
     use super::*;
@@ -17,58 +18,58 @@ pub mod scp_control {
     }
     pub async fn client_scp_control_nominate(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
-        arg2: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
+        arg2: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<bool, RpcError> {
         c.scp_control_nominate(arg0, arg1, arg2).await
     }
     pub async fn client_scp_control_stop_nomination(
         c: &S,
-        arg0: &SCPSlotIndex,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_control_stop_nomination(arg0).await
     }
     pub async fn client_scp_control_update_local_quorum_set(
         c: &S,
-        arg0: &SCPQuorumSet,
+        arg0: &(impl EncodesAs<SCPQuorumSet> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_control_update_local_quorum_set(arg0).await
     }
     pub async fn client_scp_control_received_envelope(
         c: &S,
-        arg0: &SCPEnvelope,
+        arg0: &(impl EncodesAs<SCPEnvelope> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_control_received_envelope(arg0).await
     }
     pub async fn client_scp_control_set_state_from_envelope(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPEnvelope,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPEnvelope> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_control_set_state_from_envelope(arg0, arg1).await
     }
     pub async fn client_scp_control_set_qset(
         c: &S,
-        arg0: &SCPQuorumSet,
+        arg0: &(impl EncodesAs<SCPQuorumSet> + ?Sized),
     ) -> Result<SCPOptQuorumSet, RpcError> {
         c.scp_control_set_qset(arg0).await
     }
     pub async fn client_scp_control_get_qset(
         c: &S,
-        arg0: &SCPHash,
+        arg0: &(impl EncodesAs<SCPHash> + ?Sized),
     ) -> Result<SCPOptQuorumSet, RpcError> {
         c.scp_control_get_qset(arg0).await
     }
     pub async fn client_scp_control_remove_qset(
         c: &S,
-        arg0: &SCPHash,
+        arg0: &(impl EncodesAs<SCPHash> + ?Sized),
     ) -> Result<SCPOptQuorumSet, RpcError> {
         c.scp_control_remove_qset(arg0).await
     }
     pub async fn client_scp_control_set_lowest_non_externalized_slot(
         c: &S,
-        arg0: &SCPSlotIndex,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_control_set_lowest_non_externalized_slot(arg0).await
     }
@@ -156,97 +157,97 @@ pub mod scp_handle {
     }
     pub async fn client_scp_handle_emit_envelope(
         c: &S,
-        arg0: &SCPEnvelope,
+        arg0: &(impl EncodesAs<SCPEnvelope> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_emit_envelope(arg0).await
     }
     pub async fn client_scp_handle_validate_ballot_value(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<SCPValidationLevel, RpcError> {
         c.scp_handle_validate_ballot_value(arg0, arg1).await
     }
     pub async fn client_scp_handle_validate_nomination_value(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<SCPValidationLevel, RpcError> {
         c.scp_handle_validate_nomination_value(arg0, arg1).await
     }
     pub async fn client_scp_handle_extract_valid_value(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<SCPOptValue, RpcError> {
         c.scp_handle_extract_valid_value(arg0, arg1).await
     }
     pub async fn client_scp_handle_combine_candidates(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValues,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValues> + ?Sized),
     ) -> Result<SCPOptValue, RpcError> {
         c.scp_handle_combine_candidates(arg0, arg1).await
     }
     pub async fn client_scp_handle_value_externalized(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_value_externalized(arg0, arg1).await
     }
     pub async fn client_scp_handle_nominating_value(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_nominating_value(arg0, arg1).await
     }
     pub async fn client_scp_handle_updated_candidate_value(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPValue,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPValue> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_updated_candidate_value(arg0, arg1).await
     }
     pub async fn client_scp_handle_started_ballot_proto(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPBallot,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPBallot> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_started_ballot_proto(arg0, arg1).await
     }
     pub async fn client_scp_handle_accepted_ballot_prepared(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPBallot,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPBallot> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_accepted_ballot_prepared(arg0, arg1).await
     }
     pub async fn client_scp_handle_confirmed_ballot_prepared(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPBallot,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPBallot> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_confirmed_ballot_prepared(arg0, arg1).await
     }
     pub async fn client_scp_handle_accepted_commit(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPBallot,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPBallot> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_accepted_commit(arg0, arg1).await
     }
     pub async fn client_scp_handle_ballot_did_hear_from_quorum(
         c: &S,
-        arg0: &SCPSlotIndex,
-        arg1: &SCPBallot,
+        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
+        arg1: &(impl EncodesAs<SCPBallot> + ?Sized),
     ) -> Result<(), RpcError> {
         c.scp_handle_ballot_did_hear_from_quorum(arg0, arg1).await
     }
     pub async fn client_scp_handle_get_quorum_set(
         c: &S,
-        arg0: &SCPHash,
+        arg0: &(impl EncodesAs<SCPHash> + ?Sized),
     ) -> Result<SCPOptQuorumSet, RpcError> {
         c.scp_handle_get_quorum_set(arg0).await
     }

@@ -7,6 +7,7 @@ use groundhog_view::{
 use groundhog_xdr::network::ProtocolCommit;
 use groundhog_xdr::view::TransactionViewQuery;
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod view_gateway {
     use super::*;
@@ -14,13 +15,13 @@ pub mod view_gateway {
 
     pub async fn client_viewgateway_intro(
         c: &S,
-        arg0: &ProtocolCommit,
+        arg0: &(impl EncodesAs<ProtocolCommit> + ?Sized),
     ) -> Result<ViewGatewayIntroOutcome, RpcError> {
         c.viewgateway_intro(arg0).await
     }
     pub async fn client_viewgateway_view(
         c: &S,
-        arg0: &TransactionViewQuery,
+        arg0: &(impl EncodesAs<TransactionViewQuery> + ?Sized),
     ) -> Result<ViewGatewayResult, RpcError> {
         c.viewgateway_view(arg0).await
     }
