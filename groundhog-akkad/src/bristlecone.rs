@@ -120,6 +120,8 @@ impl core::fmt::Display for BristleconeVoteType {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct BristleconeSafeVote {
+    // The hash of the sender's quorum set (BristleconeQuorumSet) for this vote.
+    pub qset_hash: BristleconeQuorumSetHash,
     pub statement: BristleconeSafeStatement,
     pub vote: BristleconeVoteType,
 }
@@ -130,6 +132,8 @@ pub struct BristleconeSafeVote {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct BristleconeTimelyVote {
+    // The hash of the sender's quorum set (BristleconeQuorumSet) for this vote.
+    pub qset_hash: BristleconeQuorumSetHash,
     pub statement: BristleconeTimelyStatement,
     pub vote: BristleconeVoteType,
 }
@@ -203,8 +207,6 @@ pub enum BristleconeContent {
 pub struct BristleconeNote {
     // The sending party.
     pub party: ValidatorID,
-    // The hash of the sender's quorum set (BristleconeQuorumSet).
-    pub qset_hash: BristleconeQuorumSetHash,
     // The slot the content applies to.
     pub slot: BristleconeSlot,
     pub content: BristleconeContent,
