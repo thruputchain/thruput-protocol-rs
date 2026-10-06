@@ -25,6 +25,7 @@ use groundhog_akkad::{
     SignedMissingTxs, TransactionHashBatch, ValidatorID,
 };
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod coord_scheduler {
     use super::*;
@@ -35,7 +36,7 @@ pub mod coord_scheduler {
     }
     pub async fn client_coordscheduler_notify_vetted(
         c: &S,
-        arg0: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.coordscheduler_notify_vetted(arg0).await
     }
@@ -66,7 +67,7 @@ pub mod discovery {
     }
     pub async fn client_discovery_update_quorums(
         c: &S,
-        arg0: &BristleconeKnownQuorumSets,
+        arg0: &(impl EncodesAs<BristleconeKnownQuorumSets> + ?Sized),
     ) -> Result<BristleconeKnownQuorumSets, RpcError> {
         c.discovery_update_quorums(arg0).await
     }
@@ -93,7 +94,7 @@ pub mod catchup {
     }
     pub async fn client_catchup_solicit(
         c: &S,
-        arg0: &SignedCatchupBlocksRequest,
+        arg0: &(impl EncodesAs<SignedCatchupBlocksRequest> + ?Sized),
     ) -> Result<SignedCatchupBlocksResult, RpcError> {
         c.catchup_solicit(arg0).await
     }
@@ -120,54 +121,54 @@ pub mod db_sched {
     }
     pub async fn client_dbsched_get_address_auth_data(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ContractAddressBatch,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
     ) -> Result<DbAddressAuthDataBatchResult, RpcError> {
         c.dbsched_get_address_auth_data(arg0, arg1).await
     }
     pub async fn client_dbsched_get_hog_ages(
         c: &S,
-        arg0: &ContractAddressBatch,
+        arg0: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
     ) -> Result<HogAgeResults, RpcError> {
         c.dbsched_get_hog_ages(arg0).await
     }
     pub async fn client_dbsched_write_hog_ages(
         c: &S,
-        arg0: &HogAgeBatch,
+        arg0: &(impl EncodesAs<HogAgeBatch> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_write_hog_ages(arg0).await
     }
     pub async fn client_dbsched_create_snapshot(
         c: &S,
-        arg0: &BlockID,
-        arg1: &BlockID,
-        arg2: &BlockExecutionMode,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<BlockID> + ?Sized),
+        arg2: &(impl EncodesAs<BlockExecutionMode> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_create_snapshot(arg0, arg1, arg2).await
     }
     pub async fn client_dbsched_commit_snapshot(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<DbBlockResult, RpcError> {
         c.dbsched_commit_snapshot(arg0, arg1).await
     }
     pub async fn client_dbsched_close_snapshot(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<DbBlockResult, RpcError> {
         c.dbsched_close_snapshot(arg0).await
     }
     pub async fn client_dbsched_abandon_snapshot(
         c: &S,
-        arg0: &BlockID,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_abandon_snapshot(arg0).await
     }
     pub async fn client_dbsched_load_genesis_configuration(
         c: &S,
-        arg0: &GenesisConfiguration,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<GenesisConfiguration> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.dbsched_load_genesis_configuration(arg0, arg1).await
     }
@@ -253,25 +254,25 @@ pub mod repair {
     }
     pub async fn client_repair_missing_txs(
         c: &S,
-        arg0: &SignedMissingTxs,
+        arg0: &(impl EncodesAs<SignedMissingTxs> + ?Sized),
     ) -> Result<RepairedTxs, RpcError> {
         c.repair_missing_txs(arg0).await
     }
     pub async fn client_repair_missing_proposal(
         c: &S,
-        arg0: &SignedMissingProposal,
+        arg0: &(impl EncodesAs<SignedMissingProposal> + ?Sized),
     ) -> Result<RepairedProposal, RpcError> {
         c.repair_missing_proposal(arg0).await
     }
     pub async fn client_repair_missing_slot(
         c: &S,
-        arg0: &SignedMissingSlot,
+        arg0: &(impl EncodesAs<SignedMissingSlot> + ?Sized),
     ) -> Result<RepairedSlot, RpcError> {
         c.repair_missing_slot(arg0).await
     }
     pub async fn client_repair_missing_blocks(
         c: &S,
-        arg0: &SignedMissingBlocks,
+        arg0: &(impl EncodesAs<SignedMissingBlocks> + ?Sized),
     ) -> Result<RepairedBlocks, RpcError> {
         c.repair_missing_blocks(arg0).await
     }
@@ -316,41 +317,41 @@ pub mod scheduler_coord {
     }
     pub async fn client_schedulercoord_intro_coord(
         c: &S,
-        arg0: &CoordCard,
+        arg0: &(impl EncodesAs<CoordCard> + ?Sized),
     ) -> Result<CoordinatorRegistrationOutcome, RpcError> {
         c.schedulercoord_intro_coord(arg0).await
     }
     pub async fn client_schedulercoord_submit_unvetted(
         c: &S,
-        arg0: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.schedulercoord_submit_unvetted(arg0).await
     }
     pub async fn client_schedulercoord_submit_vetted(
         c: &S,
-        arg0: &ValidatorID,
-        arg1: &ParallelSignedTransactionBatch,
+        arg0: &(impl EncodesAs<ValidatorID> + ?Sized),
+        arg1: &(impl EncodesAs<ParallelSignedTransactionBatch> + ?Sized),
     ) -> Result<(), RpcError> {
         c.schedulercoord_submit_vetted(arg0, arg1).await
     }
     pub async fn client_schedulercoord_propose_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ProposalContext,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ProposalContext> + ?Sized),
     ) -> Result<SchedulerProposalResult, RpcError> {
         c.schedulercoord_propose_block(arg0, arg1).await
     }
     pub async fn client_schedulercoord_validate_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &Proposal,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<Proposal> + ?Sized),
     ) -> Result<SchedulerValidationResult, RpcError> {
         c.schedulercoord_validate_block(arg0, arg1).await
     }
     pub async fn client_schedulercoord_commit_block(
         c: &S,
-        arg0: &BlockID,
-        arg1: &ConsensusValue,
+        arg0: &(impl EncodesAs<BlockID> + ?Sized),
+        arg1: &(impl EncodesAs<ConsensusValue> + ?Sized),
     ) -> Result<SchedulerCommitOutcome, RpcError> {
         c.schedulercoord_commit_block(arg0, arg1).await
     }
@@ -361,19 +362,19 @@ pub mod scheduler_coord {
     }
     pub async fn client_schedcoord_load_genesis_configuration(
         c: &S,
-        arg0: &GenesisConfiguration,
+        arg0: &(impl EncodesAs<GenesisConfiguration> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
         c.schedcoord_load_genesis_configuration(arg0).await
     }
     pub async fn client_schedulercoord_commit_genesis_ceremony(
         c: &S,
-        arg0: &GenesisCeremonyRequest,
+        arg0: &(impl EncodesAs<GenesisCeremonyRequest> + ?Sized),
     ) -> Result<GenesisCeremonyResult, RpcError> {
         c.schedulercoord_commit_genesis_ceremony(arg0).await
     }
     pub async fn client_schedcoord_lookup_transactions(
         c: &S,
-        arg0: &TransactionHashBatch,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
     ) -> Result<OptSignedTransactionBatch, RpcError> {
         c.schedcoord_lookup_transactions(arg0).await
     }
@@ -476,15 +477,15 @@ pub mod loadgen_interface {
 
     pub async fn client_generate_experiment(
         c: &S,
-        arg0: &ExperimentConfig,
+        arg0: &(impl EncodesAs<ExperimentConfig> + ?Sized),
     ) -> Result<LoadgenResult, RpcError> {
         c.generate_experiment(arg0).await
     }
     pub async fn client_extend_experiment(
         c: &S,
-        arg0: &LoadgenContextID,
+        arg0: &(impl EncodesAs<LoadgenContextID> + ?Sized),
         arg1: u64,
-        arg2: &BlockHeight,
+        arg2: &(impl EncodesAs<BlockHeight> + ?Sized),
     ) -> Result<LoadgenExtensionResult, RpcError> {
         c.extend_experiment(arg0, arg1, arg2).await
     }
@@ -518,7 +519,7 @@ pub mod dogwood {
     }
     pub async fn client_dogwood_deliver(
         c: &S,
-        arg0: &DogwoodDeliveryEnvelope,
+        arg0: &(impl EncodesAs<DogwoodDeliveryEnvelope> + ?Sized),
     ) -> Result<(), RpcError> {
         c.dogwood_deliver(arg0).await
     }

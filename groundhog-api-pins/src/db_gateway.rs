@@ -6,6 +6,7 @@ use groundhog_db_gateway::{
 };
 use groundhog_xdr::network::ProtocolCommit;
 use rpc_api::{ProgramError, RpcError};
+use xdrs::EncodesAs;
 
 pub mod db_gateway {
     use super::*;
@@ -13,13 +14,13 @@ pub mod db_gateway {
 
     pub async fn client_dbgateway_intro(
         c: &S,
-        arg0: &ProtocolCommit,
+        arg0: &(impl EncodesAs<ProtocolCommit> + ?Sized),
     ) -> Result<DbGatewayIntroOutcome, RpcError> {
         c.dbgateway_intro(arg0).await
     }
     pub async fn client_dbgateway_get_items(
         c: &S,
-        arg0: &AddressAndKeyBatch,
+        arg0: &(impl EncodesAs<AddressAndKeyBatch> + ?Sized),
     ) -> Result<DbGatewayResult, RpcError> {
         c.dbgateway_get_items(arg0).await
     }

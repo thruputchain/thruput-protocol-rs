@@ -23,3 +23,4 @@ groundhog-trace = { workspace = true }
 groundhog_view = { workspace = true }
 groundhog-xdr = { workspace = true }
 rpc_api = { workspace = true }
+xdrs = { workspace = true }
