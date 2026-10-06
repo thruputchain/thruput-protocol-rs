@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -137,27 +137,27 @@ impl EventExecutor_EventExecutor1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventexecutor_open_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventexecutor_open_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 31, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventexecutor_close_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventexecutor_close_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 32, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventexecutor_report_tx_failure(&self, arg0 : &TransactionHash, arg1 : &TxFailureDiagnostic) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventexecutor_report_tx_failure(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHash> + ?Sized), arg1 : &(impl xdrs::EncodesAs<TxFailureDiagnostic> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 33, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventexecutor_emit_event(&self, arg0 : &BlockID, arg1 : &TransactionID, arg2 : &TxEventLog, arg3 : &ProposedTransaction) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventexecutor_emit_event(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<TransactionID> + ?Sized), arg2 : &(impl xdrs::EncodesAs<TxEventLog> + ?Sized), arg3 : &(impl xdrs::EncodesAs<ProposedTransaction> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1, &arg2, &arg3)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1, arg2, arg3)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -281,27 +281,27 @@ impl EventSched_EventSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventsched_open_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventsched_open_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventsched_close_block(&self, arg0 : &BlockID, arg1 : &BlockHeight) -> Result<EventBlockResult, ::rpc_api::RpcError> {
+    pub async fn eventsched_close_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<EventBlockResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 30, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventsched_commit_block(&self, arg0 : &BlockID, arg1 : &ConsensusValue) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventsched_commit_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ConsensusValue> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, &arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 31, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn eventsched_abandon_block(&self, arg0 : &BlockID) -> Result<RPCError, ::rpc_api::RpcError> {
+    pub async fn eventsched_abandon_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized)) -> Result<RPCError, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 40, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

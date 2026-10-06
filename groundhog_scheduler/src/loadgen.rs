@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: dcb5d7af8f39be558b0bfe56c0d0bb9163cce9f2
+// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -247,15 +247,15 @@ impl LoadgenInterface_LoadgenInterfaceV1_Client {
     fn prog_vers() -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(12341234, 1)
     }
-    pub async fn generate_experiment(&self, arg0 : &ExperimentConfig) -> Result<LoadgenResult, ::rpc_api::RpcError> {
+    pub async fn generate_experiment(&self, arg0 : &(impl xdrs::EncodesAs<ExperimentConfig> + ?Sized)) -> Result<LoadgenResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn extend_experiment(&self, arg0 : &LoadgenContextID, arg1 : u64, arg2 : &BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_api::RpcError> {
+    pub async fn extend_experiment(&self, arg0 : &(impl xdrs::EncodesAs<LoadgenContextID> + ?Sized), arg1 : u64, arg2 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<LoadgenExtensionResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(&arg0, arg1, &arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.encode(&(arg0, arg1, arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
