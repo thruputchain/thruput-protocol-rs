@@ -597,6 +597,14 @@ pub struct SchedulerTransactionOutcome {
     pub error_source: SchedulerTransactionErrorSource,
     // The actual error.
     pub error_code: i32,
+    // For [SchedulerTransactionSucceeded], the committed block height.
+    // For [SchedulerTransactionRetry] or [SchedulerTransactionDropped], the
+    // proposal height for an executor failure, or the current chain height for
+    // an admission/scheduler failure.
+    // For [SchedulerTransactionPending], the current chain height at lookup.
+    // Unspecified for [SchedulerTransactionNotFound].
+    // Zero is a valid height.
+    pub height: BlockHeight,
 }
 
 pub type SchedulerTransactionOutcomeBatch = VecM::<SchedulerTransactionOutcome>;
