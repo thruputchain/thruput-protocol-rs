@@ -24,6 +24,7 @@ serde = [
     "dep:serde",
     "xdrs/serde",
     "groundhog-xdr/serde",
+    "groundhog_scheduler/serde",
 ]
 
 [dependencies]
