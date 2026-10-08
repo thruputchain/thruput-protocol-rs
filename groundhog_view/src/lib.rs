@@ -32,6 +32,35 @@ mod tests {
 
     #[async_trait::async_trait]
     impl ViewGateway_ViewGateway1 for ScriptedViewGateway {
+        async fn viewgateway_view_batch(
+            &self,
+            request: ViewGatewayBatchQuery,
+        ) -> Result<ViewGatewayBatchResult, ProgramError> {
+            assert_eq!(request.calls.0, vec![query(), query()]);
+            assert_eq!(request.min_height, Some(BlockHeight::from(42)));
+            assert_eq!(request.budget_millis, 1000);
+            assert_eq!(request.max_response_bytes, 1_048_576);
+            Ok(ViewGatewayBatchResult::ViewGatewayBatchOk {
+                payload: ViewGatewayBatchPayload {
+                    height: BlockHeight::from(42),
+                    results: VecM(vec![
+                        TransactionViewResult {
+                            gas_consumed: 17,
+                            output: InvocationFrameOutput::Return {
+                                return_buffer: BytesM(vec![1]),
+                            },
+                            events: VecM(vec![]),
+                        },
+                        TransactionViewResult {
+                            gas_consumed: 23,
+                            output: InvocationFrameOutput::Fault,
+                            events: VecM(vec![]),
+                        },
+                    ]),
+                },
+            })
+        }
+
         async fn viewgateway_intro(
             &self,
             protocol: ProtocolCommit,
@@ -163,6 +192,8 @@ mod tests {
         let _ = schemars::schema_for!(ViewGatewayOutcome);
         let _ = schemars::schema_for!(ViewGatewayResult);
         let _ = schemars::schema_for!(ViewGatewayIntroOutcome);
+        let _ = schemars::schema_for!(ViewGatewayBatchQuery);
+        let _ = schemars::schema_for!(ViewGatewayBatchResult);
     }
 
     #[cfg(feature = "serde")]
@@ -179,7 +210,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn generated_client_dispatches_intro_and_view() {
+    async fn generated_client_dispatches_intro_view_and_batch() {
         let calls = Arc::new(Mutex::new(Vec::new()));
         let handler = Arc::new(ViewGateway_ViewGateway1_Dispatcher::new(
             Box::new(ScriptedViewGateway),
@@ -214,9 +245,51 @@ mod tests {
             other => panic!("unexpected view result: {other:?}"),
         }
 
+        let batch = ViewGatewayBatchQuery {
+            calls: VecM(vec![query(), query()]),
+            min_height: Some(BlockHeight::from(42)),
+            budget_millis: 1000,
+            max_response_bytes: 1_048_576,
+        };
+        let result = client
+            .viewgateway_view_batch(&batch)
+            .await
+            .expect("batch should round-trip through dispatcher");
+        assert_eq!(
+            result,
+            ScriptedViewGateway
+                .viewgateway_view_batch(batch)
+                .await
+                .unwrap()
+        );
         assert_eq!(
             *calls.lock().expect("calls lock poisoned"),
-            vec![(VIEW_GATEWAY_PROG_VERS, 0), (VIEW_GATEWAY_PROG_VERS, 1)]
+            vec![
+                (VIEW_GATEWAY_PROG_VERS, 0),
+                (VIEW_GATEWAY_PROG_VERS, 1),
+                (VIEW_GATEWAY_PROG_VERS, 2)
+            ]
         );
+    }
+
+    #[test]
+    fn batch_failures_preserve_height_details_and_unknown_outcomes() {
+        let mut failures =
+            vec![ViewGatewayBatchResult::ViewGatewayBatchHeightUnavailable {
+                height_unavailable: ViewGatewayHeightUnavailable {
+                    requested: BlockHeight::from(50),
+                    observed: BlockHeight::from(42),
+                },
+            }];
+        failures.extend(
+            [1, 3, 4, 5, 6, 99]
+                .map(|outcome| ViewGatewayBatchResult::Default { outcome }),
+        );
+        for result in failures {
+            let encoded = xdrs::txs::encode(&result).unwrap();
+            let decoded: ViewGatewayBatchResult =
+                xdrs::txs::decode(&encoded).unwrap();
+            assert_eq!(decoded, result);
+        }
     }
 }
