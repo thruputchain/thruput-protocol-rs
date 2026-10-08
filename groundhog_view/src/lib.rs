@@ -39,7 +39,6 @@ mod tests {
             assert_eq!(request.calls.0, vec![query(), query()]);
             assert_eq!(request.min_height, Some(BlockHeight::from(42)));
             assert_eq!(request.budget_millis, 1000);
-            assert_eq!(request.max_gas, 160_000_000);
             assert_eq!(request.max_response_bytes, 1_048_576);
             Ok(ViewGatewayBatchResult::ViewGatewayBatchOk {
                 payload: ViewGatewayBatchPayload {
@@ -250,7 +249,6 @@ mod tests {
             calls: VecM(vec![query(), query()]),
             min_height: Some(BlockHeight::from(42)),
             budget_millis: 1000,
-            max_gas: 160_000_000,
             max_response_bytes: 1_048_576,
         };
         let result = client.viewgateway_view_batch(&batch).await.unwrap();
