@@ -102,11 +102,6 @@ jobs:
           echo "$RUNNER_TEMP/protocol-rs-generator/bin" >> "$GITHUB_PATH"
       - name: Setup environment
         uses: ./.github/actions/setup
-      - name: Generate missing executor bindings for review
-        run: |
-          "$RUNNER_TEMP/x23c" --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "$RUNNER_TEMP/sched_exec.rs" protocol/sched_exec.x
-          "$RUNNER_TEMP/x23c" --rust --rust-feature xdrs --rust-feature std --rust-no-feature schema --rust-no-feature spec --rust-no-feature serde -o "$RUNNER_TEMP/sched_exec_standalone.rs" protocol/sched_exec.x
-          python3 -c 'import json,os,pathlib; p=pathlib.Path(os.environ["RUNNER_TEMP"]); print("GENERATED_SCHED_EXEC="+json.dumps({n:(p/n).read_text() for n in ["sched_exec.rs","sched_exec_standalone.rs"]}))'
       - name: Run CI checks
         run: XDRC="$RUNNER_TEMP/x23c" ./scripts/ci-check.sh
 
