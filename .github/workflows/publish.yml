@@ -122,4 +122,4 @@ jobs:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: groundhog
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-          publish-delay-seconds: '20'
+          publish-delay-seconds: '10'
