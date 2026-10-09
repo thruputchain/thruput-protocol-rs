@@ -221,6 +221,7 @@ scheduler_deps=(
   auth_card.x
   auth_rpc.x
   sched_event.x
+  sched_exec.x
   event_rpc.x
   exec_sched.x
   consensus.x
