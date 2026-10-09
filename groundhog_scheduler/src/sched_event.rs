@@ -192,7 +192,7 @@ impl SchedEvent_SchedEvent1_Dispatcher {
 #[async_trait::async_trait]
 impl ::rpc_api::RpcHandler for SchedEvent_SchedEvent1_Dispatcher {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee79998, 1)
+        ::rpc_api::ProgVers::new(0x7ee79996, 1)
     }
     async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
         match proc {
@@ -226,7 +226,7 @@ impl SchedEvent_SchedEvent1_Client {
     }
 
     fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee79998, 1)
+        ::rpc_api::ProgVers::new(0x7ee79996, 1)
     }
     pub async fn schedevent_prepare_event(&self, arg0 : &(impl xdrs::EncodesAs<EventCard> + ?Sized)) -> Result<EventPrepareResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
