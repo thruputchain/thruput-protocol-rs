@@ -51,6 +51,10 @@ pub mod sched_event;
 pub use sched_event::*;
 
 #[rustfmt::skip]
+pub mod sched_exec;
+pub use sched_exec::*;
+
+#[rustfmt::skip]
 pub mod event_rpc;
 pub use event_rpc::*;
 
