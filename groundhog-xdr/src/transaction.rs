@@ -64,10 +64,11 @@ use ::serde::{{Serialize, Deserialize}};
 /// encoding is planned but not yet enabled.
 pub type Calldata = BytesM;
 
-/// Maximum size of data that can be returned from a contract invocation.
+/// The limit in force on a return buffer when a configuration does not
+/// state `kConfigParamMaxReturnBufferLen`.
 ///
-/// Return values larger than this will cause the invocation to revert
-/// with a deterministic error (equivalent to wasm `unreachable`).
+/// Return values larger than the limit in force cause the invocation to
+/// revert with a deterministic error (equivalent to wasm `unreachable`).
 // 
 pub const kMaxReturnBufferLen : u32 = 1024;
 
@@ -75,7 +76,13 @@ pub const kMaxReturnBufferLen : u32 = 1024;
 ///
 /// Like Calldata, contracts can encode return values arbitrarily, but the
 /// SDK default uses XDR serialization per RFC 4506 (<https://datatracker.ietf.org/doc/html/rfc4506>).
-pub type ReturnBuffer = BytesM::<kMaxReturnBufferLen>;
+///
+/// Unbounded here, as `Calldata` is: what a chain permits is stated by
+/// `kConfigParamMaxReturnBufferLen` and enforced where the Return syscall
+/// writes one, rather than where one is decoded. Nothing decodes a buffer
+/// the local executor did not just build, so a bound here would constrain
+/// what a configuration may state without guarding anything.
+pub type ReturnBuffer = BytesM;
 
 //------------------------------------------------------------------------------
 // Invocations
