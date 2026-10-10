@@ -52,7 +52,9 @@ pub struct CopyableInvokeInputs {
 #[repr(C)]
 pub struct CopyableInvokeOutputs {
     pub return_buffer_len: RuntimeMemoryLength,
-    pub returned_auth_token_len: RuntimeMemoryLength,
+    // The number of auth tokens the child returned. GetReturnedBuffer reports
+    // which of the current frame's ids they took.
+    pub returned_auth_token_count: u32,
     // The outcome of the child frame. Only meaningful when the Invoke syscall
     // returns kSyscallErrorCodeNone (i.e. a child frame actually ran):
     //   Return -> child returned normally; return_buffer_len bytes available

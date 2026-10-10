@@ -49,18 +49,14 @@ fn test_get_calldata_span_output() {
     // GetCalldata has:
     // - buffer: span_argument (output)
     // - written_len: RuntimeMemoryLength (u32, primitive output)
+    // - auth_token_count: u32 (primitive output)
 
     let mut buffer = [0u8; 1024];
     let mut written_len: RuntimeMemoryLength = 0;
-    let mut auth_token_list = [0u8; 1024];
-    let mut auth_token_written_len: RuntimeMemoryLength = 0;
+    let mut auth_token_count: u32 = 0;
 
-    let result = raw_GetCalldata(
-        &mut buffer,
-        &mut written_len,
-        &mut auth_token_list,
-        &mut auth_token_written_len,
-    );
+    let result =
+        raw_GetCalldata(&mut buffer, &mut written_len, &mut auth_token_count);
 
     assert!(result.is_ok());
 
@@ -76,17 +72,10 @@ fn test_get_calldata_span_output() {
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
     // arg3: written_len pointer
     assert_eq!(invocations[0].args[2], &written_len as *const _ as u64);
-    // arg4: auth_token_list pointer
-    assert_eq!(invocations[0].args[3], auth_token_list.as_mut_ptr() as u64);
-    // arg5: auth_token_list length
-    assert_eq!(invocations[0].args[4], auth_token_list.len() as u64);
-    // arg6: auth_token_written_len pointer
-    assert_eq!(
-        invocations[0].args[5],
-        &auth_token_written_len as *const _ as u64
-    );
+    // arg4: auth_token_count pointer
+    assert_eq!(invocations[0].args[3], &auth_token_count as *const _ as u64);
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[6..], [0; 1]);
+    assert_eq!(invocations[0].args[4..], [0; 3]);
 }
 
 #[test]
@@ -98,18 +87,19 @@ fn test_get_returned_buffer_span_output() {
     // GetReturnedBuffer has:
     // - buffer: span_argument (output)
     // - written_len: RuntimeMemoryLength (u32, primitive output)
+    // - returned_auth_token_start: u32 (primitive output)
+    // - returned_auth_token_count: u32 (primitive output)
 
     let mut buffer = [0u8; 512];
     let mut written_len: RuntimeMemoryLength = 0;
-
-    let mut restored_auth_token_ids = [0u8; 512];
-    let mut restored_auth_token_ids_written_len: RuntimeMemoryLength = 0;
+    let mut returned_auth_token_start: u32 = 0;
+    let mut returned_auth_token_count: u32 = 0;
 
     let result = raw_GetReturnedBuffer(
         &mut buffer,
         &mut written_len,
-        &mut restored_auth_token_ids,
-        &mut restored_auth_token_ids_written_len,
+        &mut returned_auth_token_start,
+        &mut returned_auth_token_count,
     );
 
     assert!(result.is_ok());
@@ -126,21 +116,18 @@ fn test_get_returned_buffer_span_output() {
     assert_eq!(invocations[0].args[1], buffer.len() as u64);
     // arg3: written_len pointer
     assert_eq!(invocations[0].args[2], &written_len as *const _ as u64);
-
-    // arg4: restored_auth_token_ids pointer
+    // arg4: returned_auth_token_start pointer
     assert_eq!(
         invocations[0].args[3],
-        restored_auth_token_ids.as_mut_ptr() as u64
+        &returned_auth_token_start as *const _ as u64
     );
-    // arg5: restored_auth_token_ids length
-    assert_eq!(invocations[0].args[4], restored_auth_token_ids.len() as u64);
-    // arg6: restored_auth_token_ids_written_len pointer
+    // arg5: returned_auth_token_count pointer
     assert_eq!(
-        invocations[0].args[5],
-        &restored_auth_token_ids_written_len as *const _ as u64
+        invocations[0].args[4],
+        &returned_auth_token_count as *const _ as u64
     );
     // Remaining args should be 0
-    assert_eq!(invocations[0].args[6..], [0; 1]);
+    assert_eq!(invocations[0].args[5..], [0; 2]);
 }
 
 #[test]

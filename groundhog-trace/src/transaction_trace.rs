@@ -126,7 +126,7 @@ pub struct SyscallGetCalldataInputs (
 #[repr(C)]
 pub struct SyscallGetCalldataOutputs {
     pub calldata: BytesM,
-    pub auth_tokens: VecM<u32>,
+    pub auth_token_count: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -240,7 +240,8 @@ pub struct SyscallGetReturnedBufferInputs (
 #[repr(C)]
 pub struct SyscallGetReturnedBufferOutputs {
     pub buffer: ReturnBuffer,
-    pub returned_auth_tokens: BytesM,
+    pub returned_auth_token_start: u32,
+    pub returned_auth_token_count: u32,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
