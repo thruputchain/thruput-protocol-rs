@@ -93,7 +93,7 @@ fn test_invoke_primitive_inputs() {
     };
     let mut outputs = CopyableInvokeOutputs {
         return_buffer_len: 0,
-        returned_auth_token_len: 0,
+        returned_auth_token_count: 0,
         frame_status: InvocationFrameStatusCode::Return,
     };
 
