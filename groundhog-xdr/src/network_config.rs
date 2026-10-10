@@ -52,6 +52,9 @@ impl ConfigParamID {
     pub const kConfigParamMaxAuthTokenDepth: Self = Self(7);
     pub const kConfigParamMaxRv32CodeBytes: Self = Self(8);
     pub const kConfigParamMaxRv32MemoryBytes: Self = Self(9);
+    pub const kConfigParamMaxAuthTokens: Self = Self(10);
+    pub const kConfigParamMaxCalldataLen: Self = Self(11);
+    pub const kConfigParamMaxReturnBufferLen: Self = Self(12);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -91,6 +94,15 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxRv32MemoryBytes.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxRv32MemoryBytes")
+            },
+            x if x == Self::kConfigParamMaxAuthTokens.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxAuthTokens")
+            },
+            x if x == Self::kConfigParamMaxCalldataLen.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxCalldataLen")
+            },
+            x if x == Self::kConfigParamMaxReturnBufferLen.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxReturnBufferLen")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -223,6 +235,52 @@ pub enum ConfigParam {
     // case kConfigParamMaxRv32MemoryBytes:
     //   u32 max_rv32_memory_bytes;
     kConfigParamMaxRv32MemoryBytes { max_rv32_memory_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32MemoryBytes.0 as i32,
+    /// Auth token ids one call may carry in a list: `Invoke`'s
+    /// `owned_auth_token_ids_list` and `Return`'s `returned_auth_token_ids`,
+    /// each read as a `[u32]` span.
+    ///
+    /// Checked against the span's length before the ids are read, so a list
+    /// past the bound is refused without being copied and what a rejected call
+    /// costs does not scale with the memory that held it. The ids in a list are
+    /// distinct and owned by the frame naming them, so this bounds what one
+    /// frame hands another in a single call rather than what a frame may hold.
+    ///
+    /// Neither wire type bounds its list, and no value was in force before this
+    /// parameter: a list was limited only by the memory holding it. A
+    /// configuration omitting this one is not continuing an older rule.
+    // case kConfigParamMaxAuthTokens:
+    //   u32 max_auth_tokens;
+    kConfigParamMaxAuthTokens { max_auth_tokens: u32 } = ConfigParamID::kConfigParamMaxAuthTokens.0 as i32,
+    /// Bytes of calldata one invocation may be given, whether a transaction
+    /// supplies it in `Invocation::calldata` or a contract supplies it in
+    /// `Invoke`'s `calldata` span.
+    ///
+    /// Checked before the bytes are copied, so an oversized call is refused
+    /// rather than materialized. `Calldata` is `opaque<>`, so the wire type
+    /// bounds neither form and this is what bounds them in execution.
+    /// `kConfigParamMaxReturnBufferLen` bounds the other direction the same
+    /// way.
+    ///
+    /// The executor holds a frame's calldata for the life of that frame and
+    /// every open frame holds its own, so a chain must keep this within what
+    /// `kConfigParamMaxCrossInvokeDepth` frames of it leave room for. No value
+    /// was in force before this parameter.
+    // case kConfigParamMaxCalldataLen:
+    //   u32 max_calldata_len;
+    kConfigParamMaxCalldataLen { max_calldata_len: u32 } = ConfigParamID::kConfigParamMaxCalldataLen.0 as i32,
+    /// Bytes one invocation frame may return, whether to a calling frame or,
+    /// from the root frame, into `TxEventLog::root_output`.
+    /// `kMaxReturnBufferLen` is the value in force for a configuration that
+    /// does not state one.
+    ///
+    /// Checked where the Return syscall writes a buffer, which is the only
+    /// place one is built. A root frame's buffer is committed to by the events
+    /// root, so what a chain states here it stores and serves for every
+    /// transaction; together with the event bounds it is what keeps a
+    /// `TxEventLog` inside the RPC transport message limit.
+    // case kConfigParamMaxReturnBufferLen:
+    //   u32 max_return_buffer_len;
+    kConfigParamMaxReturnBufferLen { max_return_buffer_len: u32 } = ConfigParamID::kConfigParamMaxReturnBufferLen.0 as i32,
     
 }
 
