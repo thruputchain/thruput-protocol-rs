@@ -270,14 +270,16 @@ pub enum ConfigParam {
     kConfigParamMaxCalldataLen { max_calldata_len: u32 } = ConfigParamID::kConfigParamMaxCalldataLen.0 as i32,
     /// Bytes one invocation frame may return, whether to a calling frame or,
     /// from the root frame, into `TxEventLog::root_output`.
-    /// `kMaxReturnBufferLen` is the value in force for a configuration that
-    /// does not state one.
     ///
     /// Checked where the Return syscall writes a buffer, which is the only
     /// place one is built. A root frame's buffer is committed to by the events
     /// root, so what a chain states here it stores and serves for every
     /// transaction; together with the event bounds it is what keeps a
     /// `TxEventLog` inside the RPC transport message limit.
+    ///
+    /// `ReturnBuffer` bounded itself at 1024 bytes before this parameter, so a
+    /// configuration omitting this one is continuing an older rule rather than
+    /// lifting it. The executor states the value it continues at.
     // case kConfigParamMaxReturnBufferLen:
     //   u32 max_return_buffer_len;
     kConfigParamMaxReturnBufferLen { max_return_buffer_len: u32 } = ConfigParamID::kConfigParamMaxReturnBufferLen.0 as i32,

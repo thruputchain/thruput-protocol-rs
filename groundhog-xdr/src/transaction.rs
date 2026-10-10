@@ -64,14 +64,6 @@ use ::serde::{{Serialize, Deserialize}};
 /// encoding is planned but not yet enabled.
 pub type Calldata = BytesM;
 
-/// The limit in force on a return buffer when a configuration does not
-/// state `kConfigParamMaxReturnBufferLen`.
-///
-/// Return values larger than the limit in force cause the invocation to
-/// revert with a deterministic error (equivalent to wasm `unreachable`).
-// 
-pub const kMaxReturnBufferLen : u32 = 1024;
-
 /// Opaque encoded return value from a contract invocation.
 ///
 /// Like Calldata, contracts can encode return values arbitrarily, but the
