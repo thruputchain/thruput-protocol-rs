@@ -81,6 +81,7 @@ jobs:
         uses: ./actions/cargo-semver-checks
         env:
           # The previous release still resolves its dependencies via this alias.
+          CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
           CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ steps.baseline.outputs.legacy-registry == 'true' && secrets.GROUNDHOG_REGISTRY_TOKEN || '' }}
         with:
           baseline-rev: ${{ steps.baseline.outputs.revision }}
