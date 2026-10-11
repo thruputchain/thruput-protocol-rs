@@ -43,7 +43,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: v1
+          ref: 16e3402eca906d0771f171ee95fcba8a0be8b0aa # registry alias support
           persist-credentials: false
 
       - name: Check for changes since last nightly
@@ -71,6 +71,7 @@ jobs:
         if: steps.changed.outputs.should_publish == 'true'
         uses: ./actions/cargo-publish-dry-run
         with:
+          registry-name: thruput
           skip-clippy: true
           cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
 
@@ -78,7 +79,7 @@ jobs:
         if: steps.changed.outputs.should_publish == 'true'
         uses: ./actions/cargo-publish-prerelease
         with:
-          registry-name: groundhog
+          registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
           no-verify: 'true'
 

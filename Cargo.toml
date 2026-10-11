@@ -1,64 +1,64 @@
 [workspace]
 members = [
     "hogexec-internal",
-    "groundhog-xdr-macros",
-    "groundhog-syscall",
-    "groundhog-xdr",
-    "groundhog_rpc",
-    "groundhog_scp",
-    "groundhog_coordinator",
-    "groundhog-akkad",
-    "groundhog_hogx",
-    "groundhog-trace",
-    "groundhog_scheduler",
-    "groundhog_indexer",
-    "groundhog_db_gateway",
-    "groundhog_view",
-    "groundhog-api-pins",
+    "thruput-xdr-macros",
+    "thruput-syscall",
+    "thruput-xdr",
+    "thruput-rpc",
+    "thruput-scp",
+    "thruput-coordinator",
+    "thruput-akkad",
+    "thruput-hogx",
+    "thruput-trace",
+    "thruput-scheduler",
+    "thruput-indexer",
+    "thruput-db-gateway",
+    "thruput-view",
+    "thruput-api-pins",
     "bin/rpcthroughput_server",
-    "groundhog_xdr_syscall_tests",
-    "groundhog-spec",
+    "thruput-xdr-syscall-tests",
+    "thruput-spec",
 ]
 resolver = "2"
 
 [workspace.package]
-version = "0.53.0"
+version = "0.54.0"
 edition = "2024"
 rust-version = "1.96"
-authors = ["Groundhog Team"]
+authors = ["Thruput Team"]
 license = "Apache-2.0"
-publish = ["groundhog"]
-description = "Groundhog Protocol"
+publish = ["thruput"]
+description = "Thruput Protocol"
 repository = "https://github.com/groundhogchain/protocol-rs.git"
 homepage = "https://github.com/groundhogchain/protocol-rs.git"
-keywords = ["groundhog"]
+keywords = ["thruput"]
 categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-groundhog-syscall = { path = "groundhog-syscall", version = "=0.53.0", registry = "groundhog" }
-groundhog-xdr = { path = "groundhog-xdr", version = "=0.53.0", registry = "groundhog" }
-groundhog-xdr-macros = { path = "groundhog-xdr-macros", version = "=0.53.0", registry = "groundhog" }
-groundhog-trace = { path = "groundhog-trace", version = "=0.53.0", registry = "groundhog" }
-groundhog_scp = { path = "groundhog_scp", version = "=0.53.0", registry = "groundhog" }
-groundhog_coordinator = { path = "groundhog_coordinator", version = "=0.53.0", registry = "groundhog" }
-groundhog-akkad = { path = "groundhog-akkad", version = "=0.53.0", registry = "groundhog" }
-groundhog_hogx = { path = "groundhog_hogx", version = "=0.53.0", registry = "groundhog" }
-groundhog_rpc = { path = "groundhog_rpc", version = "=0.53.0", registry = "groundhog" }
-groundhog_scheduler = { path = "groundhog_scheduler", version = "=0.53.0", registry = "groundhog" }
-groundhog_indexer = { path = "groundhog_indexer", version = "=0.53.0", registry = "groundhog" }
-groundhog_db_gateway = { path = "groundhog_db_gateway", version = "=0.53.0", registry = "groundhog" }
-groundhog_view = { path = "groundhog_view", version = "=0.53.0", registry = "groundhog" }
-hogexec-internal = { path = "hogexec-internal", version = "=0.53.0", registry = "groundhog" }
-groundhog-spec = { path = "groundhog-spec", version = "=0.53.0", registry = "groundhog" }
-xdrs = { registry = "groundhog", version = "0.10.3", default-features = false, features = [
+thruput-syscall = { path = "thruput-syscall", version = "=0.54.0", registry = "thruput" }
+thruput-xdr = { path = "thruput-xdr", version = "=0.54.0", registry = "thruput" }
+thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.54.0", registry = "thruput" }
+thruput-trace = { path = "thruput-trace", version = "=0.54.0", registry = "thruput" }
+thruput-scp = { path = "thruput-scp", version = "=0.54.0", registry = "thruput" }
+thruput-coordinator = { path = "thruput-coordinator", version = "=0.54.0", registry = "thruput" }
+thruput-akkad = { path = "thruput-akkad", version = "=0.54.0", registry = "thruput" }
+thruput-hogx = { path = "thruput-hogx", version = "=0.54.0", registry = "thruput" }
+thruput-rpc = { path = "thruput-rpc", version = "=0.54.0", registry = "thruput" }
+thruput-scheduler = { path = "thruput-scheduler", version = "=0.54.0", registry = "thruput" }
+thruput-indexer = { path = "thruput-indexer", version = "=0.54.0", registry = "thruput" }
+thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.54.0", registry = "thruput" }
+thruput-view = { path = "thruput-view", version = "=0.54.0", registry = "thruput" }
+hogexec-internal = { path = "hogexec-internal", version = "=0.54.0", registry = "thruput" }
+thruput-spec = { path = "thruput-spec", version = "=0.54.0", registry = "thruput" }
+xdrs = { registry = "thruput", version = "0.10.3", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { version = "0.10.3", registry = "groundhog" }
-xdr-derive = { version = "0.10.3", registry = "groundhog" }
-rpc_api = { version = "0.2", registry = "groundhog" }
-rpc_driver = { version = "0.11", registry = "groundhog" }
+xdr-common = { version = "0.10.3", registry = "thruput" }
+xdr-derive = { version = "0.10.3", registry = "thruput" }
+rpc_api = { version = "0.2", registry = "thruput" }
+rpc_driver = { version = "0.11", registry = "thruput" }
 schemars = { version = "1" }
 
 [profile.dev]

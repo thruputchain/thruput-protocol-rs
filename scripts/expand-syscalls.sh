@@ -1,7 +1,7 @@
 #!/bin/bash
 
 exec cargo expand \
-    --package groundhog-xdr \
+    --package thruput-xdr \
     --features syscalls \
     "$@" \
     syscalls

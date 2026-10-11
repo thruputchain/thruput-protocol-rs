@@ -10,7 +10,7 @@ name = "rpcthroughput_server"
 path = "src/main.rs"
 
 [dependencies]
-groundhog_rpc = { workspace = true }
+thruput-rpc = { workspace = true }
 tokio = { version = "1.0", features = ["full"] }
 async-trait = "0.1"
 rpc_driver = { workspace = true }

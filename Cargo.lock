@@ -94,216 +94,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bfcf67fea2815c2fc3b90873fae90957be12ff417335dfadc7f52927feb03b2"
 
 [[package]]
-name = "groundhog-akkad"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog-api-pins"
-version = "0.53.0"
-dependencies = [
- "groundhog-akkad",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_db_gateway",
- "groundhog_hogx",
- "groundhog_indexer",
- "groundhog_rpc",
- "groundhog_scheduler",
- "groundhog_scp",
- "groundhog_view",
- "rpc_api",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog-spec"
-version = "0.53.0"
-dependencies = [
- "groundhog-xdr",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog-syscall"
-version = "0.53.0"
-
-[[package]]
-name = "groundhog-trace"
-version = "0.53.0"
-dependencies = [
- "groundhog-xdr",
- "hogexec-internal",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog-xdr"
-version = "0.53.0"
-dependencies = [
- "groundhog-syscall",
- "groundhog-xdr-macros",
- "schemars",
- "serde",
- "serde_json",
- "thiserror",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog-xdr-macros"
-version = "0.53.0"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "serde",
- "serde_json",
- "serde_yaml",
- "syn",
-]
-
-[[package]]
-name = "groundhog_coordinator"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_db_gateway"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_scheduler",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_hogx"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_indexer"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_scheduler",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_rpc"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "rpc_api",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_scheduler"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_scp"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "rpc_api",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_view"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "tokio",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_xdr_syscall_tests"
-version = "0.53.0"
-dependencies = [
- "groundhog-xdr",
-]
-
-[[package]]
 name = "hashbrown"
 version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -311,7 +101,7 @@ checksum = "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
 
 [[package]]
 name = "hogexec-internal"
-version = "0.53.0"
+version = "0.54.0"
 dependencies = [
  "xdrs",
 ]
@@ -481,11 +271,11 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.53.0"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog_rpc",
  "rpc_driver",
+ "thruput-rpc",
  "tokio",
 ]
 
@@ -654,6 +444,216 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "thruput-akkad"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput-scp",
+ "thruput-xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-api-pins"
+version = "0.54.0"
+dependencies = [
+ "rpc_api",
+ "thruput-akkad",
+ "thruput-coordinator",
+ "thruput-db-gateway",
+ "thruput-hogx",
+ "thruput-indexer",
+ "thruput-rpc",
+ "thruput-scheduler",
+ "thruput-scp",
+ "thruput-trace",
+ "thruput-view",
+ "thruput-xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-coordinator"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput-scp",
+ "thruput-xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-db-gateway"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput-scheduler",
+ "thruput-scp",
+ "thruput-xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-hogx"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput-coordinator",
+ "thruput-scp",
+ "thruput-xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-indexer"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput-scheduler",
+ "thruput-scp",
+ "thruput-trace",
+ "thruput-xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-rpc"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-scheduler"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput-coordinator",
+ "thruput-scp",
+ "thruput-trace",
+ "thruput-xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-scp"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput-xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-spec"
+version = "0.54.0"
+dependencies = [
+ "schemars",
+ "serde",
+ "thruput-xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-syscall"
+version = "0.54.0"
+
+[[package]]
+name = "thruput-trace"
+version = "0.54.0"
+dependencies = [
+ "hogexec-internal",
+ "schemars",
+ "serde",
+ "thruput-xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-view"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput-scp",
+ "thruput-xdr",
+ "tokio",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-xdr"
+version = "0.54.0"
+dependencies = [
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "thruput-syscall",
+ "thruput-xdr-macros",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput-xdr-macros"
+version = "0.54.0"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "syn",
+]
+
+[[package]]
+name = "thruput-xdr-syscall-tests"
+version = "0.54.0"
+dependencies = [
+ "thruput-xdr",
 ]
 
 [[package]]
