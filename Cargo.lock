@@ -94,12 +94,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bfcf67fea2815c2fc3b90873fae90957be12ff417335dfadc7f52927feb03b2"
 
 [[package]]
-name = "groundhog-akkad"
-version = "0.53.0"
+name = "thruput_akkad"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
+ "thruput_xdr",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
@@ -107,43 +107,43 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog-api-pins"
-version = "0.53.0"
+name = "thruput_api_pins"
+version = "0.54.0"
 dependencies = [
- "groundhog-akkad",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_db_gateway",
- "groundhog_hogx",
- "groundhog_indexer",
- "groundhog_rpc",
- "groundhog_scheduler",
- "groundhog_scp",
- "groundhog_view",
+ "thruput_akkad",
+ "thruput_trace",
+ "thruput_xdr",
+ "thruput_coordinator",
+ "thruput_db_gateway",
+ "thruput_hogx",
+ "thruput_indexer",
+ "thruput_rpc",
+ "thruput_scheduler",
+ "thruput_scp",
+ "thruput_view",
  "rpc_api",
  "xdrs",
 ]
 
 [[package]]
-name = "groundhog-spec"
-version = "0.53.0"
+name = "thruput_spec"
+version = "0.54.0"
 dependencies = [
- "groundhog-xdr",
+ "thruput_xdr",
  "schemars",
  "serde",
  "xdrs",
 ]
 
 [[package]]
-name = "groundhog-syscall"
-version = "0.53.0"
+name = "thruput_syscall"
+version = "0.54.0"
 
 [[package]]
-name = "groundhog-trace"
-version = "0.53.0"
+name = "thruput_trace"
+version = "0.54.0"
 dependencies = [
- "groundhog-xdr",
+ "thruput_xdr",
  "hogexec-internal",
  "schemars",
  "serde",
@@ -152,11 +152,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog-xdr"
-version = "0.53.0"
+name = "thruput_xdr"
+version = "0.54.0"
 dependencies = [
- "groundhog-syscall",
- "groundhog-xdr-macros",
+ "thruput_syscall",
+ "thruput_xdr_macros",
  "schemars",
  "serde",
  "serde_json",
@@ -166,8 +166,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog-xdr-macros"
-version = "0.53.0"
+name = "thruput_xdr_macros"
+version = "0.54.0"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -179,12 +179,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_coordinator"
-version = "0.53.0"
+name = "thruput_coordinator"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
+ "thruput_xdr",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
@@ -192,44 +192,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_db_gateway"
-version = "0.53.0"
+name = "thruput_db_gateway"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-xdr",
- "groundhog_scheduler",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_hogx"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "groundhog_indexer"
-version = "0.53.0"
-dependencies = [
- "async-trait",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_scheduler",
- "groundhog_scp",
+ "thruput_xdr",
+ "thruput_scheduler",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
@@ -239,26 +208,28 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_rpc"
-version = "0.53.0"
+name = "thruput_hogx"
+version = "0.54.0"
 dependencies = [
  "async-trait",
+ "thruput_xdr",
+ "thruput_coordinator",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
- "xdr-common",
  "xdrs",
 ]
 
 [[package]]
-name = "groundhog_scheduler"
-version = "0.53.0"
+name = "thruput_indexer"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-trace",
- "groundhog-xdr",
- "groundhog_coordinator",
- "groundhog_scp",
+ "thruput_trace",
+ "thruput_xdr",
+ "thruput_scheduler",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
@@ -268,11 +239,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_scp"
-version = "0.53.0"
+name = "thruput_rpc"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-xdr",
  "rpc_api",
  "schemars",
  "serde",
@@ -281,12 +251,42 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_view"
-version = "0.53.0"
+name = "thruput_scheduler"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog-xdr",
- "groundhog_scp",
+ "thruput_trace",
+ "thruput_xdr",
+ "thruput_coordinator",
+ "thruput_scp",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_scp"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "thruput_xdr",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_view"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "thruput_xdr",
+ "thruput_scp",
  "rpc_api",
  "schemars",
  "serde",
@@ -297,10 +297,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "groundhog_xdr_syscall_tests"
-version = "0.53.0"
+name = "thruput_xdr_syscall_tests"
+version = "0.54.0"
 dependencies = [
- "groundhog-xdr",
+ "thruput_xdr",
 ]
 
 [[package]]
@@ -311,7 +311,7 @@ checksum = "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
 
 [[package]]
 name = "hogexec-internal"
-version = "0.53.0"
+version = "0.54.0"
 dependencies = [
  "xdrs",
 ]
@@ -481,10 +481,10 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.53.0"
+version = "0.54.0"
 dependencies = [
  "async-trait",
- "groundhog_rpc",
+ "thruput_rpc",
  "rpc_driver",
  "tokio",
 ]

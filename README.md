@@ -1,6 +1,6 @@
 # protocol-rs
 
-Rust bindings generated from the Groundhog protocol XDR definitions in
+Rust bindings generated from the Thruput protocol XDR definitions in
 `protocol/` (a submodule of [groundhogchain/protocol]). The sources under each
 crate's `src/` are emitted by hogd's `x23c` compiler and are not edited by
 hand.
@@ -30,3 +30,15 @@ bash scripts/generate.sh
 ```shell
 bash scripts/ci-check.sh
 ```
+
+## Package names
+
+New releases use `thruput_*` package names and the `thruput` Cargo registry
+alias. Previously published `groundhog-*` and `groundhog_*` packages remain
+available at their existing versions. To upgrade, change each dependency name
+and Rust import explicitly, for example `groundhog-xdr` to `thruput_xdr` and
+`groundhog_xdr::` to `thruput_xdr::`. Versions continue from the existing release
+sequence; the first renamed release is 0.54.0.
+
+`hogexec-internal` keeps its name. Repository URLs, protocol definitions, and
+wire identifiers are unchanged.

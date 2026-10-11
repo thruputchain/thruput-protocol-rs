@@ -1,0 +1,91 @@
+[package]
+name = "thruput_xdr"
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Bindings for Thruput protocol structures"
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords = ["xdr", "blockchain", "thruput"]
+categories.workspace = true
+include = [
+    "**/*.rs",
+    "build.rs",
+    "Cargo.toml",
+    "docs/**/*.md",
+    "src/syscalls.yaml",
+    "syscalls_docs.json"
+]
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = []
+alloc = ["serde?/alloc", "xdrs/alloc"]
+std = ["alloc", "dep:thiserror"]
+# Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
+# Fixed-size byte arrays serialize as hex strings through `xdr_common::serde_hex`.
+serde = ["dep:serde", "xdrs/serde"]
+# `xdrs` deliberately does not imply `alloc`: rv32 contract builds use
+# `xdrs` without an allocator for encoding and fixed-size decoding.
+# Decoding variable-length types (VecM/BytesM/StringM) requires `alloc`;
+# without it, the xdrs crate's no-alloc `ReadXDR` impls for those types
+# panic with `unimplemented!()` at runtime. Enable `alloc` (or use the
+# heapless containers from `xdrs`) anywhere such values are decoded.
+xdrs = []
+schema = ["dep:schemars", "xdrs/schemars", "std"]
+syscalls = ["dep:thruput_syscall"]
+syscalls_mock = ["syscalls", "thruput_syscall/syscalls_mock", "std"]   # required for native_exec integration
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive"]
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.thruput_syscall]
+workspace = true
+optional = true
+
+[dependencies.thruput_xdr_macros]
+workspace = true
+
+[dependencies.thiserror]
+optional = true
+version = "2.0.16"
+default-features = false
+
+[dependencies.schemars]
+workspace = true
+optional = true
+
+[dependencies.xdr-common]
+workspace = true
+
+[dev-dependencies.xdrs]
+workspace = true
+features = ["alloc"]
+
+[dev-dependencies.serde_json]
+version = "1"
+
+[[test]]
+name = "syscall_no_display"
+required-features = ["std"]
+
+[[test]]
+name = "roundtrip"
+required-features = ["std", "xdrs"]
+
+[[test]]
+name = "serde_hex"
+required-features = ["std", "serde"]

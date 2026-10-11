@@ -1,0 +1,45 @@
+[package]
+name = "thruput_indexer"
+description = "Bindings for Thruput indexer RPCs (IndexerBlockExplorer, IndexerEvent, EventIndexer)"
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = ["alloc", "std"]
+alloc = ["xdrs/alloc", "thruput_xdr/alloc"]
+std = ["alloc"]
+serde = [
+    "dep:serde",
+    "xdrs/serde",
+    "thruput_xdr/serde",
+    "thruput_scheduler/serde",
+    "thruput_trace/serde",
+]
+
+[dependencies]
+async-trait = "0.1.89"
+thruput_xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
+thruput_scheduler = { workspace = true, features = ["std"] }
+thruput_trace = { workspace = true, features = ["std"] }
+thruput_scp = { workspace = true, features = ["std"] }
+xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
+xdr-common = { workspace = true }
+rpc_api = { workspace = true }
+
+schemars = { workspace = true }
+serde = { version = "1", features = ["derive"], optional = true }
+
+[dev-dependencies]
+serde_json = "1"

@@ -1,0 +1,15 @@
+[package]
+name = "thruput_xdr_syscall_tests"
+version.workspace = true
+rust-version.workspace = true
+edition = "2021"
+publish = false
+
+[lib]
+name = "thruput_xdr_syscall_tests"
+path = "src/lib.rs"
+
+[dependencies]
+thruput_xdr = { workspace = true, features = ["syscalls_mock", "std"] }
+
+[dev-dependencies]

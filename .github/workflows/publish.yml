@@ -49,7 +49,7 @@ jobs:
         with:
           repository: groundhogchain/actions
           path: actions
-          ref: v1
+          ref: 16e3402eca906d0771f171ee95fcba8a0be8b0aa # registry alias support
           persist-credentials: false
 
       # Must run before the dry-run step: cargo-publish-dry-run extracts every
@@ -61,24 +61,46 @@ jobs:
       # itself. Here the workspace version is already bumped, so this validates
       # that the bump is large enough for the API changes since the previous
       # release.
+      - name: Select semver baseline packages
+        id: baseline
+        run: |
+          set -euo pipefail
+          baseline=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*')
+          echo "revision=$baseline" >> "$GITHUB_OUTPUT"
+          if git show "$baseline:Cargo.toml" | grep -q '^thruput_xdr ='; then
+            echo "packages=" >> "$GITHUB_OUTPUT"
+            echo "legacy-registry=false" >> "$GITHUB_OUTPUT"
+          else
+            # New package identities have no same-name baseline. Keep checking
+            # the unchanged package until a Thruput release becomes the baseline.
+            echo "packages=hogexec-internal" >> "$GITHUB_OUTPUT"
+            echo "legacy-registry=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: semver check
         uses: ./actions/cargo-semver-checks
+        env:
+          # The previous release still resolves its dependencies via this alias.
+          CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ steps.baseline.outputs.legacy-registry == 'true' && secrets.GROUNDHOG_REGISTRY_TOKEN || '' }}
         with:
+          baseline-rev: ${{ steps.baseline.outputs.revision }}
+          packages: ${{ steps.baseline.outputs.packages }}
           semver-checks-version: '0.50.0'
-          registry-name: groundhog
+          registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
       # The dry-run action never compiles publish=false crates (cargo-hack
       # runs with --ignore-private and clippy is skipped here), so the API
-      # signature pins must be checked explicitly. See groundhog-api-pins.
+      # signature pins must be checked explicitly. See thruput_api_pins.
       - name: API signature pins
         run: |
           source "$HOME/.cargo/env"
-          cargo check --package groundhog-api-pins --locked
+          cargo check --package thruput_api_pins --locked
 
       - name: dry run
         uses: ./actions/cargo-publish-dry-run
         with:
+          registry-name: thruput
           skip-clippy: true
           cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
 
@@ -120,6 +142,6 @@ jobs:
         uses: ./actions/cargo-publish
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
-          registry-name: groundhog
+          registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
           publish-delay-seconds: '10'

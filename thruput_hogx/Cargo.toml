@@ -1,0 +1,61 @@
+[package]
+name = "thruput_hogx"
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description =  "Bindings for Thruput hogx rpcs"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = ["alloc", "std", "xdrs"]
+alloc = ["xdrs", "xdrs/alloc"]
+std = ["alloc"]
+xdrs = []
+serde = [
+    "dep:serde",
+    "xdrs/serde",
+    "thruput_scp/serde",
+    "thruput_xdr/serde",
+    "thruput_coordinator/serde",
+]
+
+[dependencies]
+async-trait = "0.1.89"
+
+[dependencies.schemars]
+workspace = true
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.thruput_scp]
+workspace = true
+features = ["std"]
+
+[dependencies.thruput_xdr]
+workspace = true
+features = ["std", "xdrs", "schema"]
+
+[dependencies.thruput_coordinator]
+workspace = true
+features = ["std"]
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "alloc", "schemars"]
+
+[dependencies.rpc_api]
+workspace = true
