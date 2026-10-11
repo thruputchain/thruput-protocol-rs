@@ -1,0 +1,45 @@
+[package]
+name = "thruput-spec"
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description =  "Bindings for Thruput specs"
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+serde = [
+    "dep:serde",
+    "xdrs/serde",
+    "thruput-xdr/serde",
+]
+schema = ["dep:schemars", "xdrs/schemars", "thruput-xdr/schema"]
+
+[dependencies]
+
+[dependencies.thruput-xdr]
+workspace = true
+features = ["xdrs", "alloc"]
+
+[dependencies.schemars]
+workspace = true
+optional = true
+
+[dependencies.serde]
+optional = true
+version = "1.0.219"
+default-features = false
+features = ["derive"]
+
+[dependencies.xdrs]
+workspace = true
+features = ["derive", "int128", "alloc"]

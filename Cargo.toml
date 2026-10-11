@@ -1,23 +1,23 @@
 [workspace]
 members = [
     "hogexec-internal",
-    "thruput_xdr_macros",
-    "thruput_syscall",
-    "thruput_xdr",
-    "thruput_rpc",
-    "thruput_scp",
-    "thruput_coordinator",
-    "thruput_akkad",
-    "thruput_hogx",
-    "thruput_trace",
-    "thruput_scheduler",
-    "thruput_indexer",
-    "thruput_db_gateway",
-    "thruput_view",
-    "thruput_api_pins",
+    "thruput-xdr-macros",
+    "thruput-syscall",
+    "thruput-xdr",
+    "thruput-rpc",
+    "thruput-scp",
+    "thruput-coordinator",
+    "thruput-akkad",
+    "thruput-hogx",
+    "thruput-trace",
+    "thruput-scheduler",
+    "thruput-indexer",
+    "thruput-db-gateway",
+    "thruput-view",
+    "thruput-api-pins",
     "bin/rpcthroughput_server",
-    "thruput_xdr_syscall_tests",
-    "thruput_spec",
+    "thruput-xdr-syscall-tests",
+    "thruput-spec",
 ]
 resolver = "2"
 
@@ -36,21 +36,21 @@ categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-thruput_syscall = { path = "thruput_syscall", version = "=0.54.0", registry = "thruput" }
-thruput_xdr = { path = "thruput_xdr", version = "=0.54.0", registry = "thruput" }
-thruput_xdr_macros = { path = "thruput_xdr_macros", version = "=0.54.0", registry = "thruput" }
-thruput_trace = { path = "thruput_trace", version = "=0.54.0", registry = "thruput" }
-thruput_scp = { path = "thruput_scp", version = "=0.54.0", registry = "thruput" }
-thruput_coordinator = { path = "thruput_coordinator", version = "=0.54.0", registry = "thruput" }
-thruput_akkad = { path = "thruput_akkad", version = "=0.54.0", registry = "thruput" }
-thruput_hogx = { path = "thruput_hogx", version = "=0.54.0", registry = "thruput" }
-thruput_rpc = { path = "thruput_rpc", version = "=0.54.0", registry = "thruput" }
-thruput_scheduler = { path = "thruput_scheduler", version = "=0.54.0", registry = "thruput" }
-thruput_indexer = { path = "thruput_indexer", version = "=0.54.0", registry = "thruput" }
-thruput_db_gateway = { path = "thruput_db_gateway", version = "=0.54.0", registry = "thruput" }
-thruput_view = { path = "thruput_view", version = "=0.54.0", registry = "thruput" }
+thruput-syscall = { path = "thruput-syscall", version = "=0.54.0", registry = "thruput" }
+thruput-xdr = { path = "thruput-xdr", version = "=0.54.0", registry = "thruput" }
+thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.54.0", registry = "thruput" }
+thruput-trace = { path = "thruput-trace", version = "=0.54.0", registry = "thruput" }
+thruput-scp = { path = "thruput-scp", version = "=0.54.0", registry = "thruput" }
+thruput-coordinator = { path = "thruput-coordinator", version = "=0.54.0", registry = "thruput" }
+thruput-akkad = { path = "thruput-akkad", version = "=0.54.0", registry = "thruput" }
+thruput-hogx = { path = "thruput-hogx", version = "=0.54.0", registry = "thruput" }
+thruput-rpc = { path = "thruput-rpc", version = "=0.54.0", registry = "thruput" }
+thruput-scheduler = { path = "thruput-scheduler", version = "=0.54.0", registry = "thruput" }
+thruput-indexer = { path = "thruput-indexer", version = "=0.54.0", registry = "thruput" }
+thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.54.0", registry = "thruput" }
+thruput-view = { path = "thruput-view", version = "=0.54.0", registry = "thruput" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.54.0", registry = "thruput" }
-thruput_spec = { path = "thruput_spec", version = "=0.54.0", registry = "thruput" }
+thruput-spec = { path = "thruput-spec", version = "=0.54.0", registry = "thruput" }
 xdrs = { registry = "thruput", version = "0.10.3", default-features = false, features = [
     "int128",
     "derive",

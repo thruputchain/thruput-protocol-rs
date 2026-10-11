@@ -67,7 +67,7 @@ jobs:
           set -euo pipefail
           baseline=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*')
           echo "revision=$baseline" >> "$GITHUB_OUTPUT"
-          if git show "$baseline:Cargo.toml" | grep -q '^thruput_xdr ='; then
+          if git show "$baseline:Cargo.toml" | grep -q '^thruput-xdr ='; then
             echo "packages=" >> "$GITHUB_OUTPUT"
             echo "legacy-registry=false" >> "$GITHUB_OUTPUT"
           else
@@ -92,11 +92,11 @@ jobs:
 
       # The dry-run action never compiles publish=false crates (cargo-hack
       # runs with --ignore-private and clippy is skipped here), so the API
-      # signature pins must be checked explicitly. See thruput_api_pins.
+      # signature pins must be checked explicitly. See thruput-api-pins.
       - name: API signature pins
         run: |
           source "$HOME/.cargo/env"
-          cargo check --package thruput_api_pins --locked
+          cargo check --package thruput-api-pins --locked
 
       - name: dry run
         uses: ./actions/cargo-publish-dry-run

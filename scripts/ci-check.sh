@@ -26,9 +26,9 @@ kargo() {
 rustup target add riscv32im-unknown-none-elf
 rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component rustfmt
 
-g=(-p thruput_xdr)
+g=(-p thruput-xdr)
 
-# thruput_xdr feature combinations
+# thruput-xdr feature combinations
 kargo build "${g[@]}"
 kargo build "${g[@]}" --features=alloc
 kargo build "${g[@]}" --features=std
@@ -53,20 +53,20 @@ kargo test "${g[@]}" --features=std,xdrs
 kargo test "${g[@]}" --features=std,serde
 
 # Other workspace crates
-kargo build -p thruput_rpc
-kargo build -p thruput_scp
-kargo build -p thruput_trace
-kargo build -p thruput_spec
-kargo build -p thruput_view
+kargo build -p thruput-rpc
+kargo build -p thruput-scp
+kargo build -p thruput-trace
+kargo build -p thruput-spec
+kargo build -p thruput-view
 
 cargo +"$NIGHTLY_TOOLCHAIN" fmt --check
 
-kargo clippy -p thruput_xdr_macros -- -D warnings
+kargo clippy -p thruput-xdr-macros -- -D warnings
 
-# Clippy over thruput_xdr, including tests. The two allowed lints
+# Clippy over thruput-xdr, including tests. The two allowed lints
 # (match_single_binding, large_enum_variant) fire only inside the
 # x23c-generated sources, which must not be edited by hand.
-kargo clippy -p thruput_xdr --all-targets --features=std,xdrs,serde -- \
+kargo clippy -p thruput-xdr --all-targets --features=std,xdrs,serde -- \
     -D warnings \
     -A clippy::match-single-binding \
     -A clippy::large-enum-variant
