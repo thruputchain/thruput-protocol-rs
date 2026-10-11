@@ -94,216 +94,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bfcf67fea2815c2fc3b90873fae90957be12ff417335dfadc7f52927feb03b2"
 
 [[package]]
-name = "thruput_akkad"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_api_pins"
-version = "0.54.0"
-dependencies = [
- "thruput_akkad",
- "thruput_trace",
- "thruput_xdr",
- "thruput_coordinator",
- "thruput_db_gateway",
- "thruput_hogx",
- "thruput_indexer",
- "thruput_rpc",
- "thruput_scheduler",
- "thruput_scp",
- "thruput_view",
- "rpc_api",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_spec"
-version = "0.54.0"
-dependencies = [
- "thruput_xdr",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_syscall"
-version = "0.54.0"
-
-[[package]]
-name = "thruput_trace"
-version = "0.54.0"
-dependencies = [
- "thruput_xdr",
- "hogexec-internal",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_xdr"
-version = "0.54.0"
-dependencies = [
- "thruput_syscall",
- "thruput_xdr_macros",
- "schemars",
- "serde",
- "serde_json",
- "thiserror",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_xdr_macros"
-version = "0.54.0"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "serde",
- "serde_json",
- "serde_yaml",
- "syn",
-]
-
-[[package]]
-name = "thruput_coordinator"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_db_gateway"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "thruput_scheduler",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_hogx"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "thruput_coordinator",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_indexer"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_trace",
- "thruput_xdr",
- "thruput_scheduler",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_rpc"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "rpc_api",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_scheduler"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_trace",
- "thruput_xdr",
- "thruput_coordinator",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_scp"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "rpc_api",
- "schemars",
- "serde",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_view"
-version = "0.54.0"
-dependencies = [
- "async-trait",
- "thruput_xdr",
- "thruput_scp",
- "rpc_api",
- "schemars",
- "serde",
- "serde_json",
- "tokio",
- "xdr-common",
- "xdrs",
-]
-
-[[package]]
-name = "thruput_xdr_syscall_tests"
-version = "0.54.0"
-dependencies = [
- "thruput_xdr",
-]
-
-[[package]]
 name = "hashbrown"
 version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -484,8 +274,8 @@ name = "rpcthroughput_server"
 version = "0.54.0"
 dependencies = [
  "async-trait",
- "thruput_rpc",
  "rpc_driver",
+ "thruput_rpc",
  "tokio",
 ]
 
@@ -654,6 +444,216 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "thruput_akkad"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput_scp",
+ "thruput_xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_api_pins"
+version = "0.54.0"
+dependencies = [
+ "rpc_api",
+ "thruput_akkad",
+ "thruput_coordinator",
+ "thruput_db_gateway",
+ "thruput_hogx",
+ "thruput_indexer",
+ "thruput_rpc",
+ "thruput_scheduler",
+ "thruput_scp",
+ "thruput_trace",
+ "thruput_view",
+ "thruput_xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_coordinator"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput_scp",
+ "thruput_xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_db_gateway"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput_scheduler",
+ "thruput_scp",
+ "thruput_xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_hogx"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput_coordinator",
+ "thruput_scp",
+ "thruput_xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_indexer"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput_scheduler",
+ "thruput_scp",
+ "thruput_trace",
+ "thruput_xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_rpc"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_scheduler"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput_coordinator",
+ "thruput_scp",
+ "thruput_trace",
+ "thruput_xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_scp"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "thruput_xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_spec"
+version = "0.54.0"
+dependencies = [
+ "schemars",
+ "serde",
+ "thruput_xdr",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_syscall"
+version = "0.54.0"
+
+[[package]]
+name = "thruput_trace"
+version = "0.54.0"
+dependencies = [
+ "hogexec-internal",
+ "schemars",
+ "serde",
+ "thruput_xdr",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_view"
+version = "0.54.0"
+dependencies = [
+ "async-trait",
+ "rpc_api",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput_scp",
+ "thruput_xdr",
+ "tokio",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_xdr"
+version = "0.54.0"
+dependencies = [
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "thruput_syscall",
+ "thruput_xdr_macros",
+ "xdr-common",
+ "xdrs",
+]
+
+[[package]]
+name = "thruput_xdr_macros"
+version = "0.54.0"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "syn",
+]
+
+[[package]]
+name = "thruput_xdr_syscall_tests"
+version = "0.54.0"
+dependencies = [
+ "thruput_xdr",
 ]
 
 [[package]]
