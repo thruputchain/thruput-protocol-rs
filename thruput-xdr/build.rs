@@ -1,4 +1,4 @@
-//! Rebuild tracking for files read by `thruput_xdr_macros` at expansion
+//! Rebuild tracking for files read by `thruput-xdr-macros` at expansion
 //! time.
 //!
 //! `generate_syscall_numbers!` and `generate_syscall_decls!` load

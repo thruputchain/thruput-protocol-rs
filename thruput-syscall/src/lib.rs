@@ -4,7 +4,7 @@
 //! single dispatch chokepoint, `syscall_wrapper`, which leaves the guest and
 //! executes a system call. It speaks only in integer words (`SyscallWord`) and
 //! raw `i32` error codes — the typed `SyscallNo` / `SysErr` layer lives in
-//! `thruput_xdr`.
+//! `thruput-xdr`.
 //!
 //! A dispatch path exists only when the target is `riscv32`, or when the
 //! `syscalls_mock` feature is enabled. On any other target (a plain host
@@ -24,7 +24,7 @@
 //!   syscall tests.
 //!
 //! You should never need to invoke `syscall_wrapper` directly; instead use the
-//! typed bindings generated in `thruput_xdr`.
+//! typed bindings generated in `thruput-xdr`.
 #![no_std]
 
 /// The integer width of a single syscall argument slot.
@@ -120,7 +120,7 @@ mod dispatch {
     ///
     /// Takes the syscall number and arguments as raw pointer-width words and returns
     /// the raw `i32` error code. The typed `SyscallNo` / `SysErr` wrapping is applied
-    /// by the generated bindings in `thruput_xdr`.
+    /// by the generated bindings in `thruput-xdr`.
     #[inline(always)]
     pub fn syscall_wrapper(
         syscall_no: SyscallWord,

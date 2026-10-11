@@ -31,12 +31,12 @@
 //!
 //! These bindings are a thin wrapper around the dispatch chokepoint
 //! `thruput_syscall::syscall_wrapper`, which leaves the guest and executes a
-//! system call. See the `thruput_syscall` crate for the per-target dispatch
+//! system call. See the `thruput-syscall` crate for the per-target dispatch
 //! paths (riscv32 `ecall`, native mock).
 
 use crate::*;
 
-// The `syscalls` feature pulls in `thruput_syscall`, which only provides a
+// The `syscalls` feature pulls in `thruput-syscall`, which only provides a
 // dispatch path on riscv32 or under its `syscalls_mock` feature. On any other
 // target it is empty, so guard with a clear message rather than letting the
 // `SyscallWord` / `syscall_wrapper` imports below fail as unresolved.

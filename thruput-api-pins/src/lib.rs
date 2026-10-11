@@ -13,7 +13,7 @@
 //! version.
 //!
 //! This crate is `publish = false`. The publish workflow compiles it
-//! explicitly (`cargo check -p thruput_api_pins`) because the publish
+//! explicitly (`cargo check -p thruput-api-pins`) because the publish
 //! dry-run action skips private crates; regular CI compiles it via
 //! `cargo test --workspace`.
 
