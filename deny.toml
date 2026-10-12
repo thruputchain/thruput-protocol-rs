@@ -29,6 +29,8 @@ allow = [
     "Unicode-3.0",
     # memchr, dual-licensed Unlicense OR MIT
     "Unlicense",
+    # encoding_rs (via serde-saphyr) is (Apache-2.0 OR MIT) AND BSD-3-Clause
+    "BSD-3-Clause",
 ]
 
 [bans]

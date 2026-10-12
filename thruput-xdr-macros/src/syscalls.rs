@@ -874,7 +874,7 @@ fn load_syscall_yaml(file_path: String) -> SyscallSpec {
         panic!("Failed to read {}: {e}", yaml_path.display())
     });
 
-    serde_yaml::from_str(&content).unwrap_or_else(|e| {
+    serde_saphyr::from_str(&content).unwrap_or_else(|e| {
         panic!("Failed to parse syscall spec {}: {e}", yaml_path.display())
     })
 }
