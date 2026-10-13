@@ -1,11 +1,11 @@
 # protocol-rs
 
 Rust bindings generated from the Thruput protocol XDR definitions in
-`protocol/` (a submodule of [groundhogchain/protocol]). The sources under each
+`protocol/` (a submodule of [thruputchain/thruput-protocol]). The sources under each
 crate's `src/` are emitted by hogd's `x23c` compiler and are not edited by
 hand.
 
-[groundhogchain/protocol]: https://github.com/groundhogchain/protocol
+[thruputchain/thruput-protocol]: https://github.com/thruputchain/thruput-protocol
 
 ## Generation prerequisites
 

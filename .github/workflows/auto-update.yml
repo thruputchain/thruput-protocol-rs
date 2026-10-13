@@ -81,7 +81,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin git@github.com:groundhogchain/protocol-rs.git
+          git remote set-url origin git@github.com:thruputchain/thruput-protocol-rs.git
 
           git checkout -b "$BRANCH"
           git add -A
@@ -97,7 +97,7 @@ jobs:
               --title "Auto-update protocol to ${PROTOCOL_SHA}" \
               --body "Automated protocol submodule bump and regeneration.
 
-          Protocol: groundhogchain/protocol@${PROTOCOL_SHA}")
+          Protocol: thruputchain/thruput-protocol@${PROTOCOL_SHA}")
             gh pr merge "$PR_URL" --auto --squash
           fi
         env:
