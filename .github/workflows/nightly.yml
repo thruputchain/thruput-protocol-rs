@@ -56,11 +56,17 @@ jobs:
 
       - name: Check for changes since last nightly
         id: changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
           HEAD_SHA=$(git rev-parse HEAD)
           echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
-          REMOTE_SHA=$(git ls-remote origin refs/tags/nightly | cut -f1 || true)
+          # Matching refs returns an empty list on the first run. Auth or
+          # network failures still fail the job instead of forcing publication.
+          REMOTE_SHA=$(gh api "repos/$REPOSITORY/git/matching-refs/tags/nightly" \
+            --jq 'map(select(.ref == "refs/tags/nightly")) | .[0].object.sha // ""')
           if [ -n "$REMOTE_SHA" ] && [ "$REMOTE_SHA" = "$HEAD_SHA" ]; then
             echo "main unchanged since last nightly ($HEAD_SHA); skipping publish and tag re-push."
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
