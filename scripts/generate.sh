@@ -100,9 +100,9 @@ if [[ -z $XDRC ]]; then
   asset="x23c-${os}-${arch}.tar.gz"
   xdrc_tmpdir=$(mktemp -d)
   trap 'rm -rf "$xdrc_tmpdir"' EXIT
-  echo "-- Downloading ${asset} from groundhogchain/hogd latest-x23c release --" >&2
+  echo "-- Downloading ${asset} from thruputchain/hogd latest-x23c release --" >&2
   if ! gh release download latest-x23c \
-         --repo groundhogchain/hogd \
+         --repo thruputchain/hogd \
          --pattern "${asset}" \
          --dir "$xdrc_tmpdir"; then
     echo "error: failed to download ${asset} from the latest-x23c release; set XDRC to a local x23c build" >&2
