@@ -29,12 +29,6 @@ jobs:
             echo "Cleaning up .gitconfig"
             rm -f /home/hogci/.gitconfig
 
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.ACTIONS_KEY }}
-
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
@@ -42,18 +36,6 @@ jobs:
           # Full history and tags: the semver baseline below is a git checkout
           # of the previous release tag.
           fetch-depth: 0
-
-      - name: Configure git to use SSH
-        run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
-
-      - name: Checkout actions repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          repository: groundhogchain/actions
-          path: actions
-          ref: 16e3402eca906d0771f171ee95fcba8a0be8b0aa # registry alias support
-          persist-credentials: false
 
       # Must run before the dry-run step: cargo-publish-dry-run extracts every
       # workspace crate into ./vendor/, and cargo-semver-checks then sees each
@@ -81,7 +63,7 @@ jobs:
           fi
 
       - name: semver check
-        uses: ./actions/cargo-semver-checks
+        uses: thruputchain/actions/cargo-semver-checks@6693fac8133585728ad3a4ca14e3441073b6def8
         env:
           # The previous release still resolves its dependencies via this alias.
           CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
@@ -102,7 +84,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: dry run
-        uses: ./actions/cargo-publish-dry-run
+        uses: thruputchain/actions/cargo-publish-dry-run@6693fac8133585728ad3a4ca14e3441073b6def8
         with:
           registry-name: thruput
           skip-clippy: true
@@ -111,7 +93,7 @@ jobs:
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
         id: publish-tag
-        uses: ./actions/cargo-version-tag
+        uses: thruputchain/actions/cargo-version-tag@6693fac8133585728ad3a4ca14e3441073b6def8
 
       - name: push tag
         if: ${{ !inputs.dry-run }}
@@ -143,7 +125,7 @@ jobs:
 
       - name: publish
         if: ${{ !inputs.dry-run }}
-        uses: ./actions/cargo-publish
+        uses: thruputchain/actions/cargo-publish@6693fac8133585728ad3a4ca14e3441073b6def8
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: thruput
