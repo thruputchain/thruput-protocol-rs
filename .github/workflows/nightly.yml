@@ -113,4 +113,4 @@ jobs:
           git tag -f nightly "$BASE_SHA"
           git remote set-url origin "https://$ACTOR:$TOKEN@github.com/$REPOSITORY.git"
           git push -f origin refs/tags/nightly
-          git remote set-url origin "git@github.com:$REPOSITORY.git"
+          git remote set-url origin "https://github.com/$REPOSITORY.git"
