@@ -29,24 +29,31 @@ jobs:
           # holds on hogd; the step only downloads a release asset.
           permission-contents: read
 
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+      - name: Generate protocol read token
+        id: protocol-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          ssh-private-key: |
-            ${{ secrets.PROTOCOL_RS_GH_ACTIONS_PROTOCOL_ACCESS_KEY }}
-            ${{ secrets.PROT_RS_WRITE_KEY }}
+          app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
+          private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
+          owner: thruputchain
+          repositories: thruput-protocol
+          permission-contents: read
 
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          submodules: recursive
           # The push below uses this key.
           persist-credentials: true
           ssh-key: ${{ secrets.PROT_RS_WRITE_KEY }}
 
       - name: Update protocol submodule to latest main
+        env:
+          GH_TOKEN: ${{ steps.protocol-token.outputs.token }}
+        # `-c` scopes the token to these commands; it is not written to git config.
         run: |
-          git -C protocol fetch origin main
+          rewrite="url.https://x-access-token:${GH_TOKEN}@github.com/thruputchain/thruput-protocol.git.insteadOf=git@github.com:thruputchain/thruput-protocol.git"
+          git -c "$rewrite" submodule update --init protocol
+          git -C protocol -c "$rewrite" fetch origin main
           git -C protocol checkout origin/main
 
       - name: Download x23c
