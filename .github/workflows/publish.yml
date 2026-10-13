@@ -143,7 +143,7 @@ jobs:
             # Tag doesn't exist on remote, push it
             git push origin "$TAG"
           fi
-          git remote set-url origin "git@github.com:$REPOSITORY.git"
+          git remote set-url origin "https://github.com/$REPOSITORY.git"
 
       - name: publish
         if: ${{ !inputs.dry-run }}
