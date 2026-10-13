@@ -21,20 +21,9 @@ jobs:
   publish:
     permissions:
       contents: write # pushes the version tag
-    runs-on: hog1
+    runs-on: namespace-profile-hogd-linux-2604
 
     steps:
-      - name: Clean up .gitconfig
-        run: |
-            echo "Cleaning up .gitconfig"
-            rm -f /home/hogci/.gitconfig
-
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.ACTIONS_KEY }}
-
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
@@ -43,17 +32,33 @@ jobs:
           # of the previous release tag.
           fetch-depth: 0
 
-      - name: Configure git to use SSH
+      - name: Install rustup if needed
         run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
-
-      - name: Checkout actions repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
-        with:
-          repository: groundhogchain/actions
-          path: actions
-          ref: 16e3402eca906d0771f171ee95fcba8a0be8b0aa # registry alias support
-          persist-credentials: false
+          if ! command -v rustup >/dev/null 2>&1; then
+            CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+            curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused \
+              --location --silent --show-error --fail https://sh.rustup.rs \
+              | sh -s -- --default-toolchain none --profile minimal -y
+            echo "CARGO_HOME=$CARGO_HOME" >> "$GITHUB_ENV"
+            echo "$CARGO_HOME/bin" >> "$GITHUB_PATH"
+          fi
+      - name: Set up Rust 1.96
+        run: |
+          rustup toolchain install 1.96.0 --profile minimal --component clippy,rustfmt --target riscv32im-unknown-none-elf --no-self-update
+          rustup default 1.96.0
+      - name: Set up dated nightly for rustdoc and rustfmt
+        run: |
+          rustup toolchain install nightly-2026-05-26 --profile minimal --component rustfmt --no-self-update
+          rustup default nightly-2026-05-26
+      - name: Install cargo-hack
+        env:
+          CARGO_HACK_VERSION: '0.6.45'
+        run: |
+          source "$HOME/.cargo/env"
+          if [ "$(cargo hack --version 2>/dev/null | awk '{print $2}')" != "$CARGO_HACK_VERSION" ]; then
+            cargo install cargo-hack --version "=$CARGO_HACK_VERSION" --locked
+          fi
+          cargo hack --version
 
       # Must run before the dry-run step: cargo-publish-dry-run extracts every
       # workspace crate into ./vendor/, and cargo-semver-checks then sees each
@@ -72,20 +77,19 @@ jobs:
           echo "revision=$baseline" >> "$GITHUB_OUTPUT"
           if git show "$baseline:Cargo.toml" | grep -q '^thruput-xdr ='; then
             echo "packages=" >> "$GITHUB_OUTPUT"
-            echo "legacy-registry=false" >> "$GITHUB_OUTPUT"
           else
             # New package identities have no same-name baseline. Keep checking
             # the unchanged package until a Thruput release becomes the baseline.
             echo "packages=hogexec-internal" >> "$GITHUB_OUTPUT"
-            echo "legacy-registry=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: semver check
-        uses: ./actions/cargo-semver-checks
+        uses: thruputchain/actions/cargo-semver-checks@6693fac8133585728ad3a4ca14e3441073b6def8
         env:
-          # The previous release still resolves its dependencies via this alias.
+          # Historical baselines may use this alias. Cargo unifies aliases
+          # for the same index, so both names need the same credential.
           CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
-          CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ steps.baseline.outputs.legacy-registry == 'true' && secrets.GROUNDHOG_REGISTRY_TOKEN || '' }}
+          CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
         with:
           baseline-rev: ${{ steps.baseline.outputs.revision }}
           packages: ${{ steps.baseline.outputs.packages }}
@@ -102,7 +106,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: dry run
-        uses: ./actions/cargo-publish-dry-run
+        uses: thruputchain/actions/cargo-publish-dry-run@6693fac8133585728ad3a4ca14e3441073b6def8
         with:
           registry-name: thruput
           skip-clippy: true
@@ -111,7 +115,7 @@ jobs:
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
         id: publish-tag
-        uses: ./actions/cargo-version-tag
+        uses: thruputchain/actions/cargo-version-tag@6693fac8133585728ad3a4ca14e3441073b6def8
 
       - name: push tag
         if: ${{ !inputs.dry-run }}
@@ -143,7 +147,7 @@ jobs:
 
       - name: publish
         if: ${{ !inputs.dry-run }}
-        uses: ./actions/cargo-publish
+        uses: thruputchain/actions/cargo-publish@6693fac8133585728ad3a4ca14e3441073b6def8
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: thruput

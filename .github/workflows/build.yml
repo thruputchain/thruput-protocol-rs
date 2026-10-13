@@ -17,7 +17,7 @@ jobs:
   dependency-policy:
     permissions:
       contents: read
-    uses: groundhogchain/actions/.github/workflows/rust-dependency-policy.yml@v1
+    uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@6693fac8133585728ad3a4ca14e3441073b6def8
     with:
       registry-name: thruput
     secrets:
@@ -26,15 +26,18 @@ jobs:
   workflow-lint:
     permissions:
       contents: read
-    uses: groundhogchain/actions/.github/workflows/workflow-lint.yml@v1
+    uses: thruputchain/actions/.github/workflows/workflow-lint.yml@f1b1a2cb8c69bab5f24f5f9976d50b6a9ab548fc
     with:
+      lint-app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
       shellcheck-scripts: true
+    secrets:
+      lint-app-private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
 
   build:
     needs: dependency-policy # inspect dependencies before anything builds them
     permissions:
       contents: read
-    runs-on: self-hosted
+    runs-on: namespace-profile-hogd-linux-2604
     env:
       CARGO_REGISTRIES_THRUPUT_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
       CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
@@ -78,17 +81,17 @@ jobs:
           rustup default nightly-2026-05-26
       - name: Generate hogd read token
         id: hogd-token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
-          owner: groundhogchain
+          owner: thruputchain
           repositories: hogd
           permission-contents: read
       - name: Download x23c
         run: |
           gh release download latest-x23c \
-            --repo groundhogchain/hogd \
+            --repo thruputchain/hogd \
             --pattern 'x23c-linux-x86_64.tar.gz' \
             --dir "$RUNNER_TEMP"
           tar xzf "$RUNNER_TEMP/x23c-linux-x86_64.tar.gz" -C "$RUNNER_TEMP"
@@ -111,7 +114,7 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     permissions:
       contents: read
-    runs-on: self-hosted
+    runs-on: namespace-profile-hogd-linux-2604
     steps:
       - name: Clean up .gitconfig
         run: rm -f /home/hogci/.gitconfig
