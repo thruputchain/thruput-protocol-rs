@@ -87,5 +87,9 @@ name = "roundtrip"
 required-features = ["std", "xdrs"]
 
 [[test]]
+name = "pubkey_auth_vectors"
+required-features = ["std", "xdrs"]
+
+[[test]]
 name = "serde_hex"
 required-features = ["std", "serde"]
