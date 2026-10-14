@@ -13,7 +13,8 @@ use thruput_xdr::event::Topic;
 use thruput_xdr::transaction::DecoratedSignature;
 use thruput_xdr::types::{
     ContractAddress, Ed25519PublicKey, Ed25519SecretKey, Ed25519Signature,
-    SHA256Hash, Signature, StorageKeyContractData, StorageLongHash,
+    MlDsa65PublicKey, MlDsa65Signature, PublicKeyHash, SHA256Hash, Signature,
+    StorageKeyContractData, StorageLongHash,
 };
 use thruput_xdr::validator::ValidatorID;
 
@@ -111,6 +112,24 @@ fn ed25519_public_key_is_64_hex_digits() {
 fn ed25519_secret_key_is_128_hex_digits() {
     let bytes = sample::<64>();
     assert_hex_string(&Ed25519SecretKey::new(bytes), &bytes);
+}
+
+#[test]
+fn mldsa65_signature_is_6618_hex_digits() {
+    let bytes = sample::<3309>();
+    assert_hex_string(&MlDsa65Signature::new(bytes), &bytes);
+}
+
+#[test]
+fn mldsa65_public_key_is_3904_hex_digits() {
+    let bytes = sample::<1952>();
+    assert_hex_string(&MlDsa65PublicKey::new(bytes), &bytes);
+}
+
+#[test]
+fn public_key_hash_is_64_hex_digits() {
+    let bytes = sample::<32>();
+    assert_hex_string(&PublicKeyHash::new(bytes), &bytes);
 }
 
 #[test]

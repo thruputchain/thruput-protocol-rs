@@ -48,7 +48,8 @@ use ::serde::{{Serialize, Deserialize}};
 // The authentication model supports two claim types:
 // - Source address auth data: the transaction is signed by the keys in the source address's auth data.
 //   and the account stores per-key weights and a minimum threshold
-// - Pubkey signature: a standalone public key signs the transaction
+// - Pubkey signature: a standalone public key signs the transaction. The claim
+//   names the key by its hash; the key itself is attached to the signatures.
 //
 // Auth claims reference AddressAuthData stored at each contract address,
 // which defines the available keys and their weights.
@@ -111,7 +112,7 @@ impl AuthClaimType {
 
     /// Requires a signature from a specific public key.
     ///
-    /// Used for accounts identified by a pubkey preimage (pubkey + nonce).
+    /// Used for accounts identified by a pubkey preimage (pubkey hash + nonce).
     pub const kPubkeySignature: Self = Self(1);
 }
 impl From<i32> for AuthClaimType {
@@ -137,13 +138,20 @@ impl core::fmt::Display for AuthClaimType {
 }
 
 
+/// The preimage of a standalone-pubkey account's address:
+/// `sha256(cxs(DomainSeparator("PubkeyAccount")) || cxs(PubkeyAccountPreimage))`.
+///
+/// It names the key by its [`PublicKeyHash`] rather than holding the key, so
+/// that the auth claim contracts read stays small whatever the scheme. The
+/// key itself travels with the signatures, as
+/// [`SignedTransaction::pubkey_claim_key`] in transaction.x.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct PubkeyAccountPreimage {
-    pub pubkey: PublicKey,
+    pub pubkey_hash: PublicKeyHash,
     pub nonce: u64,
 }
 

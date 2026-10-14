@@ -365,6 +365,161 @@ impl schemars::JsonSchema for Ed25519SecretKey {
 
 
 
+/// Represents an ML-DSA-65 (FIPS 204) signature.
+///
+/// Not every byte string of this length is a well-formed signature;
+/// verification rejects malformed ones like any other invalid signature.
+// 
+/// Represents an ML-DSA-65 (FIPS 204) public key.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct MlDsa65Signature {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 3309 as usize],
+}
+impl From<[u8; 3309 as usize]> for MlDsa65Signature {
+    fn from(_inner: [u8; 3309 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl MlDsa65Signature {
+    pub fn into_inner(self) -> [u8; 3309 as usize] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 3309 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for MlDsa65Signature {
+    type Target = [u8; 3309 as usize];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for MlDsa65Signature {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+impl AsRef<[u8]> for MlDsa65Signature {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+impl<'a> From<&'a [u8; 3309]> for &'a MlDsa65Signature {
+    fn from(arr: &[u8; 3309]) -> Self {
+        let ptr = arr as *const [u8; 3309] as *const MlDsa65Signature;
+        unsafe { &*ptr }
+    }
+}
+#[cfg(feature = "xdrs")]
+impl<'r> ReadXDR<'r> for &'r MlDsa65Signature {
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 3309] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for MlDsa65Signature {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "MlDsa65Signature".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 6618,
+            "maxLength": 6618
+        })
+    }
+}
+
+
+
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct MlDsa65PublicKey {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 1952 as usize],
+}
+impl From<[u8; 1952 as usize]> for MlDsa65PublicKey {
+    fn from(_inner: [u8; 1952 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl MlDsa65PublicKey {
+    pub fn into_inner(self) -> [u8; 1952 as usize] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 1952 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for MlDsa65PublicKey {
+    type Target = [u8; 1952 as usize];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for MlDsa65PublicKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+impl AsRef<[u8]> for MlDsa65PublicKey {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+impl<'a> From<&'a [u8; 1952]> for &'a MlDsa65PublicKey {
+    fn from(arr: &[u8; 1952]) -> Self {
+        let ptr = arr as *const [u8; 1952] as *const MlDsa65PublicKey;
+        unsafe { &*ptr }
+    }
+}
+#[cfg(feature = "xdrs")]
+impl<'r> ReadXDR<'r> for &'r MlDsa65PublicKey {
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 1952] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for MlDsa65PublicKey {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "MlDsa65PublicKey".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 3904,
+            "maxLength": 3904
+        })
+    }
+}
+
+
+
 /// Represents the cryptographic scheme used for a signature or public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -377,6 +532,10 @@ pub struct CryptographicScheme(pub i32);
 
 impl CryptographicScheme {
     pub const Ed25519: Self = Self(0);
+
+    /// ML-DSA-65 (FIPS 204), pure ML-DSA (not HashML-DSA) with an empty
+    /// context string.
+    pub const MlDsa65: Self = Self(1);
 }
 impl From<i32> for CryptographicScheme {
     fn from(v: i32) -> Self {
@@ -390,6 +549,9 @@ impl core::fmt::Display for CryptographicScheme {
             x if x == Self::Ed25519.0 => {
                 write!(f, "CryptographicScheme::Ed25519")
             },
+            x if x == Self::MlDsa65.0 => {
+                write!(f, "CryptographicScheme::MlDsa65")
+            },
             _ => {
                 write!(f, "CryptographicScheme({})", self.0)
             }
@@ -399,6 +561,10 @@ impl core::fmt::Display for CryptographicScheme {
 
 
 /// Union of a Signature type over the various cryptographic schemes.
+///
+/// The ML-DSA arms of Signature and PublicKey are boxed in C++ (heap
+/// allocated), so that Ed25519 signatures and keys, which are most of them,
+/// do not each take the size of the largest ML-DSA value in memory.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -409,6 +575,10 @@ pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
     Ed25519 { ed25519: Ed25519Signature } = CryptographicScheme::Ed25519.0 as i32,
+    // #[cpp(box)]
+    // case MlDsa65:
+    //   MlDsa65Signature mldsa65;
+    MlDsa65 { mldsa65: MlDsa65Signature } = CryptographicScheme::MlDsa65.0 as i32,
     
 }
 
@@ -423,10 +593,96 @@ pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
     Ed25519 { ed25519: Ed25519PublicKey } = CryptographicScheme::Ed25519.0 as i32,
+    // #[cpp(box)]
+    // case MlDsa65:
+    //   MlDsa65PublicKey mldsa65;
+    MlDsa65 { mldsa65: MlDsa65PublicKey } = CryptographicScheme::MlDsa65.0 as i32,
     
 }
 
+/// SHA-256 hash committing to a [`PublicKey`], scheme included:
+/// `sha256(cxs(DomainSeparator("PublicKey")) || cxs(PublicKey))`.
+///
+/// A fixed-size stand-in for public keys of any scheme, so that types
+/// exposed to contracts do not grow with the largest key.
+// 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Default, Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct PublicKeyHash {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 32 as usize],
+}
+impl From<[u8; 32 as usize]> for PublicKeyHash {
+    fn from(_inner: [u8; 32 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl PublicKeyHash {
+    pub fn into_inner(self) -> [u8; 32 as usize] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 32 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for PublicKeyHash {
+    type Target = [u8; 32 as usize];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for PublicKeyHash {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+impl AsRef<[u8]> for PublicKeyHash {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+impl<'a> From<&'a [u8; 32]> for &'a PublicKeyHash {
+    fn from(arr: &[u8; 32]) -> Self {
+        let ptr = arr as *const [u8; 32] as *const PublicKeyHash;
+        unsafe { &*ptr }
+    }
+}
+#[cfg(feature = "xdrs")]
+impl<'r> ReadXDR<'r> for &'r PublicKeyHash {
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for PublicKeyHash {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "PublicKeyHash".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 64,
+            "maxLength": 64
+        })
+    }
+}
+
+
+
 /// Union of a SecretKey type over the various cryptographic schemes.
+///
+/// There is no ML-DSA variant: nodes never sign with ML-DSA.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]

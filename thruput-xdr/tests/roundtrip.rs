@@ -12,7 +12,8 @@ use thruput_xdr::address_auth::{
     kDefaultNewAddressRequiredWeight,
 };
 use thruput_xdr::auth_claim::{
-    AuthClaim, AuthClaim_source_address_claim, kMaxSigners,
+    AuthClaim, AuthClaim_source_address_claim, PubkeyAccountPreimage,
+    kMaxSigners,
 };
 use thruput_xdr::contract::{Contract, ContractBlob};
 use thruput_xdr::event::{TxEmittedEvent, TxEventLog};
@@ -26,8 +27,9 @@ use thruput_xdr::transaction::{
     Transaction, Uniquifier,
 };
 use thruput_xdr::types::{
-    ContractAddress, Ed25519PublicKey, Ed25519Signature, PublicKey,
-    SHA256Hash, Signature, int128_xdr,
+    ContractAddress, Ed25519PublicKey, Ed25519Signature, MlDsa65PublicKey,
+    MlDsa65Signature, PublicKey, PublicKeyHash, SHA256Hash, Signature,
+    int128_xdr,
 };
 use xdrs::{BytesM, VecM};
 
@@ -138,6 +140,34 @@ fn sample_signed_transaction() -> SignedTransaction {
         ]
         .try_into()
         .unwrap(),
+        pubkey_claim_key: None,
+    }
+}
+
+/// A transaction from a standalone ML-DSA-65 pubkey account: the claim
+/// names the key by hash, and the key itself rides beside the one
+/// signature. The hash is a placeholder; these tests cover encoding only.
+fn sample_mldsa_signed_transaction() -> SignedTransaction {
+    let mut tx = sample_transaction();
+    tx.auth_claim = AuthClaim::kPubkeySignature {
+        pubkey_preimage: PubkeyAccountPreimage {
+            pubkey_hash: PublicKeyHash::new([0x5A; 32]),
+            nonce: 7,
+        },
+    };
+    SignedTransaction {
+        tx,
+        signatures: vec![DecoratedSignature {
+            public_key_id: 0,
+            signature: Signature::MlDsa65 {
+                mldsa65: MlDsa65Signature::new([0x33; 3309]),
+            },
+        }]
+        .try_into()
+        .unwrap(),
+        pubkey_claim_key: Some(PublicKey::MlDsa65 {
+            mldsa65: MlDsa65PublicKey::new([0x44; 1952]),
+        }),
     }
 }
 
@@ -183,6 +213,68 @@ fn transaction_roundtrip() {
 fn signed_transaction_roundtrip() {
     let bytes = roundtrip(&sample_signed_transaction());
     assert_prefixes_and_suffix_err::<SignedTransaction>(&bytes);
+}
+
+#[test]
+fn mldsa_signed_transaction_roundtrip() {
+    let stx = sample_mldsa_signed_transaction();
+    let bytes = roundtrip(&stx);
+    assert_prefixes_and_suffix_err::<SignedTransaction>(&bytes);
+
+    // The key sits outside the signed body: dropping it leaves the
+    // Transaction encoding, and so the transaction hash, unchanged.
+    let tx_bytes = xdrs::txs::encode(&stx.tx).unwrap();
+    assert_eq!(&bytes[..tx_bytes.len()], tx_bytes.as_slice());
+    // Trailing optional: a present flag, then the PublicKey union.
+    let tail = &bytes[bytes.len() - (4 + 4 + 1952)..];
+    assert_eq!(tail[..4], 1u32.to_be_bytes(), "pubkey_claim_key present");
+    assert_eq!(tail[4..8], 1i32.to_be_bytes(), "MlDsa65 discriminant");
+}
+
+/// Fixed-size arms encode as the scheme discriminant followed by the
+/// raw bytes, padded to a 4-byte boundary in TXS.
+#[test]
+fn mldsa65_key_and_signature_txs_layout() {
+    let key = PublicKey::MlDsa65 {
+        mldsa65: MlDsa65PublicKey::new([0x44; 1952]),
+    };
+    let bytes = roundtrip(&key);
+    assert_eq!(bytes.len(), 4 + 1952);
+    assert_eq!(bytes[..4], 1i32.to_be_bytes());
+    assert_eq!(bytes[4..], [0x44; 1952]);
+    assert_prefixes_and_suffix_err::<PublicKey>(&bytes);
+
+    let sig = Signature::MlDsa65 {
+        mldsa65: MlDsa65Signature::new([0x33; 3309]),
+    };
+    let bytes = roundtrip(&sig);
+    assert_eq!(bytes.len(), 4 + 3309 + 3);
+    assert_eq!(bytes[..4], 1i32.to_be_bytes());
+    assert_eq!(bytes[4..4 + 3309], [0x33; 3309]);
+    assert_eq!(bytes[4 + 3309..], [0; 3]);
+    assert_prefixes_and_suffix_err::<Signature>(&bytes);
+}
+
+/// A scheme discriminant past the last defined one is rejected rather
+/// than resolved to an existing arm.
+#[test]
+fn unknown_scheme_discriminant_rejected() {
+    let key = PublicKey::Ed25519 {
+        ed25519: Ed25519PublicKey::new([0x42; 32]),
+    };
+    let mut bytes = xdrs::txs::encode(&key).unwrap();
+    bytes[..4].copy_from_slice(&2i32.to_be_bytes());
+    assert!(xdrs::txs::decode::<PublicKey>(&bytes).is_err());
+}
+
+/// The claim contracts read through GetAuthClaim is passed by value
+/// across the syscall boundary, so its in-memory size is part of the
+/// contract ABI. Naming the key by hash keeps it at 48 bytes whatever
+/// the scheme.
+#[test]
+fn auth_claim_ffi_size_is_scheme_independent() {
+    assert_eq!(core::mem::size_of::<PubkeyAccountPreimage>(), 40);
+    assert_eq!(core::mem::size_of::<AuthClaim>(), 48);
 }
 
 #[test]
@@ -294,6 +386,7 @@ fn empty_containers_roundtrip() {
     let stx = SignedTransaction {
         tx,
         signatures: VecM::default(),
+        pubkey_claim_key: None,
     };
     roundtrip(&stx);
 
