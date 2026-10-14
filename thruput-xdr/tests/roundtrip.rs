@@ -12,7 +12,8 @@ use thruput_xdr::address_auth::{
     kDefaultNewAddressRequiredWeight,
 };
 use thruput_xdr::auth_claim::{
-    AuthClaim, AuthClaim_source_address_claim, kMaxSigners,
+    AuthClaim, AuthClaim_source_address_claim, PubkeyAccountPreimage,
+    kMaxSigners,
 };
 use thruput_xdr::contract::{Contract, ContractBlob};
 use thruput_xdr::event::{TxEmittedEvent, TxEventLog};
@@ -26,8 +27,9 @@ use thruput_xdr::transaction::{
     Transaction, Uniquifier,
 };
 use thruput_xdr::types::{
-    ContractAddress, Ed25519PublicKey, Ed25519Signature, PublicKey,
-    SHA256Hash, Signature, int128_xdr,
+    ContractAddress, Ed25519PublicKey, Ed25519Signature, MlDsa65PublicKey,
+    MlDsa65Signature, PublicKey, PublicKeyHash, SHA256Hash, Signature,
+    int128_xdr,
 };
 use xdrs::{BytesM, VecM};
 
@@ -138,6 +140,7 @@ fn sample_signed_transaction() -> SignedTransaction {
         ]
         .try_into()
         .unwrap(),
+        pubkey_claim_key: None,
     }
 }
 
@@ -182,6 +185,35 @@ fn transaction_roundtrip() {
 #[test]
 fn signed_transaction_roundtrip() {
     let bytes = roundtrip(&sample_signed_transaction());
+    assert_prefixes_and_suffix_err::<SignedTransaction>(&bytes);
+}
+
+#[test]
+fn mldsa_pubkey_claim_roundtrip() {
+    // A pubkey claim names its key by hash; the key itself, here an ML-DSA-65
+    // one, rides alongside the signatures.
+    let mut tx = sample_transaction();
+    tx.auth_claim = AuthClaim::kPubkeySignature {
+        pubkey_preimage: PubkeyAccountPreimage {
+            pubkey_hash: PublicKeyHash::new([0x5C; 32]),
+            nonce: 7,
+        },
+    };
+    let stx = SignedTransaction {
+        tx,
+        signatures: vec![DecoratedSignature {
+            public_key_id: 0,
+            signature: Signature::MlDsa65 {
+                mldsa65: MlDsa65Signature::new([0x33; 3309]),
+            },
+        }]
+        .try_into()
+        .unwrap(),
+        pubkey_claim_key: Some(PublicKey::MlDsa65 {
+            mldsa65: MlDsa65PublicKey::new([0x44; 1952]),
+        }),
+    };
+    let bytes = roundtrip(&stx);
     assert_prefixes_and_suffix_err::<SignedTransaction>(&bytes);
 }
 
@@ -294,6 +326,7 @@ fn empty_containers_roundtrip() {
     let stx = SignedTransaction {
         tx,
         signatures: VecM::default(),
+        pubkey_claim_key: None,
     };
     roundtrip(&stx);
 
