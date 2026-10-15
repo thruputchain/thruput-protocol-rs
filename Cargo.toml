@@ -57,7 +57,7 @@ xdrs = { registry = "thruput", version = "0.10.3", default-features = false, fea
 ] }
 xdr-common = { version = "0.10.3", registry = "thruput" }
 xdr-derive = { version = "0.10.3", registry = "thruput" }
-rpc_api = { version = "0.2", registry = "thruput" }
+rpc_api = { version = "0.2.2", registry = "thruput" }
 rpc_driver = { version = "0.11", registry = "thruput" }
 schemars = { version = "1" }
 

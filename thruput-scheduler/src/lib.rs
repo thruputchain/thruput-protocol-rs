@@ -95,3 +95,6 @@ pub use parallel_impls::*;
 
 mod impls;
 pub use impls::*;
+
+mod chunk;
+pub use chunk::*;

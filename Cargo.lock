@@ -305,9 +305,9 @@ dependencies = [
 
 [[package]]
 name = "rpc_api"
-version = "0.2.0"
+version = "0.2.2"
 source = "sparse+https://crates.thruput.network/api/v1/crates/"
-checksum = "f036fb03367c01b1361848588f9872d20af205bf89b0ad2d484cf9ea194bac6d"
+checksum = "b76a1175c5119ec33c48df25755e18e48aa254afc184c1cc10ff9acf6c9a088a"
 dependencies = [
  "async-trait",
  "thiserror",
