@@ -160,61 +160,111 @@ impl SCP_Control_SCP_Control1_Client {
     }
     pub async fn scp_control_null(&self) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_nominate(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SCPValue> + ?Sized), arg2 : &(impl xdrs::EncodesAs<SCPValue> + ?Sized)) -> Result<bool, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1, arg2)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1, arg2), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_stop_nomination(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 20, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_update_local_quorum_set(&self, arg0 : &(impl xdrs::EncodesAs<SCPQuorumSet> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_received_envelope(&self, arg0 : &(impl xdrs::EncodesAs<SCPEnvelope> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 200, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_set_state_from_envelope(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SCPEnvelope> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 201, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_set_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPQuorumSet> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 300, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_get_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPHash> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 301, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_remove_qset(&self, arg0 : &(impl xdrs::EncodesAs<SCPHash> + ?Sized)) -> Result<SCPOptQuorumSet, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 302, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : &(impl xdrs::EncodesAs<SCPSlotIndex> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 400, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

@@ -227,19 +227,34 @@ impl DbGateway_DbGateway1_Client {
     }
     pub async fn dbgateway_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<DbGatewayIntroOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbgateway_get_items(&self, arg0 : &(impl xdrs::EncodesAs<AddressAndKeyBatch> + ?Sized)) -> Result<DbGatewayResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn dbgateway_get_config(&self) -> Result<DbGatewayConfigResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

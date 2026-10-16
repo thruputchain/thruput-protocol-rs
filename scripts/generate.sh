@@ -69,7 +69,7 @@ akkads=(
   dogwood.x
   integration.x
   loadgen.x
-  multiplex.x
+  multiplex2.x
   proposal.x
   parallel.x
   repair2.x

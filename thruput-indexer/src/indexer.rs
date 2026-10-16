@@ -621,43 +621,78 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
     }
     pub async fn indexer_block_explorer_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_transaction_info(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHash> + ?Sized)) -> Result<TxInfoResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_block_by_height(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<BlockLookupResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_events(&self, arg0 : &(impl xdrs::EncodesAs<EventQuery> + ?Sized)) -> Result<EventPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionQuery> + ?Sized)) -> Result<TransactionPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn get_transactions_by_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
@@ -1123,13 +1158,23 @@ impl EventIndexer_EventIndexer1_Client {
     }
     pub async fn event_indexer_pull_next(&self, arg0 : &(impl xdrs::EncodesAs<EventIndexerPullRequest> + ?Sized)) -> Result<EventIndexerPullResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 11, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

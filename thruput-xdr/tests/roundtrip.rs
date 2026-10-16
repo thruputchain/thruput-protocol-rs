@@ -204,13 +204,13 @@ fn mldsa_pubkey_claim_roundtrip() {
         signatures: vec![DecoratedSignature {
             public_key_id: 0,
             signature: Signature::MlDsa65 {
-                mldsa65: MlDsa65Signature::new([0x33; 3309]),
+                mldsa65: Box::new(MlDsa65Signature::new([0x33; 3309])),
             },
         }]
         .try_into()
         .unwrap(),
         pubkey_claim_key: Some(PublicKey::MlDsa65 {
-            mldsa65: MlDsa65PublicKey::new([0x44; 1952]),
+            mldsa65: Box::new(MlDsa65PublicKey::new([0x44; 1952])),
         }),
     };
     let bytes = roundtrip(&stx);

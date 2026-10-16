@@ -75,7 +75,7 @@ impl<'a> From<&'a [u8; 32]> for &'a ValidatorID {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r ValidatorID {
+unsafe impl<'r> ReadXDR<'r> for &'r ValidatorID {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
