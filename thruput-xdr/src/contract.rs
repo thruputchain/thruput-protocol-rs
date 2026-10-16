@@ -359,7 +359,7 @@ impl<'a> From<&'a [u8; 8]> for &'a ContractEntrypointID {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
+impl<'r> ReadXDR<'r> for &'r ContractEntrypointID {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 8] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);

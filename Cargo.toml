@@ -51,12 +51,12 @@ thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.56.0", registr
 thruput-view = { path = "thruput-view", version = "=0.56.0", registry = "thruput" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.56.0", registry = "thruput" }
 thruput-spec = { path = "thruput-spec", version = "=0.56.0", registry = "thruput" }
-xdrs = { registry = "thruput", version = "0.11.0", default-features = false, features = [
+xdrs = { registry = "thruput", version = "0.12.0", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { version = "0.11.0", registry = "thruput" }
-xdr-derive = { version = "0.11.0", registry = "thruput" }
+xdr-common = { version = "0.12.0", registry = "thruput" }
+xdr-derive = { version = "0.12.0", registry = "thruput" }
 rpc_api = { version = "0.3.0", registry = "thruput" }
 rpc_driver = { version = "0.14", registry = "thruput" }
 schemars = { version = "1" }

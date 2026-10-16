@@ -188,7 +188,7 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
+impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -264,7 +264,7 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
+impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -339,7 +339,7 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
+impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -419,7 +419,7 @@ impl<'a> From<&'a [u8; 3309]> for &'a MlDsa65Signature {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r MlDsa65Signature {
+impl<'r> ReadXDR<'r> for &'r MlDsa65Signature {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 3309] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -494,7 +494,7 @@ impl<'a> From<&'a [u8; 1952]> for &'a MlDsa65PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r MlDsa65PublicKey {
+impl<'r> ReadXDR<'r> for &'r MlDsa65PublicKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 1952] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -654,7 +654,7 @@ impl<'a> From<&'a [u8; 32]> for &'a PublicKeyHash {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r PublicKeyHash {
+impl<'r> ReadXDR<'r> for &'r PublicKeyHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -765,7 +765,7 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r SHA256Hash {
+impl<'r> ReadXDR<'r> for &'r SHA256Hash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -955,7 +955,7 @@ impl<'a> From<&'a [u8; 2048]> for &'a StorageLongHash {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r StorageLongHash {
+impl<'r> ReadXDR<'r> for &'r StorageLongHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 2048] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -1181,7 +1181,7 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r ContractAddress {
+impl<'r> ReadXDR<'r> for &'r ContractAddress {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -1337,7 +1337,7 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
     }
 }
 #[cfg(feature = "xdrs")]
-unsafe impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
+impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);

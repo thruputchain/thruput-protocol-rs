@@ -159,7 +159,7 @@ dependencies = [
 name = "hogexec-internal"
 version = "0.56.0"
 dependencies = [
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -326,7 +326,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
- "xdrs",
+ "xdrs 0.11.0",
 ]
 
 [[package]]
@@ -523,7 +523,7 @@ dependencies = [
  "serde",
  "thruput-scp",
  "thruput-xdr",
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -542,7 +542,7 @@ dependencies = [
  "thruput-trace",
  "thruput-view",
  "thruput-xdr",
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -555,7 +555,7 @@ dependencies = [
  "serde",
  "thruput-scp",
  "thruput-xdr",
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -570,8 +570,8 @@ dependencies = [
  "thruput-scheduler",
  "thruput-scp",
  "thruput-xdr",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -585,7 +585,7 @@ dependencies = [
  "thruput-coordinator",
  "thruput-scp",
  "thruput-xdr",
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -601,8 +601,8 @@ dependencies = [
  "thruput-scp",
  "thruput-trace",
  "thruput-xdr",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -613,8 +613,8 @@ dependencies = [
  "rpc_api",
  "schemars",
  "serde",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -630,8 +630,8 @@ dependencies = [
  "thruput-scp",
  "thruput-trace",
  "thruput-xdr",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -643,8 +643,8 @@ dependencies = [
  "schemars",
  "serde",
  "thruput-xdr",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -654,7 +654,7 @@ dependencies = [
  "schemars",
  "serde",
  "thruput-xdr",
- "xdrs",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -669,8 +669,8 @@ dependencies = [
  "schemars",
  "serde",
  "thruput-xdr",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -685,8 +685,8 @@ dependencies = [
  "thruput-scp",
  "thruput-xdr",
  "tokio",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -699,8 +699,8 @@ dependencies = [
  "thiserror",
  "thruput-syscall",
  "thruput-xdr-macros",
- "xdr-common",
- "xdrs",
+ "xdr-common 0.12.0",
+ "xdrs 0.12.0",
 ]
 
 [[package]]
@@ -810,6 +810,15 @@ source = "sparse+https://crates.thruput.network/api/v1/crates/"
 checksum = "5b1a211ba15f70d96b9a4e649e8ac523c9fe965531d020a197c6479df121c8d8"
 dependencies = [
  "escape-bytes",
+]
+
+[[package]]
+name = "xdr-common"
+version = "0.12.0"
+source = "sparse+https://crates.thruput.network/api/v1/crates/"
+checksum = "6e738541d9a13ae720b896d23ced56f35d76813c0482d234f20918f08c5fdb24"
+dependencies = [
+ "escape-bytes",
  "schemars",
  "serde",
 ]
@@ -827,12 +836,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "xdr-repr"
-version = "0.11.0"
+name = "xdr-derive"
+version = "0.12.0"
 source = "sparse+https://crates.thruput.network/api/v1/crates/"
-checksum = "36ce79944977c730d5b22cd17df287c3a4a702c18f745b90bf905695edbb1246"
+checksum = "f9b6f189ec1edb0a821d156932d32be2e7ebe7e098749e81999c5348ff6b54d3"
 dependencies = [
- "xdr-common",
+ "darling",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "xdr-repr"
+version = "0.12.0"
+source = "sparse+https://crates.thruput.network/api/v1/crates/"
+checksum = "13b6c2cd8e01cfff620b1bd961e9b1abd85e8666e2dade8f47412756330ffb59"
+dependencies = [
+ "xdr-common 0.12.0",
 ]
 
 [[package]]
@@ -841,8 +862,18 @@ version = "0.11.0"
 source = "sparse+https://crates.thruput.network/api/v1/crates/"
 checksum = "025c71170cbefab61149cdb4dde9f6802659a87b7cebe3451572c8250d15daf7"
 dependencies = [
- "xdr-common",
- "xdr-derive",
+ "xdr-common 0.11.0",
+ "xdr-derive 0.11.0",
+]
+
+[[package]]
+name = "xdrs"
+version = "0.12.0"
+source = "sparse+https://crates.thruput.network/api/v1/crates/"
+checksum = "0acdb56d25ddc81eb90818010741babae106289b2b14cdc66803504111e6530b"
+dependencies = [
+ "xdr-common 0.12.0",
+ "xdr-derive 0.12.0",
  "xdr-repr",
 ]
 
