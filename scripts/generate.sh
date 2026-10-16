@@ -61,12 +61,14 @@ akkads=(
   bristlecone.x
   catchup.x
   config.x
+  config2.x
   consensus.x
   coord_sched.x
   db_sched.x
   discovery2.x
   dogwood_kit.x
   dogwood.x
+  genesis2.x
   integration.x
   loadgen.x
   multiplex2.x
