@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
+// Generated from xdrc commit: ec35b7e948f24afe96a948ea1637c12f260be1f5
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -562,9 +562,9 @@ impl core::fmt::Display for CryptographicScheme {
 
 /// Union of a Signature type over the various cryptographic schemes.
 ///
-/// The ML-DSA arms of Signature and PublicKey are boxed in C++ (heap
-/// allocated), so that Ed25519 signatures and keys, which are most of them,
-/// do not each take the size of the largest ML-DSA value in memory.
+/// The ML-DSA arms of Signature and PublicKey are boxed (heap allocated) in
+/// both C++ and Rust, so that Ed25519 signatures and keys, which are most of
+/// them, do not each take the size of the largest ML-DSA value in memory.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -575,10 +575,10 @@ pub enum Signature {
     // case Ed25519:
     //   Ed25519Signature ed25519;
     Ed25519 { ed25519: Ed25519Signature } = CryptographicScheme::Ed25519.0 as i32,
-    // #[cpp(box)]
+    // #[rust(box_ptr)], #[cpp(box)]
     // case MlDsa65:
-    //   MlDsa65Signature mldsa65;
-    MlDsa65 { mldsa65: MlDsa65Signature } = CryptographicScheme::MlDsa65.0 as i32,
+    //   Box<MlDsa65Signature> mldsa65;
+    MlDsa65 { mldsa65: Box<MlDsa65Signature> } = CryptographicScheme::MlDsa65.0 as i32,
     
 }
 
@@ -593,10 +593,10 @@ pub enum PublicKey {
     // case Ed25519:
     //   Ed25519PublicKey ed25519;
     Ed25519 { ed25519: Ed25519PublicKey } = CryptographicScheme::Ed25519.0 as i32,
-    // #[cpp(box)]
+    // #[rust(box_ptr)], #[cpp(box)]
     // case MlDsa65:
-    //   MlDsa65PublicKey mldsa65;
-    MlDsa65 { mldsa65: MlDsa65PublicKey } = CryptographicScheme::MlDsa65.0 as i32,
+    //   Box<MlDsa65PublicKey> mldsa65;
+    MlDsa65 { mldsa65: Box<MlDsa65PublicKey> } = CryptographicScheme::MlDsa65.0 as i32,
     
 }
 

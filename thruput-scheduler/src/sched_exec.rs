@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
+// Generated from xdrc commit: ec35b7e948f24afe96a948ea1637c12f260be1f5
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -108,7 +108,12 @@ impl SchedExec_SchedExec1_Client {
     }
     pub async fn schedexec_intro_exec(&self, arg0 : &(impl xdrs::EncodesAs<ExecCard> + ?Sized)) -> Result<IntroExecResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }

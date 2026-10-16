@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 4eba524354bda9d7db1efa2845da43ce40dd1ab9
+// Generated from xdrc commit: ec35b7e948f24afe96a948ea1637c12f260be1f5
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -794,73 +794,133 @@ impl SchedulerCoord_SchedulerCoord1_Client {
     }
     pub async fn schedulercoord_null(&self) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_intro_coord(&self, arg0 : &(impl xdrs::EncodesAs<CoordCard> + ?Sized)) -> Result<CoordinatorRegistrationOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_submit_unvetted(&self, arg0 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_submit_vetted(&self, arg0 : &(impl xdrs::EncodesAs<ValidatorID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_propose_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ProposalContext> + ?Sized)) -> Result<SchedulerProposalResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_validate_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<Proposal> + ?Sized)) -> Result<SchedulerValidationResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_commit_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockID> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ConsensusValue> + ?Sized)) -> Result<SchedulerCommitOutcome, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0, arg1)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedcoord_get_tip(&self) -> Result<SchedulerGetTipResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&()).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 7, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedcoord_load_genesis_configuration(&self, arg0 : &(impl xdrs::EncodesAs<GenesisConfiguration> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 8, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : &(impl xdrs::EncodesAs<GenesisCeremonyRequest> + ?Sized)) -> Result<GenesisCeremonyResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedcoord_lookup_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 100, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
     pub async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
-         call.encode(&(arg0)).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
          let buf = self.handle.send_call(Self::prog_vers(), 101, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
