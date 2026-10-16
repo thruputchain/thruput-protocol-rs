@@ -26,6 +26,10 @@ pub mod config;
 pub use config::*;
 
 #[rustfmt::skip]
+pub mod config2;
+pub use config2::*;
+
+#[rustfmt::skip]
 pub mod consensus;
 pub use consensus::*;
 
@@ -44,6 +48,10 @@ pub use dogwood_kit::*;
 #[rustfmt::skip]
 pub mod dogwood;
 pub use dogwood::*;
+
+#[rustfmt::skip]
+pub mod genesis2;
+pub use genesis2::*;
 
 #[rustfmt::skip]
 pub mod integration;
