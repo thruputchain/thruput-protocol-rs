@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ec35b7e948f24afe96a948ea1637c12f260be1f5
+// Generated from xdrc commit: 6274c208f1d444c1450f0a2111b8b1918e067237
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -188,7 +188,7 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519Signature {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r Ed25519Signature {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a Ed25519Signature {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -264,7 +264,7 @@ impl<'a> From<&'a [u8; 32]> for &'a Ed25519PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r Ed25519PublicKey {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a Ed25519PublicKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -339,7 +339,7 @@ impl<'a> From<&'a [u8; 64]> for &'a Ed25519SecretKey {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r Ed25519SecretKey {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a Ed25519SecretKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 64] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -419,7 +419,7 @@ impl<'a> From<&'a [u8; 3309]> for &'a MlDsa65Signature {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r MlDsa65Signature {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a MlDsa65Signature {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 3309] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -494,7 +494,7 @@ impl<'a> From<&'a [u8; 1952]> for &'a MlDsa65PublicKey {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r MlDsa65PublicKey {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a MlDsa65PublicKey {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 1952] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -654,7 +654,7 @@ impl<'a> From<&'a [u8; 32]> for &'a PublicKeyHash {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r PublicKeyHash {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a PublicKeyHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -765,7 +765,7 @@ impl<'a> From<&'a [u8; 32]> for &'a SHA256Hash {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r SHA256Hash {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a SHA256Hash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -955,7 +955,7 @@ impl<'a> From<&'a [u8; 2048]> for &'a StorageLongHash {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r StorageLongHash {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a StorageLongHash {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 2048] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -1181,7 +1181,7 @@ impl<'a> From<&'a [u8; 32]> for &'a ContractAddress {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r ContractAddress {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a ContractAddress {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
@@ -1337,7 +1337,7 @@ impl<'a> From<&'a [u8; 32]> for &'a StorageKeyContractData {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r StorageKeyContractData {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a StorageKeyContractData {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);

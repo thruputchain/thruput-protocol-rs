@@ -33,6 +33,34 @@ use thruput_xdr::types::{
 };
 use xdrs::{BytesM, VecM};
 
+#[test]
+fn derived_borrowed_fields_decode_without_copying() {
+    #[derive(Debug, PartialEq, xdrs::ReadXDR, xdrs::WriteXDR)]
+    struct Borrowed<'a> {
+        address: &'a ContractAddress,
+        hash: &'a SHA256Hash,
+    }
+
+    let address = ContractAddress::new([0x21; 32]);
+    let hash = SHA256Hash::new([0x43; 32]);
+    let value = Borrowed {
+        address: &address,
+        hash: &hash,
+    };
+
+    let txs = xdrs::txs::encode(&value).unwrap();
+    let decoded: Borrowed<'_> = xdrs::txs::decode(&txs).unwrap();
+    assert_eq!(decoded, value);
+    assert_eq!(decoded.address.as_ref().as_ptr(), txs.as_ptr());
+    assert_eq!(decoded.hash.as_ref().as_ptr(), txs[32..].as_ptr());
+
+    let cxs = xdrs::cxs::encode(&value).unwrap();
+    let decoded: Borrowed<'_> = xdrs::cxs::decode(&cxs).unwrap();
+    assert_eq!(decoded, value);
+    assert_eq!(decoded.address.as_ref().as_ptr(), cxs.as_ptr());
+    assert_eq!(decoded.hash.as_ref().as_ptr(), cxs[32..].as_ptr());
+}
+
 /// Encodes `value` in both XDR serializations and asserts that decoding
 /// reproduces it exactly. Returns the TXS encoding for reuse in
 /// corruption tests.

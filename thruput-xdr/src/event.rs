@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: ec35b7e948f24afe96a948ea1637c12f260be1f5
+// Generated from xdrc commit: 6274c208f1d444c1450f0a2111b8b1918e067237
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -98,7 +98,7 @@ impl<'a> From<&'a [u8; 32]> for &'a Topic {
     }
 }
 #[cfg(feature = "xdrs")]
-impl<'r> ReadXDR<'r> for &'r Topic {
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a Topic {
   fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
       let arr: &[u8; 32] = xdrs::read_xdr(r)?;
       let val = Self::from(arr);
