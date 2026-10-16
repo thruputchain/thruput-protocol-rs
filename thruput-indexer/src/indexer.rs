@@ -509,9 +509,9 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
     async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::ProgramError>;
     
     async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::rpc_api::ProgramError>;
-        // The canonical consensus value for a retained, indexed height. Unknown,
-    // future, and unavailable heights return BlockNotFound; backend failures
-    // remain RPC errors.
+        // The canonical consensus value for a retained, indexed height. Heights
+    // outside ready indexed coverage return BlockNotFound. An index that is
+    // not ready or has an internal failure returns an x23 SYSTEM_ERR, not a miss.
 
     async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_api::ProgramError>;
         // Paginated, filtered events query.  A candidate event matches
