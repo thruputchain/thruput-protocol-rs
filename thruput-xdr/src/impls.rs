@@ -131,30 +131,22 @@ impl ContractAddress {
     }
 }
 
-/// Hand-written `Debug` for the 32-byte opaque newtypes, which carry
-/// `#[rust(no_debug)]` in `types.x` so x23c leaves `Debug` off the derive
-/// list it generates.
-///
-/// The derived form renders a hash or an address as `[1, 2, 3, ...]`: hard
-/// to read, and impossible to match against the hex that logs, explorers
-/// and the JSON schema all use. These are the two types that show up most
-/// in `{:?}` output -- SDK call logs, assertion failures, error chains --
-/// so they get the readable form and the newtypes wrapping them inherit it
-/// through their own derived `Debug`.
-macro_rules! hex_debug {
+// These types carry `#[rust(no_debug)]` in types.x. Wrappers inherit this
+// readable identifier form through their derived Debug implementations.
+macro_rules! base58_debug {
     ($($t:ty),+ $(,)?) => {$(
         impl core::fmt::Debug for $t {
             fn fmt(
                 &self,
                 f: &mut core::fmt::Formatter<'_>,
             ) -> core::fmt::Result {
-                write!(f, "0x{}", crate::hex::hex_encode(self))
+                write!(f, "{}", crate::base58::base58_encode(self))
             }
         }
     )+};
 }
 
-hex_debug!(ContractAddress, SHA256Hash);
+base58_debug!(ContractAddress, SHA256Hash);
 
 impl ContractEntrypointID {
     /// Builds an entrypoint ID from its numeric form, storing `n` as

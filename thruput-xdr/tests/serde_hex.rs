@@ -3,8 +3,9 @@
 //! Signatures, keys, hashes, addresses, topics, entrypoint IDs, and validator
 //! IDs serialize through `xdr_common::serde_hex`: a lowercase hex string
 //! with no prefix and exactly two digits per byte. Clients parse these
-//! strings, so the tests pin the emitted text and the accepted inputs
-//! rather than only checking that a value survives a round trip.
+//! strings internally. Public APIs and saved identifier formats use explicit
+//! boundary adapters instead of these raw protocol Serde implementations.
+//! These tests pin the internal representation independently of Debug output.
 
 use serde::Serialize;
 use serde::de::DeserializeOwned;

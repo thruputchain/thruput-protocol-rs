@@ -25,8 +25,8 @@ impl<'a> fmt::Display for Hex<'a> {
 }
 
 /// Wraps `b` so `{:?}` and `{}` format it as lowercase hex, for readable
-/// byte values (hashes, addresses, keys) in logs and error messages
-/// without allocating.
+/// opaque payloads and binary inspection without allocating. For typed
+/// identifiers, use [`crate::base58::base58_encode`].
 pub fn hex_encode<'a, B: AsRef<[u8]>>(b: &'a B) -> Hex<'a> {
     Hex(b.as_ref())
 }

@@ -1,3 +1,10 @@
+//! Protocol types and binary XDR serialization.
+//!
+//! The optional `serde` feature exposes the raw protocol representation,
+//! including hex fixed-size byte arrays. Public APIs and saved identifier
+//! formats need explicit boundary adapters. Identifier diagnostics and the
+//! allocation-free [`base58`] helpers do not change Serde or XDR encoding.
+
 #![no_std]
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
@@ -17,6 +24,7 @@ pub use protocol_version::PROTOCOL_VERSION;
 #[cfg(feature = "xdrs")]
 mod const_size_guard;
 
+pub mod base58;
 pub mod hex;
 use hex::*;
 

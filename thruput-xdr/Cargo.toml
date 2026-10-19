@@ -30,6 +30,8 @@ alloc = ["serde?/alloc", "xdrs/alloc"]
 std = ["alloc", "dep:thiserror"]
 # Note that pulling in serde pulls in an allocator via xdrs/serde->xdr_common/serde->xdr_common/alloc
 # Fixed-size byte arrays serialize as hex strings through `xdr_common::serde_hex`.
+# Public/saved identifier formats require boundary adapters; Debug uses base58
+# for ContractAddress and SHA256Hash independently of this feature.
 serde = ["dep:serde", "xdrs/serde"]
 # `xdrs` deliberately does not imply `alloc`: rv32 contract builds use
 # `xdrs` without an allocator for encoding and fixed-size decoding.
@@ -45,6 +47,10 @@ syscalls_mock = ["syscalls", "thruput-syscall/syscalls_mock", "std"]   # require
 [dependencies.xdrs]
 workspace = true
 features = ["derive"]
+
+[dependencies.bs58]
+version = "0.5.1"
+default-features = false
 
 [dependencies.serde]
 optional = true
