@@ -55,6 +55,7 @@ impl ConfigParamID {
     pub const kConfigParamMaxAuthTokens: Self = Self(10);
     pub const kConfigParamMaxCalldataLen: Self = Self(11);
     pub const kConfigParamMaxReturnBufferLen: Self = Self(12);
+    pub const kConfigParamMaxTxGas: Self = Self(13);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -103,6 +104,9 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxReturnBufferLen.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxReturnBufferLen")
+            },
+            x if x == Self::kConfigParamMaxTxGas.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxTxGas")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -283,6 +287,23 @@ pub enum ConfigParam {
     // case kConfigParamMaxReturnBufferLen:
     //   u32 max_return_buffer_len;
     kConfigParamMaxReturnBufferLen { max_return_buffer_len: u32 } = ConfigParamID::kConfigParamMaxReturnBufferLen.0 as i32,
+    /// Gas one transaction may budget: the most a root `Invocation::gas_limit`
+    /// may state.
+    ///
+    /// Checked before any attached contract is verified or any body runs, so
+    /// a transaction over the bound is refused outright rather than clamped:
+    /// the budget a transaction signs is the one it executes under or none.
+    /// Subinvocations are already capped at their caller's remaining gas, so
+    /// bounding the root bounds every frame.
+    ///
+    /// Hog availability bounded a transaction's budget before this parameter,
+    /// and nothing else did, so a configuration omitting this one continues
+    /// that rule: the value in force is the largest `GasAmount`, which no
+    /// budget exceeds. A `GasAmount` rather than an `unsigned int` so that a
+    /// chain may state any budget a transaction can.
+    // case kConfigParamMaxTxGas:
+    //   GasAmount max_tx_gas;
+    kConfigParamMaxTxGas { max_tx_gas: GasAmount } = ConfigParamID::kConfigParamMaxTxGas.0 as i32,
     
 }
 
