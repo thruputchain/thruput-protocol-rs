@@ -76,6 +76,18 @@ pub struct BristleconeTimelyStatement {
     pub timely: bool,
 }
 
+// The statement of a leader vote: this party leads the epoch whose last slot
+// is the note's slot. Each epoch's leader is elected by one federated vote,
+// keyed by the epoch's last slot.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct BristleconeLeaderStatement {
+    pub leader: ValidatorID,
+}
+
 // The federated-voting phase of a vote: the sender votes for the statement,
 // or accepts it.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -138,7 +150,20 @@ pub struct BristleconeTimelyVote {
     pub vote: BristleconeVoteType,
 }
 
-// The three kinds of envelope: a proposal, a SAFE vote, and a TIMELY vote.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct BristleconeLeaderVote {
+    // The hash of the sender's quorum set (BristleconeQuorumSet) for this vote.
+    pub qset_hash: BristleconeQuorumSetHash,
+    pub statement: BristleconeLeaderStatement,
+    pub vote: BristleconeVoteType,
+}
+
+// The four kinds of envelope: a proposal, a SAFE vote, a TIMELY vote, and a
+// leader vote.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -152,6 +177,7 @@ impl BristleconeContentType {
     pub const BRISTLECONE_PROPOSAL: Self = Self(0);
     pub const BRISTLECONE_SAFE_VOTE: Self = Self(1);
     pub const BRISTLECONE_TIMELY_VOTE: Self = Self(2);
+    pub const BRISTLECONE_LEADER_VOTE: Self = Self(3);
 }
 impl From<i32> for BristleconeContentType {
     fn from(v: i32) -> Self {
@@ -170,6 +196,9 @@ impl core::fmt::Display for BristleconeContentType {
             },
             x if x == Self::BRISTLECONE_TIMELY_VOTE.0 => {
                 write!(f, "BristleconeContentType::BRISTLECONE_TIMELY_VOTE")
+            },
+            x if x == Self::BRISTLECONE_LEADER_VOTE.0 => {
+                write!(f, "BristleconeContentType::BRISTLECONE_LEADER_VOTE")
             },
             _ => {
                 write!(f, "BristleconeContentType({})", self.0)
@@ -195,6 +224,9 @@ pub enum BristleconeContent {
     // case BRISTLECONE_TIMELY_VOTE:
     //   BristleconeTimelyVote timely_vote;
     BRISTLECONE_TIMELY_VOTE { timely_vote: BristleconeTimelyVote } = BristleconeContentType::BRISTLECONE_TIMELY_VOTE.0 as i32,
+    // case BRISTLECONE_LEADER_VOTE:
+    //   BristleconeLeaderVote leader_vote;
+    BRISTLECONE_LEADER_VOTE { leader_vote: BristleconeLeaderVote } = BristleconeContentType::BRISTLECONE_LEADER_VOTE.0 as i32,
     
 }
 
@@ -207,7 +239,8 @@ pub enum BristleconeContent {
 pub struct BristleconeNote {
     // The sending party.
     pub party: ValidatorID,
-    // The slot the content applies to.
+    // The slot the content applies to; for a leader vote, the last slot of the
+    // epoch whose leader is voted on.
     pub slot: BristleconeSlot,
     pub content: BristleconeContent,
 }
