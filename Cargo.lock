@@ -163,7 +163,7 @@ dependencies = [
 
 [[package]]
 name = "hogexec-internal"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "xdrs",
 ]
@@ -337,7 +337,7 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_driver",
@@ -521,7 +521,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-akkad"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -534,7 +534,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-api-pins"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "rpc_api",
  "thruput-akkad",
@@ -553,7 +553,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-coordinator"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -566,7 +566,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-db-gateway"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -582,7 +582,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-hogx"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -596,7 +596,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-indexer"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -613,7 +613,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-rpc"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -625,7 +625,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-scheduler"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -642,7 +642,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-scp"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -655,7 +655,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-spec"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "schemars",
  "serde",
@@ -665,11 +665,11 @@ dependencies = [
 
 [[package]]
 name = "thruput-syscall"
-version = "0.56.4"
+version = "0.56.5"
 
 [[package]]
 name = "thruput-trace"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "hogexec-internal",
  "schemars",
@@ -681,7 +681,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-view"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "async-trait",
  "rpc_api",
@@ -697,7 +697,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "bs58",
  "schemars",
@@ -712,7 +712,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-macros"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -725,7 +725,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-syscall-tests"
-version = "0.56.4"
+version = "0.56.5"
 dependencies = [
  "thruput-xdr",
 ]
