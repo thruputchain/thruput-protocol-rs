@@ -224,9 +224,11 @@ pub enum SchedulerValidationResult {
     // case SchedulerValidationOK:
     //   SchedulerValidationBlock block;
     SchedulerValidationOK { block: SchedulerValidationBlock } = SchedulerValidationOutcome::SchedulerValidationOK.0 as i32,
+    // The proposal's transactions this mempool does not hold in the proposed
+    // encoding, including bodies it holds under a different signing.
     // case SchedulerValidationMissingTxs:
-    //   VecM<TransactionHash> missing_tx_hashes;
-    SchedulerValidationMissingTxs { missing_tx_hashes: VecM<TransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
+    //   VecM<SignedTransactionHash> missing_signed_tx_hashes;
+    SchedulerValidationMissingTxs { missing_signed_tx_hashes: VecM<SignedTransactionHash> } = SchedulerValidationOutcome::SchedulerValidationMissingTxs.0 as i32,
     // case SchedulerValidationDbFailed:
     // case SchedulerValidationExecutorFailed:
     // case SchedulerValidationInvalid:
@@ -663,9 +665,10 @@ pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {
     async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
     
     async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_api::ProgramError>;
-        // Returns transactions from the mempool that have not yet been committed in a block.
+        // Returns transactions from the mempool that have not yet been committed in a block,
+    // by their exact signed encoding.
 
-    async fn schedcoord_lookup_transactions(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
+    async fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
         // Returns one pending or recent outcome per input hash (same order).
 
     async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
@@ -762,7 +765,7 @@ impl ::rpc_api::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispatcher {
             }
             // schedcoord_lookup_transactions
             100 => {
-                let args: (TransactionHashBatch, ) =
+                let args: (SignedTransactionHashBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
                 let res = self.inner.schedcoord_lookup_transactions(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
@@ -902,7 +905,7 @@ impl SchedulerCoord_SchedulerCoord1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn schedcoord_lookup_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
+    pub async fn schedcoord_lookup_transactions(&self, arg0 : &(impl xdrs::EncodesAs<SignedTransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));

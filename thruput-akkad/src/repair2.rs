@@ -35,7 +35,7 @@ use ::serde::{{Serialize, Deserialize}};
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct MissingTxs {
-    pub tx_hashes: VecM<TransactionHash>,
+    pub signed_tx_hashes: VecM<SignedTransactionHash>,
     pub consensus_value: ConsensusValue,
 }
 
