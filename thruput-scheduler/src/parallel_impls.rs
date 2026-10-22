@@ -95,7 +95,7 @@ mod tests {
     use super::*;
     use crate::{
         ParallelNondeterministicProposalDataBatch,
-        ParallelSignedTransactionBatch, ParallelTransactionHashBatch,
+        ParallelSignedTransactionBatch, ParallelSignedTransactionHashBatch,
     };
     use xdr_common::{BytesM, VecM};
 
@@ -298,11 +298,11 @@ mod tests {
     }
 
     #[test]
-    fn xdr_roundtrip_transaction_hash_batch() {
+    fn xdr_roundtrip_signed_transaction_hash_batch() {
         let inner = make_batch(&[(1, &[0xDE, 0xAD])]);
-        let batch = ParallelTransactionHashBatch::from(inner.clone());
+        let batch = ParallelSignedTransactionHashBatch::from(inner.clone());
         let encoded = xdrs::txs::encode(&batch).unwrap();
-        let decoded: ParallelTransactionHashBatch =
+        let decoded: ParallelSignedTransactionHashBatch =
             xdrs::txs::decode(&encoded).unwrap();
         assert_eq!(*decoded, inner);
     }
@@ -349,9 +349,9 @@ mod tests {
             serde_json::from_str(&json).unwrap();
         assert_eq!(*decoded, inner);
 
-        let hash = ParallelTransactionHashBatch::from(inner.clone());
+        let hash = ParallelSignedTransactionHashBatch::from(inner.clone());
         let json = serde_json::to_string(&hash).unwrap();
-        let decoded: ParallelTransactionHashBatch =
+        let decoded: ParallelSignedTransactionHashBatch =
             serde_json::from_str(&json).unwrap();
         assert_eq!(*decoded, inner);
 
@@ -371,7 +371,7 @@ mod tests {
         let tx = ParallelSignedTransactionBatch::from(inner.clone());
         assert_eq!(tx.into_inner(), inner);
 
-        let hash = ParallelTransactionHashBatch::new(inner.clone());
+        let hash = ParallelSignedTransactionHashBatch::new(inner.clone());
         assert_eq!(hash.into_inner(), inner);
 
         let nd =
