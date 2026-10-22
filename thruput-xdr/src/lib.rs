@@ -56,6 +56,9 @@ use precompiles::*;
 pub mod genesis;
 use genesis::*;
 
+/// [`ContractAddress`] constants for the contracts placed at genesis.
+pub mod genesis_addresses;
+
 #[rustfmt::skip]
 pub mod retrocausal_queue;
 use retrocausal_queue::*;
