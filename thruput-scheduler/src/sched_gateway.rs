@@ -146,7 +146,8 @@ pub trait SchedGateway_SchedGateway1: Send + Sync {
     // has no committed block yet (pre-genesis bootstrap).
 
     async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::ProgramError>;
-        // Lookup in-flight (not-yet-committed) transactions by hash.
+        // Lookup in-flight (not-yet-committed) transactions by TransactionHash, returning
+    // whichever signing of each body is cached.
     // Returns one OptSignedTransaction per input hash (same order).
 
     async fn schedgateway_lookup_tx(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;

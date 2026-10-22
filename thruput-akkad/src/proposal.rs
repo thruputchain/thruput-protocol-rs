@@ -30,8 +30,11 @@ use ::serde::{{Serialize, Deserialize}};
 /// Transaction-side payload for a proposal.
 ///
 /// This is the payload a `ConsensusValue` commits to through
-/// `ProposalTxsHash`. The signed transaction bodies travel separately, since
-/// nodes usually already hold them from transaction dissemination.
+/// `ProposalTxsHash`. The signed transactions travel separately, since nodes
+/// usually already hold them from transaction dissemination. Because the
+/// payload names each transaction by its [`SignedTransactionHash`], a node
+/// that holds a different signing of a body treats that transaction as
+/// missing and fetches the proposer's encoding.
 ///
 /// Travels on network.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -41,8 +44,9 @@ use ::serde::{{Serialize, Deserialize}};
 #[repr(C)]
 pub struct ProposalTxs {
     pub ext: ExtensionPoint,
-    /// Hashes of the block's transactions, in execution order.
-    pub hash: ParallelTransactionHashBatch,
+    /// Signed hashes of the block's transactions, in execution order: the
+    /// exact encodings the block executes.
+    pub signed_hash: ParallelSignedTransactionHashBatch,
     /// Nondeterministic choices captured by the proposer, replayed by
     /// validators so re-execution reproduces the header outputs exactly.
     pub nondeterministic_data: ParallelNondeterministicProposalDataBatch,
