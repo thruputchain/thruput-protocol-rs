@@ -6,23 +6,18 @@
 //! zero.
 //!
 //! ```
-//! use thruput_xdr::genesis::GenesisContractAddresses;
-//! use thruput_xdr::genesis_addresses::{ADDRESS_NATIVE_TOKEN, genesis_contract_address};
+//! use thruput_xdr::genesis_addresses::ADDRESS_NATIVE_TOKEN;
 //!
 //! let mut bytes = [0u8; 32];
 //! bytes[31] = 1;
 //! assert_eq!(*ADDRESS_NATIVE_TOKEN, bytes);
-//! assert_eq!(
-//!     genesis_contract_address(GenesisContractAddresses::kAddressNativeToken),
-//!     ADDRESS_NATIVE_TOKEN,
-//! );
 //! ```
 
 use crate::genesis::GenesisContractAddresses;
 use crate::types::ContractAddress;
 
 /// Returns the [`ContractAddress`] of the genesis contract `addr` names.
-pub const fn genesis_contract_address(
+const fn genesis_contract_address(
     addr: GenesisContractAddresses,
 ) -> ContractAddress {
     let mut bytes = [0u8; 32];
