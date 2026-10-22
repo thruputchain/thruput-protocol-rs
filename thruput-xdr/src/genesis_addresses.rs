@@ -34,6 +34,10 @@ pub const fn genesis_contract_address(
     ContractAddress::new(bytes)
 }
 
+/// The reserved null address: all 32 bytes zero.
+pub const ADDRESS_NULL: ContractAddress =
+    genesis_contract_address(GenesisContractAddresses::kAddressNull);
+
 /// Address of the precompiled native-token contract.
 pub const ADDRESS_NATIVE_TOKEN: ContractAddress =
     genesis_contract_address(GenesisContractAddresses::kAddressNativeToken);
@@ -48,6 +52,8 @@ mod tests {
 
     #[test]
     fn addresses_pack_the_genesis_id_into_the_last_four_bytes() {
+        assert_eq!(*ADDRESS_NULL, [0u8; 32]);
+
         let mut native = [0u8; 32];
         native[31] = 1;
         assert_eq!(*ADDRESS_NATIVE_TOKEN, native);
