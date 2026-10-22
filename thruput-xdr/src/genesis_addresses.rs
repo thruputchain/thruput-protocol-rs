@@ -1,0 +1,67 @@
+//! The 32-byte [`ContractAddress`] of each contract the protocol places at
+//! genesis.
+//!
+//! [`GenesisContractAddresses`] numbers these contracts; the address is that
+//! number in big-endian order in the last four bytes, with every other byte
+//! zero.
+//!
+//! ```
+//! use thruput_xdr::genesis::GenesisContractAddresses;
+//! use thruput_xdr::genesis_addresses::{ADDRESS_NATIVE_TOKEN, genesis_contract_address};
+//!
+//! let mut bytes = [0u8; 32];
+//! bytes[31] = 1;
+//! assert_eq!(*ADDRESS_NATIVE_TOKEN, bytes);
+//! assert_eq!(
+//!     genesis_contract_address(GenesisContractAddresses::kAddressNativeToken),
+//!     ADDRESS_NATIVE_TOKEN,
+//! );
+//! ```
+
+use crate::genesis::GenesisContractAddresses;
+use crate::types::ContractAddress;
+
+/// Returns the [`ContractAddress`] of the genesis contract `addr` names.
+pub const fn genesis_contract_address(
+    addr: GenesisContractAddresses,
+) -> ContractAddress {
+    let mut bytes = [0u8; 32];
+    let id = addr.0.to_be_bytes();
+    bytes[28] = id[0];
+    bytes[29] = id[1];
+    bytes[30] = id[2];
+    bytes[31] = id[3];
+    ContractAddress::new(bytes)
+}
+
+/// Address of the precompiled native-token contract.
+pub const ADDRESS_NATIVE_TOKEN: ContractAddress =
+    genesis_contract_address(GenesisContractAddresses::kAddressNativeToken);
+
+/// Address of the genesis root contract.
+pub const ADDRESS_GENESIS_ROOT: ContractAddress =
+    genesis_contract_address(GenesisContractAddresses::kAddressGenesisRoot);
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn addresses_pack_the_genesis_id_into_the_last_four_bytes() {
+        let mut native = [0u8; 32];
+        native[31] = 1;
+        assert_eq!(*ADDRESS_NATIVE_TOKEN, native);
+
+        let mut root = [0u8; 32];
+        root[31] = 2;
+        assert_eq!(*ADDRESS_GENESIS_ROOT, root);
+
+        assert_eq!(
+            *genesis_contract_address(GenesisContractAddresses(0x0102_0304)),
+            [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4,
+            ],
+        );
+    }
+}
