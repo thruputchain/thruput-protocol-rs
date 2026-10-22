@@ -13,6 +13,5 @@ rules:
   self-repository:
     ignore:
       - build.yml
-      - nightly.yml
       - publish.yml
       - yank.yml
