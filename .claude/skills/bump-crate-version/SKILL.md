@@ -45,7 +45,7 @@ thruput-xdr = { path = "thruput-xdr", version = "=X.Y.Z", ... }
 # ... all path-based deps
 ```
 
-**Internal deps** (bump these): `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-hogx`, `thruput-rpc`, `thruput-scheduler`, `hogexec-internal`, `macros`
+**Internal deps** (bump these): `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-rpc`, `thruput-scheduler`, `hogexec-internal`, `macros`
 
 **External deps** (DO NOT bump): `xdrs`, `rpc_driver`, `xdr-common`, `xdr-repr`, `xdr-derive`, `serde_with`
 

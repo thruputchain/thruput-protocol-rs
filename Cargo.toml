@@ -8,7 +8,6 @@ members = [
     "thruput-scp",
     "thruput-coordinator",
     "thruput-akkad",
-    "thruput-hogx",
     "thruput-trace",
     "thruput-scheduler",
     "thruput-indexer",
@@ -43,7 +42,6 @@ thruput-trace = { path = "thruput-trace", version = "=0.58.0", registry = "thrup
 thruput-scp = { path = "thruput-scp", version = "=0.58.0", registry = "thruput" }
 thruput-coordinator = { path = "thruput-coordinator", version = "=0.58.0", registry = "thruput" }
 thruput-akkad = { path = "thruput-akkad", version = "=0.58.0", registry = "thruput" }
-thruput-hogx = { path = "thruput-hogx", version = "=0.58.0", registry = "thruput" }
 thruput-rpc = { path = "thruput-rpc", version = "=0.58.0", registry = "thruput" }
 thruput-scheduler = { path = "thruput-scheduler", version = "=0.58.0", registry = "thruput" }
 thruput-indexer = { path = "thruput-indexer", version = "=0.58.0", registry = "thruput" }

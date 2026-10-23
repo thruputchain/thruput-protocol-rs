@@ -20,7 +20,6 @@
 pub mod akkad;
 pub mod coordinator;
 pub mod db_gateway;
-pub mod hogx;
 pub mod indexer;
 pub mod rpc;
 pub mod scheduler;

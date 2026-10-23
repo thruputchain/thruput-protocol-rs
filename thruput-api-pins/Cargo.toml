@@ -14,7 +14,6 @@ homepage.workspace = true
 thruput-akkad = { workspace = true }
 thruput-coordinator = { workspace = true }
 thruput-db-gateway = { workspace = true }
-thruput-hogx = { workspace = true }
 thruput-indexer = { workspace = true }
 thruput-rpc = { workspace = true }
 thruput-scheduler = { workspace = true }
