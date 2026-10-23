@@ -22,7 +22,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.57.0"
+version = "0.58.0"
 edition = "2024"
 rust-version = "1.96"
 authors = ["Thruput Team"]
@@ -36,29 +36,31 @@ categories = ["blockchain"]
 
 # These version numbers need to be kept in sync with the workspace package version number
 [workspace.dependencies]
-thruput-syscall = { path = "thruput-syscall", version = "=0.57.0", registry = "thruput" }
-thruput-xdr = { path = "thruput-xdr", version = "=0.57.0", registry = "thruput" }
-thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.57.0", registry = "thruput" }
-thruput-trace = { path = "thruput-trace", version = "=0.57.0", registry = "thruput" }
-thruput-scp = { path = "thruput-scp", version = "=0.57.0", registry = "thruput" }
-thruput-coordinator = { path = "thruput-coordinator", version = "=0.57.0", registry = "thruput" }
-thruput-akkad = { path = "thruput-akkad", version = "=0.57.0", registry = "thruput" }
-thruput-hogx = { path = "thruput-hogx", version = "=0.57.0", registry = "thruput" }
-thruput-rpc = { path = "thruput-rpc", version = "=0.57.0", registry = "thruput" }
-thruput-scheduler = { path = "thruput-scheduler", version = "=0.57.0", registry = "thruput" }
-thruput-indexer = { path = "thruput-indexer", version = "=0.57.0", registry = "thruput" }
-thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.57.0", registry = "thruput" }
-thruput-view = { path = "thruput-view", version = "=0.57.0", registry = "thruput" }
-hogexec-internal = { path = "hogexec-internal", version = "=0.57.0", registry = "thruput" }
-thruput-spec = { path = "thruput-spec", version = "=0.57.0", registry = "thruput" }
-xdrs = { registry = "thruput", version = "0.12.0", default-features = false, features = [
+thruput-syscall = { path = "thruput-syscall", version = "=0.58.0", registry = "thruput" }
+thruput-xdr = { path = "thruput-xdr", version = "=0.58.0", registry = "thruput" }
+thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.58.0", registry = "thruput" }
+thruput-trace = { path = "thruput-trace", version = "=0.58.0", registry = "thruput" }
+thruput-scp = { path = "thruput-scp", version = "=0.58.0", registry = "thruput" }
+thruput-coordinator = { path = "thruput-coordinator", version = "=0.58.0", registry = "thruput" }
+thruput-akkad = { path = "thruput-akkad", version = "=0.58.0", registry = "thruput" }
+thruput-hogx = { path = "thruput-hogx", version = "=0.58.0", registry = "thruput" }
+thruput-rpc = { path = "thruput-rpc", version = "=0.58.0", registry = "thruput" }
+thruput-scheduler = { path = "thruput-scheduler", version = "=0.58.0", registry = "thruput" }
+thruput-indexer = { path = "thruput-indexer", version = "=0.58.0", registry = "thruput" }
+thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.58.0", registry = "thruput" }
+thruput-view = { path = "thruput-view", version = "=0.58.0", registry = "thruput" }
+hogexec-internal = { path = "hogexec-internal", version = "=0.58.0", registry = "thruput" }
+thruput-spec = { path = "thruput-spec", version = "=0.58.0", registry = "thruput" }
+# Published on crates.io under thruput-* package names; the dependency keys keep
+# the library names that the generated bindings and xdr-derive output use.
+xdrs = { package = "thruput-xdrs", version = "0.16.1", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { version = "0.12.0", registry = "thruput" }
-xdr-derive = { version = "0.12.0", registry = "thruput" }
-rpc_api = { version = "0.3.0", registry = "thruput" }
-rpc_driver = { version = "0.15", registry = "thruput" }
+xdr-common = { package = "thruput-xdr-common", version = "0.16.1" }
+xdr-derive = { package = "thruput-xdr-derive", version = "0.16.1" }
+rpc_api = { package = "thruput-rpc-api", version = "0.3.2" }
+rpc_driver = { package = "thruput-rpc-driver", version = "0.16.1" }
 schemars = { version = "1" }
 
 [profile.dev]
