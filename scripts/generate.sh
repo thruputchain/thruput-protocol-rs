@@ -79,16 +79,6 @@ akkads=(
   sched_coord.x
 )
 
-hogxs=(
-    port.x
-    hogx_agent.x
-    hogx_base.x
-    hogx_cluster.x
-    hogx_host.x
-    hogx_unit.x
-    hogx_validator.x
-)
-
 specs=(
   groundhog_contract_spec.x
 )
@@ -195,10 +185,6 @@ done
 
 for akkad in "${akkads[@]}"; do
   generate_rpc "protocol/${akkad}" "thruput-akkad"
-done
-
-for hogx in "${hogxs[@]}"; do
-  generate_rpc "protocol/${hogx}" "thruput-hogx"
 done
 
 for spec in "${specs[@]}"; do
