@@ -191,15 +191,16 @@ pub struct KeyChange {
 
 pub type KeyChangeBatch = VecM::<KeyChange>;
 
-// A committed block's auth-data changes reach the auth server as a run of
-// chunks, each a KeyChangeChunk, because the one-record form grew with the
-// number of accounts whose auth data a block changed (hogd#3146). hog_db
-// chooses the chunk size; the wire bounds a chunk only by the link's record
-// cap. The chunks of a run may be sent concurrently and over several
-// connections, so they can arrive in any order, and hog_db may have the runs
-// of several heights in flight at once, so the chunks of different heights
-// can interleave. The auth server treats a height's changes as complete only
-// once every chunk of its run has arrived, and applies heights in order.
+// A committed block's auth-data changes travel as a run of chunks, each a
+// KeyChangeChunk, from hog_db to the auth server and on from the auth server
+// to the mempool, because the one-record form grew with the number of
+// accounts whose auth data a block changed (hogd#3146). The sender chooses
+// the chunk size; the wire bounds a chunk only by the link's record cap. The
+// chunks of a run may be sent concurrently and over several connections, so
+// they can arrive in any order, and a sender may have the runs of several
+// heights in flight at once, so the chunks of different heights can
+// interleave. A receiver treats a height's changes as complete only once
+// every chunk of its run has arrived, and applies heights in order.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -212,7 +213,7 @@ pub struct KeyChangeChunk {
     // Every chunk of a run carries the same chunk_count, and each index in
     // [0, chunk_count) is sent exactly once. A block that changed no auth data
     // is a run of one empty chunk, so every committed block still sends a run
-    // and the auth server's height advances with every block.
+    // and each receiver's height advances with every block.
     pub chunk_index: u32,
     pub chunk_count: u32,
     pub changes: VecM<KeyChange>,
@@ -593,9 +594,16 @@ pub enum IntroAuthResult {
 #[async_trait::async_trait]
 pub trait MempoolAuth_MempoolAuth1: Send + Sync {    
     async fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> Result<IntroAuthResult, ::rpc_api::ProgramError>;
-        // Forward updated key changes from the auth server to the mempool.
+        // Retired number, never to be reused, so that a peer built against it
+    // fails to dispatch rather than misparse a newer payload:
+    //   1: mempoolauth_auth_data_changed(BlockHeight, KeyChangeBatch), a
+    //      block's auth-data changes in one unbounded record (hogd#3146).
 
-    async fn mempoolauth_auth_data_changed(&self, arg0 : BlockHeight, arg1 : KeyChangeBatch) -> Result<(), ::rpc_api::ProgramError>;
+    // Deliver one chunk of a committed block's auth-data changes from the auth
+    // server to the mempool. The auth server sends a height's run only after
+    // it has applied the whole height itself.
+
+    async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
 }
 
 
@@ -624,11 +632,11 @@ impl ::rpc_api::RpcHandler for MempoolAuth_MempoolAuth1_Dispatcher {
                 let res = self.inner.mempoolauth_intro_auth(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            // mempoolauth_auth_data_changed
-            1 => {
-                let args: (BlockHeight, KeyChangeBatch, ) =
+            // mempoolauth_auth_data_changed_chunk
+            2 => {
+                let args: (KeyChangeChunk, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.mempoolauth_auth_data_changed(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.mempoolauth_auth_data_changed_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
@@ -660,15 +668,15 @@ impl MempoolAuth_MempoolAuth1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn mempoolauth_auth_data_changed(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<KeyChangeBatch> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : &(impl xdrs::EncodesAs<KeyChangeChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
-             let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
+             let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
          }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
+         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
 }

@@ -1233,7 +1233,7 @@ impl StorageKeyType {
 
     /// Native token balance.
     ///
-    /// Stores the free balance of the native HOG token for this address.
+    /// Stores the free balance of the native token for this address.
     pub const FreeNativeTokenBalance: Self = Self(1);
 
     /// Address authorization data.
@@ -1390,11 +1390,8 @@ pub enum StorageKey {
 }
 
 // 
-pub const kTotalHogSupply : u64 = 62_500_000_000;
-
-// 
-// Each hog token is divisible into 10^7 units
-pub const kHogDivisibility : u32 = 10_000_000;
+// Each native token is divisible into 10^7 base units
+pub const kNativeTokenDivisibility : u32 = 10_000_000;
 
 /// In the global storage, every item is indexed by a unique [contract address + storage key] pair.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

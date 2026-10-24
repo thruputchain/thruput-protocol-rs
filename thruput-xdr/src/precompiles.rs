@@ -36,7 +36,7 @@ use ::serde::{{Serialize, Deserialize}};
 pub struct HogexecPrecompiledNativeContracts(pub i32);
 
 impl HogexecPrecompiledNativeContracts {
-    pub const kNativeContractHogToken: Self = Self(0);
+    pub const kNativeContractNativeToken: Self = Self(0);
 
     // Native contract ID 1 is retired and must remain unused.
     pub const kNativeContractDefaultWallet: Self = Self(2);
@@ -50,8 +50,8 @@ impl From<i32> for HogexecPrecompiledNativeContracts {
 impl core::fmt::Display for HogexecPrecompiledNativeContracts {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self.0 {
-            x if x == Self::kNativeContractHogToken.0 => {
-                write!(f, "HogexecPrecompiledNativeContracts::kNativeContractHogToken")
+            x if x == Self::kNativeContractNativeToken.0 => {
+                write!(f, "HogexecPrecompiledNativeContracts::kNativeContractNativeToken")
             },
             x if x == Self::kNativeContractDefaultWallet.0 => {
                 write!(f, "HogexecPrecompiledNativeContracts::kNativeContractDefaultWallet")

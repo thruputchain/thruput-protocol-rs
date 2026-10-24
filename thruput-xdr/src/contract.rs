@@ -82,7 +82,7 @@ pub struct ContractType(pub i32);
 impl ContractType {
     /// Precompiled native contract implemented directly in Rust.
     ///
-    /// Used for system contracts like the native HogToken.
+    /// Used for system contracts like the native token.
     /// Cheaper to invoke than a deployed RV32 contract, but users cannot
     /// deploy new ones.
     pub const kNative: Self = Self(1);

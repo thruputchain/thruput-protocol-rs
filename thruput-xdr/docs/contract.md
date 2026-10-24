@@ -23,7 +23,7 @@ The `contract` module provides types and structures for contract deployment, exe
 Thruput supports three types of contracts:
 
 - **`kRv32`**: RISC-V contracts executed in the RV32 VM. This is the standard contract type for user-deployed contracts.
-- **`kNative`**: Precompiled native contracts implemented directly in Rust. Used for system contracts like the native HogToken. More efficient than RV32 but cannot be deployed by users.
+- **`kNative`**: Precompiled native contracts implemented directly in Rust. Used for system contracts like the native token. More efficient than RV32 but cannot be deployed by users.
 - **`kMockTest`**: Mock contracts for local testing. Never deployed on-chain; exists only in the test harness.
 
 A fourth discriminant, `kWasmi`, is a legacy WebAssembly contract type. WebAssembly

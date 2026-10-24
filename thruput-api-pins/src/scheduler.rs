@@ -21,13 +21,13 @@ use thruput_scheduler::{
     EventSched_EventSched1_Client, ExecProposeBatchResult, ExecProposeResult,
     ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
     ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
-    GenesisCeremonyRequest, GenesisCeremonyResult, HogAgeBatch, HogAgeResults,
-    HogsTransferredChunk, IntroAuthResult, KeyChangeBatch, KeyChangeChunk,
-    LoadgenContextID, LoadgenExtensionResult,
+    GenesisCeremonyRequest, GenesisCeremonyResult, IntroAuthResult,
+    KeyChangeChunk, LoadgenContextID, LoadgenExtensionResult,
     LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
     MempoolAuth_MempoolAuth1, MempoolAuth_MempoolAuth1_Client,
-    MissingTransactionsEnvelope, OptProposal, ParallelSignedTransactionBatch,
+    MissingTransactionsEnvelope, NativeTokenAgeBatch, NativeTokenAgeResults,
+    NativeTokensTransferredChunk, OptProposal, ParallelSignedTransactionBatch,
     PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
     RepairedTransactions, SchedDb_SchedDb1, SchedDb_SchedDb1_Client,
     SchedEvent_SchedEvent1, SchedEvent_SchedEvent1_Client,
@@ -231,17 +231,17 @@ pub mod db_sched {
     ) -> Result<DbAddressAuthDataBatchResult, RpcError> {
         c.dbsched_get_address_auth_data(arg0, arg1).await
     }
-    pub async fn client_dbsched_get_hog_ages(
+    pub async fn client_dbsched_get_native_token_ages(
         c: &S,
         arg0: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
-    ) -> Result<HogAgeResults, RpcError> {
-        c.dbsched_get_hog_ages(arg0).await
+    ) -> Result<NativeTokenAgeResults, RpcError> {
+        c.dbsched_get_native_token_ages(arg0).await
     }
-    pub async fn client_dbsched_write_hog_ages(
+    pub async fn client_dbsched_write_native_token_ages(
         c: &S,
-        arg0: &(impl EncodesAs<HogAgeBatch> + ?Sized),
+        arg0: &(impl EncodesAs<NativeTokenAgeBatch> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
-        c.dbsched_write_hog_ages(arg0).await
+        c.dbsched_write_native_token_ages(arg0).await
     }
     pub async fn client_dbsched_create_snapshot(
         c: &S,
@@ -295,17 +295,17 @@ pub mod db_sched {
     ) -> Result<DbAddressAuthDataBatchResult, ProgramError> {
         t.dbsched_get_address_auth_data(arg0, arg1).await
     }
-    pub async fn trait_dbsched_get_hog_ages<T: DbSched_DbSched1>(
+    pub async fn trait_dbsched_get_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
         arg0: ContractAddressBatch,
-    ) -> Result<HogAgeResults, ProgramError> {
-        t.dbsched_get_hog_ages(arg0).await
+    ) -> Result<NativeTokenAgeResults, ProgramError> {
+        t.dbsched_get_native_token_ages(arg0).await
     }
-    pub async fn trait_dbsched_write_hog_ages<T: DbSched_DbSched1>(
+    pub async fn trait_dbsched_write_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
-        arg0: HogAgeBatch,
+        arg0: NativeTokenAgeBatch,
     ) -> Result<DbSchedResult, ProgramError> {
-        t.dbsched_write_hog_ages(arg0).await
+        t.dbsched_write_native_token_ages(arg0).await
     }
     pub async fn trait_dbsched_create_snapshot<T: DbSched_DbSched1>(
         t: &T,
@@ -690,12 +690,11 @@ pub mod mempool_auth {
     ) -> Result<IntroAuthResult, RpcError> {
         c.mempoolauth_intro_auth(arg0).await
     }
-    pub async fn client_mempoolauth_auth_data_changed(
+    pub async fn client_mempoolauth_auth_data_changed_chunk(
         c: &S,
-        arg0: &(impl EncodesAs<BlockHeight> + ?Sized),
-        arg1: &(impl EncodesAs<KeyChangeBatch> + ?Sized),
+        arg0: &(impl EncodesAs<KeyChangeChunk> + ?Sized),
     ) -> Result<(), RpcError> {
-        c.mempoolauth_auth_data_changed(arg0, arg1).await
+        c.mempoolauth_auth_data_changed_chunk(arg0).await
     }
 
     pub async fn trait_mempoolauth_intro_auth<T: MempoolAuth_MempoolAuth1>(
@@ -704,14 +703,13 @@ pub mod mempool_auth {
     ) -> Result<IntroAuthResult, ProgramError> {
         t.mempoolauth_intro_auth(arg0).await
     }
-    pub async fn trait_mempoolauth_auth_data_changed<
+    pub async fn trait_mempoolauth_auth_data_changed_chunk<
         T: MempoolAuth_MempoolAuth1,
     >(
         t: &T,
-        arg0: BlockHeight,
-        arg1: KeyChangeBatch,
+        arg0: KeyChangeChunk,
     ) -> Result<(), ProgramError> {
-        t.mempoolauth_auth_data_changed(arg0, arg1).await
+        t.mempoolauth_auth_data_changed_chunk(arg0).await
     }
 }
 
@@ -776,11 +774,11 @@ pub mod sched_db {
     ) -> Result<(), RpcError> {
         c.scheddb_intro_shard(arg0).await
     }
-    pub async fn client_scheddb_hogs_transferred_chunk(
+    pub async fn client_scheddb_native_tokens_transferred_chunk(
         c: &S,
-        arg0: &(impl EncodesAs<HogsTransferredChunk> + ?Sized),
+        arg0: &(impl EncodesAs<NativeTokensTransferredChunk> + ?Sized),
     ) -> Result<(), RpcError> {
-        c.scheddb_hogs_transferred_chunk(arg0).await
+        c.scheddb_native_tokens_transferred_chunk(arg0).await
     }
 
     pub async fn trait_scheddb_intro_shard<T: SchedDb_SchedDb1>(
@@ -789,11 +787,13 @@ pub mod sched_db {
     ) -> Result<(), ProgramError> {
         t.scheddb_intro_shard(arg0).await
     }
-    pub async fn trait_scheddb_hogs_transferred_chunk<T: SchedDb_SchedDb1>(
+    pub async fn trait_scheddb_native_tokens_transferred_chunk<
+        T: SchedDb_SchedDb1,
+    >(
         t: &T,
-        arg0: HogsTransferredChunk,
+        arg0: NativeTokensTransferredChunk,
     ) -> Result<(), ProgramError> {
-        t.scheddb_hogs_transferred_chunk(arg0).await
+        t.scheddb_native_tokens_transferred_chunk(arg0).await
     }
 }
 

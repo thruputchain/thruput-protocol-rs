@@ -65,26 +65,26 @@ impl core::fmt::Display for DbSchedResult {
 }
 
 
-pub const kHogAgeGroupToSchedule : u32 = 0;
+pub const kNativeTokenAgeGroupToSchedule : u32 = 0;
 
-pub const kHogAgeGroupAlreadyScheduled : u32 = 1;
+pub const kNativeTokenAgeGroupAlreadyScheduled : u32 = 1;
 
-pub const kHogAgeGroupReceived : u32 = 2;
+pub const kNativeTokenAgeGroupReceived : u32 = 2;
 
-pub const kHogAgeNumGroups : u32 = 3;
+pub const kNativeTokenAgeNumGroups : u32 = 3;
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct HogAge {
+pub struct NativeTokenAge {
     pub address: ContractAddress,
-    pub num_hogs: [uint128_xdr; kHogAgeNumGroups as usize],
-    pub average_ages: [BlockHeight; kHogAgeNumGroups as usize],
+    pub num_native_tokens: [uint128_xdr; kNativeTokenAgeNumGroups as usize],
+    pub average_ages: [BlockHeight; kNativeTokenAgeNumGroups as usize],
 }
 
-pub type HogAgeBatch = VecM::<HogAge>;
+pub type NativeTokenAgeBatch = VecM::<NativeTokenAge>;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -92,16 +92,16 @@ pub type HogAgeBatch = VecM::<HogAge>;
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
-pub enum HogAgeResult {
+pub enum NativeTokenAgeResult {
     // case DbSchedResultOK:
-    //   HogAge hog_age;
-    DbSchedResultOK { hog_age: HogAge } = DbSchedResult::DbSchedResultOK.0 as i32,
+    //   NativeTokenAge native_token_age;
+    DbSchedResultOK { native_token_age: NativeTokenAge } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
     #[xdr(default_variant)] Default { result: i32 },
 }
 
-pub type HogAgeResults = VecM::<HogAgeResult>;
+pub type NativeTokenAgeResults = VecM::<NativeTokenAgeResult>;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -199,9 +199,9 @@ pub trait DbSched_DbSched1: Send + Sync {
     
     async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_api::ProgramError>;
     
-    async fn dbsched_get_hog_ages(&self, arg0 : ContractAddressBatch) -> Result<HogAgeResults, ::rpc_api::ProgramError>;
+    async fn dbsched_get_native_token_ages(&self, arg0 : ContractAddressBatch) -> Result<NativeTokenAgeResults, ::rpc_api::ProgramError>;
     
-    async fn dbsched_write_hog_ages(&self, arg0 : HogAgeBatch) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    async fn dbsched_write_native_token_ages(&self, arg0 : NativeTokenAgeBatch) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
         // Examples of valid call sequences to the db:
     //
     // dbsched_create_snapshot | dbsched_open_snapshot
@@ -280,18 +280,18 @@ impl ::rpc_api::RpcHandler for DbSched_DbSched1_Dispatcher {
                 let res = self.inner.dbsched_get_address_auth_data(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            // dbsched_get_hog_ages
+            // dbsched_get_native_token_ages
             2 => {
                 let args: (ContractAddressBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_get_hog_ages(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.dbsched_get_native_token_ages(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            // dbsched_write_hog_ages
+            // dbsched_write_native_token_ages
             3 => {
-                let args: (HogAgeBatch, ) =
+                let args: (NativeTokenAgeBatch, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.dbsched_write_hog_ages(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.dbsched_write_native_token_ages(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             // dbsched_create_snapshot
@@ -376,7 +376,7 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_get_hog_ages(&self, arg0 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<HogAgeResults, ::rpc_api::RpcError> {
+    pub async fn dbsched_get_native_token_ages(&self, arg0 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<NativeTokenAgeResults, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
@@ -387,7 +387,7 @@ impl DbSched_DbSched1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn dbsched_write_hog_ages(&self, arg0 : &(impl xdrs::EncodesAs<HogAgeBatch> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
+    pub async fn dbsched_write_native_token_ages(&self, arg0 : &(impl xdrs::EncodesAs<NativeTokenAgeBatch> + ?Sized)) -> Result<DbSchedResult, ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
@@ -478,10 +478,10 @@ impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for DbSched_DbSched1_Clien
 // XDR internals below this point
 //
 
-impl HogAgeResult {
+impl NativeTokenAgeResult {
     pub fn result(&self) -> DbSchedResult {
         match self {
-            HogAgeResult::Default{ result } => (*result).into(),
+            NativeTokenAgeResult::Default{ result } => (*result).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
