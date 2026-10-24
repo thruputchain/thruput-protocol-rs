@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -530,49 +530,48 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
-    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::ProgramError>;
+    fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IndexerBlockExplorerIntroOutcome>, ::rpc_api::ProgramError>> + Send;
     
-    async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::rpc_api::ProgramError>;
+    fn get_transaction_info(&self, arg0 : TransactionHash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TxInfoResult>, ::rpc_api::ProgramError>> + Send;
         // The canonical consensus value for a retained, indexed height. Heights
     // outside ready indexed coverage return BlockNotFound. An index that is
     // not ready or has an internal failure returns an x23 SYSTEM_ERR, not a miss.
 
-    async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_api::ProgramError>;
+    fn get_block_by_height(&self, arg0 : BlockHeight) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<BlockLookupResult>, ::rpc_api::ProgramError>> + Send;
         // Paginated, filtered events query.  A candidate event matches
     // iff it matches at least one EventFilter in the request (OR
     // across filters, AND within each filter).  Supports the wallet
     // "transfers to OR from me" case in a single call.
 
-    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPageResult, ::rpc_api::ProgramError>;
+    fn get_events(&self, arg0 : EventQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventPageResult>, ::rpc_api::ProgramError>> + Send;
         // Paginated transactions, whole-chain, in block order.
 
-    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPageResult, ::rpc_api::ProgramError>;
+    fn get_transactions(&self, arg0 : TransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionPageResult>, ::rpc_api::ProgramError>> + Send;
         // Paginated transaction refs whose root invoked address == the query
     // address (account transaction history).  Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
+    fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionRefPageResult>, ::rpc_api::ProgramError>> + Send;
         // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
+    fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionRefPageResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
-  inner: Box<dyn IndexerBlockExplorer_IndexerBlockExplorer1>,
+pub struct IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
-  pub fn new(inner: Box<dyn IndexerBlockExplorer_IndexerBlockExplorer1>) -> Self {
+impl<T: IndexerBlockExplorer_IndexerBlockExplorer1> IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
+impl<T: IndexerBlockExplorer_IndexerBlockExplorer1> ::rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x4321aaaa, 1)
     }
@@ -1124,27 +1123,26 @@ pub type IndexerTxFailureNoticeBatch = VecM::<IndexerTxFailureNotice, 256>;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::rpc_api::ProgramError>;
+    fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventIndexerPullResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_api::ProgramError>;
+    fn event_indexer_pull_tx_failures(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IndexerTxFailureNoticeBatch>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct EventIndexer_EventIndexer1_Dispatcher {
-  inner: Box<dyn EventIndexer_EventIndexer1>,
+pub struct EventIndexer_EventIndexer1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl EventIndexer_EventIndexer1_Dispatcher {
-  pub fn new(inner: Box<dyn EventIndexer_EventIndexer1>) -> Self {
+impl<T: EventIndexer_EventIndexer1> EventIndexer_EventIndexer1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher {
+impl<T: EventIndexer_EventIndexer1> ::rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x4321aaac, 1)
     }

@@ -30,7 +30,7 @@ mod tests {
 
     struct ScriptedViewGateway;
 
-    #[async_trait::async_trait]
+    #[allow(refining_impl_trait)]
     impl ViewGateway_ViewGateway1 for ScriptedViewGateway {
         async fn viewgateway_view_batch(
             &self,

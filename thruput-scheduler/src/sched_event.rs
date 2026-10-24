@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -170,27 +170,26 @@ pub enum EventActivationResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedEvent_SchedEvent1: Send + Sync {    
-    async fn schedevent_prepare_event(&self, arg0 : EventCard) -> Result<EventPrepareResult, ::rpc_api::ProgramError>;
+    fn schedevent_prepare_event(&self, arg0 : EventCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventPrepareResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn schedevent_activate_event(&self, arg0 : EventRegistrationSnapshot) -> Result<EventActivationResult, ::rpc_api::ProgramError>;
+    fn schedevent_activate_event(&self, arg0 : EventRegistrationSnapshot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventActivationResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedEvent_SchedEvent1_Dispatcher {
-  inner: Box<dyn SchedEvent_SchedEvent1>,
+pub struct SchedEvent_SchedEvent1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl SchedEvent_SchedEvent1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedEvent_SchedEvent1>) -> Self {
+impl<T: SchedEvent_SchedEvent1> SchedEvent_SchedEvent1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SchedEvent_SchedEvent1_Dispatcher {
+impl<T: SchedEvent_SchedEvent1> ::rpc_api::RpcHandler for SchedEvent_SchedEvent1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x7ee79996, 1)
     }

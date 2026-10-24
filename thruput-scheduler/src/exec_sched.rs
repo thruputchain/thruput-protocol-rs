@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -52,19 +52,18 @@ pub type ExecValidateBatchResult = VecM::<ExecResult>;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait ExecutorSched_ExecutorSched1: Send + Sync {    
-    async fn executorsched_null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn executorsched_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_ready(&self) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    fn executorsched_ready(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : SignedTransaction) -> Result<ExecProposeResult, ::rpc_api::ProgramError>;
+    fn executorsched_propose_transaction(&self, arg0 : BlockID, arg1 : SignedTransaction) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecProposeResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_validate_transaction(&self, arg0 : BlockID, arg1 : ProposedTransaction) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    fn executorsched_validate_transaction(&self, arg0 : BlockID, arg1 : ProposedTransaction) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : SignedTransactionBatch) -> Result<ExecProposeBatchResult, ::rpc_api::ProgramError>;
+    fn executorsched_propose_batch(&self, arg0 : BlockID, arg1 : SignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecProposeBatchResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_validate_batch(&self, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> Result<ExecValidateBatchResult, ::rpc_api::ProgramError>;
+    fn executorsched_validate_batch(&self, arg0 : BlockID, arg1 : ProposedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecValidateBatchResult>, ::rpc_api::ProgramError>> + Send;
         // Executor can be in one of three states: None, Proposing, Validating
     // open_xyz_block() methods set the executor state, or return an error
     // if executor has already opened a block.
@@ -88,32 +87,32 @@ pub trait ExecutorSched_ExecutorSched1: Send + Sync {
     // its execution committed to, so any divergence here diverges execution
     // and splits consensus.
 
-    async fn executorsched_open_proposal_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    fn executorsched_open_proposal_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_open_validation_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    fn executorsched_open_validation_block(&self, arg0 : BlockID, arg1 : BlockExecutionContext) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn executorsched_finish_block(&self, arg0 : BlockID) -> Result<ExecResult, ::rpc_api::ProgramError>;
+    fn executorsched_finish_block(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExecResult>, ::rpc_api::ProgramError>> + Send;
         // Scheduler should call this to shutdown the executor.
     // Shutdown will not occur until all pending transactions complete.
     // No new transactions or blocks can be opened after shutdown.
 
-    async fn executorsched_shutdown(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn executorsched_shutdown(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct ExecutorSched_ExecutorSched1_Dispatcher {
-  inner: Box<dyn ExecutorSched_ExecutorSched1>,
+pub struct ExecutorSched_ExecutorSched1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl ExecutorSched_ExecutorSched1_Dispatcher {
-  pub fn new(inner: Box<dyn ExecutorSched_ExecutorSched1>) -> Self {
+impl<T: ExecutorSched_ExecutorSched1> ExecutorSched_ExecutorSched1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for ExecutorSched_ExecutorSched1_Dispatcher {
+impl<T: ExecutorSched_ExecutorSched1> ::rpc_api::RpcHandler for ExecutorSched_ExecutorSched1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x7ee79999, 1)
     }

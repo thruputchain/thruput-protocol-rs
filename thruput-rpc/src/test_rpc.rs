@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -30,27 +30,26 @@ pub type Data = BytesM;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait blank_rpc_blank_rpc_v1: Send + Sync {    
-    async fn null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn echo(&self, arg0 : Data) -> Result<Data, ::rpc_api::ProgramError>;
+    fn echo(&self, arg0 : Data) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<Data>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct blank_rpc_blank_rpc_v1_Dispatcher {
-  inner: Box<dyn blank_rpc_blank_rpc_v1>,
+pub struct blank_rpc_blank_rpc_v1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl blank_rpc_blank_rpc_v1_Dispatcher {
-  pub fn new(inner: Box<dyn blank_rpc_blank_rpc_v1>) -> Self {
+impl<T: blank_rpc_blank_rpc_v1> blank_rpc_blank_rpc_v1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for blank_rpc_blank_rpc_v1_Dispatcher {
+impl<T: blank_rpc_blank_rpc_v1> ::rpc_api::RpcHandler for blank_rpc_blank_rpc_v1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(3123124, 1)
     }

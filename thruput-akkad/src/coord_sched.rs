@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -27,30 +27,29 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait CoordScheduler_CoordScheduler1: Send + Sync {    
-    async fn coordscheduler_null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn coordscheduler_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
         // The scheduler calls coordscheduler_notify_vetted to indicate that the
     // given transactions are vetted, meaning the coordinator can broadcast
     // them to the network.
 
-    async fn coordscheduler_notify_vetted(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::ProgramError>;
+    fn coordscheduler_notify_vetted(&self, arg0 : ParallelSignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct CoordScheduler_CoordScheduler1_Dispatcher {
-  inner: Box<dyn CoordScheduler_CoordScheduler1>,
+pub struct CoordScheduler_CoordScheduler1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl CoordScheduler_CoordScheduler1_Dispatcher {
-  pub fn new(inner: Box<dyn CoordScheduler_CoordScheduler1>) -> Self {
+impl<T: CoordScheduler_CoordScheduler1> CoordScheduler_CoordScheduler1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for CoordScheduler_CoordScheduler1_Dispatcher {
+impl<T: CoordScheduler_CoordScheduler1> ::rpc_api::RpcHandler for CoordScheduler_CoordScheduler1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x11117667, 1)
     }

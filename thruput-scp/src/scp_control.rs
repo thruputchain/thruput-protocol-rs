@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -27,44 +27,43 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SCP_Control_SCP_Control1: Send + Sync {    
-    async fn scp_control_null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
         // arguments: slot index, value to nominate, previous value
 
-    async fn scp_control_nominate(&self, arg0 : SCPSlotIndex, arg1 : SCPValue, arg2 : SCPValue) -> Result<bool, ::rpc_api::ProgramError>;
+    fn scp_control_nominate(&self, arg0 : SCPSlotIndex, arg1 : SCPValue, arg2 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<bool>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_stop_nomination(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_stop_nomination(&self, arg0 : SCPSlotIndex) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_update_local_quorum_set(&self, arg0 : SCPQuorumSet) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_update_local_quorum_set(&self, arg0 : SCPQuorumSet) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_received_envelope(&self, arg0 : SCPEnvelope) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_received_envelope(&self, arg0 : SCPEnvelope) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_set_state_from_envelope(&self, arg0 : SCPSlotIndex, arg1 : SCPEnvelope) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_set_state_from_envelope(&self, arg0 : SCPSlotIndex, arg1 : SCPEnvelope) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_set_qset(&self, arg0 : SCPQuorumSet) -> Result<SCPOptQuorumSet, ::rpc_api::ProgramError>;
+    fn scp_control_set_qset(&self, arg0 : SCPQuorumSet) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptQuorumSet>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_get_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_api::ProgramError>;
+    fn scp_control_get_qset(&self, arg0 : SCPHash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptQuorumSet>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_remove_qset(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::rpc_api::ProgramError>;
+    fn scp_control_remove_qset(&self, arg0 : SCPHash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptQuorumSet>, ::rpc_api::ProgramError>> + Send;
     
-    async fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : SCPSlotIndex) -> Result<(), ::rpc_api::ProgramError>;
+    fn scp_control_set_lowest_non_externalized_slot(&self, arg0 : SCPSlotIndex) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SCP_Control_SCP_Control1_Dispatcher {
-  inner: Box<dyn SCP_Control_SCP_Control1>,
+pub struct SCP_Control_SCP_Control1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl SCP_Control_SCP_Control1_Dispatcher {
-  pub fn new(inner: Box<dyn SCP_Control_SCP_Control1>) -> Self {
+impl<T: SCP_Control_SCP_Control1> SCP_Control_SCP_Control1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SCP_Control_SCP_Control1_Dispatcher {
+impl<T: SCP_Control_SCP_Control1> ::rpc_api::RpcHandler for SCP_Control_SCP_Control1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x9aa93003, 1)
     }

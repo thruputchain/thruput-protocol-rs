@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -193,15 +193,14 @@ pub enum DbTipResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait DbSched_DbSched1: Send + Sync {    
-    async fn dbsched_null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn dbsched_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::rpc_api::ProgramError>;
+    fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbAddressAuthDataBatchResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_native_token_ages(&self, arg0 : ContractAddressBatch) -> Result<NativeTokenAgeResults, ::rpc_api::ProgramError>;
+    fn dbsched_get_native_token_ages(&self, arg0 : ContractAddressBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<NativeTokenAgeResults>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_write_native_token_ages(&self, arg0 : NativeTokenAgeBatch) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    fn dbsched_write_native_token_ages(&self, arg0 : NativeTokenAgeBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::rpc_api::ProgramError>> + Send;
         // Examples of valid call sequences to the db:
     //
     // dbsched_create_snapshot
@@ -219,14 +218,14 @@ pub trait DbSched_DbSched1: Send + Sync {
     // that would be created if the parent block commits.
     // Parent block must be closed.
 
-    async fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::rpc_api::ProgramError>> + Send;
         // Commits the block with the specified block ID to disk. Should only be
     // called for e.g. finalized blocks. At a minimum, the block must be closed
     // before being committed. Any BlockID that is not a descendant of this
     // block will return an error if accessed. This BlockID must be the
     // immediate descendant of the most recently committed block.
 
-    async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<DbBlockResult, ::rpc_api::ProgramError>;
+    fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbBlockResult>, ::rpc_api::ProgramError>> + Send;
         // Call to close a block. This indicates that no more transactions
     // will be added to this block. The block must have been previously opened
     // with dbsched_create_snapshot().
@@ -234,30 +233,30 @@ pub trait DbSched_DbSched1: Send + Sync {
     // Error if the block has been pruned or contains an item in an invalid
     // state (due to e.g. a block validation failure).
 
-    async fn dbsched_close_snapshot(&self, arg0 : BlockID) -> Result<DbBlockResult, ::rpc_api::ProgramError>;
+    fn dbsched_close_snapshot(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbBlockResult>, ::rpc_api::ProgramError>> + Send;
         // Call to abandon a block.
 
-    async fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::rpc_api::ProgramError>;
+    fn dbsched_get_tip(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbTipResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct DbSched_DbSched1_Dispatcher {
-  inner: Box<dyn DbSched_DbSched1>,
+pub struct DbSched_DbSched1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl DbSched_DbSched1_Dispatcher {
-  pub fn new(inner: Box<dyn DbSched_DbSched1>) -> Self {
+impl<T: DbSched_DbSched1> DbSched_DbSched1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for DbSched_DbSched1_Dispatcher {
+impl<T: DbSched_DbSched1> ::rpc_api::RpcHandler for DbSched_DbSched1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x88887ee7, 1)
     }

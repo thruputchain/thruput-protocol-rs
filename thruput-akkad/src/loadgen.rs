@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -185,31 +185,30 @@ pub enum LoadgenExtensionResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait LoadgenInterface_LoadgenInterfaceV1: Send + Sync {    
-    async fn generate_experiment(&self, arg0 : ExperimentConfig) -> Result<LoadgenResult, ::rpc_api::ProgramError>;
+    fn generate_experiment(&self, arg0 : ExperimentConfig) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<LoadgenResult>, ::rpc_api::ProgramError>> + Send;
         // arguments:
     // LoadgenContextID context_id (a handle returned by generate_experiment)
     // unsigned hyper num_txs (the number of transactions to return)
     // BlockHeight expiry_height (the height at which the transactions will expire)
 
-    async fn extend_experiment(&self, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> Result<LoadgenExtensionResult, ::rpc_api::ProgramError>;
+    fn extend_experiment(&self, arg0 : LoadgenContextID, arg1 : u64, arg2 : BlockHeight) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<LoadgenExtensionResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
-  inner: Box<dyn LoadgenInterface_LoadgenInterfaceV1>,
+pub struct LoadgenInterface_LoadgenInterfaceV1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
-  pub fn new(inner: Box<dyn LoadgenInterface_LoadgenInterfaceV1>) -> Self {
+impl<T: LoadgenInterface_LoadgenInterfaceV1> LoadgenInterface_LoadgenInterfaceV1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for LoadgenInterface_LoadgenInterfaceV1_Dispatcher {
+impl<T: LoadgenInterface_LoadgenInterfaceV1> ::rpc_api::RpcHandler for LoadgenInterface_LoadgenInterfaceV1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(12341234, 1)
     }

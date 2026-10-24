@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -132,47 +132,46 @@ pub type PendingTxCount = i64;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedGateway_SchedGateway1: Send + Sync {    
-    async fn schedgateway_intro(&self, arg0 : ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::rpc_api::ProgramError>;
+    fn schedgateway_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedGatewayIntroOutcome>, ::rpc_api::ProgramError>> + Send;
         // Submit wallet-originated transactions and return the request-scoped,
     // exact-cardinality admission outcomes described above. A malformed batch
     // fails at the RPC level because its transactions cannot be identified
     // reliably. Admission does not imply commitment; clients learn about commit
     // via getTransactionStatus / getTransactionReceipt polling.
 
-    async fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::ProgramError>;
+    fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedGatewaySubmitOutcomeBatch>, ::rpc_api::ProgramError>> + Send;
         // Current committed tip.  Returns kRPCNotFound when the node
     // has no committed block yet (pre-genesis bootstrap).
 
-    async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::ProgramError>;
+    fn schedgateway_get_tip(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ExpectedDBTip>, ::rpc_api::ProgramError>> + Send;
         // Lookup in-flight (not-yet-committed) transactions by TransactionHash, returning
     // whichever signing of each body is cached.
     // Returns one OptSignedTransaction per input hash (same order).
 
-    async fn schedgateway_lookup_tx(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
+    fn schedgateway_lookup_tx(&self, arg0 : TransactionHashBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<OptSignedTransactionBatch>, ::rpc_api::ProgramError>> + Send;
         // Number of transactions currently pending in the mempool.
 
-    async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::ProgramError>;
+    fn schedgateway_pending_tx_count(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<PendingTxCount>, ::rpc_api::ProgramError>> + Send;
         // Returns one pending or recent outcome per input hash (same order).
 
-    async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
+    fn schedgateway_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerTransactionOutcomeBatch>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedGateway_SchedGateway1_Dispatcher {
-  inner: Box<dyn SchedGateway_SchedGateway1>,
+pub struct SchedGateway_SchedGateway1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl SchedGateway_SchedGateway1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedGateway_SchedGateway1>) -> Self {
+impl<T: SchedGateway_SchedGateway1> SchedGateway_SchedGateway1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher {
+impl<T: SchedGateway_SchedGateway1> ::rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x7ee7aaaa, 1)
     }

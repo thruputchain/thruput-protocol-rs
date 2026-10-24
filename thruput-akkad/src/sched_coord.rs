@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -628,66 +628,65 @@ pub enum GenesisCeremonyResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedulerCoord_SchedulerCoord1: Send + Sync {    
-    async fn schedulercoord_null(&self) -> Result<(), ::rpc_api::ProgramError>;
+    fn schedulercoord_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn schedulercoord_intro_coord(&self, arg0 : CoordCard) -> Result<CoordinatorRegistrationOutcome, ::rpc_api::ProgramError>;
+    fn schedulercoord_intro_coord(&self, arg0 : CoordCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<CoordinatorRegistrationOutcome>, ::rpc_api::ProgramError>> + Send;
         // Coordinator calls schedulercoord_submit_unvetted to submit new/unvetted
     // transactions coming from the wallet. Asynchronously, the scheduler will
     // call the coordinator's coordscheduler_notify_vetted to notify the
     // coordinator when transactions have become vetted and can be broadcast
     // to the network.
 
-    async fn schedulercoord_submit_unvetted(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::ProgramError>;
+    fn schedulercoord_submit_unvetted(&self, arg0 : ParallelSignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
     
-    async fn schedulercoord_submit_vetted(&self, arg0 : ValidatorID, arg1 : ParallelSignedTransactionBatch) -> Result<(), ::rpc_api::ProgramError>;
+    fn schedulercoord_submit_vetted(&self, arg0 : ValidatorID, arg1 : ParallelSignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
         // schedulercoord_propose asks the scheduler to prepare a proposal (a
     // block proposal) on top of the given db block.
 
-    async fn schedulercoord_propose_block(&self, arg0 : BlockID, arg1 : ProposalContext) -> Result<SchedulerProposalResult, ::rpc_api::ProgramError>;
+    fn schedulercoord_propose_block(&self, arg0 : BlockID, arg1 : ProposalContext) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerProposalResult>, ::rpc_api::ProgramError>> + Send;
         // schedulercoord_validate asks the scheduler to validate a proposal,
     // and if successful, return the block ID in the db of the validated
     // block. BlockID is the block onto which the proposal is done.
 
-    async fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : Proposal) -> Result<SchedulerValidationResult, ::rpc_api::ProgramError>;
+    fn schedulercoord_validate_block(&self, arg0 : BlockID, arg1 : Proposal) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerValidationResult>, ::rpc_api::ProgramError>> + Send;
         // Commit the block with block ID. This block must have been previously
     // proposed or validated by the mempool.
     // On commit the block is associated with the ConsensusValue that confirmed it.
     // This value is saved in the database and retrievable via schedcoord_get_tip.
 
-    async fn schedulercoord_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<SchedulerCommitOutcome, ::rpc_api::ProgramError>;
+    fn schedulercoord_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerCommitOutcome>, ::rpc_api::ProgramError>> + Send;
         // Returns information about the current highest committed block.
     // If there is no committed block, returns SchedulerGetTipNoGenesisBlock.
 
-    async fn schedcoord_get_tip(&self) -> Result<SchedulerGetTipResult, ::rpc_api::ProgramError>;
+    fn schedcoord_get_tip(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerGetTipResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> Result<DbSchedResult, ::rpc_api::ProgramError>;
+    fn schedcoord_load_genesis_configuration(&self, arg0 : GenesisConfiguration) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn schedulercoord_commit_genesis_ceremony(&self, arg0 : GenesisCeremonyRequest) -> Result<GenesisCeremonyResult, ::rpc_api::ProgramError>;
+    fn schedulercoord_commit_genesis_ceremony(&self, arg0 : GenesisCeremonyRequest) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<GenesisCeremonyResult>, ::rpc_api::ProgramError>> + Send;
         // Returns transactions from the mempool that have not yet been committed in a block,
     // by their exact signed encoding.
 
-    async fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
+    fn schedcoord_lookup_transactions(&self, arg0 : SignedTransactionHashBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<OptSignedTransactionBatch>, ::rpc_api::ProgramError>> + Send;
         // Returns one pending or recent outcome per input hash (same order).
 
-    async fn schedcoord_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
+    fn schedcoord_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SchedulerTransactionOutcomeBatch>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedulerCoord_SchedulerCoord1_Dispatcher {
-  inner: Box<dyn SchedulerCoord_SchedulerCoord1>,
+pub struct SchedulerCoord_SchedulerCoord1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl SchedulerCoord_SchedulerCoord1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedulerCoord_SchedulerCoord1>) -> Self {
+impl<T: SchedulerCoord_SchedulerCoord1> SchedulerCoord_SchedulerCoord1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispatcher {
+impl<T: SchedulerCoord_SchedulerCoord1> ::rpc_api::RpcHandler for SchedulerCoord_SchedulerCoord1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x76671111, 1)
     }

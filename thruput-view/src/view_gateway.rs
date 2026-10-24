@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -280,29 +280,28 @@ pub enum ViewGatewayBatchResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait ViewGateway_ViewGateway1: Send + Sync {    
-    async fn viewgateway_intro(&self, arg0 : ProtocolCommit) -> Result<ViewGatewayIntroOutcome, ::rpc_api::ProgramError>;
+    fn viewgateway_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayIntroOutcome>, ::rpc_api::ProgramError>> + Send;
     
-    async fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> Result<ViewGatewayResult, ::rpc_api::ProgramError>;
+    fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn viewgateway_view_batch(&self, arg0 : ViewGatewayBatchQuery) -> Result<ViewGatewayBatchResult, ::rpc_api::ProgramError>;
+    fn viewgateway_view_batch(&self, arg0 : ViewGatewayBatchQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayBatchResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct ViewGateway_ViewGateway1_Dispatcher {
-  inner: Box<dyn ViewGateway_ViewGateway1>,
+pub struct ViewGateway_ViewGateway1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl ViewGateway_ViewGateway1_Dispatcher {
-  pub fn new(inner: Box<dyn ViewGateway_ViewGateway1>) -> Self {
+impl<T: ViewGateway_ViewGateway1> ViewGateway_ViewGateway1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for ViewGateway_ViewGateway1_Dispatcher {
+impl<T: ViewGateway_ViewGateway1> ::rpc_api::RpcHandler for ViewGateway_ViewGateway1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x56475759, 1)
     }

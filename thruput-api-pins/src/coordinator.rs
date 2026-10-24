@@ -23,13 +23,13 @@ pub mod discovery {
 
     pub async fn trait_discovery_null<T: Discovery_Discovery1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.discovery_null().await
     }
     pub async fn trait_discovery_update_quorums<T: Discovery_Discovery1>(
         t: &T,
         arg0: KnownQuorumSets,
-    ) -> Result<KnownQuorumSets, ProgramError> {
+    ) -> Result<impl EncodesAs<KnownQuorumSets>, ProgramError> {
         t.discovery_update_quorums(arg0).await
     }
 }
@@ -50,13 +50,13 @@ pub mod dogwood {
 
     pub async fn trait_dogwood_null<T: Dogwood_Dogwood1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.dogwood_null().await
     }
     pub async fn trait_dogwood_deliver<T: Dogwood_Dogwood1>(
         t: &T,
         arg0: DogwoodDeliveryEnvelope,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.dogwood_deliver(arg0).await
     }
 }

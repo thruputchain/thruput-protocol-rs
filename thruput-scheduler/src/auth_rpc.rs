@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -81,36 +81,35 @@ pub type AuthErrorCodeBatch = VecM::<AuthErrorCode>;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait AuthMempool_AuthMempool1: Send + Sync {        // Verify a list of transactions.  This version returns a result for each transaction.
     // The BlockHeight is the height of the most recently committed block,
     // i.e. the block height of the block that produced the snapshot auth data against which
     // the transactions are to be verified.
 
-    async fn authmempool_verify_transactions(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCodeBatch, ::rpc_api::ProgramError>;
+    fn authmempool_verify_transactions(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<AuthErrorCodeBatch>, ::rpc_api::ProgramError>> + Send;
         // Verify a batch of transactions.  This version returns a single result for the batch,
     // i.e. are all correct or is there at least one invalid transaction?
     // This version should be called when validating a proposal, in which if even one
     // transaction is invalid then the whole block can be rejected.
     // This version can use batch verification to speed up the verification.
 
-    async fn authmempool_verify_batch(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCode, ::rpc_api::ProgramError>;
+    fn authmempool_verify_batch(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<AuthErrorCode>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct AuthMempool_AuthMempool1_Dispatcher {
-  inner: Box<dyn AuthMempool_AuthMempool1>,
+pub struct AuthMempool_AuthMempool1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl AuthMempool_AuthMempool1_Dispatcher {
-  pub fn new(inner: Box<dyn AuthMempool_AuthMempool1>) -> Self {
+impl<T: AuthMempool_AuthMempool1> AuthMempool_AuthMempool1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for AuthMempool_AuthMempool1_Dispatcher {
+impl<T: AuthMempool_AuthMempool1> ::rpc_api::RpcHandler for AuthMempool_AuthMempool1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x8aa87aa7, 1)
     }
@@ -221,7 +220,6 @@ pub struct KeyChangeChunk {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait AuthDB_AuthDB1: Send + Sync {        // Retired number, never to be reused, so that a peer built against it
     // fails to dispatch rather than misparse a newer payload:
     //   1: authdb_forward_key_changes(BlockHeight, KeyChangeBatch), a block's
@@ -232,23 +230,23 @@ pub trait AuthDB_AuthDB1: Send + Sync {        // Retired number, never to be re
     // Deliver one chunk of a committed block's auth-data changes to the auth
     // server.
 
-    async fn authdb_forward_key_changes_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
+    fn authdb_forward_key_changes_chunk(&self, arg0 : KeyChangeChunk) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct AuthDB_AuthDB1_Dispatcher {
-  inner: Box<dyn AuthDB_AuthDB1>,
+pub struct AuthDB_AuthDB1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl AuthDB_AuthDB1_Dispatcher {
-  pub fn new(inner: Box<dyn AuthDB_AuthDB1>) -> Self {
+impl<T: AuthDB_AuthDB1> AuthDB_AuthDB1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for AuthDB_AuthDB1_Dispatcher {
+impl<T: AuthDB_AuthDB1> ::rpc_api::RpcHandler for AuthDB_AuthDB1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x8aa87aa8, 1)
     }
@@ -413,35 +411,34 @@ pub type DBAuthResultBatch = VecM::<DBAuthResult>;
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait DBAuth_DBAuth1: Send + Sync {        // Get the auth data for a single address.
     // If some block concurrently commits which modifies the auth data,
     // then this call can return kDBAuthStaleBlockHeight.
 
-    async fn authdb_get_auth_data(&self, arg0 : BlockHeight, arg1 : ContractAddress) -> Result<DBAuthResult, ::rpc_api::ProgramError>;
+    fn authdb_get_auth_data(&self, arg0 : BlockHeight, arg1 : ContractAddress) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DBAuthResult>, ::rpc_api::ProgramError>> + Send;
         // Get the auth data for a batch of addresses.
 
-    async fn authdb_get_auth_data_batch(&self, arg0 : BlockHeight, arg1 : ContractAddressBatch) -> Result<DBAuthResultBatch, ::rpc_api::ProgramError>;
+    fn authdb_get_auth_data_batch(&self, arg0 : BlockHeight, arg1 : ContractAddressBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DBAuthResultBatch>, ::rpc_api::ProgramError>> + Send;
         // Introduce an auth server to a db shard,
     // and subscribe to updates to auth data
 
-    async fn dbauth_intro(&self, arg0 : AuthCard) -> Result<DBAuthIntroResult, ::rpc_api::ProgramError>;
+    fn dbauth_intro(&self, arg0 : AuthCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DBAuthIntroResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct DBAuth_DBAuth1_Dispatcher {
-  inner: Box<dyn DBAuth_DBAuth1>,
+pub struct DBAuth_DBAuth1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl DBAuth_DBAuth1_Dispatcher {
-  pub fn new(inner: Box<dyn DBAuth_DBAuth1>) -> Self {
+impl<T: DBAuth_DBAuth1> DBAuth_DBAuth1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for DBAuth_DBAuth1_Dispatcher {
+impl<T: DBAuth_DBAuth1> ::rpc_api::RpcHandler for DBAuth_DBAuth1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x8aa87aa9, 1)
     }
@@ -591,9 +588,8 @@ pub enum IntroAuthResult {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait MempoolAuth_MempoolAuth1: Send + Sync {    
-    async fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> Result<IntroAuthResult, ::rpc_api::ProgramError>;
+    fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IntroAuthResult>, ::rpc_api::ProgramError>> + Send;
         // Retired number, never to be reused, so that a peer built against it
     // fails to dispatch rather than misparse a newer payload:
     //   1: mempoolauth_auth_data_changed(BlockHeight, KeyChangeBatch), a
@@ -603,23 +599,23 @@ pub trait MempoolAuth_MempoolAuth1: Send + Sync {
     // server to the mempool. The auth server sends a height's run only after
     // it has applied the whole height itself.
 
-    async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
+    fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct MempoolAuth_MempoolAuth1_Dispatcher {
-  inner: Box<dyn MempoolAuth_MempoolAuth1>,
+pub struct MempoolAuth_MempoolAuth1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl MempoolAuth_MempoolAuth1_Dispatcher {
-  pub fn new(inner: Box<dyn MempoolAuth_MempoolAuth1>) -> Self {
+impl<T: MempoolAuth_MempoolAuth1> MempoolAuth_MempoolAuth1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for MempoolAuth_MempoolAuth1_Dispatcher {
+impl<T: MempoolAuth_MempoolAuth1> ::rpc_api::RpcHandler for MempoolAuth_MempoolAuth1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x8aa87aaa, 1)
     }

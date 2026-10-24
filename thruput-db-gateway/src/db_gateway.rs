@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: e0e14dde6a5cd5db1bcaab5a5c5c8006735576c1
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -158,29 +158,28 @@ impl core::fmt::Display for DbGatewayIntroOutcome {
 
 
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait DbGateway_DbGateway1: Send + Sync {    
-    async fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::rpc_api::ProgramError>;
+    fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayIntroOutcome>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> Result<DbGatewayResult, ::rpc_api::ProgramError>;
+    fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayResult>, ::rpc_api::ProgramError>> + Send;
     
-    async fn dbgateway_get_config(&self) -> Result<DbGatewayConfigResult, ::rpc_api::ProgramError>;
+    fn dbgateway_get_config(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayConfigResult>, ::rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct DbGateway_DbGateway1_Dispatcher {
-  inner: Box<dyn DbGateway_DbGateway1>,
+pub struct DbGateway_DbGateway1_Dispatcher<T> {
+  inner: Box<T>,
 }
 
-impl DbGateway_DbGateway1_Dispatcher {
-  pub fn new(inner: Box<dyn DbGateway_DbGateway1>) -> Self {
+impl<T: DbGateway_DbGateway1> DbGateway_DbGateway1_Dispatcher<T> {
+  pub fn new(inner: Box<T>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for DbGateway_DbGateway1_Dispatcher {
+impl<T: DbGateway_DbGateway1> ::rpc_api::RpcHandler for DbGateway_DbGateway1_Dispatcher<T> {
     fn prog_vers(&self) -> ::rpc_api::ProgVers {
         ::rpc_api::ProgVers::new(0x44424757, 1)
     }
