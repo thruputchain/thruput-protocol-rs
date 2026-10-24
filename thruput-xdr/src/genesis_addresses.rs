@@ -1,7 +1,7 @@
-//! The 32-byte [`ContractAddress`] of each contract the protocol places at
-//! genesis.
+//! The 32-byte [`ContractAddress`] of each address the protocol reserves at
+//! genesis: the null address and the contracts placed there.
 //!
-//! [`GenesisContractAddresses`] numbers these contracts; the address is that
+//! [`GenesisContractAddresses`] numbers these addresses; the address is that
 //! number in big-endian order in the last four bytes, with every other byte
 //! zero.
 //!

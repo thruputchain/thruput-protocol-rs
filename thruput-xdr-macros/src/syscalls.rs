@@ -40,12 +40,13 @@ struct TypeMapping {
     rust_uses_as_ptr: bool,
     #[serde(default = "default_false")]
     primitive_type: bool,
-    /// rust newtype wrappers (with the transparent wrapper structs
-    /// in the generated code) use .inner to access the inner object.
+    /// Rust newtype wrappers (the transparent wrapper structs in the
+    /// generated code) pass `.into_inner()` when passed by value.
     #[serde(default = "default_false")]
     newtype: bool,
-    /// Enum types, and newtype structs (i.e. Foo(i32)) use .0 as u64
-    /// as input arguments
+    /// Enum types and other tuple structs with a public `.0` (e.g.
+    /// `TransactionStatistic(i32)`) pass `.0 as SyscallWord` when passed by
+    /// value.
     #[serde(default = "default_false")]
     dot_zero_type: bool,
 }
@@ -253,8 +254,8 @@ impl Arg {
         }
     }
 
-    /// Returns true if this arg's type is a newtype struct (e.g. `Foo(i32)`)
-    /// that needs `.into_inner() as SyscallWord` instead of `as SyscallWord`.
+    /// Returns true if this arg's type is a generated newtype wrapper that
+    /// needs `.into_inner() as SyscallWord` instead of `as SyscallWord`.
     fn is_newtype(&self, type_map: &TypeMap) -> bool {
         if let Some(type_details) = self.get_type_details(type_map) {
             type_details.newtype
@@ -884,22 +885,21 @@ fn load_syscall_docs(json_path: String) -> BTreeMap<String, SyscallDoc> {
         .expect("CARGO_MANIFEST_DIR not set");
     let docs_path = std::path::PathBuf::from(manifest_dir).join(&json_path);
 
-    if !docs_path.exists() {
-        // Return empty map if docs don't exist (for backwards compatibility)
-        return BTreeMap::new();
-    }
-
+    // Every syscall needs its documentation, so a missing or unreadable file
+    // is an error here rather than at the first undocumented syscall.
     let content = std::fs::read_to_string(&docs_path).unwrap_or_else(|e| {
-        panic!("Failed to read {}: {e}", docs_path.display())
+        panic!(
+            "Failed to read {}: {e}; regenerate it with scripts/generate.sh",
+            docs_path.display()
+        )
     });
 
     serde_json::from_str(&content).unwrap_or_else(|e| {
-        eprintln!(
-            "Warning: failed to parse syscall docs {}: {e}; continuing \
-             without docs",
+        panic!(
+            "Failed to parse syscall docs {}: {e}; regenerate it with \
+             scripts/generate.sh",
             docs_path.display()
-        );
-        BTreeMap::new()
+        )
     })
 }
 
@@ -998,7 +998,7 @@ fn add_uninit_arguments_section(
     // Outputs subsection
     doc_lines.push("### Outputs".to_string());
     if !outputs.is_empty() {
-        doc_lines.push("The following parameters use `MaybeUninit` types and will be initialized by the syscall if the error is `kNone`:".to_string());
+        doc_lines.push("The following parameters use `MaybeUninit` types and are written by the syscall only if it returns `kSyscallErrorCodeNone`. A fixed-size output is then fully initialized; a span output has only its first `min(len, written_len)` bytes initialized:".to_string());
         for output in outputs {
             doc_lines.push(format!("- `{}`", output.name));
         }
@@ -1030,7 +1030,7 @@ fn add_raw_arguments_section(
     // Outputs subsection
     doc_lines.push("### Outputs".to_string());
     if !outputs.is_empty() {
-        doc_lines.push("The following parameters will be modified by the syscall syscall only if the error is `kNone`:".to_string());
+        doc_lines.push("The following parameters are written by the syscall only if it returns `kSyscallErrorCodeNone`. A span output then has only its first `min(len, written_len)` bytes written:".to_string());
         for output in outputs {
             doc_lines.push(format!("- `{}`", output.name));
         }
@@ -1068,8 +1068,8 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     validate_spec_args(&spec, &file_path);
     let type_map = spec.get_type_map();
 
-    // Try to load documentation JSON (from the crate directory)
-    // The JSON is generated into the thruput_xdr directory by the build script
+    // Load the documentation JSON from the crate directory. scripts/generate.sh
+    // writes it into thruput-xdr from protocol/syscalls.yaml.
     let docs_path = "syscalls_docs.json";
     let docs = load_syscall_docs(docs_path.to_string());
 

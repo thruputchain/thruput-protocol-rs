@@ -56,7 +56,7 @@ use precompiles::*;
 pub mod genesis;
 use genesis::*;
 
-/// [`ContractAddress`] constants for the contracts placed at genesis.
+/// [`ContractAddress`] constants for the addresses reserved at genesis.
 pub mod genesis_addresses;
 
 #[rustfmt::skip]
@@ -116,7 +116,7 @@ pub use syscall_numbers::*;
 pub mod syserr;
 use syserr::*;
 
-/// System call bindings and syscall numbers (SyscallNo enum).
+/// Generated system call bindings. Syscall numbers are [`SyscallNo`].
 #[cfg(feature = "syscalls")]
 pub mod syscalls;
 

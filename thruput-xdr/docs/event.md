@@ -4,38 +4,50 @@ This module defines the event system for Thruput contracts. Events provide a mec
 
 ## Emitting Events: The LogEvent Syscall
 
-Contracts emit events using the LogEvent syscall. The syscall signature is
+Contracts emit events using the LogEvent syscall (available with the `syscalls` feature). The syscall signature is
 
-```rust,ignore
-fn LogEvent(
-    topic0: Option<&[u8; 32]>,
-    topic1: Option<&[u8; 32]>,
-    topic2: Option<&[u8; 32]>,
-    data: &[u8]
-) -> SyscallResult<()>;
+```rust
+# #[cfg(feature = "syscalls")]
+# fn check() {
+use thruput_xdr::syscalls::{LogEvent, SyscallResult};
+
+let _: fn(
+    Option<&[u8; 32]>, // topic0
+    Option<&[u8; 32]>, // topic1
+    Option<&[u8; 32]>, // topic2
+    &[u8],             // data
+) -> SyscallResult<()> = LogEvent;
+# }
 ```
 
 In practice, contracts should use SDK wrapper functions that handle event serialization and topic construction rather than calling LogEvent directly.
 
 ### Example Usage
 
-Here's a conceptual example of emitting a transfer event:
+Here's an example of emitting a transfer event:
 
-```rust,ignore
+```rust,no_run
+# #[cfg(feature = "syscalls")]
+# fn emit() -> thruput_xdr::syscalls::SyscallResult<()> {
+use thruput_xdr::syscalls::{LogEvent, SHA256};
+
 // Define your event data (excluding topics)
 let event_data = b"some event data";
 
 // Calculate event signature
-let event_signature = sha256(b"Transfer");
+let event_signature: [u8; 32] = *SHA256(b"Transfer")?;
+let sender = [0xaa; 32]; // the sender's 32-byte address
+let recipient = [0xbb; 32]; // the recipient's 32-byte address
 
 // Emit the event with topics
 // LogEvent will construct serialized_event as event_signature || sender || recipient || event_data
 LogEvent(
-    Some(&event_signature),     // topic0: event type signature
-    Some(&sha256(b"alice")),    // topic1: from address
-    Some(&sha256(b"bob")),      // topic2: to address
-    event_data                  // remaining data after topics
-).unwrap();
+    Some(&event_signature), // topic0: event type signature
+    Some(&sender),          // topic1: from address
+    Some(&recipient),       // topic2: to address
+    event_data,             // remaining data after topics
+)
+# }
 ```
 
 The resulting `TxEmittedEvent` will have:
@@ -74,7 +86,7 @@ Downstream indexers can then efficiently filter events by "all transfers from ad
 ### Error Conditions
 
 The `LogEvent` syscall returns an error if:
-- **Event too large**: The serialized event (32 bytes per supplied topic plus the data) is longer than `kMaxEventLength` (1024 bytes)
+- **Event too large**: The serialized event (32 bytes per topic plus the data) exceeds `kMaxEventLength` (1024 bytes)
 - **Too many events**: The transaction has already emitted `kMaxEventsPerTransaction` (1000) events
 - **Invalid topic sequence**: Topics are not provided in a continuous sequence (e.g., topic0 and topic2 without topic1)
 
@@ -84,15 +96,15 @@ During block execution, the system accumulates events from all transactions. At 
 
 ### TxEventLog Structure
 
-Events are organized per-transaction using the `TxEventLog` structure:
+Events are organized per-transaction using the [`TxEventLog`] structure:
 
 - `tx_hash`: SHA256 hash of the XDR-encoded `Transaction`
-- `exec_result`: The transaction's execution result
-- `root_output`: The output of the transaction's root frame: the return buffer on success, the abort buffer on a deterministic revert, or `Fault` when no root output was produced
-- `gas_consumed`: The gas the whole transaction consumed, including the pre-execution validation of attached contracts (the transaction's gas limit on an out-of-gas fault)
-- `events`: All `TxEmittedEvent` structures emitted by that transaction, at most `kMaxEventsPerTransaction`
+- `exec_result`: the transaction's [`ExecResult`]
+- `root_output`: the root frame's output (its return or abort buffer, or none on a fault)
+- `gas_consumed`: the gas the whole transaction consumed
+- `events`: the `TxEmittedEvent`s it emitted, in order
 
-This organization allows efficient retrieval of all events emitted by a specific transaction.
+In the trie, the key is `tx_hash`, and the value is the rest of the XDR-encoded `TxEventLog` followed by the transaction's XDR-encoded `NondeterministicProposalData`. This organization allows efficient retrieval of all events emitted by a specific transaction.
 
 ### TxEmittedEvent Structure
 
@@ -105,7 +117,7 @@ Each individual event contains:
 
 Within each block:
 1. As transactions execute, their events are collected into `TxEventLog` entries
-2. These entries are inserted into a merkle-patricia trie, keyed by `tx_hash`. Each leaf's value is the rest of `XDR(TxEventLog)` followed by `XDR(NondeterministicProposalData)`, which binds the nondeterministic inputs used during execution to the root
+2. These entries are inserted into a merkle-patricia trie, keyed by `tx_hash`
 3. At block close, the trie is finalized and a root hash is computed
 4. This root hash becomes part of the block's cryptographic commitment
 
@@ -115,7 +127,7 @@ The `IdentifiedEvent` structure is not constructed during the main transaction w
 
 It provides complete identification of a unique event:
 - `tx_hash`: The transaction that emitted the event
-- `block_height`: The height of the block that contains the transaction
+- `block_height`: The block that committed that transaction
 - `sequence_number`: Distinguishes multiple events from the same transaction (0-indexed)
 - `emitted_event`: The complete event data
 

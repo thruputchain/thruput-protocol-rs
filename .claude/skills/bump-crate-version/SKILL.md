@@ -45,9 +45,11 @@ thruput-xdr = { path = "thruput-xdr", version = "=X.Y.Z", ... }
 # ... all path-based deps
 ```
 
-**Internal deps** (bump these): `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-rpc`, `thruput-scheduler`, `hogexec-internal`, `macros`
+**Internal deps** (bump these): `thruput-syscall`, `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-akkad`, `thruput-rpc`, `thruput-scheduler`, `thruput-indexer`, `thruput-db-gateway`, `thruput-view`, `hogexec-internal`, `thruput-spec`
 
-**External deps** (DO NOT bump): `xdrs`, `rpc_driver`, `xdr-common`, `xdr-repr`, `xdr-derive`, `serde_with`
+**External deps** (DO NOT bump): `xdrs`, `xdr-common`, `xdr-derive`, `rpc_api`, `rpc_driver`, `schemars`
+
+If these lists disagree with `Cargo.toml`, the rule wins: bump every entry that has `path = "..."`, and nothing else. A missed internal pin fails `cargo check` with an unresolvable `=X.Y.Z` requirement.
 
 ## 3. Verify
 
@@ -55,4 +57,4 @@ thruput-xdr = { path = "thruput-xdr", version = "=X.Y.Z", ... }
 cargo check
 ```
 
-No other files need changing -- all member crates inherit `version.workspace = true`.
+`cargo check` rewrites the workspace crates' versions in `Cargo.lock`; commit that with `Cargo.toml`, since CI builds with `--locked`. No other files need changing -- all member crates inherit `version.workspace = true`.

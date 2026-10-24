@@ -7,17 +7,21 @@
 //! in `[0, chunk_count)` is sent exactly once, and a run always has at least
 //! one record, so an empty message is a run of one empty record. The records
 //! of a run may be sent concurrently and over several connections, so they
-//! can arrive in any order, and the runs of several heights can interleave.
+//! can arrive in any order. The `KeyChangeChunk` runs of several heights can
+//! interleave; hog_db sends one height's `NativeTokensTransferredChunk` run
+//! only once the previous one is acknowledged.
 //!
 //! The [`ChunkRecord`] impls here take the two records apart into height,
-//! [`ChunkPosition`] and items. A server implementing `SchedDb1` or `AuthDB1`
-//! hands every record it receives to an `rpc_driver::ChunkRunAssembler`,
-//! which returns the height's whole message once every chunk of its run is
-//! in, with the parts read as one sequence; hogd's C++ mempool and auth
-//! server do the same with `hogd/base/chunk_run_assembler.h`. This crate
-//! depends on `rpc_api` alone, so the assembler is not named here:
+//! [`ChunkPosition`] and items. A server implementing `SchedDb1`, `AuthDB1`
+//! or `MempoolAuth1` (over which the auth server forwards `KeyChangeChunk`
+//! runs to the mempool) hands every record it receives to an
+//! `rpc_driver::ChunkRunAssembler`, which returns the height's whole message
+//! once every chunk of its run is in, with the parts read as one sequence;
+//! hogd's C++ mempool and auth server do the same with
+//! `hogd/base/chunk_run_assembler.h`. This crate depends on `rpc_api` alone,
+//! so the assembler is not named here:
 //!
-//! ```ignore
+//! ```
 //! use rpc_driver::{ChunkRunAssembler, ProgramError};
 //! use thruput_scheduler::{Delta, NativeTokensTransferredChunk};
 //! use thruput_xdr::types::BlockHeight;

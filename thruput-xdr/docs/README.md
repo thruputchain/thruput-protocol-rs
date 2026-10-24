@@ -11,7 +11,7 @@ Each module in `thruput-xdr` can have a corresponding markdown file in this dire
 1. **Type-level documentation**: Add `///` comments directly in the `.x` files (e.g., `protocol/types.x`). These are preserved as Rust doc comments in the generated code.
 
 2. **Module-level documentation**: Create a `.md` file in this directory and include it in `lib.rs`:
-   ```rust
+   ```rust,ignore
    #[doc = include_str!("../docs/module_name.md")]
    #[rustfmt::skip]
    pub mod module_name;
@@ -32,6 +32,6 @@ Each module in `thruput-xdr` can have a corresponding markdown file in this dire
 ## Notes
 
 - Documentation files are written in Markdown and support standard Rust doc comment features
-- Links to types use intra-doc link syntax, e.g. ``[`Transaction`]``, resolved from the module that includes the file
+- Link to types with intra-doc links (``[`TypeName`]``), which rustdoc checks
 - These files are included at compile time, so changes require recompilation to appear in `cargo doc`
 

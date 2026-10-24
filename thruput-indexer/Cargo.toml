@@ -1,6 +1,6 @@
 [package]
 name = "thruput-indexer"
-description = "Bindings for Thruput indexer RPCs (IndexerBlockExplorer, IndexerEvent, EventIndexer)"
+description = "Bindings for Thruput indexer RPCs (IndexerBlockExplorer, EventIndexer)"
 version.workspace = true
 rust-version.workspace = true
 edition.workspace = true

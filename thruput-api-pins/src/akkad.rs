@@ -1,4 +1,4 @@
-//! Signature pins for `thruput_akkad` (generated: src/coord_sched.rs, src/discovery.rs,
+//! Signature pins for `thruput_akkad` (generated: src/coord_sched.rs, src/discovery2.rs,
 //! src/catchup.rs, src/db_sched.rs, src/repair2.rs, src/sched_coord.rs, src/loadgen.rs,
 //! src/dogwood.rs).
 
@@ -20,10 +20,10 @@ use thruput_akkad::{
     Repair_Repair2_Client, RepairedBlocks, RepairedProposal, RepairedSlot,
     RepairedTxs, SchedulerCommitOutcome, SchedulerCoord_SchedulerCoord1,
     SchedulerCoord_SchedulerCoord1_Client, SchedulerGetTipResult,
-    SchedulerProposalResult, SchedulerValidationResult,
-    SignedCatchupBlocksRequest, SignedCatchupBlocksResult,
-    SignedMissingBlocks, SignedMissingProposal, SignedMissingSlot,
-    SignedMissingTxs, TransactionHashBatch, ValidatorID,
+    SchedulerProposalResult, SchedulerTransactionOutcomeBatch,
+    SchedulerValidationResult, SignedCatchupBlocksRequest,
+    SignedCatchupBlocksResult, SignedMissingBlocks, SignedMissingProposal,
+    SignedMissingSlot, SignedMissingTxs, TransactionHashBatch, ValidatorID,
 };
 use xdrs::EncodesAs;
 
@@ -378,6 +378,12 @@ pub mod scheduler_coord {
     ) -> Result<OptSignedTransactionBatch, RpcError> {
         c.schedcoord_lookup_transactions(arg0).await
     }
+    pub async fn client_schedcoord_lookup_transaction_outcomes(
+        c: &S,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
+    ) -> Result<SchedulerTransactionOutcomeBatch, RpcError> {
+        c.schedcoord_lookup_transaction_outcomes(arg0).await
+    }
 
     pub async fn trait_schedulercoord_null<
         T: SchedulerCoord_SchedulerCoord1,
@@ -468,6 +474,14 @@ pub mod scheduler_coord {
         arg0: TransactionHashBatch,
     ) -> Result<OptSignedTransactionBatch, ProgramError> {
         t.schedcoord_lookup_transactions(arg0).await
+    }
+    pub async fn trait_schedcoord_lookup_transaction_outcomes<
+        T: SchedulerCoord_SchedulerCoord1,
+    >(
+        t: &T,
+        arg0: TransactionHashBatch,
+    ) -> Result<SchedulerTransactionOutcomeBatch, ProgramError> {
+        t.schedcoord_lookup_transaction_outcomes(arg0).await
     }
 }
 
