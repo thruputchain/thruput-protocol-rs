@@ -44,3 +44,7 @@ workspace = true
 
 [dependencies.xdr-common]
 workspace = true
+
+[dev-dependencies]
+thruput-rpc-driver = { workspace = true }
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "sync", "time"] }
