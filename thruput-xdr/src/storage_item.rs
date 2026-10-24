@@ -124,7 +124,7 @@ pub enum StorageItem {
     ///
     /// This can be stored at any [`StorageKey`] of type `ContractData`.
     /// This type is also used to store the free native token balance at
-    /// storage key `FreeNativeTokenBalance`.
+    /// storage key type `FreeNativeTokenBalance`.
     // case kItemTypeNonnegativeInt:
     //   int128_xdr nnint;
     kItemTypeNonnegativeInt { nnint: int128_xdr } = StorageItemType::kItemTypeNonnegativeInt.0 as i32,
@@ -137,21 +137,21 @@ pub enum StorageItem {
     /// A set of [`Uniquifier`]s that have been used by the current address.
     /// Transactions can only insert a Uniquifier, not read the whole set.
     ///
-    /// This is the type stored at storage key `ReplayCache`.
+    /// This is the type stored at storage key type `ReplayCache`.
     /// It cannot be stored at any other storage key.
     // case kItemTypeReplayCacheData:
     //   VecM<Uniquifier> active_uniquifiers;
     kItemTypeReplayCacheData { active_uniquifiers: VecM<Uniquifier> } = StorageItemType::kItemTypeReplayCacheData.0 as i32,
     /// The authorization data for the current address.
     ///
-    /// This is the type stored at storage key `AddressAuthData`.
+    /// This is the type stored at storage key type `AuthData`.
     /// It cannot be stored at any other storage key.
     // case kItemTypeAuthData:
     //   AddressAuthData auth_data;
     kItemTypeAuthData { auth_data: AddressAuthData } = StorageItemType::kItemTypeAuthData.0 as i32,
     /// The hash of the deployed contract for the current address.
     ///
-    /// This is the type stored at storage key `AddressMetadata`.
+    /// This is the type stored at storage key type `Metadata`.
     /// It cannot be stored at any other storage key.
     // case kItemTypeDeployedContractHash:
     //   DeployedContractHash deployed_contract_hash;

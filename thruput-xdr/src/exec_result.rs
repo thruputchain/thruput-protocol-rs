@@ -38,7 +38,7 @@ impl ExecResult {
     pub const ExecResultOK: Self = Self(0);
 
     // Transaction execution (during proposal or validation) failed.
-    // Specifically, the root frame returned Deterministic.
+    // Specifically, the root frame failed with Deterministic or OutOfGas.
     // the error is deterministic and can be replayed in validation.
     // Transactions with this error code can be included in the block.
     pub const ExecResultTxDeterministicError: Self = Self(1);

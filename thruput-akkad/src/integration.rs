@@ -54,9 +54,9 @@ pub const kCoordinatorMaxBytesSCPEnvelopeMessage : u32 = 5_000_000;
 // 1MB
 pub const kCoordinatorMaxBytesSCPQuorumSet : u32 = 1_000_000;
 
-/// kMaxBytesSignedTransaction is a currently assumed (but not enforced) bound on the
-/// maximum size of a signed transaction submitted through the wallet.
-/// This bound is used by the coordinator to calculate how many unvetted transactions it can buffer
+/// kMaxBytesSignedTransaction is the maximum encoded size of a signed transaction;
+/// the auth server rejects larger ones.
+/// This bound is also used by the coordinator to calculate how many unvetted transactions it can buffer
 /// before submitting them to the mempool without violating kMempoolCoordinatorRpcMaxBytes.
 // 2MB
 pub const kMaxBytesSignedTransaction : u32 = 2_000_000;

@@ -81,8 +81,9 @@ pub struct DbTip {
     /// ProposalHeader::config_hash through ConfigHashPreimage.
     pub default_wallet: DeployedContractHash,
     /// The execution parameters in force for the block that follows this tip.
-    /// Set at genesis from GenesisConfiguration::network_config; carried forward
-    /// verbatim by every commit that does not apply a [`ConfigUpgrade`].
+    /// Set at genesis from GenesisConfiguration::network_config and carried
+    /// forward verbatim by every commit: no mechanism changes it after genesis
+    /// yet (see [`ConfigParam`]).
     pub network_config: NetworkConfig,
 }
 
