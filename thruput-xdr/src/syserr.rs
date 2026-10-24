@@ -67,6 +67,9 @@ impl fmt::Debug for SysErr {
             SyscallErrorCode::kSyscallErrorCodeIsRootTransaction => {
                 write!(f, "SysErr<IsRootTransaction>")
             }
+            SyscallErrorCode::kSyscallErrorCodeReentrance => {
+                write!(f, "SysErr<Reentrance>")
+            }
             SyscallErrorCode::kSyscallErrorCodeContractAlreadyDeployed => {
                 write!(f, "SysErr<ContractAlreadyDeployed>")
             }
@@ -82,6 +85,12 @@ impl fmt::Debug for SysErr {
             SyscallErrorCode::kSyscallErrorCodeNoRetrocausalQueueEntry => {
                 write!(f, "SysErr<NoRetrocausalQueueEntry>")
             }
+            SyscallErrorCode::kSyscallErrorCodeRetrocausalQueueReadLimitReached => {
+                write!(f, "SysErr<RetrocausalQueueReadLimitReached>")
+            }
+            SyscallErrorCode::kSyscallErrorCodeInvokeDepthExceeded => {
+                write!(f, "SysErr<InvokeDepthExceeded>")
+            }
             _ => write!(f, "SysErr({})", self.0),
         }
     }
@@ -96,5 +105,22 @@ impl From<SyscallErrorCode> for SysErr {
 impl From<SysErr> for i32 {
     fn from(err: SysErr) -> Self {
         err.0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::format;
+
+    #[test]
+    fn debug_names_every_known_code() {
+        for code in
+            0..=SyscallErrorCode::kSyscallErrorCodeInvokeDepthExceeded.0
+        {
+            let debug = format!("{:?}", SysErr(code));
+            assert!(debug.starts_with("SysErr<"), "{code} prints as {debug}");
+        }
+        assert_eq!(format!("{:?}", SysErr(1000)), "SysErr(1000)");
     }
 }

@@ -1,7 +1,7 @@
 //! Signature pins for `thruput_scheduler` (generated: src/auth_rpc.rs,
 //! src/catchup.rs, src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs,
 //! src/exec_sched.rs, src/loadgen.rs, src/repair.rs, src/sched_coord.rs,
-//! src/sched_db.rs, src/sched_event.rs, src/sched_gateway.rs).
+//! src/sched_db.rs, src/sched_event.rs, src/sched_exec.rs, src/sched_gateway.rs).
 
 use rpc_api::{ProgramError, RpcError};
 use thruput_scheduler::{
@@ -18,11 +18,11 @@ use thruput_scheduler::{
     EventActivationResult, EventBlockResult, EventCard,
     EventExecutor_EventExecutor1, EventExecutor_EventExecutor1_Client,
     EventPrepareResult, EventRegistrationSnapshot, EventSched_EventSched1,
-    EventSched_EventSched1_Client, ExecProposeBatchResult, ExecProposeResult,
-    ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
+    EventSched_EventSched1_Client, ExecCard, ExecProposeBatchResult,
+    ExecProposeResult, ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
     ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
     GenesisCeremonyRequest, GenesisCeremonyResult, IntroAuthResult,
-    KeyChangeChunk, LoadgenContextID, LoadgenExtensionResult,
+    IntroExecResult, KeyChangeChunk, LoadgenContextID, LoadgenExtensionResult,
     LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
     MempoolAuth_MempoolAuth1, MempoolAuth_MempoolAuth1_Client,
@@ -31,12 +31,14 @@ use thruput_scheduler::{
     PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
     RepairedTransactions, SchedDb_SchedDb1, SchedDb_SchedDb1_Client,
     SchedEvent_SchedEvent1, SchedEvent_SchedEvent1_Client,
+    SchedExec_SchedExec1, SchedExec_SchedExec1_Client,
     SchedGateway_SchedGateway1, SchedGateway_SchedGateway1_Client,
     SchedGatewayIntroOutcome, SchedGatewaySubmitOutcomeBatch,
     SchedulerCommitOutcome, SchedulerCoord_SchedulerCoord1,
     SchedulerCoord_SchedulerCoord1_Client, SchedulerGetTipResult,
-    SchedulerProposalResult, SchedulerValidationResult, ShardCard,
-    SignedCatchupBlocksRequest, SignedCatchupBlocksResult, TransactionID,
+    SchedulerProposalResult, SchedulerTransactionOutcomeBatch,
+    SchedulerValidationResult, ShardCard, SignedCatchupBlocksRequest,
+    SignedCatchupBlocksResult, TransactionID,
 };
 use thruput_scp::scp::{SCPEnvelopes, SCPSlotIndex};
 use thruput_trace::db_conflict::TxFailureDiagnostic;
@@ -828,6 +830,25 @@ pub mod sched_event {
     }
 }
 
+pub mod sched_exec {
+    use super::*;
+    type S = SchedExec_SchedExec1_Client;
+
+    pub async fn client_schedexec_intro_exec(
+        c: &S,
+        arg0: &(impl EncodesAs<ExecCard> + ?Sized),
+    ) -> Result<IntroExecResult, RpcError> {
+        c.schedexec_intro_exec(arg0).await
+    }
+
+    pub async fn trait_schedexec_intro_exec<T: SchedExec_SchedExec1>(
+        t: &T,
+        arg0: ExecCard,
+    ) -> Result<IntroExecResult, ProgramError> {
+        t.schedexec_intro_exec(arg0).await
+    }
+}
+
 pub mod sched_gateway {
     use super::*;
     type S = SchedGateway_SchedGateway1_Client;
@@ -859,6 +880,12 @@ pub mod sched_gateway {
         c: &S,
     ) -> Result<PendingTxCount, RpcError> {
         c.schedgateway_pending_tx_count().await
+    }
+    pub async fn client_schedgateway_lookup_transaction_outcomes(
+        c: &S,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
+    ) -> Result<SchedulerTransactionOutcomeBatch, RpcError> {
+        c.schedgateway_lookup_transaction_outcomes(arg0).await
     }
 
     pub async fn trait_schedgateway_intro<T: SchedGateway_SchedGateway1>(
@@ -894,6 +921,14 @@ pub mod sched_gateway {
         t: &T,
     ) -> Result<PendingTxCount, ProgramError> {
         t.schedgateway_pending_tx_count().await
+    }
+    pub async fn trait_schedgateway_lookup_transaction_outcomes<
+        T: SchedGateway_SchedGateway1,
+    >(
+        t: &T,
+        arg0: TransactionHashBatch,
+    ) -> Result<SchedulerTransactionOutcomeBatch, ProgramError> {
+        t.schedgateway_lookup_transaction_outcomes(arg0).await
     }
 }
 
@@ -966,6 +1001,12 @@ pub mod scheduler_coord {
         arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
     ) -> Result<OptSignedTransactionBatch, RpcError> {
         c.schedcoord_lookup_transactions(arg0).await
+    }
+    pub async fn client_schedcoord_lookup_transaction_outcomes(
+        c: &S,
+        arg0: &(impl EncodesAs<TransactionHashBatch> + ?Sized),
+    ) -> Result<SchedulerTransactionOutcomeBatch, RpcError> {
+        c.schedcoord_lookup_transaction_outcomes(arg0).await
     }
 
     pub async fn trait_schedulercoord_null<
@@ -1057,5 +1098,13 @@ pub mod scheduler_coord {
         arg0: TransactionHashBatch,
     ) -> Result<OptSignedTransactionBatch, ProgramError> {
         t.schedcoord_lookup_transactions(arg0).await
+    }
+    pub async fn trait_schedcoord_lookup_transaction_outcomes<
+        T: SchedulerCoord_SchedulerCoord1,
+    >(
+        t: &T,
+        arg0: TransactionHashBatch,
+    ) -> Result<SchedulerTransactionOutcomeBatch, ProgramError> {
+        t.schedcoord_lookup_transaction_outcomes(arg0).await
     }
 }

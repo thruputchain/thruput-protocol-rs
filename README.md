@@ -1,9 +1,11 @@
 # protocol-rs
 
 Rust bindings generated from the Thruput protocol XDR definitions in
-`protocol/` (a submodule of [thruputchain/thruput-protocol]). The sources under each
-crate's `src/` are emitted by hogd's `x23c` compiler and are not edited by
-hand.
+`protocol/` (a submodule of [thruputchain/thruput-protocol]). The files
+`scripts/generate.sh` writes (most of each crate's `src/`) are emitted by
+hogd's `x23c` compiler and are not edited by hand. Each crate's `lib.rs`, its
+`impls` files and a few other modules, and the `thruput-syscall`,
+`thruput-xdr-macros` and `thruput-api-pins` crates, are hand-written.
 
 [thruputchain/thruput-protocol]: https://github.com/thruputchain/thruput-protocol
 

@@ -3,7 +3,8 @@
 use rpc_api::{ProgramError, RpcError};
 use thruput_view::{
     ViewGateway_ViewGateway1, ViewGateway_ViewGateway1_Client,
-    ViewGatewayIntroOutcome, ViewGatewayResult,
+    ViewGatewayBatchQuery, ViewGatewayBatchResult, ViewGatewayIntroOutcome,
+    ViewGatewayResult,
 };
 use thruput_xdr::network::ProtocolCommit;
 use thruput_xdr::view::TransactionViewQuery;
@@ -25,6 +26,12 @@ pub mod view_gateway {
     ) -> Result<ViewGatewayResult, RpcError> {
         c.viewgateway_view(arg0).await
     }
+    pub async fn client_viewgateway_view_batch(
+        c: &S,
+        arg0: &(impl EncodesAs<ViewGatewayBatchQuery> + ?Sized),
+    ) -> Result<ViewGatewayBatchResult, RpcError> {
+        c.viewgateway_view_batch(arg0).await
+    }
 
     pub async fn trait_viewgateway_intro<T: ViewGateway_ViewGateway1>(
         t: &T,
@@ -37,5 +44,11 @@ pub mod view_gateway {
         arg0: TransactionViewQuery,
     ) -> Result<ViewGatewayResult, ProgramError> {
         t.viewgateway_view(arg0).await
+    }
+    pub async fn trait_viewgateway_view_batch<T: ViewGateway_ViewGateway1>(
+        t: &T,
+        arg0: ViewGatewayBatchQuery,
+    ) -> Result<ViewGatewayBatchResult, ProgramError> {
+        t.viewgateway_view_batch(arg0).await
     }
 }

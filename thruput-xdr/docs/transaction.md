@@ -7,21 +7,21 @@ This module defines the transaction model for Thruput. Transactions are the fund
 The `transaction` module provides types and structures for constructing, signing, and executing transactions. These types are generated from the XDR specification in `protocol/transaction.x` and include:
 
 - **Invocations**: Contract method calls with parameters and gas limits
-- **Transactions**: Complete transactions with auth claims, uniquifiers, and deployments
+- **Transactions**: Complete transactions with an auth claim, a uniquifier, and attached contracts
 - **Signatures**: Decorated signatures with key identifiers
 - **Nondeterministic data**: Execution data for deterministic replay in parallel execution
 
 ## Key Concepts
 
 - Each transaction invokes a contract method with specified parameters
-- Transactions include authorization claims that must be satisfied by signatures
-- Transactions can deploy new contracts and sponsor gas
+- Transactions include an authorization claim that must be satisfied by signatures
+- Transactions can attach new contracts, which their invocations can deploy
 - Thruput executes transactions in parallel, using 2PC for conflict resolution
 - Proposers attach nondeterministic data to ensure deterministic re-execution by validators
 
 ## Transaction Lifecycle
 
-1. User constructs a [`Transaction`] with invocation details, auth claims, etc.
+1. User constructs a [`Transaction`] with invocation details, an auth claim, etc.
 2. Signatures are added to create a [`SignedTransaction`]
 3. Transaction is submitted to the network
 4. A proposer executes the transaction and captures nondeterministic data

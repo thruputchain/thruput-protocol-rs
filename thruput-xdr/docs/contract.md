@@ -23,14 +23,13 @@ The `contract` module provides types and structures for contract deployment, exe
 Thruput supports three types of contracts:
 
 - **`kRv32`**: RISC-V contracts executed in the RV32 VM. This is the standard contract type for user-deployed contracts.
-- **`kNative`**: Precompiled native contracts implemented directly in Rust. Used for system contracts like the native token. More efficient than RV32 but cannot be deployed by users.
+- **`kNative`**: Precompiled native contracts implemented natively by the node. Used for system contracts like the native token. More efficient than RV32 but cannot be deployed by users.
 - **`kMockTest`**: Mock contracts for local testing. Never deployed on-chain; exists only in the test harness.
 
-A fourth discriminant, `kWasmi`, is a legacy WebAssembly contract type. WebAssembly
-execution has been removed in favor of RV32; the discriminant remains reserved in
-the XDR only so existing encodings stay parseable, and it must not be used for new
-deployments. It will be dropped from `protocol/contract.x` once the on-chain
-migration completes.
+Discriminant 0 is retired. It selected the Wasmi (WebAssembly) runtime, which was
+removed once RV32 became the only deployable execution environment. The value is
+not reused: encodings that carry it fail to decode rather than silently decoding
+as a live contract type.
 
 ## Contract Deployment
 
@@ -46,15 +45,11 @@ This is Thruput's analogue of Ethereum's `CREATE2` opcode, allowing deterministi
 
 ## Contract Interfaces and Entrypoints
 
-Contract entrypoints can be arbitrary 8-byte identifiers. By default, the SDK for Thruput contracts follows a scheme for allocating those identifiers:
+Contract entrypoints can be arbitrary 8-byte identifiers. By default, the SDK for Thruput contracts derives each one from the interface name, the interface's major version, and the method name:
 
-1. Contract interfaces define a set of methods (entrypoints) with a name and version
-2. The first 6 bytes of `SHA256(ContractInterfaceIDPreimage)` serve as a namespace prefix for all methods in that interface
-3. The last 2 bytes identify the specific method within the interface
+```text
+ContractEntrypointID = SHA256(name || "::" || major || "::" || method)[0..8]
+```
 
-This two-level scheme provides:
-- Interface-level namespace (6 bytes) - prevents collisions between interfaces
-- Method-level identifier (2 bytes) - identifies specific method within interface
-
-By default, the SDK lexicographically sorts method names and allocates the last 2 bytes based on that order (first method gets 0x0000, second gets 0x0001, etc.).
+`major` is the semver compatibility prefix of the interface version (`"1"` for `"1.4.2"`, `"0.2"` for `"0.2.7"`), so compatible versions share entrypoint IDs. For example, `transfer` on an `"ERC20"` interface at version `"1.0.0"` is `SHA256("ERC20::1::transfer")[0..8]`. [`ContractEntrypointID::from_u64`] and [`ContractEntrypointID::into_u64`] convert between the bytes and the big-endian `u64` the `Invoke` syscall takes.
 
