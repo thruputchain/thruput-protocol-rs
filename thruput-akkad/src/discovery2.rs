@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -78,28 +78,30 @@ pub struct BristleconeKnownQuorumSets {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait Discovery_Discovery2: Send + Sync {    
-    async fn discovery_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn discovery_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn discovery_update_quorums(&self, arg0 : BristleconeKnownQuorumSets) -> Result<BristleconeKnownQuorumSets, ::thruput_rpc_api::ProgramError>;
+    fn discovery_update_quorums(&self, arg0 : BristleconeKnownQuorumSets) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<BristleconeKnownQuorumSets>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct Discovery_Discovery2_Dispatcher {
-  inner: Box<dyn Discovery_Discovery2>,
+pub struct Discovery_Discovery2_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl Discovery_Discovery2_Dispatcher {
-  pub fn new(inner: Box<dyn Discovery_Discovery2>) -> Self {
+impl<__Handler: Discovery_Discovery2> Discovery_Discovery2_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for Discovery_Discovery2_Dispatcher {
+impl<__Handler: Discovery_Discovery2> ::thruput_rpc_api::RpcHandler for Discovery_Discovery2_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x3eef0707, 2)
     }

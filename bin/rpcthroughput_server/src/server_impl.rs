@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use thruput_rpc::{Data, blank_rpc_blank_rpc_v1};
 
 pub struct BlankRpcServer;
@@ -9,7 +8,7 @@ impl BlankRpcServer {
     }
 }
 
-#[async_trait]
+#[allow(refining_impl_trait)]
 impl blank_rpc_blank_rpc_v1 for BlankRpcServer {
     async fn null(&self) -> Result<(), ::thruput_rpc_driver::ProgramError> {
         // Simple null operation - just return success

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -89,28 +89,30 @@ pub struct SignedCatchupBlocksResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait Catchup_Catchup1: Send + Sync {    
-    async fn catchup_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn catchup_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn catchup_solicit(&self, arg0 : SignedCatchupBlocksRequest) -> Result<SignedCatchupBlocksResult, ::thruput_rpc_api::ProgramError>;
+    fn catchup_solicit(&self, arg0 : SignedCatchupBlocksRequest) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SignedCatchupBlocksResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct Catchup_Catchup1_Dispatcher {
-  inner: Box<dyn Catchup_Catchup1>,
+pub struct Catchup_Catchup1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl Catchup_Catchup1_Dispatcher {
-  pub fn new(inner: Box<dyn Catchup_Catchup1>) -> Self {
+impl<__Handler: Catchup_Catchup1> Catchup_Catchup1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for Catchup_Catchup1_Dispatcher {
+impl<__Handler: Catchup_Catchup1> ::thruput_rpc_api::RpcHandler for Catchup_Catchup1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x4321abcd, 1)
     }

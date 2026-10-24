@@ -80,7 +80,7 @@ akkads=(
 )
 
 specs=(
-  groundhog_contract_spec.x
+  contract_spec.x
 )
 
 
@@ -151,7 +151,7 @@ generate_trace() {
 generate_contract_spec() {
   proto=${1:?}
   package=${2:?}
-  name=thruput_contract_spec
+  name=$(basename "${proto}" .x)
   $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature std -o "${package}/src/${name}.rs" "${proto}"
 }
 

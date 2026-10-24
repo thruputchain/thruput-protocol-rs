@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -279,30 +279,32 @@ pub enum ViewGatewayBatchResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait ViewGateway_ViewGateway1: Send + Sync {    
-    async fn viewgateway_intro(&self, arg0 : ProtocolCommit) -> Result<ViewGatewayIntroOutcome, ::thruput_rpc_api::ProgramError>;
+    fn viewgateway_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayIntroOutcome>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> Result<ViewGatewayResult, ::thruput_rpc_api::ProgramError>;
+    fn viewgateway_view(&self, arg0 : TransactionViewQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn viewgateway_view_batch(&self, arg0 : ViewGatewayBatchQuery) -> Result<ViewGatewayBatchResult, ::thruput_rpc_api::ProgramError>;
+    fn viewgateway_view_batch(&self, arg0 : ViewGatewayBatchQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<ViewGatewayBatchResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct ViewGateway_ViewGateway1_Dispatcher {
-  inner: Box<dyn ViewGateway_ViewGateway1>,
+pub struct ViewGateway_ViewGateway1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl ViewGateway_ViewGateway1_Dispatcher {
-  pub fn new(inner: Box<dyn ViewGateway_ViewGateway1>) -> Self {
+impl<__Handler: ViewGateway_ViewGateway1> ViewGateway_ViewGateway1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for ViewGateway_ViewGateway1_Dispatcher {
+impl<__Handler: ViewGateway_ViewGateway1> ::thruput_rpc_api::RpcHandler for ViewGateway_ViewGateway1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x56475759, 1)
     }
@@ -422,6 +424,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for ViewGateway_Vi
 //
 
 impl ViewGatewayResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> ViewGatewayOutcome {
         match self {
             ViewGatewayResult::Default{ outcome } => (*outcome).into(),
@@ -432,6 +435,7 @@ impl ViewGatewayResult {
 }
 
 impl ViewGatewayBatchResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> ViewGatewayBatchOutcome {
         match self {
             ViewGatewayBatchResult::Default{ outcome } => (*outcome).into(),

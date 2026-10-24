@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -29,28 +29,30 @@ use ::serde::{{Serialize, Deserialize}};
 pub type Data = BytesM;
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait blank_rpc_blank_rpc_v1: Send + Sync {    
-    async fn null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn echo(&self, arg0 : Data) -> Result<Data, ::thruput_rpc_api::ProgramError>;
+    fn echo(&self, arg0 : Data) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<Data>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct blank_rpc_blank_rpc_v1_Dispatcher {
-  inner: Box<dyn blank_rpc_blank_rpc_v1>,
+pub struct blank_rpc_blank_rpc_v1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl blank_rpc_blank_rpc_v1_Dispatcher {
-  pub fn new(inner: Box<dyn blank_rpc_blank_rpc_v1>) -> Self {
+impl<__Handler: blank_rpc_blank_rpc_v1> blank_rpc_blank_rpc_v1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for blank_rpc_blank_rpc_v1_Dispatcher {
+impl<__Handler: blank_rpc_blank_rpc_v1> ::thruput_rpc_api::RpcHandler for blank_rpc_blank_rpc_v1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(3123124, 1)
     }

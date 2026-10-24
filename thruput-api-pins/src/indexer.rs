@@ -68,7 +68,8 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: ProtocolCommit,
-    ) -> Result<IndexerBlockExplorerIntroOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<IndexerBlockExplorerIntroOutcome>, ProgramError>
+    {
         t.indexer_block_explorer_intro(arg0).await
     }
     pub async fn trait_get_transaction_info<
@@ -76,7 +77,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: TransactionHash,
-    ) -> Result<TxInfoResult, ProgramError> {
+    ) -> Result<impl EncodesAs<TxInfoResult>, ProgramError> {
         t.get_transaction_info(arg0).await
     }
     pub async fn trait_get_block_by_height<
@@ -84,7 +85,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: BlockHeight,
-    ) -> Result<BlockLookupResult, ProgramError> {
+    ) -> Result<impl EncodesAs<BlockLookupResult>, ProgramError> {
         t.get_block_by_height(arg0).await
     }
     pub async fn trait_get_events<
@@ -92,7 +93,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: EventQuery,
-    ) -> Result<EventPageResult, ProgramError> {
+    ) -> Result<impl EncodesAs<EventPageResult>, ProgramError> {
         t.get_events(arg0).await
     }
     pub async fn trait_get_transactions<
@@ -100,7 +101,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: TransactionQuery,
-    ) -> Result<TransactionPageResult, ProgramError> {
+    ) -> Result<impl EncodesAs<TransactionPageResult>, ProgramError> {
         t.get_transactions(arg0).await
     }
     pub async fn trait_get_transactions_by_address<
@@ -108,7 +109,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: AddressTransactionQuery,
-    ) -> Result<TransactionRefPageResult, ProgramError> {
+    ) -> Result<impl EncodesAs<TransactionRefPageResult>, ProgramError> {
         t.get_transactions_by_address(arg0).await
     }
     pub async fn trait_get_transactions_by_block<
@@ -116,7 +117,7 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: BlockTransactionQuery,
-    ) -> Result<TransactionRefPageResult, ProgramError> {
+    ) -> Result<impl EncodesAs<TransactionRefPageResult>, ProgramError> {
         t.get_transactions_by_block(arg0).await
     }
 }
@@ -142,14 +143,15 @@ pub mod event_indexer {
     >(
         t: &T,
         arg0: EventIndexerPullRequest,
-    ) -> Result<EventIndexerPullResult, ProgramError> {
+    ) -> Result<impl EncodesAs<EventIndexerPullResult>, ProgramError> {
         t.event_indexer_pull_next(arg0).await
     }
     pub async fn trait_event_indexer_pull_tx_failures<
         T: EventIndexer_EventIndexer1,
     >(
         t: &T,
-    ) -> Result<IndexerTxFailureNoticeBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<IndexerTxFailureNoticeBatch>, ProgramError>
+    {
         t.event_indexer_pull_tx_failures().await
     }
 }

@@ -22,13 +22,13 @@ pub mod blank_rpc {
 
     pub async fn trait_null<T: blank_rpc_blank_rpc_v1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.null().await
     }
     pub async fn trait_echo<T: blank_rpc_blank_rpc_v1>(
         t: &T,
         arg0: Data,
-    ) -> Result<Data, ProgramError> {
+    ) -> Result<impl EncodesAs<Data>, ProgramError> {
         t.echo(arg0).await
     }
 }

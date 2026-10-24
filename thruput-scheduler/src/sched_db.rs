@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -87,12 +87,14 @@ pub struct NativeTokensTransferredChunk {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is called by a db shard to introduce itself to the
     // system.
 
-    async fn scheddb_intro_shard(&self, arg0 : ShardCard) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scheddb_intro_shard(&self, arg0 : ShardCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
         // Retired numbers, never to be reused, so that a peer built against one
     // fails to dispatch rather than misparse a newer payload:
     //   2: the unchunked form of procedure 4, a block's deltas in one
@@ -107,23 +109,23 @@ pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is cal
     // shards the mempool completes the block once every registered shard has
     // sent its run's last chunk.
 
-    async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : NativeTokensTransferredChunk) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scheddb_native_tokens_transferred_chunk(&self, arg0 : NativeTokensTransferredChunk) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedDb_SchedDb1_Dispatcher {
-  inner: Box<dyn SchedDb_SchedDb1>,
+pub struct SchedDb_SchedDb1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl SchedDb_SchedDb1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedDb_SchedDb1>) -> Self {
+impl<__Handler: SchedDb_SchedDb1> SchedDb_SchedDb1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for SchedDb_SchedDb1_Dispatcher {
+impl<__Handler: SchedDb_SchedDb1> ::thruput_rpc_api::RpcHandler for SchedDb_SchedDb1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x7ee79998, 1)
     }

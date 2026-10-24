@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -192,16 +192,18 @@ pub enum DbTipResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait DbSched_DbSched1: Send + Sync {    
-    async fn dbsched_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn dbsched_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> Result<DbAddressAuthDataBatchResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_get_address_auth_data(&self, arg0 : BlockID, arg1 : ContractAddressBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbAddressAuthDataBatchResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_native_token_ages(&self, arg0 : ContractAddressBatch) -> Result<NativeTokenAgeResults, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_get_native_token_ages(&self, arg0 : ContractAddressBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<NativeTokenAgeResults>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_write_native_token_ages(&self, arg0 : NativeTokenAgeBatch) -> Result<DbSchedResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_write_native_token_ages(&self, arg0 : NativeTokenAgeBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Examples of valid call sequences to the db:
     //
     // dbsched_create_snapshot
@@ -219,14 +221,14 @@ pub trait DbSched_DbSched1: Send + Sync {
     // that would be created if the parent block commits.
     // Parent block must be closed.
 
-    async fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> Result<DbSchedResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_create_snapshot(&self, arg0 : BlockID, arg1 : BlockID, arg2 : BlockExecutionMode) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Commits the block with the specified block ID to disk. Should only be
     // called for e.g. finalized blocks. At a minimum, the block must be closed
     // before being committed. Any BlockID that is not a descendant of this
     // block will return an error if accessed. This BlockID must be the
     // immediate descendant of the most recently committed block.
 
-    async fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<DbBlockResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_commit_snapshot(&self, arg0 : BlockID, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbBlockResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Call to close a block. This indicates that no more transactions
     // will be added to this block. The block must have been previously opened
     // with dbsched_create_snapshot().
@@ -234,30 +236,30 @@ pub trait DbSched_DbSched1: Send + Sync {
     // Error if the block has been pruned or contains an item in an invalid
     // state (due to e.g. a block validation failure).
 
-    async fn dbsched_close_snapshot(&self, arg0 : BlockID) -> Result<DbBlockResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_close_snapshot(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbBlockResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Call to abandon a block.
 
-    async fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> Result<DbSchedResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_abandon_snapshot(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> Result<DbSchedResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_load_genesis_configuration(&self, arg0 : GenesisConfiguration, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbSchedResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbsched_get_tip(&self) -> Result<DbTipResult, ::thruput_rpc_api::ProgramError>;
+    fn dbsched_get_tip(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbTipResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct DbSched_DbSched1_Dispatcher {
-  inner: Box<dyn DbSched_DbSched1>,
+pub struct DbSched_DbSched1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl DbSched_DbSched1_Dispatcher {
-  pub fn new(inner: Box<dyn DbSched_DbSched1>) -> Self {
+impl<__Handler: DbSched_DbSched1> DbSched_DbSched1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for DbSched_DbSched1_Dispatcher {
+impl<__Handler: DbSched_DbSched1> ::thruput_rpc_api::RpcHandler for DbSched_DbSched1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x88887ee7, 1)
     }
@@ -566,6 +568,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for DbSched_DbSche
 //
 
 impl NativeTokenAgeResult {
+    #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
             NativeTokenAgeResult::Default{ result } => (*result).into(),
@@ -576,6 +579,7 @@ impl NativeTokenAgeResult {
 }
 
 impl DbAddressAuthDataBatchResult {
+    #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbAddressAuthDataBatchResult::Default{ result } => (*result).into(),
@@ -586,6 +590,7 @@ impl DbAddressAuthDataBatchResult {
 }
 
 impl DbBlockResult {
+    #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbBlockResult::Default{ result } => (*result).into(),
@@ -596,6 +601,7 @@ impl DbBlockResult {
 }
 
 impl DbTipResult {
+    #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbTipResult::Default{ result } => (*result).into(),

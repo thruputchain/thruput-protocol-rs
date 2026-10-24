@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -26,16 +26,18 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait EventExecutor_EventExecutor1: Send + Sync {    
-    async fn eventexecutor_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn eventexecutor_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
         // Called when executor opens a block - increments executor handle count
 
-    async fn eventexecutor_open_block(&self, arg0 : BlockID) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventexecutor_open_block(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
         // Called when executor closes its handle to a block - decrements count
 
-    async fn eventexecutor_close_block(&self, arg0 : BlockID) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventexecutor_close_block(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
         // Best-effort report that a transaction was excluded from the proposal:
     // it failed nondeterministically during 2-phase commit, or the executor
     // refused one of its contract attachments. The event server places this
@@ -44,7 +46,7 @@ pub trait EventExecutor_EventExecutor1: Send + Sync {
     // the commit pipeline). The executor sends fire-and-forget and ignores
     // the result.
 
-    async fn eventexecutor_report_tx_failure(&self, arg0 : TransactionHash, arg1 : TxFailureDiagnostic) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventexecutor_report_tx_failure(&self, arg0 : TransactionHash, arg1 : TxFailureDiagnostic) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
         // A transaction should not call this more than once
     // We don't technically need the transaction ID here;
     // however, this will help later with tracing RPC calls through the system,
@@ -56,23 +58,23 @@ pub trait EventExecutor_EventExecutor1: Send + Sync {
     // it from the SignedTransaction it executed plus the nondeterministic data
     // it produced; in validation mode it is the ProposedTransaction it was given.
 
-    async fn eventexecutor_emit_event(&self, arg0 : BlockID, arg1 : TransactionID, arg2 : TxEventLog, arg3 : ProposedTransaction) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventexecutor_emit_event(&self, arg0 : BlockID, arg1 : TransactionID, arg2 : TxEventLog, arg3 : ProposedTransaction) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct EventExecutor_EventExecutor1_Dispatcher {
-  inner: Box<dyn EventExecutor_EventExecutor1>,
+pub struct EventExecutor_EventExecutor1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl EventExecutor_EventExecutor1_Dispatcher {
-  pub fn new(inner: Box<dyn EventExecutor_EventExecutor1>) -> Self {
+impl<__Handler: EventExecutor_EventExecutor1> EventExecutor_EventExecutor1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for EventExecutor_EventExecutor1_Dispatcher {
+impl<__Handler: EventExecutor_EventExecutor1> ::thruput_rpc_api::RpcHandler for EventExecutor_EventExecutor1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x8aa81224, 1)
     }
@@ -256,37 +258,39 @@ pub enum EventBlockResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait EventSched_EventSched1: Send + Sync {    
-    async fn eventsched_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn eventsched_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn eventsched_open_block(&self, arg0 : BlockID) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventsched_open_block(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn eventsched_close_block(&self, arg0 : BlockID, arg1 : BlockHeight) -> Result<EventBlockResult, ::thruput_rpc_api::ProgramError>;
+    fn eventsched_close_block(&self, arg0 : BlockID, arg1 : BlockHeight) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventBlockResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Called after finalization. Durably publishes the event/indexer record;
     // the record becomes pullable as soon as this call succeeds, even if the
     // local HogDB commit running alongside it has not completed yet.
 
-    async fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn eventsched_abandon_block(&self, arg0 : BlockID) -> Result<RPCError, ::thruput_rpc_api::ProgramError>;
+    fn eventsched_abandon_block(&self, arg0 : BlockID) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct EventSched_EventSched1_Dispatcher {
-  inner: Box<dyn EventSched_EventSched1>,
+pub struct EventSched_EventSched1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl EventSched_EventSched1_Dispatcher {
-  pub fn new(inner: Box<dyn EventSched_EventSched1>) -> Self {
+impl<__Handler: EventSched_EventSched1> EventSched_EventSched1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for EventSched_EventSched1_Dispatcher {
+impl<__Handler: EventSched_EventSched1> ::thruput_rpc_api::RpcHandler for EventSched_EventSched1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x8aa81226, 1)
     }
@@ -460,6 +464,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for EventSched_Eve
 //
 
 impl EventBlockResult {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             EventBlockResult::Default{ error } => (*error).into(),

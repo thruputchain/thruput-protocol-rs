@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -98,7 +98,6 @@ pub struct ContractVectorType {
     pub max_len: u32,
 }
 
-/// Mirrors #[repr(i32)] enum ContractType in sdk_rs/groundhog-contract-spec/src/model.rs
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -345,8 +344,8 @@ pub struct ContractEnumDef {
     pub variants: VecM<ContractEnumVariant>,
 }
 
-/// Mirrors #[repr(i32)] enum ContractUnionCaseType in sdk_rs/groundhog-contract-spec/src/model.rs
-/// (goxdr requires enum tags unique across the namespace; names prefixed for uniqueness.)
+/// Case names carry a `UnionCase` prefix because enum tags share one namespace,
+/// and ContractTypeKind already has `Void` and `Tuple`.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -495,6 +494,7 @@ pub struct ContractSpec {
 //
 
 impl ContractType {
+    #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractTypeKind {
         match self {
             
@@ -504,6 +504,7 @@ impl ContractType {
 }
 
 impl ContractUnionCaseType {
+    #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractUnionCaseKind {
         match self {
             
@@ -513,6 +514,7 @@ impl ContractUnionCaseType {
 }
 
 impl ContractTypeDef {
+    #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractTypeDefKind {
         match self {
             

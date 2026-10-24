@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -54,28 +54,30 @@ pub struct IntroExecResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedExec_SchedExec1: Send + Sync {        // [schedexec_intro_exec] is called by an executor to introduce itself to
     // the system.
 
-    async fn schedexec_intro_exec(&self, arg0 : ExecCard) -> Result<IntroExecResult, ::thruput_rpc_api::ProgramError>;
+    fn schedexec_intro_exec(&self, arg0 : ExecCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IntroExecResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedExec_SchedExec1_Dispatcher {
-  inner: Box<dyn SchedExec_SchedExec1>,
+pub struct SchedExec_SchedExec1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl SchedExec_SchedExec1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedExec_SchedExec1>) -> Self {
+impl<__Handler: SchedExec_SchedExec1> SchedExec_SchedExec1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for SchedExec_SchedExec1_Dispatcher {
+impl<__Handler: SchedExec_SchedExec1> ::thruput_rpc_api::RpcHandler for SchedExec_SchedExec1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x7ee79997, 1)
     }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -169,28 +169,30 @@ pub enum EventActivationResult {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SchedEvent_SchedEvent1: Send + Sync {    
-    async fn schedevent_prepare_event(&self, arg0 : EventCard) -> Result<EventPrepareResult, ::thruput_rpc_api::ProgramError>;
+    fn schedevent_prepare_event(&self, arg0 : EventCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventPrepareResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn schedevent_activate_event(&self, arg0 : EventRegistrationSnapshot) -> Result<EventActivationResult, ::thruput_rpc_api::ProgramError>;
+    fn schedevent_activate_event(&self, arg0 : EventRegistrationSnapshot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventActivationResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SchedEvent_SchedEvent1_Dispatcher {
-  inner: Box<dyn SchedEvent_SchedEvent1>,
+pub struct SchedEvent_SchedEvent1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl SchedEvent_SchedEvent1_Dispatcher {
-  pub fn new(inner: Box<dyn SchedEvent_SchedEvent1>) -> Self {
+impl<__Handler: SchedEvent_SchedEvent1> SchedEvent_SchedEvent1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for SchedEvent_SchedEvent1_Dispatcher {
+impl<__Handler: SchedEvent_SchedEvent1> ::thruput_rpc_api::RpcHandler for SchedEvent_SchedEvent1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x7ee79996, 1)
     }
@@ -283,6 +285,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for SchedEvent_Sch
 //
 
 impl EventPrepareResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> EventPrepareOutcome {
         match self {
             EventPrepareResult::Default{ outcome } => (*outcome).into(),
@@ -293,6 +296,7 @@ impl EventPrepareResult {
 }
 
 impl EventActivationResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> EventActivationOutcome {
         match self {
             EventActivationResult::Default{ outcome } => (*outcome).into(),

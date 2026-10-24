@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -68,59 +68,61 @@ impl core::fmt::Display for SCPValidationLevel {
 
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait SCP_Handle_SCP_Handle1: Send + Sync {    
-    async fn scp_handle_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
         // hooks
 
 
-    async fn scp_handle_emit_envelope(&self, arg0 : SCPEnvelope) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_emit_envelope(&self, arg0 : SCPEnvelope) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_validate_ballot_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPValidationLevel, ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_validate_ballot_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPValidationLevel>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_validate_nomination_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPValidationLevel, ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_validate_nomination_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPValidationLevel>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_extract_valid_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<SCPOptValue, ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_extract_valid_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptValue>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_combine_candidates(&self, arg0 : SCPSlotIndex, arg1 : SCPValues) -> Result<SCPOptValue, ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_combine_candidates(&self, arg0 : SCPSlotIndex, arg1 : SCPValues) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptValue>, ::thruput_rpc_api::ProgramError>> + Send;
         // notifications
 
 
-    async fn scp_handle_value_externalized(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_value_externalized(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_nominating_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_nominating_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_updated_candidate_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_updated_candidate_value(&self, arg0 : SCPSlotIndex, arg1 : SCPValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_started_ballot_proto(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_started_ballot_proto(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_accepted_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_accepted_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_confirmed_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_confirmed_ballot_prepared(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_accepted_commit(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_accepted_commit(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn scp_handle_ballot_did_hear_from_quorum(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_ballot_did_hear_from_quorum(&self, arg0 : SCPSlotIndex, arg1 : SCPBallot) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
         // utils
 
-    async fn scp_handle_get_quorum_set(&self, arg0 : SCPHash) -> Result<SCPOptQuorumSet, ::thruput_rpc_api::ProgramError>;
+    fn scp_handle_get_quorum_set(&self, arg0 : SCPHash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<SCPOptQuorumSet>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct SCP_Handle_SCP_Handle1_Dispatcher {
-  inner: Box<dyn SCP_Handle_SCP_Handle1>,
+pub struct SCP_Handle_SCP_Handle1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl SCP_Handle_SCP_Handle1_Dispatcher {
-  pub fn new(inner: Box<dyn SCP_Handle_SCP_Handle1>) -> Self {
+impl<__Handler: SCP_Handle_SCP_Handle1> SCP_Handle_SCP_Handle1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for SCP_Handle_SCP_Handle1_Dispatcher {
+impl<__Handler: SCP_Handle_SCP_Handle1> ::thruput_rpc_api::RpcHandler for SCP_Handle_SCP_Handle1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x9aa92002, 1)
     }

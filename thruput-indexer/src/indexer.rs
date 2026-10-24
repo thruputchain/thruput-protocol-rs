@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -529,50 +529,52 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
-    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::thruput_rpc_api::ProgramError>;
+    fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IndexerBlockExplorerIntroOutcome>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::thruput_rpc_api::ProgramError>;
+    fn get_transaction_info(&self, arg0 : TransactionHash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TxInfoResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // The canonical consensus value for a retained, indexed height. Heights
     // outside ready indexed coverage return BlockNotFound. An index that is
     // not ready or has an internal failure returns an x23 SYSTEM_ERR, not a miss.
 
-    async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::thruput_rpc_api::ProgramError>;
+    fn get_block_by_height(&self, arg0 : BlockHeight) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<BlockLookupResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Paginated, filtered events query.  A candidate event matches
     // iff it matches at least one EventFilter in the request (OR
     // across filters, AND within each filter).  Supports the wallet
     // "transfers to OR from me" case in a single call.
 
-    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPageResult, ::thruput_rpc_api::ProgramError>;
+    fn get_events(&self, arg0 : EventQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Paginated transactions, whole-chain, in block order.
 
-    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPageResult, ::thruput_rpc_api::ProgramError>;
+    fn get_transactions(&self, arg0 : TransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Paginated transaction refs whose root invoked address == the query
     // address (account transaction history).  Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPageResult, ::thruput_rpc_api::ProgramError>;
+    fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionRefPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPageResult, ::thruput_rpc_api::ProgramError>;
+    fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionRefPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
-  inner: Box<dyn IndexerBlockExplorer_IndexerBlockExplorer1>,
+pub struct IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
-  pub fn new(inner: Box<dyn IndexerBlockExplorer_IndexerBlockExplorer1>) -> Self {
+impl<__Handler: IndexerBlockExplorer_IndexerBlockExplorer1> IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
+impl<__Handler: IndexerBlockExplorer_IndexerBlockExplorer1> ::thruput_rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x4321aaaa, 1)
     }
@@ -1186,28 +1188,30 @@ pub struct IndexerTxFailureNotice {
 pub type IndexerTxFailureNoticeBatch = VecM::<IndexerTxFailureNotice, 256>;
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::thruput_rpc_api::ProgramError>;
+    fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventIndexerPullResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::thruput_rpc_api::ProgramError>;
+    fn event_indexer_pull_tx_failures(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IndexerTxFailureNoticeBatch>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct EventIndexer_EventIndexer1_Dispatcher {
-  inner: Box<dyn EventIndexer_EventIndexer1>,
+pub struct EventIndexer_EventIndexer1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl EventIndexer_EventIndexer1_Dispatcher {
-  pub fn new(inner: Box<dyn EventIndexer_EventIndexer1>) -> Self {
+impl<__Handler: EventIndexer_EventIndexer1> EventIndexer_EventIndexer1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher {
+impl<__Handler: EventIndexer_EventIndexer1> ::thruput_rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x4321aaac, 1)
     }
@@ -1300,6 +1304,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for EventIndexer_E
 //
 
 impl TxInfoResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> TxInfoOutcome {
         match self {
             TxInfoResult::Default{ outcome } => (*outcome).into(),
@@ -1310,6 +1315,7 @@ impl TxInfoResult {
 }
 
 impl BlockLookupResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> BlockLookupOutcome {
         match self {
             BlockLookupResult::Default{ outcome } => (*outcome).into(),
@@ -1320,6 +1326,7 @@ impl BlockLookupResult {
 }
 
 impl EventPageResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             EventPageResult::Default{ outcome } => (*outcome).into(),
@@ -1330,6 +1337,7 @@ impl EventPageResult {
 }
 
 impl TransactionPageResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             TransactionPageResult::Default{ outcome } => (*outcome).into(),
@@ -1340,6 +1348,7 @@ impl TransactionPageResult {
 }
 
 impl TransactionRefPageResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             TransactionRefPageResult::Default{ outcome } => (*outcome).into(),
@@ -1350,6 +1359,7 @@ impl TransactionRefPageResult {
 }
 
 impl IndexerProgress {
+    #[allow(clippy::match_single_binding)]
     pub fn state(&self) -> IndexerProgressState {
         match self {
             IndexerProgress::Default{ state } => (*state).into(),
@@ -1360,6 +1370,7 @@ impl IndexerProgress {
 }
 
 impl IndexerEpochResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerEpochOutcome {
         match self {
             IndexerEpochResult::Default{ outcome,..} => (*outcome).into(),
@@ -1370,6 +1381,7 @@ impl IndexerEpochResult {
 }
 
 impl IndexerBlockApplyResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerBlockApplyOutcome {
         match self {
             IndexerBlockApplyResult::Default{ outcome,..} => (*outcome).into(),
@@ -1380,6 +1392,7 @@ impl IndexerBlockApplyResult {
 }
 
 impl EventIndexerPullResult {
+    #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> EventIndexerPullOutcome {
         match self {
             EventIndexerPullResult::Default{ outcome,..} => (*outcome).into(),

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -174,28 +174,30 @@ pub struct DogwoodDeliveryEnvelope {
 }
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait Dogwood_Dogwood1: Send + Sync {    
-    async fn dogwood_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn dogwood_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dogwood_deliver(&self, arg0 : DogwoodDeliveryEnvelope) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn dogwood_deliver(&self, arg0 : DogwoodDeliveryEnvelope) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct Dogwood_Dogwood1_Dispatcher {
-  inner: Box<dyn Dogwood_Dogwood1>,
+pub struct Dogwood_Dogwood1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl Dogwood_Dogwood1_Dispatcher {
-  pub fn new(inner: Box<dyn Dogwood_Dogwood1>) -> Self {
+impl<__Handler: Dogwood_Dogwood1> Dogwood_Dogwood1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for Dogwood_Dogwood1_Dispatcher {
+impl<__Handler: Dogwood_Dogwood1> ::thruput_rpc_api::RpcHandler for Dogwood_Dogwood1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x8ee82002, 1)
     }
