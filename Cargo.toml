@@ -61,22 +61,23 @@ rpc_api = { package = "thruput-rpc-api", version = "0.3.2" }
 rpc_driver = { package = "thruput-rpc-driver", version = "0.16.1" }
 schemars = { version = "1" }
 
+# Build and test share one profile so `cargo build` and `cargo test` reuse
+# the same dependency artifacts instead of compiling everything twice.
+# Use --release for optimized binaries.
 [profile.dev]
-opt-level = 3
-overflow-checks = false
-debug = false
-strip = "none"
-panic = "abort"
-lto = true
-codegen-units = 1
+# On Linux, leave the DWARF in per-object .dwo files instead of copying it into
+# every linked binary. Debuggers and backtraces still find it; macOS already
+# defaults to this.
+split-debuginfo = "unpacked"
 
-[profile.test]
-# settings inherited from profile.dev
-opt-level = 0
-overflow-checks = true
-debug = true
-strip = "none"
-debug-assertions = true
+# Dependencies keep file:line for backtraces; only stepping into their source
+# in a debugger degrades. Workspace crates keep full debuginfo.
+[profile.dev.package."*"]
+debug = "line-tables-only"
+
+# Build scripts and proc macros are build-time machinery nobody debugs.
+[profile.dev.build-override]
+debug = false
 
 [profile.release]
 opt-level = 3
