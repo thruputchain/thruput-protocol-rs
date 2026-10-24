@@ -74,7 +74,8 @@ Downstream indexers can then efficiently filter events by "all transfers from ad
 ### Error Conditions
 
 The `LogEvent` syscall returns an error if:
-- **Data too large**: Event data exceeds `kMaxEventLength` (1024 bytes)
+- **Event too large**: The serialized event (32 bytes per supplied topic plus the data) is longer than `kMaxEventLength` (1024 bytes)
+- **Too many events**: The transaction has already emitted `kMaxEventsPerTransaction` (1000) events
 - **Invalid topic sequence**: Topics are not provided in a continuous sequence (e.g., topic0 and topic2 without topic1)
 
 ## Event Storage
@@ -85,8 +86,11 @@ During block execution, the system accumulates events from all transactions. At 
 
 Events are organized per-transaction using the `TxEventLog` structure:
 
-- **Key**: `tx_hash` - SHA256 hash of the XDR-encoded `Transaction`
-- **Value**: Array of `TxEmittedEvent` structures (all events emitted by that transaction)
+- `tx_hash`: SHA256 hash of the XDR-encoded `Transaction`
+- `exec_result`: The transaction's execution result
+- `root_output`: The output of the transaction's root frame: the return buffer on success, the abort buffer on a deterministic revert, or `Fault` when no root output was produced
+- `gas_consumed`: The gas the whole transaction consumed, including the pre-execution validation of attached contracts (the transaction's gas limit on an out-of-gas fault)
+- `events`: All `TxEmittedEvent` structures emitted by that transaction, at most `kMaxEventsPerTransaction`
 
 This organization allows efficient retrieval of all events emitted by a specific transaction.
 
@@ -101,7 +105,7 @@ Each individual event contains:
 
 Within each block:
 1. As transactions execute, their events are collected into `TxEventLog` entries
-2. These entries are inserted into a merkle-patricia trie, keyed by `tx_hash`
+2. These entries are inserted into a merkle-patricia trie, keyed by `tx_hash`. Each leaf's value is the rest of `XDR(TxEventLog)` followed by `XDR(NondeterministicProposalData)`, which binds the nondeterministic inputs used during execution to the root
 3. At block close, the trie is finalized and a root hash is computed
 4. This root hash becomes part of the block's cryptographic commitment
 
@@ -111,6 +115,7 @@ The `IdentifiedEvent` structure is not constructed during the main transaction w
 
 It provides complete identification of a unique event:
 - `tx_hash`: The transaction that emitted the event
+- `block_height`: The height of the block that contains the transaction
 - `sequence_number`: Distinguishes multiple events from the same transaction (0-indexed)
 - `emitted_event`: The complete event data
 
@@ -124,4 +129,4 @@ When designing events for your contracts:
 2. **32-byte topics**: Each topic must be exactly 32 bytes - use addresses, hashes, or hash larger values
 3. **Topic ordering**: Topic0 is typically an event signature, topic1 and topic2 are the primary filterable fields
 4. **Remaining data**: Pass any additional event data (beyond topics) in the `data` parameter to LogEvent
-5. **Total size limit**: The complete event (topics + data) must be under 1024 bytes (`kMaxEventLength`)
+5. **Total size limit**: The complete event (topics + data) must be at most 1024 bytes (`kMaxEventLength`)

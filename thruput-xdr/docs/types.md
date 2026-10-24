@@ -6,6 +6,6 @@ This module contains the core type definitions for the Thruput protocol, includi
 
 The `types` module provides the foundational types used throughout the Thruput protocol. These types are generated from the XDR specification in `protocol/types.x` and include:
 
-- **Cryptographic types**: Ed25519 keys and signatures
+- **Cryptographic types**: Ed25519 and ML-DSA-65 (FIPS 204) keys and signatures
 - **Storage types**: Contract addresses, storage keys, and hashes
 - **Protocol primitives**: Time points, gas amounts, block heights

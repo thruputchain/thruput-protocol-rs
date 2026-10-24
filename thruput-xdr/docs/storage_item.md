@@ -10,7 +10,7 @@ applied if the transaction commits.
 
 These conflict resolution rules are the key idea that makes Thruput unique.
 These are the tools that contract developers can use to express what kinds of concurrency are and are not allowed
-in their contract.  Thruput does not understand what happens inside of a WebAssembly contract.  Instead,
+in their contract.  Thruput does not understand what happens inside a contract's code.  Instead,
 contracts tell Thruput, via these typed interfaces, how Thruput should resolve concurrent modifications to their storage items.
 
 ## Storage Items
@@ -47,7 +47,7 @@ StorageItem::kItemTypeNonnegativeInt {
 }
 ```
 
-This type is used both for general contract data at `kStorageKeyTypeContractData` keys and for tracking free native token balances at `kStorageKeyTypeFreeNativeTokenBalance` keys.
+This type is used both for general contract data at `StorageKeyType::ContractData` keys and for tracking free native token balances at `StorageKeyType::FreeNativeTokenBalance` keys.
 
 The nonnegative integer type supports efficient parallel updates through addition operations that can be merged without conflicts (see `StorageDelta` below).
 
@@ -88,14 +88,14 @@ StorageItem::kItemTypeReplayCacheData {
 }
 ```
 
-This type can only exist at storage key `kStorageKeyTypeReplayCache`. Each transaction has an embedded `Uniquifier`, which
+This type can only exist at storage key `StorageKeyType::ReplayCache`. Each transaction has an embedded `Uniquifier`, which
 is inserted into the set if the transaction commits. The system automatically garbage collects expired uniquifiers.
 
-**Storage key restriction**: Only at `kStorageKeyTypeReplayCache`
+**Storage key restriction**: Only at `StorageKeyType::ReplayCache`
 
 ### kItemTypeAuthData
 
-The authorization data for an address, including public keys and nonce configuration.
+The authorization data for an address: its public keys and the weight required to authorize a transaction.
 
 ```rust,ignore
 StorageItem::kItemTypeAuthData {
@@ -103,11 +103,11 @@ StorageItem::kItemTypeAuthData {
 }
 ```
 
-This type can only exist at storage key `kStorageKeyTypeAddressAuthData`. 
+This type can only exist at storage key `StorageKeyType::AuthData`. 
 Through this data item, a contract tells the rest of the Thruput system under what conditions is a transaction allowed to originate
 at that contract's address (and i.e. use that address's gas).
 
-**Storage key restriction**: Only at `kStorageKeyTypeAddressAuthData`
+**Storage key restriction**: Only at `StorageKeyType::AuthData`
 
 ### kItemTypeDeployedContractHash
 
@@ -119,9 +119,9 @@ StorageItem::kItemTypeDeployedContractHash {
 }
 ```
 
-This type can only exist at storage key `kStorageKeyTypeAddressMetadata`. It records what contract code is deployed at an address.
+This type can only exist at storage key `StorageKeyType::Metadata`. It records what contract code is deployed at an address.
 
-**Storage key restriction**: Only at `kStorageKeyTypeAddressMetadata`
+**Storage key restriction**: Only at `StorageKeyType::Metadata`
 
 ## Storage Deltas
 
@@ -233,9 +233,8 @@ Modifies the authorization data for an address.
 ```rust,ignore
 StorageDelta::kDeltaTypeAuthDataChange {
     auth_data_change: AuthDataChangeArgs {
-        auth_data_change_signers: VecM<AuthDataChangeSigner>,
-        new_nonce_config: Option<NonceConfig>,
-        new_gas_config_change: Option<GasConfigChange>,
+        auth_data_change_signers: VecM<AuthDataChangeSigner, kMaxSigners>,
+        new_required_weight: Option<Weight>,
     }
 }
 ```
@@ -283,13 +282,13 @@ StorageDelta::kDeltaTypeConsumeUniquifier {
 
 Deltas can have flags that modify their behavior:
 
-### kStorageDeltaFlagNone
+### `StorageDeltaFlags::None`
 
 No special flags (default).
 
-### kStorageDeltaFlagExclusiveLock
+### `StorageDeltaFlags::ExclusiveLock`
 
-Forces the delta to acquire an exclusive lock on the storage key, overriding normal conflict resolution rules. When this flag is set, the delta conflicts with any other delta targeting the same key, regardless of type-specific merge rules.
+Forces the delta to acquire an exclusive lock on the storage key, overriding normal conflict resolution rules. When this flag is set, the delta conflicts with any other delta targeting the same key, regardless of type-specific merge rules. Not every key type supports it; setting it on one that does not fails the commit with `ExclusiveLockDenied`.
 
 ```rust,ignore
 pub type StorageDeltaFlagSet = u32;  // Bitset of flags

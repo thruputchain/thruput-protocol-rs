@@ -32,6 +32,6 @@ Each module in `thruput-xdr` can have a corresponding markdown file in this dire
 ## Notes
 
 - Documentation files are written in Markdown and support standard Rust doc comment features
-- Links to types use the format `[TypeName](struct.TypeName.html)` or `[TypeName](enum.TypeName.html)`
+- Links to types use intra-doc link syntax, e.g. ``[`Transaction`]``, resolved from the module that includes the file
 - These files are included at compile time, so changes require recompilation to appear in `cargo doc`
 
