@@ -1,6 +1,6 @@
 //! Signature pins for `thruput_view` (generated: src/view_gateway.rs).
 
-use rpc_api::{ProgramError, RpcError};
+use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_view::{
     ViewGateway_ViewGateway1, ViewGateway_ViewGateway1_Client,
     ViewGatewayBatchQuery, ViewGatewayBatchResult, ViewGatewayIntroOutcome,

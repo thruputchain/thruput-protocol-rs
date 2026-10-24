@@ -19,8 +19,10 @@ pub use view_gateway::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rpc_api::{ProgVers, ProgramError, RpcError, RpcResponse, RpcSender};
     use std::sync::{Arc, Mutex};
+    use thruput_rpc_api::{
+        ProgVers, ProgramError, RpcError, RpcResponse, RpcSender,
+    };
     use xdr_common::{BytesM, StringM, VecM};
 
     const VIEW_GATEWAY_PROG_VERS: ProgVers = ProgVers::new(0x56475759, 1);
@@ -97,21 +99,21 @@ mod tests {
     }
 
     struct LocalSender {
-        handler: Arc<dyn rpc_api::RpcHandler>,
+        handler: Arc<dyn thruput_rpc_api::RpcHandler>,
         calls: Arc<Mutex<Vec<(ProgVers, u32)>>>,
     }
 
     #[async_trait::async_trait]
     impl RpcSender for LocalSender {
-        fn call_buf(&self) -> rpc_api::CallBuf {
-            rpc_api::CallBuf::new()
+        fn call_buf(&self) -> thruput_rpc_api::CallBuf {
+            thruput_rpc_api::CallBuf::new()
         }
 
         async fn send_call(
             &self,
             progvers: ProgVers,
             proc: u32,
-            call: rpc_api::CallBuf,
+            call: thruput_rpc_api::CallBuf,
         ) -> Result<RpcResponse, RpcError> {
             self.calls
                 .lock()

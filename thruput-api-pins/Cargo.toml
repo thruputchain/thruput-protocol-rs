@@ -21,5 +21,5 @@ thruput-scp = { workspace = true }
 thruput-trace = { workspace = true }
 thruput-view = { workspace = true }
 thruput-xdr = { workspace = true }
-rpc_api = { workspace = true }
+thruput-rpc-api = { workspace = true }
 xdrs = { workspace = true }

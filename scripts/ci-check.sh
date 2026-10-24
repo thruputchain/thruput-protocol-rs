@@ -24,7 +24,7 @@ kargo() {
 
 # Make sure the cross-compilation targets used by CI are installed.
 rustup target add riscv32im-unknown-none-elf
-rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component rustfmt
+rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component rustfmt --component miri --component rust-src
 
 g=(-p thruput-xdr)
 
@@ -60,6 +60,11 @@ kargo build -p thruput-spec
 kargo build -p thruput-view
 
 cargo +"$NIGHTLY_TOOLCHAIN" fmt --check
+
+# The generated client's call path under Miri: over a LoopbackLink the reply
+# is decoded on the handler's task, into the client's future, while it waits.
+MIRIFLAGS="-Zmiri-disable-isolation" \
+    cargo +"$NIGHTLY_TOOLCHAIN" "${LOCKED[@]}" miri test -p thruput-rpc --test call_path
 
 kargo clippy -p thruput-xdr-macros -- -D warnings
 

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -134,29 +134,29 @@ pub type PendingTxCount = i64;
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait SchedGateway_SchedGateway1: Send + Sync {    
-    async fn schedgateway_intro(&self, arg0 : ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::rpc_api::ProgramError>;
+    async fn schedgateway_intro(&self, arg0 : ProtocolCommit) -> Result<SchedGatewayIntroOutcome, ::thruput_rpc_api::ProgramError>;
         // Submit wallet-originated transactions and return the request-scoped,
     // exact-cardinality admission outcomes described above. A malformed batch
     // fails at the RPC level because its transactions cannot be identified
     // reliably. Admission does not imply commitment; clients learn about commit
     // via getTransactionStatus / getTransactionReceipt polling.
 
-    async fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::ProgramError>;
+    async fn schedgateway_submit_tx_batch(&self, arg0 : ParallelSignedTransactionBatch) -> Result<SchedGatewaySubmitOutcomeBatch, ::thruput_rpc_api::ProgramError>;
         // Current committed tip.  Returns kRPCNotFound when the node
     // has no committed block yet (pre-genesis bootstrap).
 
-    async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::ProgramError>;
+    async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::thruput_rpc_api::ProgramError>;
         // Lookup in-flight (not-yet-committed) transactions by TransactionHash, returning
     // whichever signing of each body is cached.
     // Returns one OptSignedTransaction per input hash (same order).
 
-    async fn schedgateway_lookup_tx(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::rpc_api::ProgramError>;
+    async fn schedgateway_lookup_tx(&self, arg0 : TransactionHashBatch) -> Result<OptSignedTransactionBatch, ::thruput_rpc_api::ProgramError>;
         // Number of transactions currently pending in the mempool.
 
-    async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::ProgramError>;
+    async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::thruput_rpc_api::ProgramError>;
         // Returns one pending or recent outcome per input hash (same order).
 
-    async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::ProgramError>;
+    async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : TransactionHashBatch) -> Result<SchedulerTransactionOutcomeBatch, ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -172,142 +172,196 @@ impl SchedGateway_SchedGateway1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee7aaaa, 1)
+impl ::thruput_rpc_api::RpcHandler for SchedGateway_SchedGateway1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x7ee7aaaa, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // schedgateway_intro
             0 => {
                 let args: (ProtocolCommit, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_intro(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_intro(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // schedgateway_submit_tx_batch
             1 => {
                 let args: (ParallelSignedTransactionBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_submit_tx_batch(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_submit_tx_batch(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // schedgateway_get_tip
             2 => {
                 let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_get_tip().await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_get_tip().await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // schedgateway_lookup_tx
             3 => {
                 let args: (TransactionHashBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_lookup_tx(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_lookup_tx(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // schedgateway_pending_tx_count
             4 => {
                 let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_pending_tx_count().await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_pending_tx_count().await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // schedgateway_lookup_transaction_outcomes
             5 => {
                 let args: (TransactionHashBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.schedgateway_lookup_transaction_outcomes(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.schedgateway_lookup_transaction_outcomes(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct SchedGateway_SchedGateway1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl SchedGateway_SchedGateway1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee7aaaa, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x7ee7aaaa, 1)
     }
-    pub async fn schedgateway_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<SchedGatewayIntroOutcome, ::rpc_api::RpcError> {
+    pub async fn schedgateway_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<SchedGatewayIntroOutcome, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 0, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_submit_tx_batch(&self, arg0 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<SchedGatewaySubmitOutcomeBatch, ::rpc_api::RpcError> {
+    pub async fn schedgateway_submit_tx_batch(&self, arg0 : &(impl xdrs::EncodesAs<ParallelSignedTransactionBatch> + ?Sized)) -> Result<SchedGatewaySubmitOutcomeBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 1, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::rpc_api::RpcError> {
+    pub async fn schedgateway_get_tip(&self) -> Result<ExpectedDBTip, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_lookup_tx(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::rpc_api::RpcError> {
+    pub async fn schedgateway_lookup_tx(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<OptSignedTransactionBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 3, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::rpc_api::RpcError> {
+    pub async fn schedgateway_pending_tx_count(&self) -> Result<PendingTxCount, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 4, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<SchedulerTransactionOutcomeBatch, ::rpc_api::RpcError> {
+    pub async fn schedgateway_lookup_transaction_outcomes(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHashBatch> + ?Sized)) -> Result<SchedulerTransactionOutcomeBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 5, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for SchedGateway_SchedGateway1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for SchedGateway_SchedGateway1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }

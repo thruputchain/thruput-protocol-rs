@@ -1,6 +1,6 @@
 //! Signature pins for `thruput_scp` (generated: src/scp_control.rs, src/scp_handle.rs).
 
-use rpc_api::{ProgramError, RpcError};
+use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_scp::{
     SCP_Control_SCP_Control1, SCP_Control_SCP_Control1_Client,
     SCP_Handle_SCP_Handle1, SCP_Handle_SCP_Handle1_Client, SCPBallot,

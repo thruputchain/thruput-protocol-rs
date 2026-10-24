@@ -13,4 +13,4 @@ path = "src/main.rs"
 thruput-rpc = { workspace = true }
 tokio = { version = "1.0", features = ["full"] }
 async-trait = "0.1"
-rpc_driver = { workspace = true }
+thruput-rpc-driver = { workspace = true }

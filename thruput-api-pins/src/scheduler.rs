@@ -3,7 +3,7 @@
 //! src/exec_sched.rs, src/loadgen.rs, src/repair.rs, src/sched_coord.rs,
 //! src/sched_db.rs, src/sched_event.rs, src/sched_exec.rs, src/sched_gateway.rs).
 
-use rpc_api::{ProgramError, RpcError};
+use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_scheduler::{
     AuthCard, AuthDB_AuthDB1, AuthDB_AuthDB1_Client, AuthErrorCode,
     AuthErrorCodeBatch, AuthMempool_AuthMempool1,

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -87,14 +87,14 @@ pub trait AuthMempool_AuthMempool1: Send + Sync {        // Verify a list of tra
     // i.e. the block height of the block that produced the snapshot auth data against which
     // the transactions are to be verified.
 
-    async fn authmempool_verify_transactions(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCodeBatch, ::rpc_api::ProgramError>;
+    async fn authmempool_verify_transactions(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCodeBatch, ::thruput_rpc_api::ProgramError>;
         // Verify a batch of transactions.  This version returns a single result for the batch,
     // i.e. are all correct or is there at least one invalid transaction?
     // This version should be called when validating a proposal, in which if even one
     // transaction is invalid then the whole block can be rejected.
     // This version can use batch verification to speed up the verification.
 
-    async fn authmempool_verify_batch(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCode, ::rpc_api::ProgramError>;
+    async fn authmempool_verify_batch(&self, arg0 : BlockHeight, arg1 : SignedTransactionBatch) -> Result<AuthErrorCode, ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -110,70 +110,88 @@ impl AuthMempool_AuthMempool1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for AuthMempool_AuthMempool1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa7, 1)
+impl ::thruput_rpc_api::RpcHandler for AuthMempool_AuthMempool1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa7, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // authmempool_verify_transactions
             2 => {
                 let args: (BlockHeight, SignedTransactionBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authmempool_verify_transactions(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.authmempool_verify_transactions(args.0, args.1).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // authmempool_verify_batch
             3 => {
                 let args: (BlockHeight, SignedTransactionBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authmempool_verify_batch(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.authmempool_verify_batch(args.0, args.1).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct AuthMempool_AuthMempool1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl AuthMempool_AuthMempool1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa7, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa7, 1)
     }
-    pub async fn authmempool_verify_transactions(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SignedTransactionBatch> + ?Sized)) -> Result<AuthErrorCodeBatch, ::rpc_api::RpcError> {
+    pub async fn authmempool_verify_transactions(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SignedTransactionBatch> + ?Sized)) -> Result<AuthErrorCodeBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn authmempool_verify_batch(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SignedTransactionBatch> + ?Sized)) -> Result<AuthErrorCode, ::rpc_api::RpcError> {
+    pub async fn authmempool_verify_batch(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<SignedTransactionBatch> + ?Sized)) -> Result<AuthErrorCode, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 3, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for AuthMempool_AuthMempool1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for AuthMempool_AuthMempool1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
@@ -232,7 +250,7 @@ pub trait AuthDB_AuthDB1: Send + Sync {        // Retired number, never to be re
     // Deliver one chunk of a committed block's auth-data changes to the auth
     // server.
 
-    async fn authdb_forward_key_changes_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
+    async fn authdb_forward_key_changes_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -248,52 +266,61 @@ impl AuthDB_AuthDB1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for AuthDB_AuthDB1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa8, 1)
+impl ::thruput_rpc_api::RpcHandler for AuthDB_AuthDB1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa8, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // authdb_forward_key_changes_chunk
             2 => {
                 let args: (KeyChangeChunk, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authdb_forward_key_changes_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.authdb_forward_key_changes_chunk(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct AuthDB_AuthDB1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl AuthDB_AuthDB1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa8, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa8, 1)
     }
-    pub async fn authdb_forward_key_changes_chunk(&self, arg0 : &(impl xdrs::EncodesAs<KeyChangeChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn authdb_forward_key_changes_chunk(&self, arg0 : &(impl xdrs::EncodesAs<KeyChangeChunk> + ?Sized)) -> Result<(), ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for AuthDB_AuthDB1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for AuthDB_AuthDB1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
@@ -418,14 +445,14 @@ pub trait DBAuth_DBAuth1: Send + Sync {        // Get the auth data for a single
     // If some block concurrently commits which modifies the auth data,
     // then this call can return kDBAuthStaleBlockHeight.
 
-    async fn authdb_get_auth_data(&self, arg0 : BlockHeight, arg1 : ContractAddress) -> Result<DBAuthResult, ::rpc_api::ProgramError>;
+    async fn authdb_get_auth_data(&self, arg0 : BlockHeight, arg1 : ContractAddress) -> Result<DBAuthResult, ::thruput_rpc_api::ProgramError>;
         // Get the auth data for a batch of addresses.
 
-    async fn authdb_get_auth_data_batch(&self, arg0 : BlockHeight, arg1 : ContractAddressBatch) -> Result<DBAuthResultBatch, ::rpc_api::ProgramError>;
+    async fn authdb_get_auth_data_batch(&self, arg0 : BlockHeight, arg1 : ContractAddressBatch) -> Result<DBAuthResultBatch, ::thruput_rpc_api::ProgramError>;
         // Introduce an auth server to a db shard,
     // and subscribe to updates to auth data
 
-    async fn dbauth_intro(&self, arg0 : AuthCard) -> Result<DBAuthIntroResult, ::rpc_api::ProgramError>;
+    async fn dbauth_intro(&self, arg0 : AuthCard) -> Result<DBAuthIntroResult, ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -441,88 +468,115 @@ impl DBAuth_DBAuth1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for DBAuth_DBAuth1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa9, 1)
+impl ::thruput_rpc_api::RpcHandler for DBAuth_DBAuth1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa9, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // authdb_get_auth_data
             0 => {
                 let args: (BlockHeight, ContractAddress, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authdb_get_auth_data(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.authdb_get_auth_data(args.0, args.1).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // authdb_get_auth_data_batch
             1 => {
                 let args: (BlockHeight, ContractAddressBatch, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.authdb_get_auth_data_batch(args.0, args.1).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.authdb_get_auth_data_batch(args.0, args.1).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // dbauth_intro
             2 => {
                 let args: (AuthCard, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.dbauth_intro(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.dbauth_intro(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct DBAuth_DBAuth1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl DBAuth_DBAuth1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aa9, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aa9, 1)
     }
-    pub async fn authdb_get_auth_data(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ContractAddress> + ?Sized)) -> Result<DBAuthResult, ::rpc_api::RpcError> {
+    pub async fn authdb_get_auth_data(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ContractAddress> + ?Sized)) -> Result<DBAuthResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 0, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn authdb_get_auth_data_batch(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<DBAuthResultBatch, ::rpc_api::RpcError> {
+    pub async fn authdb_get_auth_data_batch(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized), arg1 : &(impl xdrs::EncodesAs<ContractAddressBatch> + ?Sized)) -> Result<DBAuthResultBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0, arg1), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 1, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn dbauth_intro(&self, arg0 : &(impl xdrs::EncodesAs<AuthCard> + ?Sized)) -> Result<DBAuthIntroResult, ::rpc_api::RpcError> {
+    pub async fn dbauth_intro(&self, arg0 : &(impl xdrs::EncodesAs<AuthCard> + ?Sized)) -> Result<DBAuthIntroResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for DBAuth_DBAuth1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for DBAuth_DBAuth1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
@@ -593,7 +647,7 @@ pub enum IntroAuthResult {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait MempoolAuth_MempoolAuth1: Send + Sync {    
-    async fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> Result<IntroAuthResult, ::rpc_api::ProgramError>;
+    async fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> Result<IntroAuthResult, ::thruput_rpc_api::ProgramError>;
         // Retired number, never to be reused, so that a peer built against it
     // fails to dispatch rather than misparse a newer payload:
     //   1: mempoolauth_auth_data_changed(BlockHeight, KeyChangeBatch), a
@@ -603,7 +657,7 @@ pub trait MempoolAuth_MempoolAuth1: Send + Sync {
     // server to the mempool. The auth server sends a height's run only after
     // it has applied the whole height itself.
 
-    async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::rpc_api::ProgramError>;
+    async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> Result<(), ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -619,70 +673,88 @@ impl MempoolAuth_MempoolAuth1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for MempoolAuth_MempoolAuth1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aaa, 1)
+impl ::thruput_rpc_api::RpcHandler for MempoolAuth_MempoolAuth1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aaa, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // mempoolauth_intro_auth
             0 => {
                 let args: (AuthCard, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.mempoolauth_intro_auth(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.mempoolauth_intro_auth(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // mempoolauth_auth_data_changed_chunk
             2 => {
                 let args: (KeyChangeChunk, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.mempoolauth_auth_data_changed_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.mempoolauth_auth_data_changed_chunk(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct MempoolAuth_MempoolAuth1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl MempoolAuth_MempoolAuth1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x8aa87aaa, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x8aa87aaa, 1)
     }
-    pub async fn mempoolauth_intro_auth(&self, arg0 : &(impl xdrs::EncodesAs<AuthCard> + ?Sized)) -> Result<IntroAuthResult, ::rpc_api::RpcError> {
+    pub async fn mempoolauth_intro_auth(&self, arg0 : &(impl xdrs::EncodesAs<AuthCard> + ?Sized)) -> Result<IntroAuthResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 0, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : &(impl xdrs::EncodesAs<KeyChangeChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn mempoolauth_auth_data_changed_chunk(&self, arg0 : &(impl xdrs::EncodesAs<KeyChangeChunk> + ?Sized)) -> Result<(), ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for MempoolAuth_MempoolAuth1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for MempoolAuth_MempoolAuth1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }

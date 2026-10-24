@@ -1,9 +1,9 @@
 mod server_impl;
 
-use rpc_driver::ServiceMap;
 use server_impl::BlankRpcServer;
 use std::error::Error;
 use thruput_rpc::blank_rpc_blank_rpc_v1_Dispatcher;
+use thruput_rpc_driver::ServiceMap;
 use tokio::net::TcpListener;
 
 #[tokio::main]
@@ -20,7 +20,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let addr = listener.local_addr().unwrap();
     println!("RPC Throughput Server listening on {}", addr);
 
-    let server = rpc_driver::RpcServer::new(listener, service_map);
+    let server = thruput_rpc_driver::RpcServer::new(listener, service_map);
 
     let _ = server.start().await;
 

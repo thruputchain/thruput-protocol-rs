@@ -11,7 +11,7 @@ impl BlankRpcServer {
 
 #[async_trait]
 impl blank_rpc_blank_rpc_v1 for BlankRpcServer {
-    async fn null(&self) -> Result<(), ::rpc_driver::ProgramError> {
+    async fn null(&self) -> Result<(), ::thruput_rpc_driver::ProgramError> {
         // Simple null operation - just return success
         Ok(())
     }
@@ -19,7 +19,7 @@ impl blank_rpc_blank_rpc_v1 for BlankRpcServer {
     async fn echo(
         &self,
         data: Data,
-    ) -> Result<Data, ::rpc_driver::ProgramError> {
+    ) -> Result<Data, ::thruput_rpc_driver::ProgramError> {
         // Echo the data back
         Ok(data)
     }

@@ -51,5 +51,5 @@ features = ["std", "xdrs", "schema"]
 workspace = true
 features = ["derive", "alloc", "schemars"]
 
-[dependencies.rpc_api]
+[dependencies.thruput-rpc-api]
 workspace = true

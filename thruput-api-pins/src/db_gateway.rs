@@ -1,10 +1,10 @@
 //! Signature pins for `thruput_db_gateway` (generated: src/db_gateway.rs).
 
-use rpc_api::{ProgramError, RpcError};
 use thruput_db_gateway::{
     AddressAndKeyBatch, DbGateway_DbGateway1, DbGateway_DbGateway1_Client,
     DbGatewayConfigResult, DbGatewayIntroOutcome, DbGatewayResult,
 };
+use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_xdr::network::ProtocolCommit;
 use xdrs::EncodesAs;
 

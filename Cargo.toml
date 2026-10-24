@@ -49,16 +49,17 @@ thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.60.0", registr
 thruput-view = { path = "thruput-view", version = "=0.60.0", registry = "thruput" }
 hogexec-internal = { path = "hogexec-internal", version = "=0.60.0", registry = "thruput" }
 thruput-spec = { path = "thruput-spec", version = "=0.60.0", registry = "thruput" }
-# Published on crates.io under thruput-* package names; the dependency keys keep
-# the library names that the generated bindings and xdr-derive output use.
-xdrs = { package = "thruput-xdrs", version = "0.16.1", default-features = false, features = [
+# Published on crates.io under thruput-* package names. The xdrs dependency keys
+# keep the library names that the generated bindings and xdr-derive output use;
+# the RPC crates' library names are their package names.
+xdrs = { package = "thruput-xdrs", version = "0.17.0", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { package = "thruput-xdr-common", version = "0.16.1" }
-xdr-derive = { package = "thruput-xdr-derive", version = "0.16.1" }
-rpc_api = { package = "thruput-rpc-api", version = "0.3.2" }
-rpc_driver = { package = "thruput-rpc-driver", version = "0.16.1" }
+xdr-common = { package = "thruput-xdr-common", version = "0.17.0" }
+xdr-derive = { package = "thruput-xdr-derive", version = "0.17.0" }
+thruput-rpc-api = { version = "0.4.0" }
+thruput-rpc-driver = { version = "0.17.1" }
 schemars = { version = "1" }
 
 # Build and test share one profile so `cargo build` and `cargo test` reuse
