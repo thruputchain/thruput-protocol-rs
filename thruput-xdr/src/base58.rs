@@ -11,10 +11,16 @@ use core::fmt;
 #[non_exhaustive]
 pub enum Error {
     /// The output buffer cannot hold the encoded text or decoded bytes.
+    ///
+    /// [`decode_fixed`] also reports input that decodes to more than its
+    /// `N` bytes this way, since it decodes into an `N`-byte buffer.
     BufferTooSmall,
     /// The input contains a character outside the case-sensitive alphabet.
     InvalidEncoding,
     /// Decoding succeeded but the identifier has the wrong byte length.
+    ///
+    /// [`decode_fixed`] reports only too-short input this way; too-long
+    /// input is [`Error::BufferTooSmall`].
     InvalidLength {
         /// Required byte length.
         expected: usize,
@@ -83,6 +89,9 @@ pub fn decode_into(text: &str, output: &mut [u8]) -> Result<usize, Error> {
 }
 
 /// Decode an identifier of exactly `N` bytes, with no heap allocation.
+///
+/// Input that decodes to fewer than `N` bytes is [`Error::InvalidLength`];
+/// input that decodes to more is [`Error::BufferTooSmall`].
 ///
 /// ```
 /// use thruput_xdr::base58::decode_fixed;

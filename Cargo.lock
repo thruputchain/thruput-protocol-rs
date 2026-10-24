@@ -618,6 +618,7 @@ dependencies = [
  "serde_json",
  "thruput-coordinator",
  "thruput-rpc-api",
+ "thruput-rpc-driver",
  "thruput-scp",
  "thruput-trace",
  "thruput-xdr",

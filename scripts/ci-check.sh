@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check that the repo is CI-clean.
-# This is the single source of truth for CI checks:
+# This is the single source of truth for the build job's checks:
 # .github/workflows/build.yml runs this script, and
 # scripts/workflow-check.sh is a thin wrapper around it.
 

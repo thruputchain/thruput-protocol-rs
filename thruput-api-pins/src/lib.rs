@@ -14,8 +14,8 @@
 //!
 //! This crate is `publish = false`. The publish workflow compiles it
 //! explicitly (`cargo check -p thruput-api-pins`) because the publish
-//! dry-run action skips private crates; regular CI compiles it via
-//! `cargo test --workspace`.
+//! dry-run action skips private crates; regular CI compiles it via the
+//! workspace-root `cargo test --features=std` in `scripts/ci-check.sh`.
 
 pub mod akkad;
 pub mod coordinator;

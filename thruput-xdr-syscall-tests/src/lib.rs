@@ -1,6 +1,6 @@
-// Mock implementation of syscall_wrapper_impl for testing
-// This provides a way to capture and verify syscall arguments
-// Uses thread-local storage so tests can run in parallel without interference
+//! Mock implementation of syscall_wrapper_impl for testing
+//! This provides a way to capture and verify syscall arguments
+//! Uses thread-local storage so tests can run in parallel without interference
 
 use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
@@ -57,6 +57,8 @@ thread_local! {
     static MOCK_HANDLER: RefCell<Option<Arc<MockSyscallHandler>>> = RefCell::new(None);
 }
 
+/// Installs `handler` for syscalls made on the current thread. Syscalls on a
+/// thread with no handler succeed without being recorded.
 pub fn set_mock_handler(handler: Arc<MockSyscallHandler>) {
     MOCK_HANDLER.with(|h| {
         *h.borrow_mut() = Some(handler);
@@ -68,7 +70,8 @@ fn get_mock_handler() -> Option<Arc<MockSyscallHandler>> {
 }
 
 /// Mock implementation of syscall_wrapper_impl
-/// This is called by the generated syscall code
+/// This is called by `thruput_syscall::syscall_wrapper` under the
+/// `syscalls_mock` feature, which the generated syscall code calls
 #[no_mangle]
 pub extern "C-unwind" fn syscall_wrapper_impl(
     syscall_no: u64,

@@ -29,12 +29,12 @@
 
 /// The integer width of a single syscall argument slot.
 ///
-/// Syscall arguments are passed as pointer-width words. On `riscv32` each slot
-/// is a 32-bit value, carried in a register (`a1..a7`) across the `ecall` trap.
-/// On native targets each slot is a 64-bit value, wide enough to carry a host
-/// pointer (this is the path used by `native_exec` in the SDK). This happens to
-/// equal the platform pointer width, but is spelled out explicitly so the
-/// syscall ABI is decoupled from any incidental use of `usize` elsewhere.
+/// On `riscv32` each slot is a 32-bit value, carried in a register (`a1..a7`)
+/// across the `ecall` trap. On every other target each slot is a 64-bit
+/// value, wide enough to carry a 64-bit host pointer (this is the path used
+/// by `native_exec` in the SDK). The width is spelled out per target rather
+/// than taken from `usize`, so the syscall ABI is decoupled from any
+/// incidental use of `usize` elsewhere.
 ///
 /// This is a pure type alias with no dispatch dependency, so it is always
 /// defined — even on targets where `syscall_wrapper` is unavailable.

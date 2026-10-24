@@ -4,35 +4,23 @@ This module defines the authorization configuration stored at each address. This
 
 ## Overview
 
-The `address_auth` module provides types and structures for managing address authorization, including public key configuration, gas sponsorship permissions, and nonce management. These types are generated from the XDR specification in `protocol/address_auth.x` and include:
+The `address_auth` module provides types and structures for managing address authorization. These types are generated from the XDR specification in `protocol/address_auth.x` and include:
 
 - **Public key configuration**: Multi-signature key management with weights
-- **Gas permissions**: Configurable gas sponsorship with limits and multi-sig requirements
-- **Nonce configuration**: Transaction nonce management rules
-- **Address authorization data**: Complete authorization configuration for an address
+- **Address authorization data**: [`AddressAuthData`], the complete authorization configuration for an address: its keys, their weights, and the weight a transaction needs
 
 ## Key Concepts
 
-In Thruput, every address can originate transactions and can be configured with multiple signing keys, weighted multi-signature requirements, and gas sponsorship permissions.
+In Thruput, every address can originate transactions and can be configured with multiple signing keys and a weighted multi-signature requirement.
 
 Unlike the common blockchain model (as in, for example, Ethereum), in which there is an explicit demarcation between so-called "externally owned addresses" (EOAs) that can initiate transactions but have no associated code, and "contract addresses", which hold invocable code but cannot initiate transactions, Thruput treats every address uniformly: all addresses can both hold a contract and initiate a transaction.
 
 ## Public Key Configuration
 
-Each address can have up to `kMaxSigners` public keys, each with an associated weight for multi-signature authorization. When verifying weighted auth claims, weights from signing keys are accumulated and compared against the required threshold.
+Each address can have up to `kMaxSigners` public keys, each with an associated weight for multi-signature authorization. When verifying a `kSourceAddressAuthData` auth claim, weights from signing keys are accumulated and compared against the required threshold.
 
-## Gas Sponsorship
-
-Gas sponsorship permissions allow an address to grant specific keys permission to spend gas on behalf of the address, with configurable limits and multi-signature requirements. This allows separation of concerns (e.g., sponsored gas vs contract owner management).
-
-## Nonce Management
-
-The nonce configuration specifies which keys can increment the nonce and what weight is required. This controls transaction ordering and replay protection.
+Replay protection does not live here: every transaction carries a [`Uniquifier`], which the address's replay cache records.
 
 ## Default Initialization
 
-When an address is first created (e.g., from a public key hash), the auth data is initialized with defaults:
-- Required weight: 1
-- Accepted keys: All key slots initially acceptable (0xFFFFFFFF)
-- Initial key ID: 0 (the public key used to derive the address is installed as key 0)
-
+An address has no `AddressAuthData` until a change registers a key or writes a threshold for it. Until then, the only claim that can authorize a transaction from it is `kPubkeySignature`, for an address derived from a standalone public key; that claim's single signature uses key ID 0 (`kDefaultNewAddressKeyID`). The first change creates the auth data with required weight 1 (`kDefaultNewAddressRequiredWeight`) unless it writes a threshold of its own.
