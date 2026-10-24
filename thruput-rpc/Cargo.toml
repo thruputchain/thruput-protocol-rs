@@ -39,7 +39,7 @@ features = ["derive"]
 workspace = true
 features = ["derive", "int128", "alloc", "schemars"]
 
-[dependencies.rpc_api]
+[dependencies.thruput-rpc-api]
 workspace = true
 
 [dependencies.xdr-common]

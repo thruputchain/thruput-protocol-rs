@@ -1,9 +1,9 @@
 //! Signature pins for `thruput_rpc` (generated: src/test_rpc.rs).
 
-use rpc_api::{ProgramError, RpcError};
 use thruput_rpc::{
     Data, blank_rpc_blank_rpc_v1, blank_rpc_blank_rpc_v1_Client,
 };
+use thruput_rpc_api::{ProgramError, RpcError};
 use xdrs::EncodesAs;
 
 pub mod blank_rpc {

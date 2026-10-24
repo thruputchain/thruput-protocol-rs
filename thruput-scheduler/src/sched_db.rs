@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -92,7 +92,7 @@ pub struct NativeTokensTransferredChunk {
 pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is called by a db shard to introduce itself to the
     // system.
 
-    async fn scheddb_intro_shard(&self, arg0 : ShardCard) -> Result<(), ::rpc_api::ProgramError>;
+    async fn scheddb_intro_shard(&self, arg0 : ShardCard) -> Result<(), ::thruput_rpc_api::ProgramError>;
         // Retired numbers, never to be reused, so that a peer built against one
     // fails to dispatch rather than misparse a newer payload:
     //   2: the unchunked form of procedure 4, a block's deltas in one
@@ -107,7 +107,7 @@ pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is cal
     // shards the mempool completes the block once every registered shard has
     // sent its run's last chunk.
 
-    async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : NativeTokensTransferredChunk) -> Result<(), ::rpc_api::ProgramError>;
+    async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : NativeTokensTransferredChunk) -> Result<(), ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -123,70 +123,88 @@ impl SchedDb_SchedDb1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for SchedDb_SchedDb1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee79998, 1)
+impl ::thruput_rpc_api::RpcHandler for SchedDb_SchedDb1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x7ee79998, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // scheddb_intro_shard
             1 => {
                 let args: (ShardCard, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.scheddb_intro_shard(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.scheddb_intro_shard(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // scheddb_native_tokens_transferred_chunk
             4 => {
                 let args: (NativeTokensTransferredChunk, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.scheddb_native_tokens_transferred_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.scheddb_native_tokens_transferred_chunk(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct SchedDb_SchedDb1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl SchedDb_SchedDb1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x7ee79998, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x7ee79998, 1)
     }
-    pub async fn scheddb_intro_shard(&self, arg0 : &(impl xdrs::EncodesAs<ShardCard> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scheddb_intro_shard(&self, arg0 : &(impl xdrs::EncodesAs<ShardCard> + ?Sized)) -> Result<(), ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 1, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : &(impl xdrs::EncodesAs<NativeTokensTransferredChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : &(impl xdrs::EncodesAs<NativeTokensTransferredChunk> + ?Sized)) -> Result<(), ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 4, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for SchedDb_SchedDb1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for SchedDb_SchedDb1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }

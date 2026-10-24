@@ -14,15 +14,15 @@
 //! The [`ChunkRecord`] impls here take the two records apart into height,
 //! [`ChunkPosition`] and items. A server implementing `SchedDb1`, `AuthDB1`
 //! or `MempoolAuth1` (over which the auth server forwards `KeyChangeChunk`
-//! runs to the mempool) hands every record it receives to an
-//! `rpc_driver::ChunkRunAssembler`, which returns the height's whole message
+//! runs to the mempool) hands every record it receives to a
+//! `thruput_rpc_driver::ChunkRunAssembler`, which returns the height's whole message
 //! once every chunk of its run is in, with the parts read as one sequence;
 //! hogd's C++ mempool and auth server do the same with
-//! `hogd/base/chunk_run_assembler.h`. This crate depends on `rpc_api` alone,
+//! `hogd/base/chunk_run_assembler.h`. This crate depends on `thruput_rpc_api` alone,
 //! so the assembler is not named here:
 //!
 //! ```
-//! use rpc_driver::{ChunkRunAssembler, ProgramError};
+//! use thruput_rpc_driver::{ChunkRunAssembler, ProgramError};
 //! use thruput_scheduler::{Delta, NativeTokensTransferredChunk};
 //! use thruput_xdr::types::BlockHeight;
 //! use xdrs::VecM;
@@ -50,7 +50,7 @@
 //! }
 //! ```
 
-use rpc_api::{ChunkPosition, ChunkRecord};
+use thruput_rpc_api::{ChunkPosition, ChunkRecord};
 use thruput_xdr::types::BlockHeight;
 use xdrs::VecM;
 

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0c2c59fb8ebeb0d6d37a1dad9cf88c4f22187ce6
+// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -532,31 +532,31 @@ impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {    
-    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::ProgramError>;
+    async fn indexer_block_explorer_intro(&self, arg0 : ProtocolCommit) -> Result<IndexerBlockExplorerIntroOutcome, ::thruput_rpc_api::ProgramError>;
     
-    async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::rpc_api::ProgramError>;
+    async fn get_transaction_info(&self, arg0 : TransactionHash) -> Result<TxInfoResult, ::thruput_rpc_api::ProgramError>;
         // The canonical consensus value for a retained, indexed height. Heights
     // outside ready indexed coverage return BlockNotFound. An index that is
     // not ready or has an internal failure returns an x23 SYSTEM_ERR, not a miss.
 
-    async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::rpc_api::ProgramError>;
+    async fn get_block_by_height(&self, arg0 : BlockHeight) -> Result<BlockLookupResult, ::thruput_rpc_api::ProgramError>;
         // Paginated, filtered events query.  A candidate event matches
     // iff it matches at least one EventFilter in the request (OR
     // across filters, AND within each filter).  Supports the wallet
     // "transfers to OR from me" case in a single call.
 
-    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPageResult, ::rpc_api::ProgramError>;
+    async fn get_events(&self, arg0 : EventQuery) -> Result<EventPageResult, ::thruput_rpc_api::ProgramError>;
         // Paginated transactions, whole-chain, in block order.
 
-    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPageResult, ::rpc_api::ProgramError>;
+    async fn get_transactions(&self, arg0 : TransactionQuery) -> Result<TransactionPageResult, ::thruput_rpc_api::ProgramError>;
         // Paginated transaction refs whose root invoked address == the query
     // address (account transaction history).  Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
+    async fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> Result<TransactionRefPageResult, ::thruput_rpc_api::ProgramError>;
         // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
-    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPageResult, ::rpc_api::ProgramError>;
+    async fn get_transactions_by_block(&self, arg0 : BlockTransactionQuery) -> Result<TransactionRefPageResult, ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -572,160 +572,223 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x4321aaaa, 1)
+impl ::thruput_rpc_api::RpcHandler for IndexerBlockExplorer_IndexerBlockExplorer1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x4321aaaa, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // indexer_block_explorer_intro
             0 => {
                 let args: (ProtocolCommit, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.indexer_block_explorer_intro(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.indexer_block_explorer_intro(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_transaction_info
             1 => {
                 let args: (TransactionHash, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transaction_info(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_block_by_height
             2 => {
                 let args: (BlockHeight, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_block_by_height(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_block_by_height(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_events
             3 => {
                 let args: (EventQuery, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_events(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_events(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_transactions
             4 => {
                 let args: (TransactionQuery, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_transactions(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_transactions_by_address
             5 => {
                 let args: (AddressTransactionQuery, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_transactions_by_address(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions_by_address(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // get_transactions_by_block
             6 => {
                 let args: (BlockTransactionQuery, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.get_transactions_by_block(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.get_transactions_by_block(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct IndexerBlockExplorer_IndexerBlockExplorer1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x4321aaaa, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x4321aaaa, 1)
     }
-    pub async fn indexer_block_explorer_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<IndexerBlockExplorerIntroOutcome, ::rpc_api::RpcError> {
+    pub async fn indexer_block_explorer_intro(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<IndexerBlockExplorerIntroOutcome, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 0, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 0, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transaction_info(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHash> + ?Sized)) -> Result<TxInfoResult, ::rpc_api::RpcError> {
+    pub async fn get_transaction_info(&self, arg0 : &(impl xdrs::EncodesAs<TransactionHash> + ?Sized)) -> Result<TxInfoResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 1, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_block_by_height(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<BlockLookupResult, ::rpc_api::RpcError> {
+    pub async fn get_block_by_height(&self, arg0 : &(impl xdrs::EncodesAs<BlockHeight> + ?Sized)) -> Result<BlockLookupResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 2, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_events(&self, arg0 : &(impl xdrs::EncodesAs<EventQuery> + ?Sized)) -> Result<EventPageResult, ::rpc_api::RpcError> {
+    pub async fn get_events(&self, arg0 : &(impl xdrs::EncodesAs<EventQuery> + ?Sized)) -> Result<EventPageResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 3, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 3, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionQuery> + ?Sized)) -> Result<TransactionPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions(&self, arg0 : &(impl xdrs::EncodesAs<TransactionQuery> + ?Sized)) -> Result<TransactionPageResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 4, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 4, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 5, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 5, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::rpc_api::RpcError> {
+    pub async fn get_transactions_by_block(&self, arg0 : &(impl xdrs::EncodesAs<BlockTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 6, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 6, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for IndexerBlockExplorer_IndexerBlockExplorer1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for IndexerBlockExplorer_IndexerBlockExplorer1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }
@@ -1126,9 +1189,9 @@ pub type IndexerTxFailureNoticeBatch = VecM::<IndexerTxFailureNotice, 256>;
 #[allow(non_camel_case_types)]
 #[async_trait::async_trait]
 pub trait EventIndexer_EventIndexer1: Send + Sync {    
-    async fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::rpc_api::ProgramError>;
+    async fn event_indexer_pull_next(&self, arg0 : EventIndexerPullRequest) -> Result<EventIndexerPullResult, ::thruput_rpc_api::ProgramError>;
     
-    async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_api::ProgramError>;
+    async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::thruput_rpc_api::ProgramError>;
 }
 
 
@@ -1144,70 +1207,88 @@ impl EventIndexer_EventIndexer1_Dispatcher {
 }
 
 #[async_trait::async_trait]
-impl ::rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher {
-    fn prog_vers(&self) -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x4321aaac, 1)
+impl ::thruput_rpc_api::RpcHandler for EventIndexer_EventIndexer1_Dispatcher {
+    fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x4321aaac, 1)
     }
-    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::rpc_api::RpcError> {
+    async fn dispatch(&self, proc: u32, data: &[u8]) -> Result<Vec<u8>, ::thruput_rpc_api::RpcError> {
         match proc {
             // event_indexer_pull_next
             10 => {
                 let args: (EventIndexerPullRequest, ) =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_pull_next(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.event_indexer_pull_next(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             // event_indexer_pull_tx_failures
             11 => {
                 let args: () =
-                    xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.event_indexer_pull_tx_failures().await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
-                xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.event_indexer_pull_tx_failures().await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
-            _ => Err(::rpc_api::RpcError::InvalidProcedure),
+            _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
         }
     }
 }
 
 #[derive(Clone)]
 pub struct EventIndexer_EventIndexer1_Client {
-    handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>,
+    handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>,
 }
 
 impl EventIndexer_EventIndexer1_Client {
-    pub fn new(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+    pub fn new(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self { handle }
     }
 
-    fn prog_vers() -> ::rpc_api::ProgVers {
-        ::rpc_api::ProgVers::new(0x4321aaac, 1)
+    fn prog_vers() -> ::thruput_rpc_api::ProgVers {
+        ::thruput_rpc_api::ProgVers::new(0x4321aaac, 1)
     }
-    pub async fn event_indexer_pull_next(&self, arg0 : &(impl xdrs::EncodesAs<EventIndexerPullRequest> + ?Sized)) -> Result<EventIndexerPullResult, ::rpc_api::RpcError> {
+    pub async fn event_indexer_pull_next(&self, arg0 : &(impl xdrs::EncodesAs<EventIndexerPullRequest> + ?Sized)) -> Result<EventIndexerPullResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(arg0), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 10, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 10, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::rpc_api::RpcError> {
+    pub async fn event_indexer_pull_tx_failures(&self) -> Result<IndexerTxFailureNoticeBatch, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
              let r = xdrs::write_xdr(&(), &mut w);
              *buf = w.into();
              r
-         }).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-         let buf = self.handle.send_call(Self::prog_vers(), 11, call).await?;
-         xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 11, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
 
-impl From<::std::sync::Arc<dyn ::rpc_api::RpcSender>> for EventIndexer_EventIndexer1_Client {
-    fn from(handle: ::std::sync::Arc<dyn ::rpc_api::RpcSender>) -> Self {
+impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for EventIndexer_EventIndexer1_Client {
+    fn from(handle: ::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>) -> Self {
         Self::new(handle)
     }
 }

@@ -2,7 +2,6 @@
 //! src/catchup.rs, src/db_sched.rs, src/repair2.rs, src/sched_coord.rs, src/loadgen.rs,
 //! src/dogwood.rs).
 
-use rpc_api::{ProgramError, RpcError};
 use thruput_akkad::{
     BlockExecutionMode, BlockHeight, BlockID, BristleconeKnownQuorumSets,
     Catchup_Catchup1, Catchup_Catchup1_Client, ConsensusValue,
@@ -25,6 +24,7 @@ use thruput_akkad::{
     SignedCatchupBlocksResult, SignedMissingBlocks, SignedMissingProposal,
     SignedMissingSlot, SignedMissingTxs, TransactionHashBatch, ValidatorID,
 };
+use thruput_rpc_api::{ProgramError, RpcError};
 use xdrs::EncodesAs;
 
 pub mod coord_scheduler {

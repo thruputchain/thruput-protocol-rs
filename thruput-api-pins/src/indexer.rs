@@ -1,6 +1,5 @@
 //! Signature pins for `thruput_indexer` (generated: src/indexer.rs).
 
-use rpc_api::{ProgramError, RpcError};
 use thruput_indexer::{
     AddressTransactionQuery, BlockLookupResult, BlockTransactionQuery,
     EventIndexer_EventIndexer1, EventIndexer_EventIndexer1_Client,
@@ -11,6 +10,7 @@ use thruput_indexer::{
     TransactionPageResult, TransactionQuery, TransactionRefPageResult,
     TxInfoResult,
 };
+use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_xdr::network::ProtocolCommit;
 use thruput_xdr::transaction::TransactionHash;
 use thruput_xdr::types::BlockHeight;
