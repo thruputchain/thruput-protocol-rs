@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
           # Full history and tags: the semver baseline below is a git checkout
@@ -84,7 +84,7 @@ jobs:
           fi
 
       - name: semver check
-        uses: thruputchain/actions/cargo-semver-checks@6693fac8133585728ad3a4ca14e3441073b6def8
+        uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
         env:
           # Historical baselines may use this alias. Cargo unifies aliases
           # for the same index, so both names need the same credential.
@@ -106,7 +106,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: dry run
-        uses: thruputchain/actions/cargo-publish-dry-run@6693fac8133585728ad3a4ca14e3441073b6def8
+        uses: thruputchain/actions/cargo-publish-dry-run@484be875e4e630d26594110bcc0ab6bf42eeaba7
         with:
           registry-name: thruput
           skip-clippy: true
@@ -115,7 +115,7 @@ jobs:
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
         id: publish-tag
-        uses: thruputchain/actions/cargo-version-tag@6693fac8133585728ad3a4ca14e3441073b6def8
+        uses: thruputchain/actions/cargo-version-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
 
       - name: push tag
         if: ${{ !inputs.dry-run }}
@@ -147,7 +147,7 @@ jobs:
 
       - name: publish
         if: ${{ !inputs.dry-run }}
-        uses: thruputchain/actions/cargo-publish@6693fac8133585728ad3a4ca14e3441073b6def8
+        uses: thruputchain/actions/cargo-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: thruput

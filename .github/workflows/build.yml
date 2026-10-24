@@ -17,7 +17,7 @@ jobs:
   dependency-policy:
     permissions:
       contents: read
-    uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@6693fac8133585728ad3a4ca14e3441073b6def8
+    uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
     with:
       registry-name: thruput
     secrets:
@@ -26,7 +26,7 @@ jobs:
   workflow-lint:
     permissions:
       contents: read
-    uses: thruputchain/actions/.github/workflows/workflow-lint.yml@f1b1a2cb8c69bab5f24f5f9976d50b6a9ab548fc
+    uses: thruputchain/actions/.github/workflows/workflow-lint.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
     with:
       lint-app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
       shellcheck-scripts: true
@@ -50,7 +50,7 @@ jobs:
           rm -f /home/hogci/.gitconfig
       - name: Generate protocol read token
         id: protocol-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
@@ -58,7 +58,7 @@ jobs:
           repositories: thruput-protocol
           permission-contents: read
       - name: Checkout repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Checkout protocol submodule
@@ -88,7 +88,7 @@ jobs:
           rustup default nightly-2026-05-26
       - name: Generate hogd read token
         id: hogd-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
           private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
@@ -126,7 +126,7 @@ jobs:
       - name: Clean up .gitconfig
         run: rm -f /home/hogci/.gitconfig
       - name: Checkout repository
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install rustup if needed
