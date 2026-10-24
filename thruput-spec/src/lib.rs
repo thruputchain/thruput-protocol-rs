@@ -5,9 +5,9 @@
 use thruput_xdr::event::Topic;
 
 #[rustfmt::skip]
-pub mod thruput_contract_spec;
-pub use thruput_contract_spec::*;
+pub mod contract_spec;
+pub use contract_spec::*;
 
 // Hand-written impls on the generated types. `generate.sh` rewrites only
-// `thruput_contract_spec.rs`, so these survive regeneration.
+// `contract_spec.rs`, so these survive regeneration.
 mod impls;

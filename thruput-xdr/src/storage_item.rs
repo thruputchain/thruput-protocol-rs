@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -520,6 +520,7 @@ pub struct FlaggedStorageDelta {
 //
 
 impl StorageItem {
+    #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageItemType {
         match self {
             
@@ -529,6 +530,7 @@ impl StorageItem {
 }
 
 impl WireStorageItem {
+    #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageItemType {
         match self {
             
@@ -538,6 +540,7 @@ impl WireStorageItem {
 }
 
 impl StorageDelta {
+    #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageDeltaType {
         match self {
             

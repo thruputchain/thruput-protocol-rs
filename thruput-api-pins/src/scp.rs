@@ -76,7 +76,7 @@ pub mod scp_control {
 
     pub async fn trait_scp_control_null<T: SCP_Control_SCP_Control1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_null().await
     }
     pub async fn trait_scp_control_nominate<T: SCP_Control_SCP_Control1>(
@@ -84,7 +84,7 @@ pub mod scp_control {
         arg0: SCPSlotIndex,
         arg1: SCPValue,
         arg2: SCPValue,
-    ) -> Result<bool, ProgramError> {
+    ) -> Result<impl EncodesAs<bool>, ProgramError> {
         t.scp_control_nominate(arg0, arg1, arg2).await
     }
     pub async fn trait_scp_control_stop_nomination<
@@ -92,7 +92,7 @@ pub mod scp_control {
     >(
         t: &T,
         arg0: SCPSlotIndex,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_stop_nomination(arg0).await
     }
     pub async fn trait_scp_control_update_local_quorum_set<
@@ -100,7 +100,7 @@ pub mod scp_control {
     >(
         t: &T,
         arg0: SCPQuorumSet,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_update_local_quorum_set(arg0).await
     }
     pub async fn trait_scp_control_received_envelope<
@@ -108,7 +108,7 @@ pub mod scp_control {
     >(
         t: &T,
         arg0: SCPEnvelope,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_received_envelope(arg0).await
     }
     pub async fn trait_scp_control_set_state_from_envelope<
@@ -117,25 +117,25 @@ pub mod scp_control {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPEnvelope,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_set_state_from_envelope(arg0, arg1).await
     }
     pub async fn trait_scp_control_set_qset<T: SCP_Control_SCP_Control1>(
         t: &T,
         arg0: SCPQuorumSet,
-    ) -> Result<SCPOptQuorumSet, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptQuorumSet>, ProgramError> {
         t.scp_control_set_qset(arg0).await
     }
     pub async fn trait_scp_control_get_qset<T: SCP_Control_SCP_Control1>(
         t: &T,
         arg0: SCPHash,
-    ) -> Result<SCPOptQuorumSet, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptQuorumSet>, ProgramError> {
         t.scp_control_get_qset(arg0).await
     }
     pub async fn trait_scp_control_remove_qset<T: SCP_Control_SCP_Control1>(
         t: &T,
         arg0: SCPHash,
-    ) -> Result<SCPOptQuorumSet, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptQuorumSet>, ProgramError> {
         t.scp_control_remove_qset(arg0).await
     }
     pub async fn trait_scp_control_set_lowest_non_externalized_slot<
@@ -143,7 +143,7 @@ pub mod scp_control {
     >(
         t: &T,
         arg0: SCPSlotIndex,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_control_set_lowest_non_externalized_slot(arg0).await
     }
 }
@@ -254,13 +254,13 @@ pub mod scp_handle {
 
     pub async fn trait_scp_handle_null<T: SCP_Handle_SCP_Handle1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_null().await
     }
     pub async fn trait_scp_handle_emit_envelope<T: SCP_Handle_SCP_Handle1>(
         t: &T,
         arg0: SCPEnvelope,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_emit_envelope(arg0).await
     }
     pub async fn trait_scp_handle_validate_ballot_value<
@@ -269,7 +269,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<SCPValidationLevel, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPValidationLevel>, ProgramError> {
         t.scp_handle_validate_ballot_value(arg0, arg1).await
     }
     pub async fn trait_scp_handle_validate_nomination_value<
@@ -278,7 +278,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<SCPValidationLevel, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPValidationLevel>, ProgramError> {
         t.scp_handle_validate_nomination_value(arg0, arg1).await
     }
     pub async fn trait_scp_handle_extract_valid_value<
@@ -287,7 +287,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<SCPOptValue, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptValue>, ProgramError> {
         t.scp_handle_extract_valid_value(arg0, arg1).await
     }
     pub async fn trait_scp_handle_combine_candidates<
@@ -296,7 +296,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValues,
-    ) -> Result<SCPOptValue, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptValue>, ProgramError> {
         t.scp_handle_combine_candidates(arg0, arg1).await
     }
     pub async fn trait_scp_handle_value_externalized<
@@ -305,7 +305,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_value_externalized(arg0, arg1).await
     }
     pub async fn trait_scp_handle_nominating_value<
@@ -314,7 +314,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_nominating_value(arg0, arg1).await
     }
     pub async fn trait_scp_handle_updated_candidate_value<
@@ -323,7 +323,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPValue,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_updated_candidate_value(arg0, arg1).await
     }
     pub async fn trait_scp_handle_started_ballot_proto<
@@ -332,7 +332,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPBallot,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_started_ballot_proto(arg0, arg1).await
     }
     pub async fn trait_scp_handle_accepted_ballot_prepared<
@@ -341,7 +341,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPBallot,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_accepted_ballot_prepared(arg0, arg1).await
     }
     pub async fn trait_scp_handle_confirmed_ballot_prepared<
@@ -350,7 +350,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPBallot,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_confirmed_ballot_prepared(arg0, arg1).await
     }
     pub async fn trait_scp_handle_accepted_commit<
@@ -359,7 +359,7 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPBallot,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_accepted_commit(arg0, arg1).await
     }
     pub async fn trait_scp_handle_ballot_did_hear_from_quorum<
@@ -368,13 +368,13 @@ pub mod scp_handle {
         t: &T,
         arg0: SCPSlotIndex,
         arg1: SCPBallot,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scp_handle_ballot_did_hear_from_quorum(arg0, arg1).await
     }
     pub async fn trait_scp_handle_get_quorum_set<T: SCP_Handle_SCP_Handle1>(
         t: &T,
         arg0: SCPHash,
-    ) -> Result<SCPOptQuorumSet, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPOptQuorumSet>, ProgramError> {
         t.scp_handle_get_quorum_set(arg0).await
     }
 }

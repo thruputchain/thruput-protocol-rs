@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -26,31 +26,33 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait CoordScheduler_CoordScheduler1: Send + Sync {    
-    async fn coordscheduler_null(&self) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn coordscheduler_null(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
         // The scheduler calls coordscheduler_notify_vetted to indicate that the
     // given transactions are vetted, meaning the coordinator can broadcast
     // them to the network.
 
-    async fn coordscheduler_notify_vetted(&self, arg0 : ParallelSignedTransactionBatch) -> Result<(), ::thruput_rpc_api::ProgramError>;
+    fn coordscheduler_notify_vetted(&self, arg0 : ParallelSignedTransactionBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct CoordScheduler_CoordScheduler1_Dispatcher {
-  inner: Box<dyn CoordScheduler_CoordScheduler1>,
+pub struct CoordScheduler_CoordScheduler1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl CoordScheduler_CoordScheduler1_Dispatcher {
-  pub fn new(inner: Box<dyn CoordScheduler_CoordScheduler1>) -> Self {
+impl<__Handler: CoordScheduler_CoordScheduler1> CoordScheduler_CoordScheduler1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for CoordScheduler_CoordScheduler1_Dispatcher {
+impl<__Handler: CoordScheduler_CoordScheduler1> ::thruput_rpc_api::RpcHandler for CoordScheduler_CoordScheduler1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x11117667, 1)
     }

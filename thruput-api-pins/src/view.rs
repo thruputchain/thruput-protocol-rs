@@ -36,19 +36,19 @@ pub mod view_gateway {
     pub async fn trait_viewgateway_intro<T: ViewGateway_ViewGateway1>(
         t: &T,
         arg0: ProtocolCommit,
-    ) -> Result<ViewGatewayIntroOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<ViewGatewayIntroOutcome>, ProgramError> {
         t.viewgateway_intro(arg0).await
     }
     pub async fn trait_viewgateway_view<T: ViewGateway_ViewGateway1>(
         t: &T,
         arg0: TransactionViewQuery,
-    ) -> Result<ViewGatewayResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ViewGatewayResult>, ProgramError> {
         t.viewgateway_view(arg0).await
     }
     pub async fn trait_viewgateway_view_batch<T: ViewGateway_ViewGateway1>(
         t: &T,
         arg0: ViewGatewayBatchQuery,
-    ) -> Result<ViewGatewayBatchResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ViewGatewayBatchResult>, ProgramError> {
         t.viewgateway_view_batch(arg0).await
     }
 }

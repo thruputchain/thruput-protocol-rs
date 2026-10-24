@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1451,6 +1451,7 @@ impl DerefMut for BlockHeight {
 //
 
 impl Signature {
+    #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
@@ -1460,6 +1461,7 @@ impl Signature {
 }
 
 impl PublicKey {
+    #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
@@ -1469,6 +1471,7 @@ impl PublicKey {
 }
 
 impl SecretKey {
+    #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
             
@@ -1478,6 +1481,7 @@ impl SecretKey {
 }
 
 impl ExtensionPoint {
+    #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> i32 {
         match self {
             
@@ -1487,6 +1491,7 @@ impl ExtensionPoint {
 }
 
 impl StorageKey {
+    #[allow(clippy::match_single_binding)]
     pub fn key_type(&self) -> StorageKeyType {
         match self {
             

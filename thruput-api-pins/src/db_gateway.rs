@@ -33,18 +33,18 @@ pub mod db_gateway {
     pub async fn trait_dbgateway_intro<T: DbGateway_DbGateway1>(
         t: &T,
         arg0: ProtocolCommit,
-    ) -> Result<DbGatewayIntroOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<DbGatewayIntroOutcome>, ProgramError> {
         t.dbgateway_intro(arg0).await
     }
     pub async fn trait_dbgateway_get_items<T: DbGateway_DbGateway1>(
         t: &T,
         arg0: AddressAndKeyBatch,
-    ) -> Result<DbGatewayResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbGatewayResult>, ProgramError> {
         t.dbgateway_get_items(arg0).await
     }
     pub async fn trait_dbgateway_get_config<T: DbGateway_DbGateway1>(
         t: &T,
-    ) -> Result<DbGatewayConfigResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbGatewayConfigResult>, ProgramError> {
         t.dbgateway_get_config().await
     }
 }

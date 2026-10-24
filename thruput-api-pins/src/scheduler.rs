@@ -70,7 +70,7 @@ pub mod auth_db {
     pub async fn trait_authdb_forward_key_changes_chunk<T: AuthDB_AuthDB1>(
         t: &T,
         arg0: KeyChangeChunk,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.authdb_forward_key_changes_chunk(arg0).await
     }
 }
@@ -100,7 +100,7 @@ pub mod auth_mempool {
         t: &T,
         arg0: BlockHeight,
         arg1: SignedTransactionBatch,
-    ) -> Result<AuthErrorCodeBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<AuthErrorCodeBatch>, ProgramError> {
         t.authmempool_verify_transactions(arg0, arg1).await
     }
     pub async fn trait_authmempool_verify_batch<
@@ -109,7 +109,7 @@ pub mod auth_mempool {
         t: &T,
         arg0: BlockHeight,
         arg1: SignedTransactionBatch,
-    ) -> Result<AuthErrorCode, ProgramError> {
+    ) -> Result<impl EncodesAs<AuthErrorCode>, ProgramError> {
         t.authmempool_verify_batch(arg0, arg1).await
     }
 }
@@ -130,13 +130,13 @@ pub mod catchup {
 
     pub async fn trait_catchup_null<T: Catchup_Catchup1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.catchup_null().await
     }
     pub async fn trait_catchup_solicit<T: Catchup_Catchup1>(
         t: &T,
         arg0: SignedCatchupBlocksRequest,
-    ) -> Result<SignedCatchupBlocksResult, ProgramError> {
+    ) -> Result<impl EncodesAs<SignedCatchupBlocksResult>, ProgramError> {
         t.catchup_solicit(arg0).await
     }
 }
@@ -159,7 +159,7 @@ pub mod coord_scheduler {
         T: CoordScheduler_CoordScheduler1,
     >(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.coordscheduler_null().await
     }
     pub async fn trait_coordscheduler_notify_vetted<
@@ -167,7 +167,7 @@ pub mod coord_scheduler {
     >(
         t: &T,
         arg0: ParallelSignedTransactionBatch,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.coordscheduler_notify_vetted(arg0).await
     }
 }
@@ -201,20 +201,20 @@ pub mod db_auth {
         t: &T,
         arg0: BlockHeight,
         arg1: ContractAddress,
-    ) -> Result<DBAuthResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DBAuthResult>, ProgramError> {
         t.authdb_get_auth_data(arg0, arg1).await
     }
     pub async fn trait_authdb_get_auth_data_batch<T: DBAuth_DBAuth1>(
         t: &T,
         arg0: BlockHeight,
         arg1: ContractAddressBatch,
-    ) -> Result<DBAuthResultBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<DBAuthResultBatch>, ProgramError> {
         t.authdb_get_auth_data_batch(arg0, arg1).await
     }
     pub async fn trait_dbauth_intro<T: DBAuth_DBAuth1>(
         t: &T,
         arg0: AuthCard,
-    ) -> Result<DBAuthIntroResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DBAuthIntroResult>, ProgramError> {
         t.dbauth_intro(arg0).await
     }
 }
@@ -287,26 +287,27 @@ pub mod db_sched {
 
     pub async fn trait_dbsched_null<T: DbSched_DbSched1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.dbsched_null().await
     }
     pub async fn trait_dbsched_get_address_auth_data<T: DbSched_DbSched1>(
         t: &T,
         arg0: BlockID,
         arg1: ContractAddressBatch,
-    ) -> Result<DbAddressAuthDataBatchResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbAddressAuthDataBatchResult>, ProgramError>
+    {
         t.dbsched_get_address_auth_data(arg0, arg1).await
     }
     pub async fn trait_dbsched_get_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
         arg0: ContractAddressBatch,
-    ) -> Result<NativeTokenAgeResults, ProgramError> {
+    ) -> Result<impl EncodesAs<NativeTokenAgeResults>, ProgramError> {
         t.dbsched_get_native_token_ages(arg0).await
     }
     pub async fn trait_dbsched_write_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
         arg0: NativeTokenAgeBatch,
-    ) -> Result<DbSchedResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbSchedResult>, ProgramError> {
         t.dbsched_write_native_token_ages(arg0).await
     }
     pub async fn trait_dbsched_create_snapshot<T: DbSched_DbSched1>(
@@ -314,26 +315,26 @@ pub mod db_sched {
         arg0: BlockID,
         arg1: BlockID,
         arg2: BlockExecutionMode,
-    ) -> Result<DbSchedResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbSchedResult>, ProgramError> {
         t.dbsched_create_snapshot(arg0, arg1, arg2).await
     }
     pub async fn trait_dbsched_commit_snapshot<T: DbSched_DbSched1>(
         t: &T,
         arg0: BlockID,
         arg1: ConsensusValue,
-    ) -> Result<DbBlockResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbBlockResult>, ProgramError> {
         t.dbsched_commit_snapshot(arg0, arg1).await
     }
     pub async fn trait_dbsched_close_snapshot<T: DbSched_DbSched1>(
         t: &T,
         arg0: BlockID,
-    ) -> Result<DbBlockResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbBlockResult>, ProgramError> {
         t.dbsched_close_snapshot(arg0).await
     }
     pub async fn trait_dbsched_abandon_snapshot<T: DbSched_DbSched1>(
         t: &T,
         arg0: BlockID,
-    ) -> Result<DbSchedResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbSchedResult>, ProgramError> {
         t.dbsched_abandon_snapshot(arg0).await
     }
     pub async fn trait_dbsched_load_genesis_configuration<
@@ -342,12 +343,12 @@ pub mod db_sched {
         t: &T,
         arg0: GenesisConfiguration,
         arg1: ConsensusValue,
-    ) -> Result<DbSchedResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbSchedResult>, ProgramError> {
         t.dbsched_load_genesis_configuration(arg0, arg1).await
     }
     pub async fn trait_dbsched_get_tip<T: DbSched_DbSched1>(
         t: &T,
-    ) -> Result<DbTipResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbTipResult>, ProgramError> {
         t.dbsched_get_tip().await
     }
 }
@@ -390,7 +391,7 @@ pub mod event_executor {
 
     pub async fn trait_eventexecutor_null<T: EventExecutor_EventExecutor1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.eventexecutor_null().await
     }
     pub async fn trait_eventexecutor_open_block<
@@ -398,7 +399,7 @@ pub mod event_executor {
     >(
         t: &T,
         arg0: BlockID,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventexecutor_open_block(arg0).await
     }
     pub async fn trait_eventexecutor_close_block<
@@ -406,7 +407,7 @@ pub mod event_executor {
     >(
         t: &T,
         arg0: BlockID,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventexecutor_close_block(arg0).await
     }
     pub async fn trait_eventexecutor_report_tx_failure<
@@ -415,7 +416,7 @@ pub mod event_executor {
         t: &T,
         arg0: TransactionHash,
         arg1: TxFailureDiagnostic,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventexecutor_report_tx_failure(arg0, arg1).await
     }
     pub async fn trait_eventexecutor_emit_event<
@@ -426,7 +427,7 @@ pub mod event_executor {
         arg1: TransactionID,
         arg2: TxEventLog,
         arg3: ProposedTransaction,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventexecutor_emit_event(arg0, arg1, arg2, arg3).await
     }
 }
@@ -467,33 +468,33 @@ pub mod event_sched {
 
     pub async fn trait_eventsched_null<T: EventSched_EventSched1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.eventsched_null().await
     }
     pub async fn trait_eventsched_open_block<T: EventSched_EventSched1>(
         t: &T,
         arg0: BlockID,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventsched_open_block(arg0).await
     }
     pub async fn trait_eventsched_close_block<T: EventSched_EventSched1>(
         t: &T,
         arg0: BlockID,
         arg1: BlockHeight,
-    ) -> Result<EventBlockResult, ProgramError> {
+    ) -> Result<impl EncodesAs<EventBlockResult>, ProgramError> {
         t.eventsched_close_block(arg0, arg1).await
     }
     pub async fn trait_eventsched_commit_block<T: EventSched_EventSched1>(
         t: &T,
         arg0: BlockID,
         arg1: ConsensusValue,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventsched_commit_block(arg0, arg1).await
     }
     pub async fn trait_eventsched_abandon_block<T: EventSched_EventSched1>(
         t: &T,
         arg0: BlockID,
-    ) -> Result<RPCError, ProgramError> {
+    ) -> Result<impl EncodesAs<RPCError>, ProgramError> {
         t.eventsched_abandon_block(arg0).await
     }
 }
@@ -564,12 +565,12 @@ pub mod executor_sched {
 
     pub async fn trait_executorsched_null<T: ExecutorSched_ExecutorSched1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.executorsched_null().await
     }
     pub async fn trait_executorsched_ready<T: ExecutorSched_ExecutorSched1>(
         t: &T,
-    ) -> Result<ExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecResult>, ProgramError> {
         t.executorsched_ready().await
     }
     pub async fn trait_executorsched_propose_transaction<
@@ -578,7 +579,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: SignedTransaction,
-    ) -> Result<ExecProposeResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecProposeResult>, ProgramError> {
         t.executorsched_propose_transaction(arg0, arg1).await
     }
     pub async fn trait_executorsched_validate_transaction<
@@ -587,7 +588,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: ProposedTransaction,
-    ) -> Result<ExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecResult>, ProgramError> {
         t.executorsched_validate_transaction(arg0, arg1).await
     }
     pub async fn trait_executorsched_propose_batch<
@@ -596,7 +597,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: SignedTransactionBatch,
-    ) -> Result<ExecProposeBatchResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecProposeBatchResult>, ProgramError> {
         t.executorsched_propose_batch(arg0, arg1).await
     }
     pub async fn trait_executorsched_validate_batch<
@@ -605,7 +606,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: ProposedTransactionBatch,
-    ) -> Result<ExecValidateBatchResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecValidateBatchResult>, ProgramError> {
         t.executorsched_validate_batch(arg0, arg1).await
     }
     pub async fn trait_executorsched_open_proposal_block<
@@ -614,7 +615,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: BlockExecutionContext,
-    ) -> Result<ExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecResult>, ProgramError> {
         t.executorsched_open_proposal_block(arg0, arg1).await
     }
     pub async fn trait_executorsched_open_validation_block<
@@ -623,7 +624,7 @@ pub mod executor_sched {
         t: &T,
         arg0: BlockID,
         arg1: BlockExecutionContext,
-    ) -> Result<ExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecResult>, ProgramError> {
         t.executorsched_open_validation_block(arg0, arg1).await
     }
     pub async fn trait_executorsched_finish_block<
@@ -631,14 +632,14 @@ pub mod executor_sched {
     >(
         t: &T,
         arg0: BlockID,
-    ) -> Result<ExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<ExecResult>, ProgramError> {
         t.executorsched_finish_block(arg0).await
     }
     pub async fn trait_executorsched_shutdown<
         T: ExecutorSched_ExecutorSched1,
     >(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.executorsched_shutdown().await
     }
 }
@@ -667,7 +668,7 @@ pub mod loadgen_interface {
     >(
         t: &T,
         arg0: ExperimentConfig,
-    ) -> Result<LoadgenResult, ProgramError> {
+    ) -> Result<impl EncodesAs<LoadgenResult>, ProgramError> {
         t.generate_experiment(arg0).await
     }
     pub async fn trait_extend_experiment<
@@ -677,7 +678,7 @@ pub mod loadgen_interface {
         arg0: LoadgenContextID,
         arg1: u64,
         arg2: BlockHeight,
-    ) -> Result<LoadgenExtensionResult, ProgramError> {
+    ) -> Result<impl EncodesAs<LoadgenExtensionResult>, ProgramError> {
         t.extend_experiment(arg0, arg1, arg2).await
     }
 }
@@ -702,7 +703,7 @@ pub mod mempool_auth {
     pub async fn trait_mempoolauth_intro_auth<T: MempoolAuth_MempoolAuth1>(
         t: &T,
         arg0: AuthCard,
-    ) -> Result<IntroAuthResult, ProgramError> {
+    ) -> Result<impl EncodesAs<IntroAuthResult>, ProgramError> {
         t.mempoolauth_intro_auth(arg0).await
     }
     pub async fn trait_mempoolauth_auth_data_changed_chunk<
@@ -710,7 +711,7 @@ pub mod mempool_auth {
     >(
         t: &T,
         arg0: KeyChangeChunk,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.mempoolauth_auth_data_changed_chunk(arg0).await
     }
 }
@@ -743,25 +744,25 @@ pub mod repair {
 
     pub async fn trait_repair_null<T: Repair_Repair1>(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.repair_null().await
     }
     pub async fn trait_repair_missing_txs<T: Repair_Repair1>(
         t: &T,
         arg0: MissingTransactionsEnvelope,
-    ) -> Result<RepairedTransactions, ProgramError> {
+    ) -> Result<impl EncodesAs<RepairedTransactions>, ProgramError> {
         t.repair_missing_txs(arg0).await
     }
     pub async fn trait_repair_missing_proposal<T: Repair_Repair1>(
         t: &T,
         arg0: ConsensusValue,
-    ) -> Result<OptProposal, ProgramError> {
+    ) -> Result<impl EncodesAs<OptProposal>, ProgramError> {
         t.repair_missing_proposal(arg0).await
     }
     pub async fn trait_repair_missing_scp_envelopes<T: Repair_Repair1>(
         t: &T,
         arg0: SCPSlotIndex,
-    ) -> Result<SCPEnvelopes, ProgramError> {
+    ) -> Result<impl EncodesAs<SCPEnvelopes>, ProgramError> {
         t.repair_missing_scp_envelopes(arg0).await
     }
 }
@@ -786,7 +787,7 @@ pub mod sched_db {
     pub async fn trait_scheddb_intro_shard<T: SchedDb_SchedDb1>(
         t: &T,
         arg0: ShardCard,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scheddb_intro_shard(arg0).await
     }
     pub async fn trait_scheddb_native_tokens_transferred_chunk<
@@ -794,7 +795,7 @@ pub mod sched_db {
     >(
         t: &T,
         arg0: NativeTokensTransferredChunk,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.scheddb_native_tokens_transferred_chunk(arg0).await
     }
 }
@@ -819,13 +820,13 @@ pub mod sched_event {
     pub async fn trait_schedevent_prepare_event<T: SchedEvent_SchedEvent1>(
         t: &T,
         arg0: EventCard,
-    ) -> Result<EventPrepareResult, ProgramError> {
+    ) -> Result<impl EncodesAs<EventPrepareResult>, ProgramError> {
         t.schedevent_prepare_event(arg0).await
     }
     pub async fn trait_schedevent_activate_event<T: SchedEvent_SchedEvent1>(
         t: &T,
         arg0: EventRegistrationSnapshot,
-    ) -> Result<EventActivationResult, ProgramError> {
+    ) -> Result<impl EncodesAs<EventActivationResult>, ProgramError> {
         t.schedevent_activate_event(arg0).await
     }
 }
@@ -844,7 +845,7 @@ pub mod sched_exec {
     pub async fn trait_schedexec_intro_exec<T: SchedExec_SchedExec1>(
         t: &T,
         arg0: ExecCard,
-    ) -> Result<IntroExecResult, ProgramError> {
+    ) -> Result<impl EncodesAs<IntroExecResult>, ProgramError> {
         t.schedexec_intro_exec(arg0).await
     }
 }
@@ -891,7 +892,7 @@ pub mod sched_gateway {
     pub async fn trait_schedgateway_intro<T: SchedGateway_SchedGateway1>(
         t: &T,
         arg0: ProtocolCommit,
-    ) -> Result<SchedGatewayIntroOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedGatewayIntroOutcome>, ProgramError> {
         t.schedgateway_intro(arg0).await
     }
     pub async fn trait_schedgateway_submit_tx_batch<
@@ -899,12 +900,13 @@ pub mod sched_gateway {
     >(
         t: &T,
         arg0: ParallelSignedTransactionBatch,
-    ) -> Result<SchedGatewaySubmitOutcomeBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedGatewaySubmitOutcomeBatch>, ProgramError>
+    {
         t.schedgateway_submit_tx_batch(arg0).await
     }
     pub async fn trait_schedgateway_get_tip<T: SchedGateway_SchedGateway1>(
         t: &T,
-    ) -> Result<ExpectedDBTip, ProgramError> {
+    ) -> Result<impl EncodesAs<ExpectedDBTip>, ProgramError> {
         t.schedgateway_get_tip().await
     }
     pub async fn trait_schedgateway_lookup_tx<
@@ -912,14 +914,14 @@ pub mod sched_gateway {
     >(
         t: &T,
         arg0: TransactionHashBatch,
-    ) -> Result<OptSignedTransactionBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<OptSignedTransactionBatch>, ProgramError> {
         t.schedgateway_lookup_tx(arg0).await
     }
     pub async fn trait_schedgateway_pending_tx_count<
         T: SchedGateway_SchedGateway1,
     >(
         t: &T,
-    ) -> Result<PendingTxCount, ProgramError> {
+    ) -> Result<impl EncodesAs<PendingTxCount>, ProgramError> {
         t.schedgateway_pending_tx_count().await
     }
     pub async fn trait_schedgateway_lookup_transaction_outcomes<
@@ -927,7 +929,8 @@ pub mod sched_gateway {
     >(
         t: &T,
         arg0: TransactionHashBatch,
-    ) -> Result<SchedulerTransactionOutcomeBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerTransactionOutcomeBatch>, ProgramError>
+    {
         t.schedgateway_lookup_transaction_outcomes(arg0).await
     }
 }
@@ -1013,7 +1016,7 @@ pub mod scheduler_coord {
         T: SchedulerCoord_SchedulerCoord1,
     >(
         t: &T,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.schedulercoord_null().await
     }
     pub async fn trait_schedulercoord_intro_coord<
@@ -1021,7 +1024,8 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: CoordCard,
-    ) -> Result<CoordinatorRegistrationOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<CoordinatorRegistrationOutcome>, ProgramError>
+    {
         t.schedulercoord_intro_coord(arg0).await
     }
     pub async fn trait_schedulercoord_submit_unvetted<
@@ -1029,7 +1033,7 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: ParallelSignedTransactionBatch,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.schedulercoord_submit_unvetted(arg0).await
     }
     pub async fn trait_schedulercoord_submit_vetted<
@@ -1038,7 +1042,7 @@ pub mod scheduler_coord {
         t: &T,
         arg0: ValidatorID,
         arg1: ParallelSignedTransactionBatch,
-    ) -> Result<(), ProgramError> {
+    ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.schedulercoord_submit_vetted(arg0, arg1).await
     }
     pub async fn trait_schedulercoord_propose_block<
@@ -1047,7 +1051,7 @@ pub mod scheduler_coord {
         t: &T,
         arg0: BlockID,
         arg1: ProposalContext,
-    ) -> Result<SchedulerProposalResult, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerProposalResult>, ProgramError> {
         t.schedulercoord_propose_block(arg0, arg1).await
     }
     pub async fn trait_schedulercoord_validate_block<
@@ -1056,7 +1060,7 @@ pub mod scheduler_coord {
         t: &T,
         arg0: BlockID,
         arg1: Proposal,
-    ) -> Result<SchedulerValidationResult, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerValidationResult>, ProgramError> {
         t.schedulercoord_validate_block(arg0, arg1).await
     }
     pub async fn trait_schedulercoord_commit_block<
@@ -1065,14 +1069,14 @@ pub mod scheduler_coord {
         t: &T,
         arg0: BlockID,
         arg1: ConsensusValue,
-    ) -> Result<SchedulerCommitOutcome, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerCommitOutcome>, ProgramError> {
         t.schedulercoord_commit_block(arg0, arg1).await
     }
     pub async fn trait_schedcoord_get_tip<
         T: SchedulerCoord_SchedulerCoord1,
     >(
         t: &T,
-    ) -> Result<SchedulerGetTipResult, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerGetTipResult>, ProgramError> {
         t.schedcoord_get_tip().await
     }
     pub async fn trait_schedcoord_load_genesis_configuration<
@@ -1080,7 +1084,7 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: GenesisConfiguration,
-    ) -> Result<DbSchedResult, ProgramError> {
+    ) -> Result<impl EncodesAs<DbSchedResult>, ProgramError> {
         t.schedcoord_load_genesis_configuration(arg0).await
     }
     pub async fn trait_schedulercoord_commit_genesis_ceremony<
@@ -1088,7 +1092,7 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: GenesisCeremonyRequest,
-    ) -> Result<GenesisCeremonyResult, ProgramError> {
+    ) -> Result<impl EncodesAs<GenesisCeremonyResult>, ProgramError> {
         t.schedulercoord_commit_genesis_ceremony(arg0).await
     }
     pub async fn trait_schedcoord_lookup_transactions<
@@ -1096,7 +1100,7 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: TransactionHashBatch,
-    ) -> Result<OptSignedTransactionBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<OptSignedTransactionBatch>, ProgramError> {
         t.schedcoord_lookup_transactions(arg0).await
     }
     pub async fn trait_schedcoord_lookup_transaction_outcomes<
@@ -1104,7 +1108,8 @@ pub mod scheduler_coord {
     >(
         t: &T,
         arg0: TransactionHashBatch,
-    ) -> Result<SchedulerTransactionOutcomeBatch, ProgramError> {
+    ) -> Result<impl EncodesAs<SchedulerTransactionOutcomeBatch>, ProgramError>
+    {
         t.schedcoord_lookup_transaction_outcomes(arg0).await
     }
 }

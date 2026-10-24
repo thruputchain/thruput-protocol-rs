@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -352,6 +352,7 @@ pub type ContractAddressBatch = VecM::<ContractAddress>;
 //
 
 impl ExpectedStorageCost {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedStorageCost::Default{ error } => (*error).into(),
@@ -362,6 +363,7 @@ impl ExpectedStorageCost {
 }
 
 impl ExpectedContract {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedContract::Default{ error } => (*error).into(),
@@ -372,6 +374,7 @@ impl ExpectedContract {
 }
 
 impl ExpectedDeployment {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedDeployment::Default{ error } => (*error).into(),
@@ -382,6 +385,7 @@ impl ExpectedDeployment {
 }
 
 impl ExpectedProposalData {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedProposalData::Default{ error } => (*error).into(),
@@ -392,6 +396,7 @@ impl ExpectedProposalData {
 }
 
 impl ExpectedRetrocausalQueueBlock {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedRetrocausalQueueBlock::Default{ error } => (*error).into(),
@@ -402,6 +407,7 @@ impl ExpectedRetrocausalQueueBlock {
 }
 
 impl ExpectedQueueEntry {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedQueueEntry::Default{ error } => (*error).into(),
@@ -412,6 +418,7 @@ impl ExpectedQueueEntry {
 }
 
 impl ExpectedDBTip {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedDBTip::Default{ error } => (*error).into(),
@@ -422,6 +429,7 @@ impl ExpectedDBTip {
 }
 
 impl ExpectedViewingSnapshot {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedViewingSnapshot::Default{ error } => (*error).into(),

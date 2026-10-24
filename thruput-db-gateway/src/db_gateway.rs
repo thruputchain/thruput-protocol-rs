@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: c385cdc8b9f636baa910ab0814dbbb7f0ff55057
+// Generated from xdrc commit: 855ee2b6f1b64eea7b421ca083525da4e6371c5a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -157,30 +157,32 @@ impl core::fmt::Display for DbGatewayIntroOutcome {
 
 
 
+/// Each handler replies with anything that encodes like the reply type.
+/// Implementations can be plain `async fn`s returning a concrete reply type
+/// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-#[async_trait::async_trait]
 pub trait DbGateway_DbGateway1: Send + Sync {    
-    async fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> Result<DbGatewayIntroOutcome, ::thruput_rpc_api::ProgramError>;
+    fn dbgateway_intro(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayIntroOutcome>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> Result<DbGatewayResult, ::thruput_rpc_api::ProgramError>;
+    fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
-    async fn dbgateway_get_config(&self) -> Result<DbGatewayConfigResult, ::thruput_rpc_api::ProgramError>;
+    fn dbgateway_get_config(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayConfigResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
 #[allow(non_camel_case_types)]
-pub struct DbGateway_DbGateway1_Dispatcher {
-  inner: Box<dyn DbGateway_DbGateway1>,
+pub struct DbGateway_DbGateway1_Dispatcher<__Handler> {
+  inner: Box<__Handler>,
 }
 
-impl DbGateway_DbGateway1_Dispatcher {
-  pub fn new(inner: Box<dyn DbGateway_DbGateway1>) -> Self {
+impl<__Handler: DbGateway_DbGateway1> DbGateway_DbGateway1_Dispatcher<__Handler> {
+  pub fn new(inner: Box<__Handler>) -> Self {
     Self { inner }
   }
 }
 
 #[async_trait::async_trait]
-impl ::thruput_rpc_api::RpcHandler for DbGateway_DbGateway1_Dispatcher {
+impl<__Handler: DbGateway_DbGateway1> ::thruput_rpc_api::RpcHandler for DbGateway_DbGateway1_Dispatcher<__Handler> {
     fn prog_vers(&self) -> ::thruput_rpc_api::ProgVers {
         ::thruput_rpc_api::ProgVers::new(0x44424757, 1)
     }
@@ -300,6 +302,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for DbGateway_DbGa
 //
 
 impl DbGatewayItemResult {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayItemResult::Default{ error } => (*error).into(),
@@ -310,6 +313,7 @@ impl DbGatewayItemResult {
 }
 
 impl DbGatewayResult {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayResult::Default{ error } => (*error).into(),
@@ -320,6 +324,7 @@ impl DbGatewayResult {
 }
 
 impl DbGatewayConfigResult {
+    #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayConfigResult::Default{ error } => (*error).into(),

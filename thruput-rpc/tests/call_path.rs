@@ -48,7 +48,7 @@ impl Drop for SetOnDrop {
     }
 }
 
-#[async_trait::async_trait]
+#[allow(refining_impl_trait)]
 impl blank_rpc_blank_rpc_v1 for Echo {
     async fn null(&self) -> Result<(), ProgramError> {
         Ok(())
