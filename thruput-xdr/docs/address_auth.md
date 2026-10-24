@@ -17,7 +17,7 @@ Unlike the common blockchain model (as in, for example, Ethereum), in which ther
 
 ## Public Key Configuration
 
-Each address can have up to `kMaxSigners` public keys, each with an associated weight for multi-signature authorization. When verifying a `kSourceAddressAuthData` auth claim, weights from signing keys are accumulated and compared against the required threshold.
+Each address can have up to `kMaxSigners` public keys, each with an associated weight for multi-signature authorization. A null entry marks an unoccupied key slot. When verifying a `kSourceAddressAuthData` auth claim, weights from signing keys are accumulated and compared against the required threshold.
 
 Replay protection does not live here: every transaction carries a [`Uniquifier`], which the address's replay cache records.
 

@@ -51,5 +51,7 @@ Contract entrypoints can be arbitrary 8-byte identifiers. By default, the SDK fo
 ContractEntrypointID = SHA256(name || "::" || major || "::" || method)[0..8]
 ```
 
-`major` is the semver compatibility prefix of the interface version (`"1"` for `"1.4.2"`, `"0.2"` for `"0.2.7"`), so compatible versions share entrypoint IDs. For example, `transfer` on an `"ERC20"` interface at version `"1.0.0"` is `SHA256("ERC20::1::transfer")[0..8]`. [`ContractEntrypointID::from_u64`] and [`ContractEntrypointID::into_u64`] convert between the bytes and the big-endian `u64` the `Invoke` syscall takes.
+`major` is the semver compatibility prefix of the interface version: the leading components up to and including the first nonzero one (`"1"` for `"1.4.2"`, `"0.2"` for `"0.2.7"`, `"0.0.3"` for `"0.0.3"`), so compatible versions share entrypoint IDs. For example, `transfer` on an `"ERC20"` interface at version `"1.0.0"` is `SHA256("ERC20::1::transfer")[0..8]`. [`ContractEntrypointID::from_u64`] and [`ContractEntrypointID::into_u64`] convert between the bytes and the big-endian `u64` the `Invoke` syscall takes.
+
+Interface IDs use the same prefix under a domain tag, `SHA256("thruput-interface::" || name || "::" || major)[0..8]`, so they never coincide with an entrypoint ID.
 

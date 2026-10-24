@@ -30,6 +30,6 @@ This design ensures transaction behavior depends only on the auth claim (which i
 ## Key Concepts
 
 - **Weights**: Accumulated from signing keys and compared against a required threshold to determine if an auth claim is satisfied
-- **Bitmaps**: Represent sets of key IDs, where each bit position corresponds to a key ID (bit 0 = key 0, bit 1 = key 1, etc.). Only bits below `kMaxSigners` may be set.
+- **Bitmaps**: Represent sets of key IDs, where each bit position corresponds to a key ID (bit 0 = key 0, bit 1 = key 1, etc.). Only bits below `kMaxSigners` may be set; a bitmap with a higher bit set is `kAuthMalformed`.
 - **Key IDs**: Identifiers for public keys within an address's key set, valid range 0 to `kMaxSigners - 1` (0-20)
 - **Auth data**: `kSourceAddressAuthData` claims are checked against the [`AddressAuthData`] stored at the source address, which defines the available keys and their weights
