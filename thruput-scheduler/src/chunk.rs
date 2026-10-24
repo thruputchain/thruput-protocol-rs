@@ -1,7 +1,7 @@
 //! The protocol's chunked RPCs, as a Rust server receives them.
 //!
 //! hog_db publishes a committed block's balance deltas and auth-data changes
-//! as runs of [`HogsTransferredChunk`] and [`KeyChangeChunk`] records,
+//! as runs of [`NativeTokensTransferredChunk`] and [`KeyChangeChunk`] records,
 //! because a block can touch more accounts than one RPC record carries.
 //! Every record of a run carries the same `chunk_count`, each `chunk_index`
 //! in `[0, chunk_count)` is sent exactly once, and a run always has at least
@@ -19,7 +19,7 @@
 //!
 //! ```ignore
 //! use rpc_driver::{ChunkRunAssembler, ProgramError};
-//! use thruput_scheduler::{Delta, HogsTransferredChunk};
+//! use thruput_scheduler::{Delta, NativeTokensTransferredChunk};
 //! use thruput_xdr::types::BlockHeight;
 //! use xdrs::VecM;
 //!
@@ -28,9 +28,9 @@
 //! }
 //!
 //! impl Mempool {
-//!     fn scheddb_hogs_transferred_chunk(
+//!     fn scheddb_native_tokens_transferred_chunk(
 //!         &self,
-//!         chunk: HogsTransferredChunk,
+//!         chunk: NativeTokensTransferredChunk,
 //!     ) -> Result<(), ProgramError> {
 //!         // A chunk that breaks its run's framing is a sender bug; the
 //!         // error converts into the ProgramError a handler returns.
@@ -50,9 +50,11 @@ use rpc_api::{ChunkPosition, ChunkRecord};
 use thruput_xdr::types::BlockHeight;
 use xdrs::VecM;
 
-use crate::{Delta, HogsTransferredChunk, KeyChangeBatch, KeyChangeChunk};
+use crate::{
+    Delta, KeyChangeBatch, KeyChangeChunk, NativeTokensTransferredChunk,
+};
 
-impl ChunkRecord for HogsTransferredChunk {
+impl ChunkRecord for NativeTokensTransferredChunk {
     type Key = BlockHeight;
     type Part = VecM<Delta>;
 
@@ -87,7 +89,7 @@ mod tests {
     fn delta(lowbits: u64) -> Delta {
         Delta {
             address: ContractAddress::default(),
-            hog_delta: int128_xdr {
+            native_token_delta: int128_xdr {
                 highbits: 0,
                 lowbits,
             },
@@ -98,14 +100,14 @@ mod tests {
     fn a_transfer_chunk_comes_apart_into_block_position_and_deltas() {
         // The record a handler receives is what the dispatcher decoded from
         // the wire, so go through the wire form.
-        let chunk = HogsTransferredChunk {
+        let chunk = NativeTokensTransferredChunk {
             block: BlockHeight::new(42),
             chunk_index: 1,
             chunk_count: 3,
             deltas: VecM(vec![delta(1), delta(2)]),
         };
         let bytes = xdrs::txs::encode(&chunk).expect("encodes");
-        let decoded: HogsTransferredChunk =
+        let decoded: NativeTokensTransferredChunk =
             xdrs::txs::decode(&bytes).expect("decodes");
         let (block, position, deltas) = decoded.into_chunk();
         assert_eq!(block, BlockHeight::new(42));

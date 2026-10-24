@@ -12,15 +12,15 @@ use thruput_akkad::{
     DbSched_DbSched1_Client, DbSchedResult, DbTipResult, Discovery_Discovery2,
     Discovery_Discovery2_Client, Dogwood_Dogwood1, Dogwood_Dogwood1_Client,
     DogwoodDeliveryEnvelope, ExperimentConfig, GenesisCeremonyRequest,
-    GenesisCeremonyResult, GenesisConfiguration, HogAgeBatch, HogAgeResults,
-    LoadgenContextID, LoadgenExtensionResult,
-    LoadgenInterface_LoadgenInterfaceV1,
+    GenesisCeremonyResult, GenesisConfiguration, LoadgenContextID,
+    LoadgenExtensionResult, LoadgenInterface_LoadgenInterfaceV1,
     LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
-    OptSignedTransactionBatch, ParallelSignedTransactionBatch, Proposal,
-    ProposalContext, Repair_Repair2, Repair_Repair2_Client, RepairedBlocks,
-    RepairedProposal, RepairedSlot, RepairedTxs, SchedulerCommitOutcome,
-    SchedulerCoord_SchedulerCoord1, SchedulerCoord_SchedulerCoord1_Client,
-    SchedulerGetTipResult, SchedulerProposalResult, SchedulerValidationResult,
+    NativeTokenAgeBatch, NativeTokenAgeResults, OptSignedTransactionBatch,
+    ParallelSignedTransactionBatch, Proposal, ProposalContext, Repair_Repair2,
+    Repair_Repair2_Client, RepairedBlocks, RepairedProposal, RepairedSlot,
+    RepairedTxs, SchedulerCommitOutcome, SchedulerCoord_SchedulerCoord1,
+    SchedulerCoord_SchedulerCoord1_Client, SchedulerGetTipResult,
+    SchedulerProposalResult, SchedulerValidationResult,
     SignedCatchupBlocksRequest, SignedCatchupBlocksResult,
     SignedMissingBlocks, SignedMissingProposal, SignedMissingSlot,
     SignedMissingTxs, TransactionHashBatch, ValidatorID,
@@ -126,17 +126,17 @@ pub mod db_sched {
     ) -> Result<DbAddressAuthDataBatchResult, RpcError> {
         c.dbsched_get_address_auth_data(arg0, arg1).await
     }
-    pub async fn client_dbsched_get_hog_ages(
+    pub async fn client_dbsched_get_native_token_ages(
         c: &S,
         arg0: &(impl EncodesAs<ContractAddressBatch> + ?Sized),
-    ) -> Result<HogAgeResults, RpcError> {
-        c.dbsched_get_hog_ages(arg0).await
+    ) -> Result<NativeTokenAgeResults, RpcError> {
+        c.dbsched_get_native_token_ages(arg0).await
     }
-    pub async fn client_dbsched_write_hog_ages(
+    pub async fn client_dbsched_write_native_token_ages(
         c: &S,
-        arg0: &(impl EncodesAs<HogAgeBatch> + ?Sized),
+        arg0: &(impl EncodesAs<NativeTokenAgeBatch> + ?Sized),
     ) -> Result<DbSchedResult, RpcError> {
-        c.dbsched_write_hog_ages(arg0).await
+        c.dbsched_write_native_token_ages(arg0).await
     }
     pub async fn client_dbsched_create_snapshot(
         c: &S,
@@ -190,17 +190,17 @@ pub mod db_sched {
     ) -> Result<DbAddressAuthDataBatchResult, ProgramError> {
         t.dbsched_get_address_auth_data(arg0, arg1).await
     }
-    pub async fn trait_dbsched_get_hog_ages<T: DbSched_DbSched1>(
+    pub async fn trait_dbsched_get_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
         arg0: ContractAddressBatch,
-    ) -> Result<HogAgeResults, ProgramError> {
-        t.dbsched_get_hog_ages(arg0).await
+    ) -> Result<NativeTokenAgeResults, ProgramError> {
+        t.dbsched_get_native_token_ages(arg0).await
     }
-    pub async fn trait_dbsched_write_hog_ages<T: DbSched_DbSched1>(
+    pub async fn trait_dbsched_write_native_token_ages<T: DbSched_DbSched1>(
         t: &T,
-        arg0: HogAgeBatch,
+        arg0: NativeTokenAgeBatch,
     ) -> Result<DbSchedResult, ProgramError> {
-        t.dbsched_write_hog_ages(arg0).await
+        t.dbsched_write_native_token_ages(arg0).await
     }
     pub async fn trait_dbsched_create_snapshot<T: DbSched_DbSched1>(
         t: &T,
