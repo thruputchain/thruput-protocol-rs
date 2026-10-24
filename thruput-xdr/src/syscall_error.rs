@@ -46,7 +46,7 @@ impl SyscallErrorCode {
     /// No error
     pub const kSyscallErrorCodeNone: Self = Self(0);
 
-    /// Out of bounds pointer to wasm memory passed to syscall
+    /// Out of bounds pointer to contract memory passed to syscall
     pub const kSyscallErrorCodeFault: Self = Self(1);
 
     /// System call for supplied number is not supported
@@ -62,11 +62,11 @@ impl SyscallErrorCode {
     /// same address)
     pub const kSyscallErrorCodeContractAlreadyDeployed: Self = Self(5);
 
-    /// No return buffer is available.  Either the most recent subcall failed, or
+    /// No return buffer is available.  Either the most recent subcall faulted, or
     /// there have been no subcalls within this call frame.
     pub const kSyscallErrorCodeNoReturnBufferAvailable: Self = Self(6);
 
-    /// Invalid input to a syscall, such as subtracting below 0 on an nnint64
+    /// Invalid input to a syscall, such as subtracting below 0 on an nnint
     /// or a bytestring that is too long
     pub const kSyscallErrorCodeInvalidSyscallInput: Self = Self(7);
 

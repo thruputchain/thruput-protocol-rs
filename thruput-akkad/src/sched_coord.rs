@@ -160,7 +160,7 @@ impl SchedulerValidationOutcome {
 
     // Proposal batch metadata is malformed or fails to decode (e.g.
     // segment token/byte counts are inconsistent, XDR deserialization
-    // fails, or tx_hashes/tx_nondeterministic counts do not match).
+    // fails, or signed_hash/nondeterministic_data counts do not match).
     pub const SchedulerValidationMalformed: Self = Self(7);
 }
 impl From<i32> for SchedulerValidationOutcome {
