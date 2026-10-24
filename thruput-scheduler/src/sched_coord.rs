@@ -541,14 +541,14 @@ impl SchedulerErrorCode {
     // The mempool had no capacity to admit the transaction.
     pub const SchedulerErrorCapacity: Self = Self(1);
 
-    // The scheduler could not obtain the account's average hog age.
-    pub const SchedulerErrorHogAgeUnavailable: Self = Self(2);
+    // The scheduler could not obtain the account's average native-token age.
+    pub const SchedulerErrorNativeTokenAgeUnavailable: Self = Self(2);
 
     // The transaction's expiry block height is earlier than the current block.
     pub const SchedulerErrorExpired: Self = Self(3);
 
-    // The transaction's gas limit exceeds all hogs available to the account.
-    pub const SchedulerErrorInsufficientHogs: Self = Self(4);
+    // The transaction's gas limit exceeds the account's available native tokens.
+    pub const SchedulerErrorInsufficientNativeTokens: Self = Self(4);
 }
 impl From<i32> for SchedulerErrorCode {
     fn from(v: i32) -> Self {
@@ -562,14 +562,14 @@ impl core::fmt::Display for SchedulerErrorCode {
             x if x == Self::SchedulerErrorCapacity.0 => {
                 write!(f, "SchedulerErrorCode::SchedulerErrorCapacity")
             },
-            x if x == Self::SchedulerErrorHogAgeUnavailable.0 => {
-                write!(f, "SchedulerErrorCode::SchedulerErrorHogAgeUnavailable")
+            x if x == Self::SchedulerErrorNativeTokenAgeUnavailable.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorNativeTokenAgeUnavailable")
             },
             x if x == Self::SchedulerErrorExpired.0 => {
                 write!(f, "SchedulerErrorCode::SchedulerErrorExpired")
             },
-            x if x == Self::SchedulerErrorInsufficientHogs.0 => {
-                write!(f, "SchedulerErrorCode::SchedulerErrorInsufficientHogs")
+            x if x == Self::SchedulerErrorInsufficientNativeTokens.0 => {
+                write!(f, "SchedulerErrorCode::SchedulerErrorInsufficientNativeTokens")
             },
             _ => {
                 write!(f, "SchedulerErrorCode({})", self.0)

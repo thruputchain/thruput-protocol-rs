@@ -51,7 +51,7 @@ pub struct ShardCard {
 #[repr(C)]
 pub struct Delta {
     pub address: ContractAddress,
-    pub hog_delta: int128_xdr,
+    pub native_token_delta: int128_xdr,
 }
 
 // One slice of the native-token balance deltas a committed block finalized.
@@ -72,9 +72,9 @@ pub struct Delta {
 #[derive(schemars::JsonSchema)]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
-pub struct HogsTransferredChunk {
+pub struct NativeTokensTransferredChunk {
     // The height of the block in which these transfers occurred. The scheduler
-    // uses this height to update average hog ages.
+    // uses this height to update average native-token ages.
     pub block: BlockHeight,
     // This chunk's position in the block's run, from 0, and the run's length.
     // Every chunk of a run carries the same chunk_count, and each index in
@@ -95,7 +95,7 @@ pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is cal
     async fn scheddb_intro_shard(&self, arg0 : ShardCard) -> Result<(), ::rpc_api::ProgramError>;
         // Retired numbers, never to be reused, so that a peer built against one
     // fails to dispatch rather than misparse a newer payload:
-    //   2: scheddb_hogs_transferred(HogsTransferred), a block's deltas in one
+    //   2: the unchunked form of procedure 4, a block's deltas in one
     //      unbounded record, which a block with enough distinct recipients
     //      grows past any single-record cap (hogd#2332).
     //   3: scheddb_changed_addresses(BlockHeight, ContractAddressBatch),
@@ -107,7 +107,7 @@ pub trait SchedDb_SchedDb1: Send + Sync {        // [scheddb_intro_shard] is cal
     // shards the mempool completes the block once every registered shard has
     // sent its run's last chunk.
 
-    async fn scheddb_hogs_transferred_chunk(&self, arg0 : HogsTransferredChunk) -> Result<(), ::rpc_api::ProgramError>;
+    async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : NativeTokensTransferredChunk) -> Result<(), ::rpc_api::ProgramError>;
 }
 
 
@@ -136,11 +136,11 @@ impl ::rpc_api::RpcHandler for SchedDb_SchedDb1_Dispatcher {
                 let res = self.inner.scheddb_intro_shard(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
-            // scheddb_hogs_transferred_chunk
+            // scheddb_native_tokens_transferred_chunk
             4 => {
-                let args: (HogsTransferredChunk, ) =
+                let args: (NativeTokensTransferredChunk, ) =
                     xdrs::txs::decode(data).map_err(|_| ::rpc_api::RpcError::GarbageArguments)?;
-                let res = self.inner.scheddb_hogs_transferred_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
+                let res = self.inner.scheddb_native_tokens_transferred_chunk(args.0).await.map_err(|_| ::rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::rpc_api::RpcError::SystemError)
             }
             _ => Err(::rpc_api::RpcError::InvalidProcedure),
@@ -172,7 +172,7 @@ impl SchedDb_SchedDb1_Client {
          let buf = self.handle.send_call(Self::prog_vers(), 1, call).await?;
          xdrs::txs::decode(&buf).map_err(|_| ::rpc_api::RpcError::SystemError)
     }
-    pub async fn scheddb_hogs_transferred_chunk(&self, arg0 : &(impl xdrs::EncodesAs<HogsTransferredChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
+    pub async fn scheddb_native_tokens_transferred_chunk(&self, arg0 : &(impl xdrs::EncodesAs<NativeTokensTransferredChunk> + ?Sized)) -> Result<(), ::rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
