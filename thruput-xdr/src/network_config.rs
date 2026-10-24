@@ -119,10 +119,11 @@ impl core::fmt::Display for ConfigParamID {
 /// One configuration parameter and the value in force for it.
 ///
 /// Serves both uses of that pairing: `NetworkConfigV0` states a chain's
-/// configuration as a list of these, and consensus carries one per parameter
-/// being changed in `ConsensusValue::upgrades`, where everything a block does
-/// not name keeps the value it already has. Each arm carries its own type, so
-/// a future parameter need not be an `unsigned int`.
+/// configuration as a list of these, and is meant to carry one per parameter
+/// being changed by a consensus upgrade, where everything a block does not
+/// name keeps the value it already has. No upgrade mechanism exists yet:
+/// `ConsensusValue::upgrades` is opaque, and hogd leaves it empty. Each arm
+/// carries its own type, so a future parameter need not be an `unsigned int`.
 ///
 /// There is no `default` arm on purpose: a node that cannot name a parameter
 /// cannot know what value is in force for it, so an unrecognized id must fail
@@ -135,7 +136,8 @@ impl core::fmt::Display for ConfigParamID {
 #[non_exhaustive]
 pub enum ConfigParam {
     /// Concurrently open incremental SHA-256 buffers permitted per invocation
-    /// frame (`SHA256Update`, `SHA256Copy`, `SHA256Finalize`).
+    /// frame (`SHA256Update`, `SHA256Copy`, `SHA256Finalize`). 32 is the value
+    /// in force for a configuration that does not state one.
     // case kConfigParamMaxSHA256Buffers:
     //   u32 max_sha256_buffers;
     kConfigParamMaxSHA256Buffers { max_sha256_buffers: u32 } = ConfigParamID::kConfigParamMaxSHA256Buffers.0 as i32,
@@ -143,7 +145,8 @@ pub enum ConfigParam {
     /// invoke rather than only the savepoint-pushing ones that
     /// `kConfigParamMaxSavepointDepth` bounds. Each open frame holds a live contract
     /// runtime, so this is what stops a recursive call chain from growing until
-    /// the executor runs out of room for it.
+    /// the executor runs out of room for it. 16 is the value in force for a
+    /// configuration that does not state one.
     // case kConfigParamMaxCrossInvokeDepth:
     //   u32 max_cross_invoke_depth;
     kConfigParamMaxCrossInvokeDepth { max_cross_invoke_depth: u32 } = ConfigParamID::kConfigParamMaxCrossInvokeDepth.0 as i32,
@@ -153,7 +156,8 @@ pub enum ConfigParam {
     /// deploy: the executor holds every attached contract for the whole
     /// transaction, and the ones deployed are a subset chosen during execution.
     /// Attaching the same contract twice is rejected outright, so the count is
-    /// over distinct contracts either way.
+    /// over distinct contracts either way. 4 is the value in force for a
+    /// configuration that does not state one.
     ///
     /// Together with `kConfigParamMaxContractSizeBytes` this is what bounds the
     /// transaction's final commit batch, which the executor sends to storage as
@@ -188,11 +192,13 @@ pub enum ConfigParam {
     // case kConfigParamMaxContractSizeBytes:
     //   u32 max_contract_size_bytes;
     kConfigParamMaxContractSizeBytes { max_contract_size_bytes: u32 } = ConfigParamID::kConfigParamMaxContractSizeBytes.0 as i32,
-    /// Storage savepoints one transaction may have open at once: one per
-    /// `TryInvoke` frame still executing, plus the one the root commit takes.
-    /// A `TryInvoke` past the limit fails as the guest would see any other
-    /// refused call. `kMaxSavepointDepth` is the value in force for a
-    /// configuration that does not state one.
+    /// Storage savepoints one transaction may hold at once: one per successful
+    /// `TryInvoke` whose writes are still held (finished siblings included),
+    /// plus the one the root commit takes. A `TryInvoke` whose child would go
+    /// past the limit still runs, then fails deterministically, as one that
+    /// loses a lock conflict does, and its writes are discarded.
+    /// `kMaxSavepointDepth` (1024) is the value in force for a configuration
+    /// that does not state one.
     ///
     /// Every open savepoint is a live nested VM on one executor thread, so a
     /// chain must keep this within what its executors' stacks hold; hogd
@@ -217,8 +223,8 @@ pub enum ConfigParam {
     kConfigParamMaxAuthTokenDepth { max_auth_token_depth: u32 } = ConfigParamID::kConfigParamMaxAuthTokenDepth.0 as i32,
     /// Bytes of code (`code_size` in the artifact header) an RV32 artifact may
     /// carry to be admitted as an attached contract.
-    /// `kDefaultMaxRv32CodeBytes` is the value in force for a configuration
-    /// that does not state one.
+    /// `kDefaultMaxRv32CodeBytes` (262144) is the value in force for a
+    /// configuration that does not state one.
     ///
     /// Checked where a contract is attached, not where a deployed one is
     /// instantiated, so lowering it leaves deployed contracts runnable. The
@@ -229,8 +235,8 @@ pub enum ConfigParam {
     kConfigParamMaxRv32CodeBytes { max_rv32_code_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32CodeBytes.0 as i32,
     /// Bytes of guest data memory (`memory_bytes` in the artifact header) an
     /// RV32 artifact may declare to be admitted as an attached contract.
-    /// `kDefaultMaxRv32MemoryBytes` is the value in force for a configuration
-    /// that does not state one.
+    /// `kDefaultMaxRv32MemoryBytes` (65536) is the value in force for a
+    /// configuration that does not state one.
     ///
     /// Checked at attachment like `kConfigParamMaxRv32CodeBytes`. Every
     /// invocation provisions and seeds the declared memory outside gas, so a
@@ -251,7 +257,8 @@ pub enum ConfigParam {
     ///
     /// Neither wire type bounds its list, and no value was in force before this
     /// parameter: a list was limited only by the memory holding it. A
-    /// configuration omitting this one is not continuing an older rule.
+    /// configuration omitting this one is not continuing an older rule: the
+    /// value in force is 64.
     // case kConfigParamMaxAuthTokens:
     //   u32 max_auth_tokens;
     kConfigParamMaxAuthTokens { max_auth_tokens: u32 } = ConfigParamID::kConfigParamMaxAuthTokens.0 as i32,
@@ -268,7 +275,8 @@ pub enum ConfigParam {
     /// The executor holds a frame's calldata for the life of that frame and
     /// every open frame holds its own, so a chain must keep this within what
     /// `kConfigParamMaxCrossInvokeDepth` frames of it leave room for. No value
-    /// was in force before this parameter.
+    /// was in force before this parameter; for a configuration that does not
+    /// state one, the value in force is 65536.
     // case kConfigParamMaxCalldataLen:
     //   u32 max_calldata_len;
     kConfigParamMaxCalldataLen { max_calldata_len: u32 } = ConfigParamID::kConfigParamMaxCalldataLen.0 as i32,
@@ -283,7 +291,8 @@ pub enum ConfigParam {
     ///
     /// `ReturnBuffer` bounded itself at 1024 bytes before this parameter, so a
     /// configuration omitting this one is continuing an older rule rather than
-    /// lifting it. The executor states the value it continues at.
+    /// lifting it: the value in force for a configuration that does not state
+    /// one is 1024.
     // case kConfigParamMaxReturnBufferLen:
     //   u32 max_return_buffer_len;
     kConfigParamMaxReturnBufferLen { max_return_buffer_len: u32 } = ConfigParamID::kConfigParamMaxReturnBufferLen.0 as i32,
@@ -340,8 +349,9 @@ pub struct NetworkConfigV0 {
 
 /// The consensus-critical execution parameters a block executes under.
 ///
-/// The protocol blesses no value for any parameter: a chain states its
-/// configuration at genesis, so there is nothing a node silently inherits.
+/// A chain states its configuration at genesis. A parameter the
+/// configuration does not state takes the value its [`ConfigParam`] arm
+/// documents (see [`NetworkConfigV0`]).
 ///
 /// One version, because `v0` states its parameters as a list: a new parameter
 /// is an id and a [`ConfigParam`] arm, not a new arm here. The discriminant is

@@ -7,4 +7,4 @@ use crate::network::ProtocolCommit;
 /// Typed as [ProtocolCommit] rather than a string: the bytes are printable
 /// ASCII, but their width is part of the protocol, and the byte-string literal
 /// below fails to compile if it no longer fills the array.
-pub const PROTOCOL_VERSION: ProtocolCommit = *b"hogp/4ac269d90c2087a";
+pub const PROTOCOL_VERSION: ProtocolCommit = *b"hogp/3d76167ad41141e";

@@ -162,11 +162,12 @@ pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
 
 pub type TxInfoBatch = VecM::<TxInfo>;
 
-/// Max contracts per filter and max filters per query.  Matches Soroban
-/// getEvents' limit of 5; designed to be low enough that the merge-walk
-/// stays cheap even on degenerate inputs.
+/// Max contracts per filter.  Matches Soroban getEvents' limit of 5;
+/// designed to be low enough that the merge-walk stays cheap even on
+/// degenerate inputs.
 pub const kMaxContractAddressesPerEventFilter : u32 = 5;
 
+/// Max filters per query, chosen like `kMaxContractAddressesPerEventFilter`.
 pub const kMaxEventFiltersPerQuery : u32 = 5;
 
 pub type ContractAddressList = VecM::<ContractAddress, kMaxContractAddressesPerEventFilter>;
@@ -193,11 +194,12 @@ pub struct EventTopicFilter {
 }
 
 /// A single event-filter predicate: events must be emitted by one of
-/// `contract_addresses` AND match the topic constraints.  Required
-/// non-empty contract_addresses — the indexer has no topic-indexed
-/// column family and can't efficiently serve "any contract" scans.
-/// (When such an index is added, the gateway relaxes the non-empty
-/// check; the XDR stays the same.)
+/// `contract_addresses` AND match the topic constraints.  The indexer has
+/// no topic-indexed column family and can't efficiently serve "any
+/// contract" scans, so a query with no filters, or with any filter whose
+/// contract_addresses is empty, matches nothing: it returns an empty page,
+/// or IndexerQueryInvalidCursor if it carries a cursor.  (When such an
+/// index is added, the indexer can relax this; the XDR stays the same.)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -367,7 +369,11 @@ pub struct BlockTransactionQuery {
 pub struct TransactionRefPage {
     pub refs: TransactionRefBatch,
     pub cursor: PaginationCursor,
+    /// Highest block the indexer serves.
     pub latest_block: BlockHeight,
+    /// Lowest block the query covers: 1 (the first indexed block) for
+    /// get_transactions_by_block, and the indexer's oldest retained block
+    /// (today always 0) for get_transactions_by_address.
     pub oldest_block: BlockHeight,
 }
 
@@ -387,9 +393,11 @@ pub struct IndexerQueryOutcome(pub i32);
 impl IndexerQueryOutcome {
     pub const IndexerQueryOk: Self = Self(0);
 
-    /// The indexer's database is not open (still starting up, or shut
-    /// down).  Transient from the cluster's point of view: retry, or ask
-    /// a healthy node.
+    /// The indexer cannot serve the query yet: its database is not open
+    /// (still starting up, or shut down), or, for block queries, no block
+    /// is indexed yet or the block projection is still being built.
+    /// Transient from the cluster's point of view: retry, or ask a healthy
+    /// node.
     pub const IndexerQueryNotReady: Self = Self(1);
 
     /// Unrecoverable backend failure (corrupt record, storage error).

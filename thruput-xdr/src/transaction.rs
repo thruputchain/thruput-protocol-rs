@@ -229,13 +229,12 @@ pub struct Transaction {
     pub invocation: Invocation,
     /// Uniqueness and replay protection data.
     pub uniquifier: Uniquifier,
-    /// New contracts to deploy before execution begins.
+    /// Contracts made available for deployment during this transaction.
     ///
-    /// These contracts become available on-chain before the root invocation
-    /// executes, allowing the transaction to deploy and immediately use contracts.
-    /// Contracts already deployed on-chain do not need to be included here.
-    ///
-    /// Deployed via the DeployContract syscall during transaction execution.
+    /// Attaching a contract does not deploy it: nothing reaches the chain
+    /// unless a frame deploys it with the DeployContract syscall, which can then
+    /// be invoked for the rest of the transaction. Contracts whose code is
+    /// already on-chain do not need to be included here.
     pub contracts_to_deploy: VecM<Contract>,
     /// Authorization claim specifying required signatures.
     ///
@@ -261,8 +260,9 @@ pub struct DecoratedSignature {
     /// The KeyID of the public key that created this signature.
     ///
     /// This is matched against the auth claims to determine if the signature
-    /// satisfies the transaction's authorization requirements. See [`AuthClaim`]
-    /// in auth_claim.x for details on how keys are registered and weighted.
+    /// satisfies the transaction's authorization requirements. Keys are
+    /// registered and weighted in [`AddressAuthData`] (address_auth.x); see
+    /// [`AuthClaim`] in auth_claim.x for how a claim selects them.
     // uint32_t
     pub public_key_id: u32,
     /// The cryptographic signature itself.
@@ -275,7 +275,7 @@ pub struct DecoratedSignature {
 /// know a transaction by.
 ///
 /// This is the SHA-256 hash of the XDR-encoded [`Transaction`] -- the same
-/// object the signatures are over. It deliberately covers neither the
+/// encoding the signatures cover (see [`SignedTransaction`]). It deliberately covers neither the
 /// signatures wrapped around it by [`SignedTransaction`] nor the
 /// nondeterministic data attached to it by [`ProposedTransaction`]:
 ///
@@ -313,9 +313,12 @@ pub type SignedTransactionHash = SHA256Hash;
 /// A transaction with cryptographic signatures.
 ///
 /// This is the form in which transactions are transmitted and stored.
-/// Before execution, the signatures are verified against the auth claims.
+/// Before execution, the signatures are verified against the auth claim.
 ///
-/// The signatures are over the [`Transaction`] object.
+/// Each signature is over
+/// `cxs(DomainSeparator("Transaction")) || network_hash || xdr(tx)`: the
+/// domain separator keeps it from being reinterpreted as a signature over
+/// another object, and the network hash binds it to one network.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -327,7 +330,7 @@ pub struct SignedTransaction {
     /// Signatures that authorize this transaction.
     ///
     /// These signatures must satisfy the auth_claim in the transaction.
-    /// The signatures are over the [`Transaction`] object.
+    /// See [`SignedTransaction`] for the message they sign.
     pub signatures: VecM<DecoratedSignature>,
     /// The public key a `kPubkeySignature` auth claim names by hash.
     ///
@@ -383,7 +386,8 @@ pub struct NondeterministicProposalData {
     /// A bitstring of nondeterministic decisions made during execution.
     ///
     /// This includes:
-    /// - Two-phase commit conflict resolution results from try_invoke frames (one boolean per frame)
+    /// - Two-phase commit conflict resolution results from try_invoke frames (one boolean
+    ///   per try_invoke frame that succeeds and attempts lock acquisition)
     /// - Other nondeterministic outcomes that must be consistent across validators
     ///
     /// Each bit represents a binary decision point encountered during execution.

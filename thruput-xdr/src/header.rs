@@ -31,15 +31,16 @@ use ::serde::{{Serialize, Deserialize}};
 /// Inputs fixed before executing a candidate block.
 ///
 /// Supplied by the coordinator when it asks the scheduler to build a proposal;
-/// the parent block is identified by the surrounding RPC. Both fields are
-/// copied into the resulting `ProposalHeader`.
+/// the parent block is identified by the surrounding RPC. `proposer` and
+/// `block_timepoint` are copied into the resulting [`ProposalHeader`].
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ProposalContext {
-    // Network protocol version.
+    /// Network protocol version. `ProposalHeader` has no protocol field; the
+    /// block's version is `ConsensusValue::protocol`.
     pub protocol: Protocol,
     /// Block proposer. Nodes missing block data fetch it from the proposer.
     pub proposer: ValidatorID,
@@ -65,7 +66,8 @@ pub struct ProposalHeader {
     /// The hash of the network name, separating this network's blocks from
     /// those of other networks.
     pub network_hash: NetworkHash,
-    /// The hash of the post-block network configuration.
+    /// The hash of the post-block [`ConfigHashPreimage`]: the storage cost
+    /// model, network configuration and default wallet.
     pub config_hash: ConfigHash,
     /// Block proposer. Nodes missing block data fetch it from the proposer.
     pub proposer: ValidatorID,

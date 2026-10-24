@@ -127,7 +127,7 @@ impl DerefMut for TimePoint {
 }
 
 /// Typedef representing a length of memory in bytes, within
-/// a wasm runtime.  This is primarily used as an argument to syscalls,
+/// a contract's memory.  This is primarily used as an argument to syscalls,
 /// and should not be directly used by most contracts.
 // uint32_t
 pub type RuntimeMemoryLength = u32;
@@ -1238,14 +1238,14 @@ impl StorageKeyType {
 
     /// Address authorization data.
     ///
-    /// Stores [`AddressAuthData`] - the authorization configuration including
-    /// public keys, weights, gas permissions, and nonce rules.
+    /// Stores [`AddressAuthData`] - the authorization configuration: public
+    /// keys, their weights, and the required weight.
     pub const AuthData: Self = Self(2);
 
     /// Address metadata.
     ///
-    /// Stores [`AddressMetadata`] - metadata about the contract deployed at
-    /// this address (hash, size, type).
+    /// Stores [`DeployedContractHash`] - metadata about the contract deployed
+    /// at this address (hash, size, type).
     pub const Metadata: Self = Self(3);
 
     /// Replay cache for nonce tracking.
