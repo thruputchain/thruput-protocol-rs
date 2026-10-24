@@ -8,8 +8,8 @@ The `contract` module provides types and structures for contract deployment, exe
 
 - **Contract types**: RV32 blobs, native precompiled code, and test mocks
 - **Deployment**: Deterministic address derivation and deployment metadata
-- **Interfaces**: Contract interface identification and entrypoint derivation
-- **Metadata**: Deployed contract information and address metadata
+- **Entrypoints**: 8-byte contract method identifiers and how the SDK derives them
+- **Metadata**: Deployed contract information
 
 ## Key Concepts
 
