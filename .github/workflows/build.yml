@@ -15,39 +15,49 @@ permissions:
 
 jobs:
   dependency-policy:
+    # (No registry credentials here: every dependency comes from crates.io.)
     permissions:
       contents: read
     uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
-    with:
-      registry-name: thruput
-    secrets:
-      registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
   workflow-lint:
     permissions:
       contents: read
     uses: thruputchain/actions/.github/workflows/workflow-lint.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
     with:
-      lint-app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
       shellcheck-scripts: true
-    secrets:
-      lint-app-private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
 
+  # Builds and tests the committed sources. It needs no secrets and neither
+  # private repository (the protocol submodule, x23c), so it runs the same
+  # for pull requests from forks.
   build:
     needs: dependency-policy # inspect dependencies before anything builds them
     permissions:
       contents: read
-    runs-on: namespace-profile-hogd-linux-2604
-    env:
-      CARGO_REGISTRIES_THRUPUT_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-      CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
-      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
-      
+    runs-on: ubuntu-latest
     steps:
-      - name: Clean up .gitconfig
-        run: |
-          echo "Cleaning up .gitconfig"
-          rm -f /home/hogci/.gitconfig
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Rust 1.96
+        run: rustup toolchain install 1.96.0 --profile minimal --component clippy,rustfmt --target riscv32im-unknown-none-elf --no-self-update
+      - name: Run CI checks
+        run: ./scripts/ci-check.sh
+
+  # Checks that the committed generated sources match the protocol submodule
+  # and the latest x23c. Both live in private repositories, read with the
+  # protocol synchronizer App's tokens, so this job runs only where the
+  # repository's secrets are: not for pull requests from forks (their
+  # generated sources are checked when they reach main). It runs on the
+  # runner the x23c release binary is built for.
+  generated:
+    name: Generated sources
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+    runs-on: namespace-profile-hogd-linux-2604
+    steps:
       - name: Generate protocol read token
         id: protocol-token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
@@ -68,24 +78,6 @@ jobs:
         run: |
           git -c url."https://x-access-token:${GH_TOKEN}@github.com/thruputchain/thruput-protocol.git".insteadOf=git@github.com:thruputchain/thruput-protocol.git \
             submodule update --init --depth 1 protocol
-      - name: Install rustup if needed
-        run: |
-          if ! command -v rustup >/dev/null 2>&1; then
-            CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
-            curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused \
-              --location --silent --show-error --fail https://sh.rustup.rs \
-              | sh -s -- --default-toolchain none --profile minimal -y
-            echo "CARGO_HOME=$CARGO_HOME" >> "$GITHUB_ENV"
-            echo "$CARGO_HOME/bin" >> "$GITHUB_PATH"
-          fi
-      - name: Set up Rust 1.96
-        run: |
-          rustup toolchain install 1.96.0 --profile minimal --component clippy,rustfmt --target riscv32im-unknown-none-elf --no-self-update
-          rustup default 1.96.0
-      - name: Set up dated nightly for rustdoc and rustfmt
-        run: |
-          rustup toolchain install nightly-2026-05-26 --profile minimal --component rustfmt --no-self-update
-          rustup default nightly-2026-05-26
       - name: Generate hogd read token
         id: hogd-token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
@@ -110,10 +102,8 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/protocol-rs-generator"
           "$RUNNER_TEMP/protocol-rs-generator/bin/pip" install 'PyYAML==6.0.3'
           echo "$RUNNER_TEMP/protocol-rs-generator/bin" >> "$GITHUB_PATH"
-      - name: Setup environment
-        uses: ./.github/actions/setup
-      - name: Run CI checks
-        run: XDRC="$RUNNER_TEMP/x23c" ./scripts/ci-check.sh
+      - name: Check generated sources
+        run: XDRC="$RUNNER_TEMP/x23c" ./scripts/generate.sh --check
 
   stable-compat:
     name: Current stable compatibility
@@ -121,31 +111,13 @@ jobs:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     permissions:
       contents: read
-    runs-on: namespace-profile-hogd-linux-2604
+    runs-on: ubuntu-latest
     steps:
-      - name: Clean up .gitconfig
-        run: rm -f /home/hogci/.gitconfig
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Install rustup if needed
-        run: |
-          if ! command -v rustup >/dev/null 2>&1; then
-            CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
-            curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused \
-              --location --silent --show-error --fail https://sh.rustup.rs \
-              | sh -s -- --default-toolchain none --profile minimal -y
-            echo "CARGO_HOME=$CARGO_HOME" >> "$GITHUB_ENV"
-            echo "$CARGO_HOME/bin" >> "$GITHUB_PATH"
-          fi
       - name: Set up current stable Rust
-        run: |
-          rustup toolchain install stable --profile minimal --no-self-update
-          rustup default stable
+        run: rustup toolchain install stable --profile minimal --no-self-update
       - name: Test workspace
-        env:
-          CARGO_REGISTRIES_THRUPUT_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-          CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
-          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: cargo +stable test --workspace --locked

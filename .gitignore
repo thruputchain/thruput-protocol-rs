@@ -20,8 +20,5 @@ target/
 
 /target
 
-#can be cleaned up once the actions repo can be public
-/actions/
-
 #mac nonsense
 **/.DS_Store

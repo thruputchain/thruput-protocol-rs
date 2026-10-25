@@ -11,7 +11,7 @@ repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
 keywords = ["xdr", "blockchain", "thruput"]
-categories.workspace = true
+categories = ["cryptography::cryptocurrencies", "encoding", "no-std"]
 include = [
     "**/*.rs",
     "build.rs",
@@ -20,6 +20,10 @@ include = [
     "src/syscalls.yaml",
     "syscalls_docs.json"
 ]
+
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
 
 [lib]
 crate-type = ["rlib"]

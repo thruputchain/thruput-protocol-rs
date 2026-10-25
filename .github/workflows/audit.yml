@@ -15,9 +15,6 @@ jobs:
     uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
     with:
       checks: advisories
-      registry-name: thruput
-    secrets:
-      registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
   notify:
     needs: scan

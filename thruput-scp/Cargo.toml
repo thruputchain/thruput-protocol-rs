@@ -13,6 +13,10 @@ keywords.workspace = true
 categories.workspace = true
 description =  "Bindings for Thruput scp rpcs"
 
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
+
 [lib]
 crate-type = ["rlib"]
 

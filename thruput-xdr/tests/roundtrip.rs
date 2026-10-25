@@ -117,7 +117,7 @@ fn sample_invocation() -> Invocation {
             0x0123_4567_89AB_CDEF,
         ),
         gas_limit: u64::MAX,
-        calldata: b"hello groundhog".as_slice().try_into().unwrap(),
+        calldata: b"hello thruput".as_slice().try_into().unwrap(),
     }
 }
 
