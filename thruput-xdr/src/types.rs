@@ -444,9 +444,11 @@ impl schemars::JsonSchema for MlDsa65Signature {
 
 
 
+// 
+/// Represents a 4032-byte ML-DSA-65 (FIPS 204) secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
-#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[derive(Copy)]
 #[repr(transparent)]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -518,6 +520,80 @@ impl schemars::JsonSchema for MlDsa65PublicKey {
 
 
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct MlDsa65SecretKey {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 4032 as usize],
+}
+impl From<[u8; 4032 as usize]> for MlDsa65SecretKey {
+    fn from(_inner: [u8; 4032 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+impl MlDsa65SecretKey {
+    pub fn into_inner(self) -> [u8; 4032 as usize] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 4032 as usize]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for MlDsa65SecretKey {
+    type Target = [u8; 4032 as usize];
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+impl DerefMut for MlDsa65SecretKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+impl AsRef<[u8]> for MlDsa65SecretKey {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+impl<'a> From<&'a [u8; 4032]> for &'a MlDsa65SecretKey {
+    fn from(arr: &[u8; 4032]) -> Self {
+        let ptr = arr as *const [u8; 4032] as *const MlDsa65SecretKey;
+        unsafe { &*ptr }
+    }
+}
+#[cfg(feature = "xdrs")]
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a MlDsa65SecretKey {
+  fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+      let arr: &[u8; 4032] = xdrs::read_xdr(r)?;
+      let val = Self::from(arr);
+      Ok(val)
+  }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for MlDsa65SecretKey {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "MlDsa65SecretKey".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "string",
+            "contentEncoding": "hex",
+            "contentMediaType": "application/binary",
+            "minLength": 8064,
+            "maxLength": 8064
+        })
+    }
+}
+
+
+
 /// Represents the cryptographic scheme used for a signature or public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -560,9 +636,10 @@ impl core::fmt::Display for CryptographicScheme {
 
 /// Union of a Signature type over the various cryptographic schemes.
 ///
-/// The ML-DSA arms of Signature and PublicKey are boxed (heap allocated) in
-/// both C++ and Rust, so that Ed25519 signatures and keys, which are most of
-/// them, do not each take the size of the largest ML-DSA value in memory.
+/// The ML-DSA arms of Signature, PublicKey and SecretKey are boxed (heap
+/// allocated) in both C++ and Rust, so that Ed25519 signatures and keys, which
+/// are most of them, do not each take the size of the largest ML-DSA value in
+/// memory.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -679,8 +756,6 @@ impl schemars::JsonSchema for PublicKeyHash {
 
 
 /// Union of a SecretKey type over the various cryptographic schemes.
-///
-/// There is no ML-DSA variant: nodes never sign with ML-DSA.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
@@ -691,6 +766,10 @@ pub enum SecretKey {
     // case Ed25519:
     //   Ed25519SecretKey ed25519;
     Ed25519 { ed25519: Ed25519SecretKey } = CryptographicScheme::Ed25519.0 as i32,
+    // #[rust(box_ptr)], #[cpp(box)]
+    // case MlDsa65:
+    //   Box<MlDsa65SecretKey> mldsa65;
+    MlDsa65 { mldsa65: Box<MlDsa65SecretKey> } = CryptographicScheme::MlDsa65.0 as i32,
     
 }
 

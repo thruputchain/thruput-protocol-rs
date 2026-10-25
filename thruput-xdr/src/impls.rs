@@ -148,27 +148,23 @@ macro_rules! base58_debug {
 
 base58_debug!(ContractAddress, SHA256Hash);
 
-// Ed25519SecretKey also carries `#[rust(no_debug)]`: SecretKey and
+// The secret key types also carry `#[rust(no_debug)]`: SecretKey and
 // ValidatorPrivateInfo derive Debug, and a derived impl here would print the
 // private key into any log that formats them.
-impl core::fmt::Debug for Ed25519SecretKey {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        f.write_str("Ed25519SecretKey(<redacted>)")
-    }
+macro_rules! redacted_debug {
+    ($($t:ident),+ $(,)?) => {$(
+        impl core::fmt::Debug for $t {
+            fn fmt(
+                &self,
+                f: &mut core::fmt::Formatter<'_>,
+            ) -> core::fmt::Result {
+                f.write_str(concat!(stringify!($t), "(<redacted>)"))
+            }
+        }
+    )+};
 }
 
-// MlDsa65PublicKey carries `#[rust(no_debug)]` too: a derived impl prints all
-// 1952 bytes, also through PublicKey's derived Debug. Its first 8 bytes in
-// hex are enough to tell keys apart in a log.
-impl core::fmt::Debug for MlDsa65PublicKey {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        f.write_str("MlDsa65PublicKey(")?;
-        for b in &self[..8] {
-            write!(f, "{b:02x}")?;
-        }
-        f.write_str("..)")
-    }
-}
+redacted_debug!(Ed25519SecretKey, MlDsa65SecretKey);
 
 impl ContractEntrypointID {
     /// Builds an entrypoint ID from its numeric form, storing `n` as
