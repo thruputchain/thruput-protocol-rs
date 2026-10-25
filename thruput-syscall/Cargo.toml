@@ -10,8 +10,12 @@ repository.workspace = true
 homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
-categories.workspace = true
+categories = ["cryptography::cryptocurrencies", "encoding", "no-std"]
 description = "Raw syscall dispatch ABI for the Thruput guest"
+
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
 
 [lib]
 crate-type = ["rlib"]

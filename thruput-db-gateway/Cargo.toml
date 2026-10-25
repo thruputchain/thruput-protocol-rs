@@ -1,6 +1,6 @@
 [package]
 name = "thruput-db-gateway"
-description = "Bindings for Thruput DbGateway1: hogdb's public-RPC-gateway-facing read interface"
+description = "Bindings for Thruput DbGateway1, the database's read interface for the public RPC gateway"
 version.workspace = true
 rust-version.workspace = true
 edition.workspace = true
@@ -12,6 +12,10 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
+
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
 
 [lib]
 crate-type = ["rlib"]

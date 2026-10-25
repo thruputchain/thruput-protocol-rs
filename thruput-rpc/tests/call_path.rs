@@ -162,12 +162,16 @@ async fn dropping_a_waiting_call_drops_its_handler_and_the_link_keeps_working()
     held.abort();
     assert!(held.await.unwrap_err().is_cancelled());
 
-    // The handler task is aborted with its call; a permit now finds no one.
-    permits.add_permits(1);
+    // Dropping the call aborted the handler's task, which drops the handler
+    // where it waits. No permit yet: a handler still inside the poll that
+    // reported it entered could take one and finish before the abort lands.
     while !dropped.load(Ordering::SeqCst) {
         tokio::task::yield_now().await;
     }
+    // Nothing is left to take a permit.
+    permits.add_permits(1);
     round_trips(&client).await;
+    assert_eq!(permits.available_permits(), 1);
 }
 
 #[tokio::test]

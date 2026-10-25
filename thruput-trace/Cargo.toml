@@ -13,6 +13,10 @@ keywords.workspace = true
 categories.workspace = true
 description =  "Thruput transaction traces"
 
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
+
 [lib]
 crate-type = ["rlib"]
 
@@ -42,7 +46,7 @@ features = ["xdrs", "alloc", "schema"]
 workspace = true
 features = ["derive", "int128", "alloc", "schemars"]
 
-[dependencies.hogexec-internal]
+[dependencies.thruput-exec-internal]
 workspace = true
 
 [dependencies.xdr-common]

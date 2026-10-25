@@ -13,6 +13,10 @@ readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
 
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
+
 [lib]
 crate-type = ["rlib"]
 

@@ -1,14 +1,14 @@
 //! The protocol's chunked RPCs, as a Rust server receives them.
 //!
-//! hog_db publishes a committed block's balance deltas and auth-data changes
-//! as runs of [`NativeTokensTransferredChunk`] and [`KeyChangeChunk`] records,
+//! The database publishes a committed block's balance deltas and auth-data
+//! changes as runs of [`NativeTokensTransferredChunk`] and [`KeyChangeChunk`] records,
 //! because a block can touch more accounts than one RPC record carries.
 //! Every record of a run carries the same `chunk_count`, each `chunk_index`
 //! in `[0, chunk_count)` is sent exactly once, and a run always has at least
 //! one record, so an empty message is a run of one empty record. The records
 //! of a run may be sent concurrently and over several connections, so they
 //! can arrive in any order. The `KeyChangeChunk` runs of several heights can
-//! interleave; hog_db sends one height's `NativeTokensTransferredChunk` run
+//! interleave; the database sends one height's `NativeTokensTransferredChunk` run
 //! only once the previous one is acknowledged.
 //!
 //! The [`ChunkRecord`] impls here take the two records apart into height,
@@ -16,10 +16,9 @@
 //! or `MempoolAuth1` (over which the auth server forwards `KeyChangeChunk`
 //! runs to the mempool) hands every record it receives to a
 //! `thruput_rpc_driver::ChunkRunAssembler`, which returns the height's whole message
-//! once every chunk of its run is in, with the parts read as one sequence;
-//! hogd's C++ mempool and auth server do the same with
-//! `hogd/base/chunk_run_assembler.h`. This crate depends on `thruput_rpc_api` alone,
-//! so the assembler is not named here:
+//! once every chunk of its run is in, with the parts read as one sequence.
+//! This crate depends on `thruput_rpc_api` alone, so the assembler is not
+//! named here:
 //!
 //! ```
 //! use thruput_rpc_driver::{ChunkRunAssembler, ProgramError};

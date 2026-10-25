@@ -32,8 +32,8 @@ traces=(
   transaction_trace.x
 )
 
-# XDR files for hogexec-internal
-hogexec_internal=(
+# XDR files for thruput-exec-internal
+exec_internal=(
   ffi_enums.x
 )
 
@@ -167,8 +167,8 @@ done
 # as an intra-doc link and fails documentation builds with warnings denied.
 perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' thruput-trace/src/db_conflict.rs
 
-for ffi_enum in "${hogexec_internal[@]}"; do
-  generate_no_schema "protocol/${ffi_enum}" "hogexec-internal"
+for ffi_enum in "${exec_internal[@]}"; do
+  generate_no_schema "protocol/${ffi_enum}" "thruput-exec-internal"
 done
 
 for rpc in "${rpcs[@]}"; do

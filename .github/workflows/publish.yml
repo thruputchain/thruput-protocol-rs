@@ -68,31 +68,15 @@ jobs:
       # baseline would resolve to that new tag and compare the release against
       # itself. Here the workspace version is already bumped, so this validates
       # that the bump is large enough for the API changes since the previous
-      # release.
-      - name: Select semver baseline packages
-        id: baseline
-        run: |
-          set -euo pipefail
-          baseline=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*')
-          echo "revision=$baseline" >> "$GITHUB_OUTPUT"
-          if git show "$baseline:Cargo.toml" | grep -q '^thruput-xdr ='; then
-            echo "packages=" >> "$GITHUB_OUTPUT"
-          else
-            # New package identities have no same-name baseline. Keep checking
-            # the unchanged package until a Thruput release becomes the baseline.
-            echo "packages=hogexec-internal" >> "$GITHUB_OUTPUT"
-          fi
-
+      # release, the nearest `v*` tag.
       - name: semver check
-        uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-semver-checks@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         env:
           # Historical baselines may use this alias. Cargo unifies aliases
           # for the same index, so both names need the same credential.
           CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
           CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
         with:
-          baseline-rev: ${{ steps.baseline.outputs.revision }}
-          packages: ${{ steps.baseline.outputs.packages }}
           semver-checks-version: '0.50.0'
           registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
@@ -106,7 +90,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: dry run
-        uses: thruputchain/actions/cargo-publish-dry-run@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-publish-dry-run@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           registry-name: thruput
           skip-clippy: true
@@ -115,7 +99,7 @@ jobs:
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
         id: publish-tag
-        uses: thruputchain/actions/cargo-version-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-version-tag@3e0d08d054591a349331ab57fe72197d6ccc0cf3
 
       - name: push tag
         if: ${{ !inputs.dry-run }}
@@ -147,7 +131,7 @@ jobs:
 
       - name: publish
         if: ${{ !inputs.dry-run }}
-        uses: thruputchain/actions/cargo-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-publish@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: thruput

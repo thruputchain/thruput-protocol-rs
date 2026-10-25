@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use hogexec_internal::ffi_enums::*;
+use thruput_exec_internal::ffi_enums::*;
 use thruput_xdr::SyscallNo;
 use thruput_xdr::auth_claim::*;
 use thruput_xdr::auth_token::*;

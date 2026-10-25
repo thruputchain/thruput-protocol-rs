@@ -4,12 +4,14 @@
 # This is the single source of truth for the build job's checks:
 # .github/workflows/build.yml runs this script, and
 # scripts/workflow-check.sh is a thin wrapper around it.
+#
+# It builds the committed sources only, so it needs neither the protocol
+# submodule nor x23c. Whether those sources are up to date with the protocol
+# is checked separately, by `scripts/generate.sh --check` (the build
+# workflow's generated-sources job).
 
 set -e # exit on error
 set -o xtrace
-
-git submodule update --init --recursive
-./scripts/generate.sh --check
 
 LOCKED=(--locked)
 if [[ "${1:-}" == "--unlocked" ]]; then
@@ -35,8 +37,7 @@ kargo build "${g[@]}" --features=std
 kargo build "${g[@]}" --features=xdrs
 kargo build "${g[@]}" --features=xdrs,syscalls_mock
 
-CARGO_NET_GIT_FETCH_WITH_CLI=true \
-    cargo +"$NIGHTLY_TOOLCHAIN" "${LOCKED[@]}" doc -F syscalls_mock --no-deps "${g[@]}"
+cargo +"$NIGHTLY_TOOLCHAIN" "${LOCKED[@]}" doc -F syscalls_mock --no-deps "${g[@]}"
 
 kargo build "${g[@]}" --features=serde
 kargo build "${g[@]}" --features=serde,xdrs
