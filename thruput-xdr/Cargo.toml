@@ -16,6 +16,7 @@ include = [
     "**/*.rs",
     "build.rs",
     "Cargo.toml",
+    "LICENSE",
     "docs/**/*.md",
     "src/syscalls.yaml",
     "syscalls_docs.json"
