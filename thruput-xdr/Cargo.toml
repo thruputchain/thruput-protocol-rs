@@ -13,6 +13,7 @@ readme.workspace = true
 keywords = ["xdr", "blockchain", "thruput"]
 categories = ["cryptography::cryptocurrencies", "encoding", "no-std"]
 include = [
+    "LICENSE",
     "**/*.rs",
     "build.rs",
     "Cargo.toml",

@@ -81,4 +81,7 @@ sources are up to date with `bash scripts/generate.sh --check`.
 
 ## License
 
-Licensed under the Apache License, Version 2.0 ([LICENSE](LICENSE)).
+Copyright 2026 Stellar Development Foundation. Licensed under the Apache
+License, Version 2.0. Each published crate includes the workspace
+[LICENSE](LICENSE). The `thruput-scp` crate also includes a `NOTICE` file
+with its upstream attribution.

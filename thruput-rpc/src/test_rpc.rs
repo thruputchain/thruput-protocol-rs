@@ -1,7 +1,10 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d205b2a2427fe9af85bb4fcdcf7e85ac770d5961
+// Generated from xdrc commit: 2ff2d08a54a36835f1f9a22aa693ba3205b0217e
+
+// A program to test the rpc driver, used in {s}rpcthroughput.
+// This file is present in protocol/ to support cross-language RPC testing.
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -22,9 +25,6 @@ use xdrs::*;
 
 #[cfg(feature = "serde")]
 use ::serde::{{Serialize, Deserialize}};
-
-// A program to test the rpc driver, used in {s}rpcthroughput.
-// This file is present in protocol/ to support cross-language RPC testing.
 
 pub type Data = BytesM;
 
