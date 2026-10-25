@@ -18,12 +18,12 @@ jobs:
     # (No registry credentials here: every dependency comes from crates.io.)
     permissions:
       contents: read
-    uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
+    uses: thruputchain/actions/.github/workflows/rust-dependency-policy.yml@3e0d08d054591a349331ab57fe72197d6ccc0cf3
 
   workflow-lint:
     permissions:
       contents: read
-    uses: thruputchain/actions/.github/workflows/workflow-lint.yml@484be875e4e630d26594110bcc0ab6bf42eeaba7
+    uses: thruputchain/actions/.github/workflows/workflow-lint.yml@3e0d08d054591a349331ab57fe72197d6ccc0cf3
     with:
       shellcheck-scripts: true
 

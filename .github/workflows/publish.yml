@@ -70,7 +70,7 @@ jobs:
       # that the bump is large enough for the API changes since the previous
       # release, the nearest `v*` tag.
       - name: semver check
-        uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-semver-checks@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         env:
           # Historical baselines may use this alias. Cargo unifies aliases
           # for the same index, so both names need the same credential.
@@ -78,10 +78,6 @@ jobs:
           CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
         with:
           semver-checks-version: '0.50.0'
-          # cargo-semver-checks fails on a package the baseline doesn't have.
-          # thruput-exec-internal was hogexec-internal through v0.61.0; drop
-          # this once a release containing it is the baseline.
-          exclude: thruput-exec-internal
           registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 
@@ -94,7 +90,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: dry run
-        uses: thruputchain/actions/cargo-publish-dry-run@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-publish-dry-run@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           registry-name: thruput
           skip-clippy: true
@@ -103,7 +99,7 @@ jobs:
       - name: tag commit with version
         if: ${{ !inputs.dry-run }}
         id: publish-tag
-        uses: thruputchain/actions/cargo-version-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-version-tag@3e0d08d054591a349331ab57fe72197d6ccc0cf3
 
       - name: push tag
         if: ${{ !inputs.dry-run }}
@@ -135,7 +131,7 @@ jobs:
 
       - name: publish
         if: ${{ !inputs.dry-run }}
-        uses: thruputchain/actions/cargo-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-publish@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           git-tag: ${{ steps.publish-tag.outputs.tag }}
           registry-name: thruput
