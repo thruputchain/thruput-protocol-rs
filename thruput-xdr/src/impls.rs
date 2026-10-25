@@ -157,6 +157,19 @@ impl core::fmt::Debug for Ed25519SecretKey {
     }
 }
 
+// MlDsa65PublicKey carries `#[rust(no_debug)]` too: a derived impl prints all
+// 1952 bytes, also through PublicKey's derived Debug. Its first 8 bytes in
+// hex are enough to tell keys apart in a log.
+impl core::fmt::Debug for MlDsa65PublicKey {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("MlDsa65PublicKey(")?;
+        for b in &self[..8] {
+            write!(f, "{b:02x}")?;
+        }
+        f.write_str("..)")
+    }
+}
+
 impl ContractEntrypointID {
     /// Builds an entrypoint ID from its numeric form, storing `n` as
     /// the ID's 8 big-endian bytes.
