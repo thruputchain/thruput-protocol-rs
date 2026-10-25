@@ -148,6 +148,24 @@ macro_rules! base58_debug {
 
 base58_debug!(ContractAddress, SHA256Hash);
 
+// The secret key types also carry `#[rust(no_debug)]`: SecretKey and
+// ValidatorPrivateInfo derive Debug, and a derived impl here would print the
+// private key into any log that formats them.
+macro_rules! redacted_debug {
+    ($($t:ident),+ $(,)?) => {$(
+        impl core::fmt::Debug for $t {
+            fn fmt(
+                &self,
+                f: &mut core::fmt::Formatter<'_>,
+            ) -> core::fmt::Result {
+                f.write_str(concat!(stringify!($t), "(<redacted>)"))
+            }
+        }
+    )+};
+}
+
+redacted_debug!(Ed25519SecretKey, MlDsa65SecretKey);
+
 impl ContractEntrypointID {
     /// Builds an entrypoint ID from its numeric form, storing `n` as
     /// the ID's 8 big-endian bytes.
