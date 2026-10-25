@@ -654,7 +654,14 @@ pub enum IntroAuthResult {
 /// Implementations can be plain `async fn`s returning a concrete reply type
 /// under `#[allow(refining_impl_trait)]`.
 #[allow(non_camel_case_types)]
-pub trait MempoolAuth_MempoolAuth1: Send + Sync {    
+pub trait MempoolAuth_MempoolAuth1: Send + Sync {        // Register an auth server with the mempool. The mempool serves the
+    // coordinator only once an auth server has registered, so an auth server
+    // registers only after it has subscribed to the db's auth-data changes
+    // (dbauth_intro), finding the db shards with mempoolauth_get_auth_info.
+    // Otherwise a block could commit before the subscription, and its changes
+    // would never reach the mempool (hogd#1927). The result repeats what
+    // mempoolauth_get_auth_info returned.
+
     fn mempoolauth_intro_auth(&self, arg0 : AuthCard) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IntroAuthResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Retired number, never to be reused, so that a peer built against it
     // fails to dispatch rather than misparse a newer payload:
@@ -666,6 +673,11 @@ pub trait MempoolAuth_MempoolAuth1: Send + Sync {
     // it has applied the whole height itself.
 
     fn mempoolauth_auth_data_changed_chunk(&self, arg0 : KeyChangeChunk) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<()>, ::thruput_rpc_api::ProgramError>> + Send;
+        // Return the db shards and the network hash, which an auth server needs
+    // to subscribe to the db before it registers. Unlike
+    // mempoolauth_intro_auth, this does not register the auth server.
+
+    fn mempoolauth_get_auth_info(&self, arg0 : ProtocolCommit) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<IntroAuthResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
@@ -699,6 +711,13 @@ impl<__Handler: MempoolAuth_MempoolAuth1> ::thruput_rpc_api::RpcHandler for Memp
                 let args: (KeyChangeChunk, ) =
                     xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
                 let res = self.inner.mempoolauth_auth_data_changed_chunk(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
+            }
+            // mempoolauth_get_auth_info
+            3 => {
+                let args: (ProtocolCommit, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.mempoolauth_get_auth_info(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
@@ -757,6 +776,26 @@ impl MempoolAuth_MempoolAuth1_Client {
          // is polled it is pinned, so neither can be freed without the
          // call future being dropped first. Decoding never blocks.
          unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
+    }
+    pub async fn mempoolauth_get_auth_info(&self, arg0 : &(impl xdrs::EncodesAs<ProtocolCommit> + ?Sized)) -> Result<IntroAuthResult, ::thruput_rpc_api::RpcError> {
+         let mut call = self.handle.call_buf();
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 3, call, &mut decode) }.await?;
          out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
 }
