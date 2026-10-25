@@ -1,3 +1,11 @@
+# Yanks (or un-yanks) one version of every published crate from crates.io.
+# Crates that never had that version are skipped; the run fails only if
+# nothing was yanked.
+#
+# Trusted publishing tokens can only publish, so this needs the
+# CRATESIO_YANK_TOKEN secret: a crates.io API token with the yank scope,
+# owned by an owner of the crates. Keep it a secret of the `release`
+# environment (see publish.yml), so only runs it admits can use it.
 name: Yank package
 
 on:
@@ -13,9 +21,6 @@ on:
         type: boolean
         default: false
 
-env:
-  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
-
 permissions:
   contents: read
 
@@ -23,23 +28,21 @@ jobs:
   yank:
     permissions:
       contents: read
-    runs-on: hog1
+    environment: release
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Clean up .gitconfig
-        run: |
-            echo "Cleaning up .gitconfig"
-            rm -f /home/hogci/.gitconfig
-
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
+      # Without a packages list, the action yanks every workspace crate that
+      # isn't publish = false.
       - name: yank
         uses: thruputchain/actions/cargo-yank@484be875e4e630d26594110bcc0ab6bf42eeaba7
         with:
           version: ${{ inputs.version }}
           undo: ${{ inputs.undo }}
-          registry-name: thruput
-          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+          registry-name: crates-io
+          registry-token: ${{ secrets.CRATESIO_YANK_TOKEN }}
