@@ -1,3 +1,19 @@
+# Releases every published crate in this workspace to crates.io in one
+# idempotent pass, with the shared thruputchain/actions release actions (the
+# same flow as thruputchain/xdrs).
+#
+# Nothing is tagged until the semver check, the dry run and the release check
+# pass, so a run that fails before tagging leaves the repository untouched.
+# Publishing skips versions crates.io already has, so a run that fails partway
+# is resumed by dispatching it again on the tagged commit.
+#
+# Authentication: crates.io trusted publishing (GitHub OIDC) for existing
+# crates; see crates-io-publish's README in thruputchain/actions. Creating a
+# crate needs the CRATESIO_CREATE_PACKAGE_TOKEN secret, a crates.io API token
+# with the scopes publish-new, trusted-publishing and change-owners. The
+# publish step registers this workflow as each new crate's trusted publisher
+# and adds CRATE_OWNERS as its owners, so remove the secret and revoke the
+# token once every crate exists.
 name: Release package
 
 on:
@@ -8,11 +24,30 @@ on:
         type: boolean
         default: false
 
+# Two concurrent releases would race on tags and registry state; queue them.
+concurrency:
+  group: publish
+
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
-  # Plain Cargo calls in the dry-run action need registry authentication too.
-  CARGO_REGISTRIES_THRUPUT_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-  CARGO_REGISTRY_GLOBAL_CREDENTIAL_PROVIDERS: cargo:token
+  # Owners added to each crate a run creates, besides the token's owner.
+  CRATE_OWNERS: github:thruputchain:core-maintainers
+  # Every publish = ["crates-io"] package, in dependency order: each after
+  # the workspace crates it depends on.
+  PACKAGES: >-
+    hogexec-internal
+    thruput-syscall
+    thruput-xdr-macros
+    thruput-xdr
+    thruput-scp
+    thruput-akkad
+    thruput-coordinator
+    thruput-trace
+    thruput-scheduler
+    thruput-db-gateway
+    thruput-indexer
+    thruput-spec
+    thruput-view
 
 permissions:
   contents: read
@@ -21,6 +56,7 @@ jobs:
   publish:
     permissions:
       contents: write # pushes the version tag
+      id-token: write # crates.io trusted publishing
     runs-on: namespace-profile-hogd-linux-2604
 
     steps:
@@ -83,9 +119,14 @@ jobs:
             echo "packages=hogexec-internal" >> "$GITHUB_OUTPUT"
           fi
 
+      # Baselines released before the move to crates.io name the private
+      # registry, which this repository no longer configures, so this step
+      # alone defines it and holds its credential. Once a crates.io release
+      # is the baseline, drop the env and the registry inputs.
       - name: semver check
         uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
         env:
+          CARGO_REGISTRIES_THRUPUT_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
           # Historical baselines may use this alias. Cargo unifies aliases
           # for the same index, so both names need the same credential.
           CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
@@ -105,51 +146,42 @@ jobs:
           source "$HOME/.cargo/env"
           cargo check --package thruput-api-pins --locked
 
+      # Verifies every crate offline, in dependency order: the action packages
+      # each listed crate into vendor/ before the next one resolves against it.
       - name: dry run
         uses: thruputchain/actions/cargo-publish-dry-run@484be875e4e630d26594110bcc0ab6bf42eeaba7
         with:
-          registry-name: thruput
+          packages: ${{ env.PACKAGES }}
+          registry-name: crates-io
           skip-clippy: true
           cargo-hack-feature-options: '--feature-powerset --group-features syscalls,syscalls_mock --ignore-unknown-features'
 
-      - name: tag commit with version
-        if: ${{ !inputs.dry-run }}
-        id: publish-tag
-        uses: thruputchain/actions/cargo-version-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
-
-      - name: push tag
-        if: ${{ !inputs.dry-run }}
-        env:
-          ACTOR: ${{ github.actor }}
-          TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          TAG: ${{ steps.publish-tag.outputs.tag }}
-        run: |
-          git remote set-url origin "https://$ACTOR:$TOKEN@github.com/$REPOSITORY.git"
-          LOCAL_COMMIT=$(git rev-parse "$TAG")
-          # Check if tag exists on remote and get its commit SHA
-          REMOTE_TAG_REF=$(git ls-remote origin "refs/tags/$TAG" | cut -f1)
-          if [ -n "$REMOTE_TAG_REF" ]; then
-            # Tag exists on remote, verify it points to the same commit
-            if [ "$REMOTE_TAG_REF" = "$LOCAL_COMMIT" ]; then
-              echo "Tag $TAG already exists on remote and points to the same commit ($LOCAL_COMMIT). Skipping push."
-            else
-              echo "Error: Tag $TAG exists on remote but points to different commit!"
-              echo "Remote: $REMOTE_TAG_REF"
-              echo "Local: $LOCAL_COMMIT"
-              exit 1
-            fi
-          else
-            # Tag doesn't exist on remote, push it
-            git push origin "$TAG"
-          fi
-          git remote set-url origin "https://github.com/$REPOSITORY.git"
-
-      - name: publish
-        if: ${{ !inputs.dry-run }}
-        uses: thruputchain/actions/cargo-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+      # `v<version>` must be free or already on HEAD: a new commit needs a
+      # version bump.
+      - name: Check release
+        id: check
+        uses: thruputchain/actions/crates-io-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
         with:
-          git-tag: ${{ steps.publish-tag.outputs.tag }}
-          registry-name: thruput
-          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
-          publish-delay-seconds: '10'
+          mode: check
+          packages: ${{ env.PACKAGES }}
+          bootstrap-token: ${{ secrets.CRATESIO_CREATE_PACKAGE_TOKEN }}
+
+      - name: Tag release
+        id: tag
+        if: ${{ !inputs.dry-run && steps.check.outputs.release == 'true' }}
+        uses: thruputchain/actions/cargo-release-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        with:
+          packages: ${{ env.PACKAGES }}
+          github-token: ${{ github.token }}
+
+      # Unlike the dry run, publishing resolves dependencies against
+      # crates.io, hence the dependency order.
+      - name: Publish
+        if: ${{ !inputs.dry-run && steps.check.outputs.release == 'true' }}
+        uses: thruputchain/actions/crates-io-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        with:
+          mode: publish
+          packages: ${{ env.PACKAGES }}
+          git-tag: ${{ steps.tag.outputs.tag }}
+          bootstrap-token: ${{ secrets.CRATESIO_CREATE_PACKAGE_TOKEN }}
+          crate-owners: ${{ env.CRATE_OWNERS }}

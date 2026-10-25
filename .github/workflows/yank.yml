@@ -41,5 +41,7 @@ jobs:
         with:
           version: ${{ inputs.version }}
           undo: ${{ inputs.undo }}
-          registry-name: thruput
-          registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
+          registry-name: crates-io
+          # A crates.io API token with the yank scope: the trusted-publishing
+          # tokens the release workflow uses cannot yank.
+          registry-token: ${{ secrets.CRATESIO_YANK_TOKEN }}
