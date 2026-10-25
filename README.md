@@ -32,3 +32,10 @@ bash scripts/generate.sh
 ```shell
 bash scripts/ci-check.sh
 ```
+
+## License
+
+Copyright 2026 Stellar Development Foundation. Licensed under the Apache
+License, Version 2.0. Each published crate includes the workspace
+[LICENSE](LICENSE). The `thruput-scp` crate also includes a `NOTICE` file
+with its upstream attribution.
