@@ -131,7 +131,7 @@ jobs:
       # that the bump is large enough for the API changes since the previous
       # release, the nearest `v*` tag.
       - name: semver check
-        uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-semver-checks@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         env:
           # Baselines released before the move to crates.io (v0.61.0 and
           # earlier) put `registry = "thruput"` on their path dependencies,
@@ -142,10 +142,6 @@ jobs:
           CARGO_REGISTRIES_THRUPUT_INDEX: sparse+https://registry.invalid/
         with:
           semver-checks-version: '0.50.0'
-          # cargo-semver-checks fails on a package the baseline doesn't have.
-          # thruput-exec-internal was hogexec-internal through v0.61.0; drop
-          # this once a release containing it is the baseline.
-          exclude: thruput-exec-internal
 
       # The dry-run action never compiles publish=false crates (cargo-hack
       # runs with --ignore-private and clippy is skipped here), so the API
@@ -156,7 +152,7 @@ jobs:
           cargo check --package thruput-api-pins --locked
 
       - name: Publish dry run
-        uses: thruputchain/actions/cargo-publish-dry-run@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-publish-dry-run@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           packages: ${{ env.PACKAGES }}
           registry-name: crates-io
@@ -167,7 +163,7 @@ jobs:
       # version bump.
       - name: Check release
         id: check
-        uses: thruputchain/actions/crates-io-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/crates-io-publish@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           mode: check
           packages: ${{ env.PACKAGES }}
@@ -176,14 +172,14 @@ jobs:
       - name: Tag release
         id: tag
         if: ${{ !inputs.dry-run && steps.check.outputs.release == 'true' }}
-        uses: thruputchain/actions/cargo-release-tag@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/cargo-release-tag@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           packages: ${{ env.PACKAGES }}
           github-token: ${{ github.token }}
 
       - name: Publish
         if: ${{ !inputs.dry-run && steps.check.outputs.release == 'true' }}
-        uses: thruputchain/actions/crates-io-publish@484be875e4e630d26594110bcc0ab6bf42eeaba7
+        uses: thruputchain/actions/crates-io-publish@3e0d08d054591a349331ab57fe72197d6ccc0cf3
         with:
           mode: publish
           packages: ${{ env.PACKAGES }}
