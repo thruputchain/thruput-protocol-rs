@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "hogexec-internal",
+    "thruput-exec-internal",
     "thruput-xdr-macros",
     "thruput-syscall",
     "thruput-xdr",
@@ -48,7 +48,7 @@ thruput-scheduler = { path = "thruput-scheduler", version = "=0.61.0", registry 
 thruput-indexer = { path = "thruput-indexer", version = "=0.61.0", registry = "thruput" }
 thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.61.0", registry = "thruput" }
 thruput-view = { path = "thruput-view", version = "=0.61.0", registry = "thruput" }
-hogexec-internal = { path = "hogexec-internal", version = "=0.61.0", registry = "thruput" }
+thruput-exec-internal = { path = "thruput-exec-internal", version = "=0.61.0", registry = "thruput" }
 thruput-spec = { path = "thruput-spec", version = "=0.61.0", registry = "thruput" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;

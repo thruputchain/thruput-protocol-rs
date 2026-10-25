@@ -68,21 +68,7 @@ jobs:
       # baseline would resolve to that new tag and compare the release against
       # itself. Here the workspace version is already bumped, so this validates
       # that the bump is large enough for the API changes since the previous
-      # release.
-      - name: Select semver baseline packages
-        id: baseline
-        run: |
-          set -euo pipefail
-          baseline=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*')
-          echo "revision=$baseline" >> "$GITHUB_OUTPUT"
-          if git show "$baseline:Cargo.toml" | grep -q '^thruput-xdr ='; then
-            echo "packages=" >> "$GITHUB_OUTPUT"
-          else
-            # New package identities have no same-name baseline. Keep checking
-            # the unchanged package until a Thruput release becomes the baseline.
-            echo "packages=hogexec-internal" >> "$GITHUB_OUTPUT"
-          fi
-
+      # release, the nearest `v*` tag.
       - name: semver check
         uses: thruputchain/actions/cargo-semver-checks@484be875e4e630d26594110bcc0ab6bf42eeaba7
         env:
@@ -91,9 +77,11 @@ jobs:
           CARGO_REGISTRIES_GROUNDHOG_INDEX: sparse+https://crates.thruput.network/api/v1/crates/
           CARGO_REGISTRIES_GROUNDHOG_TOKEN: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
         with:
-          baseline-rev: ${{ steps.baseline.outputs.revision }}
-          packages: ${{ steps.baseline.outputs.packages }}
           semver-checks-version: '0.50.0'
+          # cargo-semver-checks fails on a package the baseline doesn't have.
+          # thruput-exec-internal was hogexec-internal through v0.61.0; drop
+          # this once a release containing it is the baseline.
+          exclude: thruput-exec-internal
           registry-name: thruput
           registry-token: ${{ secrets.GROUNDHOG_REGISTRY_TOKEN }}
 

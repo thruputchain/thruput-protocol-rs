@@ -1,5 +1,5 @@
 [package]
-name = "hogexec-internal"
+name = "thruput-exec-internal"
 version.workspace = true
 rust-version.workspace = true
 edition.workspace = true
@@ -11,7 +11,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
-description =  "FFI enums for use inside hogexec and test bindings"
+description = "FFI enums shared with the Thruput executor: invocation, host-function and system error codes"
 
 # docs.rs builds the default features only; document the whole API.
 [package.metadata.docs.rs]

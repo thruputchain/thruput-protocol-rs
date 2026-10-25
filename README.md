@@ -11,7 +11,7 @@ definitions.
 | `thruput-syscall` | Raw syscall dispatch ABI for the Thruput guest |
 | `thruput-spec` | Contract spec types |
 | `thruput-trace` | Transaction traces |
-| `hogexec-internal` | FFI enums shared with the executor (invocation, host-function and system error codes), used by the trace bindings |
+| `thruput-exec-internal` | FFI enums shared with the executor (invocation, host-function and system error codes), used by the trace bindings |
 | `thruput-scp` | SCP RPC bindings |
 | `thruput-coordinator`, `thruput-akkad` | Coordinator RPC bindings |
 | `thruput-scheduler` | Scheduler RPC bindings |
@@ -19,9 +19,9 @@ definitions.
 | `thruput-db-gateway` | Database read-gateway RPC bindings |
 | `thruput-view` | Read-only view invocation RPC bindings |
 
-Every crate shares one version. The bindings
-encode with [`thruput-xdrs`] (imported as `xdrs`), and the RPC crates build
-on [`thruput-rpc-api`]; serve or call them with [`thruput-rpc-driver`].
+Every crate shares one version. The bindings encode with [`thruput-xdrs`]
+(imported as `xdrs`), and the RPC crates build on [`thruput-rpc-api`]; serve
+or call them with [`thruput-rpc-driver`].
 
 The minimum supported Rust version is 1.96. `thruput-xdr` is `no_std`; its
 features:
