@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 2ff2d08a54a36835f1f9a22aa693ba3205b0217e
+// Generated from xdrc commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -27,10 +27,10 @@ use ::serde::{{Serialize, Deserialize}};
 
 
 // 
-/// Levels of node nesting a token may carry when a configuration does not
-/// state `kConfigParamMaxAuthTokenDepth`. Consensus-critical, so frozen.
 pub const kAuthTokenMaxLen : u32 = 256;
 
+/// Levels of node nesting a token may carry when a configuration does not
+/// state `kConfigParamMaxAuthTokenDepth`. Consensus-critical, so frozen.
 // 
 pub const kAuthTokenMaxDepth : u32 = 4;
 

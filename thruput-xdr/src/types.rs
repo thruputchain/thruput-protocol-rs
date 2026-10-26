@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 2ff2d08a54a36835f1f9a22aa693ba3205b0217e
+// Generated from xdrc commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -139,7 +139,6 @@ pub type GasAmount = u64;
 
 /// Represents a 512-bit Ed25519 signature.
 // 
-/// Represents a 256-bit Ed25519 public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -214,8 +213,8 @@ impl schemars::JsonSchema for Ed25519Signature {
 
 
 
+/// Represents a 256-bit Ed25519 public key.
 // 
-/// Represents a 64-byte Ed25519 secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -290,6 +289,7 @@ impl schemars::JsonSchema for Ed25519PublicKey {
 
 
 
+/// Represents a 64-byte Ed25519 secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -369,7 +369,6 @@ impl schemars::JsonSchema for Ed25519SecretKey {
 /// Not every byte string of this length is a well-formed signature;
 /// verification rejects malformed ones like any other invalid signature.
 // 
-/// Represents an ML-DSA-65 (FIPS 204) public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -444,8 +443,8 @@ impl schemars::JsonSchema for MlDsa65Signature {
 
 
 
+/// Represents an ML-DSA-65 (FIPS 204) public key.
 // 
-/// Represents a 4032-byte ML-DSA-65 (FIPS 204) secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -520,6 +519,7 @@ impl schemars::JsonSchema for MlDsa65PublicKey {
 
 
 
+/// Represents a 4032-byte ML-DSA-65 (FIPS 204) secret key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
 #[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
