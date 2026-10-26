@@ -19,9 +19,9 @@ definitions.
 | `thruput-db-gateway` | Database read-gateway RPC bindings |
 | `thruput-view` | Read-only view invocation RPC bindings |
 
-Every crate shares one version. The bindings encode with [`thruput-xdrs`]
-(imported as `xdrs`), and the RPC crates build on [`thruput-rpc-api`]; serve
-or call them with [`thruput-rpc-driver`].
+Every crate shares one version and is published on crates.io. The bindings
+encode with [`thruput-xdrs`] (imported as `xdrs`), and the RPC crates build
+on [`thruput-rpc-api`]; serve or call them with [`thruput-rpc-driver`].
 
 The minimum supported Rust version is 1.96. `thruput-xdr` is `no_std`; its
 features:
