@@ -33,7 +33,7 @@ pub type Upgrade = BytesM::<128>;
 /// The block commitment externalized by consensus.
 ///
 /// `ConsensusValue` is the small value that systems use to identify
-/// a finalized Groundhog block without the full transaction payload.
+/// a finalized Thruput block without the full transaction payload.
 /// Its XDR hash is the block identity (`ConsensusValueHash`), so every
 /// field is consensus-critical.
 ///

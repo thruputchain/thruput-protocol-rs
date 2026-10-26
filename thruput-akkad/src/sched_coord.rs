@@ -490,13 +490,13 @@ impl SchedulerTransactionErrorSource {
     // There is no error to report.
     pub const SchedulerTransactionErrorNone: Self = Self(0);
 
-    // The error was triggered by the authentication subsystem (hog-auth).
+    // The error was triggered by the authentication subsystem.
     pub const SchedulerTransactionErrorAuth: Self = Self(1);
 
-    // The error was triggered by the mempool (hog-mempool).
+    // The error was triggered by the mempool.
     pub const SchedulerTransactionErrorScheduler: Self = Self(2);
 
-    // The error was triggered by an executor (hog-exec).
+    // The error was triggered by an executor.
     pub const SchedulerTransactionErrorExecutor: Self = Self(3);
 }
 impl From<i32> for SchedulerTransactionErrorSource {

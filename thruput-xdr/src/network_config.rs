@@ -122,7 +122,7 @@ impl core::fmt::Display for ConfigParamID {
 /// configuration as a list of these, and is meant to carry one per parameter
 /// being changed by a consensus upgrade, where everything a block does not
 /// name keeps the value it already has. No upgrade mechanism exists yet:
-/// `ConsensusValue::upgrades` is opaque, and hogd leaves it empty. Each arm
+/// `ConsensusValue::upgrades` is opaque, and the node leaves it empty. Each arm
 /// carries its own type, so a future parameter need not be an `unsigned int`.
 ///
 /// There is no `default` arm on purpose: a node that cannot name a parameter
@@ -162,8 +162,8 @@ pub enum ConfigParam {
     /// Together with `kConfigParamMaxContractSizeBytes` this is what bounds the
     /// transaction's final commit batch, which the executor sends to storage as
     /// a single message. A chain must set the pair low enough that the largest
-    /// batch it admits still fits that message; hogd rejects a genesis that
-    /// does not.
+    /// batch it admits still fits that message; the node rejects a genesis
+    /// that does not.
     // case kConfigParamMaxNewContractsPerTx:
     //   u32 max_new_contracts_per_tx;
     kConfigParamMaxNewContractsPerTx { max_new_contracts_per_tx: u32 } = ConfigParamID::kConfigParamMaxNewContractsPerTx.0 as i32,
@@ -188,7 +188,7 @@ pub enum ConfigParam {
     /// contract it thereby admits, that every attached contract still fits a
     /// transaction (`kMaxBytesSignedTransaction`), and that the commit batch
     /// `kConfigParamMaxNewContractsPerTx` bounds fits one storage message.
-    /// hogd rejects a genesis that does not.
+    /// The node rejects a genesis that does not.
     // case kConfigParamMaxContractSizeBytes:
     //   u32 max_contract_size_bytes;
     kConfigParamMaxContractSizeBytes { max_contract_size_bytes: u32 } = ConfigParamID::kConfigParamMaxContractSizeBytes.0 as i32,
@@ -201,8 +201,8 @@ pub enum ConfigParam {
     /// that does not state one.
     ///
     /// Every open savepoint is a live nested VM on one executor thread, so a
-    /// chain must keep this within what its executors' stacks hold; hogd
-    /// rejects a genesis above its build ceiling.
+    /// chain must keep this within what its executors' stacks hold; the
+    /// node rejects a genesis above its build ceiling.
     // case kConfigParamMaxSavepointDepth:
     //   u32 max_savepoint_depth;
     kConfigParamMaxSavepointDepth { max_savepoint_depth: u32 } = ConfigParamID::kConfigParamMaxSavepointDepth.0 as i32,
@@ -228,8 +228,8 @@ pub enum ConfigParam {
     ///
     /// Checked where a contract is attached, not where a deployed one is
     /// instantiated, so lowering it leaves deployed contracts runnable. The
-    /// artifact format itself does not bound the field; hogd rejects a genesis
-    /// above what its VM can translate.
+    /// artifact format itself does not bound the field; the node rejects a
+    /// genesis above what its VM can translate.
     // case kConfigParamMaxRv32CodeBytes:
     //   u32 max_rv32_code_bytes;
     kConfigParamMaxRv32CodeBytes { max_rv32_code_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32CodeBytes.0 as i32,
@@ -240,8 +240,8 @@ pub enum ConfigParam {
     ///
     /// Checked at attachment like `kConfigParamMaxRv32CodeBytes`. Every
     /// invocation provisions and seeds the declared memory outside gas, so a
-    /// chain raising this accepts that per-call cost; hogd rejects a genesis
-    /// above what its VM provisions.
+    /// chain raising this accepts that per-call cost; the node rejects a
+    /// genesis above what its VM provisions.
     // case kConfigParamMaxRv32MemoryBytes:
     //   u32 max_rv32_memory_bytes;
     kConfigParamMaxRv32MemoryBytes { max_rv32_memory_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32MemoryBytes.0 as i32,
@@ -387,7 +387,7 @@ pub struct ConfigHashPreimage {
     /// It selects executing code, so a node running under a different one from
     /// its peers executes a different chain. Nothing else commits to it: a
     /// node's copy travels in the tip, which implementations are free to keep
-    /// outside the state the storage hash covers, and hogd does. Committing to
+    /// outside the state the storage hash covers, and some do. Committing to
     /// it here is what binds the value a node executes under to the one
     /// consensus agreed, rather than to whatever its own storage returns.
     pub default_wallet: DeployedContractHash,

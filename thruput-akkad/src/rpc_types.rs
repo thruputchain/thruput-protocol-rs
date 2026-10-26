@@ -97,7 +97,7 @@ pub type TransactionID = u64;
 // These are some of the error codes I suspect we will need, but these
 // are not organized in any particular manner.
 //
-// TODO(geoff): This probably should get moved to a different file?
+// TODO: This probably should get moved to a different file?
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]

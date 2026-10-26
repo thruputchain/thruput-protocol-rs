@@ -132,7 +132,7 @@ impl DerefMut for TimePoint {
 // uint32_t
 pub type RuntimeMemoryLength = u32;
 
-// TODO(geoff): consider using a smaller type for GasAmount
+// TODO: consider using a smaller type for GasAmount
 /// Represents a quantity of gas.  Alias of u64.
 // uint64_t
 pub type GasAmount = u64;
@@ -981,7 +981,7 @@ impl DerefMut for ConfigHash {
     }
 }
 
-/// Hash of the groundhog database contents.
+/// Hash of the Thruput database contents.
 /// Format is a 2048-byte LtHash16 hash.
 // 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1208,7 +1208,7 @@ impl DerefMut for ProposalHeaderHash {
 }
 
 /// Represents a 256-bit contract address.
-/// In the groundhog storage model, each contract is deployed at a
+/// In the Thruput storage model, each contract is deployed at a
 /// 32-byte unique `ContractAddress`.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]

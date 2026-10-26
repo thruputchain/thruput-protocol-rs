@@ -106,7 +106,7 @@ pub type Bytestring = BytesM::<kBytestringCeilingLen>;
 /// [`StorageDelta`]s are modifications that are applied to these StorageItem objects.
 ///
 /// Contracts do not generally directly load these values, but can access them via the typed
-/// system call interface provided by the Groundhog runtime.
+/// system call interface provided by the Thruput runtime.
 /// For example, a contract can call `BytestringGet`, which will return either a Bytestring value or
 /// an error if the storage key does not exist or contains a different type.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -333,7 +333,7 @@ pub enum StorageDelta {
     ///     to the value of the item at the start of the block (if it is a nonnegative integer) or 0 otherwise.
     ///     If that implicit set_value is not the same as the supplied `set_value`, the deltas will conflict.
     ///   - At the end of a block, the value will be `set_value` plus the sum of all `add_values` supplied by this
-    ///     delta and other deltas from the same block.  Groundhog maintains the property that this expression
+    ///     delta and other deltas from the same block.  Thruput maintains the property that this expression
     ///     does not overflow a 128-bit integer, and that that value is always at least `min(set_value, 0)`.
     // case kDeltaTypeNonnegativeIntSetAdd:
     //   NonnegativeInt128SetAddArgs nnint;
@@ -365,7 +365,7 @@ pub enum StorageDelta {
     ///
     /// Conflicts:
     ///   - Insertions do not conflict with each other.
-    ///     TODO(geoff): we may impose limits on the number of entries that can be inserted in one block.
+    ///     TODO: we may impose limits on the number of entries that can be inserted in one block.
     ///   - Consuming entries conflicts with other consumption deltas in the same block.
     // case kDeltaTypeRetrocausalQueue:
     //   RetrocausalQueueDelta retrocausal_queue;
@@ -505,7 +505,7 @@ pub type StorageDeltaFlagSet = u32;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct FlaggedStorageDelta {
-    // TODO(geoff): The addrkey field is likely repetitive when sending
+    // TODO: The addrkey field is likely repetitive when sending
     // many deltas to the database.
     // possibly we can readjust this data structure, if raw bandwidth becomes
     // important.
