@@ -270,7 +270,7 @@ pub trait EventSched_EventSched1: Send + Sync {
     fn eventsched_close_block(&self, arg0 : BlockID, arg1 : BlockHeight) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<EventBlockResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Called after finalization. Durably publishes the event/indexer record;
     // the record becomes pullable as soon as this call succeeds, even if the
-    // local HogDB commit running alongside it has not completed yet.
+    // local database commit running alongside it has not completed yet.
 
     fn eventsched_commit_block(&self, arg0 : BlockID, arg1 : ConsensusValue) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<RPCError>, ::thruput_rpc_api::ProgramError>> + Send;
     
