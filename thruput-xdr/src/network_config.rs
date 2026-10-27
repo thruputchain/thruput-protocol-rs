@@ -197,8 +197,8 @@ pub enum ConfigParam {
     /// plus the one the root commit takes. A `TryInvoke` whose child would go
     /// past the limit still runs, then fails deterministically, as one that
     /// loses a lock conflict does, and its writes are discarded.
-    /// `kMaxSavepointDepth` (1024) is the value in force for a configuration
-    /// that does not state one.
+    /// 1024 is the value in force for a configuration that does not state
+    /// one.
     ///
     /// Every open savepoint is a live nested VM on one executor thread, so a
     /// chain must keep this within what its executors' stacks hold; the
@@ -223,8 +223,8 @@ pub enum ConfigParam {
     kConfigParamMaxAuthTokenDepth { max_auth_token_depth: u32 } = ConfigParamID::kConfigParamMaxAuthTokenDepth.0 as i32,
     /// Bytes of code (`code_size` in the artifact header) an RV32 artifact may
     /// carry to be admitted as an attached contract.
-    /// `kDefaultMaxRv32CodeBytes` (262144) is the value in force for a
-    /// configuration that does not state one.
+    /// 262144 is the value in force for a configuration that does not state
+    /// one.
     ///
     /// Checked where a contract is attached, not where a deployed one is
     /// instantiated, so lowering it leaves deployed contracts runnable. The
@@ -235,8 +235,8 @@ pub enum ConfigParam {
     kConfigParamMaxRv32CodeBytes { max_rv32_code_bytes: u32 } = ConfigParamID::kConfigParamMaxRv32CodeBytes.0 as i32,
     /// Bytes of guest data memory (`memory_bytes` in the artifact header) an
     /// RV32 artifact may declare to be admitted as an attached contract.
-    /// `kDefaultMaxRv32MemoryBytes` (65536) is the value in force for a
-    /// configuration that does not state one.
+    /// 65536 is the value in force for a configuration that does not state
+    /// one.
     ///
     /// Checked at attachment like `kConfigParamMaxRv32CodeBytes`. Every
     /// invocation provisions and seeds the declared memory outside gas, so a
