@@ -161,6 +161,79 @@ pub struct Config {
     pub storage_config: Option<StorageConfig>,
 }
 
+/// The router of a coordinator's boundary, which chooses the dissemination
+/// trees over the validators the boundary knows.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct CoordinatorRouterConfig {
+    /// The largest number of children of a node of a dissemination tree.
+    pub max_fanout: u64,
+}
+
+/// The baton, which drives a coordinator's proposals and validations
+/// through its scheduler.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct CoordinatorBatonConfig {
+    /// The expected maximum local clock skew between validators.
+    pub clock_skew_msec: Milliseconds,
+}
+
+/// The consensus protocol a coordinator's broker runs.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct CoordinatorConsensusConfig {
+    /// The number of slots in an epoch: the leader elected for an epoch
+    /// proposes for all of its slots. Must be positive.
+    pub epoch_length: u64,
+    /// The pipeline width: how many slots ahead of the current slot the
+    /// leader may propose. Must be positive.
+    pub pipeline_length: u64,
+    /// The time a slot is given to resolve before it is deemed late.
+    pub timeout_msec: Milliseconds,
+}
+
+/// The basis and block pools of a coordinator. Each keeps the values of
+/// the latest heights in memory and evicts older ones to disk after a
+/// commit.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct CoordinatorPoolConfig {
+    /// How many heights below the committed tip the basis pool keeps in
+    /// memory.
+    pub basis_pool_hotcold_window: u64,
+    /// How many heights below the committed tip the block pool keeps in
+    /// memory.
+    pub block_pool_hotcold_window: u64,
+}
+
+/// The configuration of a coordinator: what its command line reads from
+/// the file named by `coordinator start --config`.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct CoordinatorConfig {
+    pub router: CoordinatorRouterConfig,
+    pub dogwood: DogwoodConfig,
+    pub baton: CoordinatorBatonConfig,
+    pub consensus: CoordinatorConsensusConfig,
+    pub pool: CoordinatorPoolConfig,
+}
+
 
 //
 // XDR internals below this point

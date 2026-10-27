@@ -61,15 +61,14 @@ coordinators=(
   bristlecone.x
   catchup.x
   config.x
-  config2.x
-  discovery2.x
-  dogwood_kit.x
+  discovery.x
   dogwood.x
-  genesis2.x
+  dogwood_kit.x
+  genesis_prior.x
   integration.x
   loadgen.x
-  multiplex2.x
-  repair2.x
+  multiplex.x
+  repair.x
 )
 
 specs=(
