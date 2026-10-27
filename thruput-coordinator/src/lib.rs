@@ -32,12 +32,8 @@ pub mod config;
 pub use config::*;
 
 #[rustfmt::skip]
-pub mod config2;
-pub use config2::*;
-
-#[rustfmt::skip]
-pub mod discovery2;
-pub use discovery2::*;
+pub mod discovery;
+pub use discovery::*;
 
 #[rustfmt::skip]
 pub mod dogwood_kit;
@@ -48,8 +44,8 @@ pub mod dogwood;
 pub use dogwood::*;
 
 #[rustfmt::skip]
-pub mod genesis2;
-pub use genesis2::*;
+pub mod genesis_prior;
+pub use genesis_prior::*;
 
 #[rustfmt::skip]
 pub mod integration;
@@ -60,12 +56,12 @@ pub mod loadgen;
 pub use loadgen::*;
 
 #[rustfmt::skip]
-pub mod multiplex2;
-pub use multiplex2::*;
+pub mod multiplex;
+pub use multiplex::*;
 
 #[rustfmt::skip]
-pub mod repair2;
-pub use repair2::*;
+pub mod repair;
+pub use repair::*;
 
 #[rustfmt::skip]
 pub mod bristlecone;

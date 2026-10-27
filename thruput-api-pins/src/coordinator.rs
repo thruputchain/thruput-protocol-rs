@@ -1,5 +1,5 @@
 //! Signature pins for `thruput_coordinator` (generated: src/catchup.rs,
-//! src/discovery2.rs, src/dogwood.rs, src/loadgen.rs, src/repair2.rs).
+//! src/discovery.rs, src/dogwood.rs, src/loadgen.rs, src/repair.rs).
 
 use thruput_coordinator::{
     BlockHeight, BristleconeKnownQuorumSets, Catchup_Catchup1,
