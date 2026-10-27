@@ -260,7 +260,7 @@ fn contract_variants_roundtrip() {
     });
 }
 
-/// Discriminant 0 selected the retired Wasmi arm. Encodings that still
+/// Discriminant 0 selected a retired contract runtime. Encodings that still
 /// carry it must fail to decode rather than resolve to a live contract
 /// type.
 #[test]

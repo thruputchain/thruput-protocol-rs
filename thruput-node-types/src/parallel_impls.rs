@@ -12,8 +12,11 @@ impl ParallelBatch {
     }
 
     /// Total number of items across all segments.
-    pub fn items(&self) -> u32 {
-        self.segment_tokens.iter().sum()
+    ///
+    /// A `u64`, so the sum of up to `u32::MAX` per-segment `u32` counts
+    /// cannot overflow.
+    pub fn items(&self) -> u64 {
+        self.segment_tokens.iter().map(|&t| u64::from(t)).sum()
     }
 
     /// Number of segments in this batch.
@@ -26,7 +29,7 @@ impl ParallelBatch {
 
     /// True if the batch contains no items.
     pub fn is_empty(&self) -> bool {
-        self.items() == 0
+        self.segment_tokens.iter().all(|&t| t == 0)
     }
 
     /// Check internal consistency of segment metadata against the
@@ -55,10 +58,13 @@ impl ParallelBatch {
         if i >= self.segments() {
             return None;
         }
-        let offset: usize =
-            self.segment_bytes[..i].iter().map(|&b| b as usize).sum();
-        let len = self.segment_bytes[i] as usize;
-        self.xdr.0.get(offset..offset + len)
+        // Sum in u64 and convert checked: on a 32-bit target the offset of a
+        // corrupt batch can exceed usize.
+        let offset: u64 =
+            self.segment_bytes[..i].iter().map(|&b| u64::from(b)).sum();
+        let offset = usize::try_from(offset).ok()?;
+        let len = usize::try_from(self.segment_bytes[i]).ok()?;
+        self.xdr.0.get(offset..offset.checked_add(len)?)
     }
 }
 
@@ -388,5 +394,37 @@ mod tests {
         assert_eq!(tx.items(), 2);
         assert_eq!(tx.segments(), 1);
         assert_eq!(tx.segment(0), Some([0xAB; 6].as_slice()));
+    }
+
+    #[test]
+    fn items_does_not_overflow_u32() {
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![u32::MAX, u32::MAX]),
+            segment_bytes: VecM(vec![0, 0]),
+            xdr: BytesM(vec![]),
+        };
+        assert_eq!(batch.items(), 2 * u64::from(u32::MAX));
+        assert!(!batch.is_empty());
+    }
+
+    #[test]
+    fn is_empty_with_zero_token_segments() {
+        let batch = make_batch(&[(0, &[]), (0, &[])]);
+        assert!(batch.is_empty());
+        assert_eq!(batch.items(), 0);
+    }
+
+    #[test]
+    fn segment_with_corrupt_lengths_is_none() {
+        // segment_bytes claim far more data than xdr holds; the offset of
+        // the last segment exceeds u32 and must not panic or wrap.
+        let batch = ParallelBatch {
+            segment_tokens: VecM(vec![1, 1, 1]),
+            segment_bytes: VecM(vec![u32::MAX, u32::MAX, 1]),
+            xdr: BytesM(vec![0; 4]),
+        };
+        assert!(batch.validate().is_err());
+        assert_eq!(batch.segment(0), None);
+        assert_eq!(batch.segment(2), None);
     }
 }

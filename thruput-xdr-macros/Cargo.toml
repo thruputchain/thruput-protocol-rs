@@ -17,7 +17,6 @@ description =  "Macros for generating Thruput syscall bindings"
 proc-macro = true
 
 [dependencies]
-darling = "0.24.0"
 proc-macro2 = "1.0.92"
 quote = "1.0.38"
 syn = { version = "3.0.3" , features = [ "full" , "extra-traits", "visit", "printing" ] }
