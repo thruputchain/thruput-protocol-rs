@@ -25,7 +25,7 @@ use xdrs::*;
 use ::serde::{{Serialize, Deserialize}};
 
 
-// Error codes returned from a runtime (wasmi) invocation.
+// Error codes returned from a contract invocation.
 // This is the external interface to a smart contract. Normally wrapped in an
 // InvokeStatus<int32_t> (a std::expected).
 //
@@ -36,10 +36,9 @@ use ::serde::{{Serialize, Deserialize}};
 // {InvokeErrorCode::None, code} back as a
 // {HostFnErrorCode::NoneOrRecoverable, code}).
 //
-// This value is generated as either the returned value from the selected
-// WebAssembly exported function that was run, the code caused by a host
-// function returning HostFnErrorCode::Exit, or 0, if invocation ends because a
-// host function returns HostFnErrorCode::Return.
+// This value is either the value returned by the contract's entry point, the
+// code caused by a host function returning HostFnErrorCode::Exit, or 0, if
+// invocation ends because a host function returns HostFnErrorCode::Return.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
