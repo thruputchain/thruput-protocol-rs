@@ -21,7 +21,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.62.0"
+version = "0.62.1"
 edition = "2024"
 rust-version = "1.96"
 authors = ["Thruput Team"]
@@ -37,20 +37,20 @@ categories = ["cryptography::cryptocurrencies", "encoding"]
 # These version numbers need to be kept in sync with the workspace package
 # version number: publishing replaces each path with its version requirement.
 [workspace.dependencies]
-thruput-syscall = { path = "thruput-syscall", version = "=0.62.0" }
-thruput-xdr = { path = "thruput-xdr", version = "=0.62.0" }
-thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.62.0" }
-thruput-trace = { path = "thruput-trace", version = "=0.62.0" }
-thruput-scp = { path = "thruput-scp", version = "=0.62.0" }
-thruput-coordinator = { path = "thruput-coordinator", version = "=0.62.0" }
-thruput-akkad = { path = "thruput-akkad", version = "=0.62.0" }
-thruput-rpc = { path = "thruput-rpc", version = "=0.62.0" }
-thruput-scheduler = { path = "thruput-scheduler", version = "=0.62.0" }
-thruput-indexer = { path = "thruput-indexer", version = "=0.62.0" }
-thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.62.0" }
-thruput-view = { path = "thruput-view", version = "=0.62.0" }
-thruput-exec-internal = { path = "thruput-exec-internal", version = "=0.62.0" }
-thruput-spec = { path = "thruput-spec", version = "=0.62.0" }
+thruput-syscall = { path = "thruput-syscall", version = "=0.62.1" }
+thruput-xdr = { path = "thruput-xdr", version = "=0.62.1" }
+thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.62.1" }
+thruput-trace = { path = "thruput-trace", version = "=0.62.1" }
+thruput-scp = { path = "thruput-scp", version = "=0.62.1" }
+thruput-coordinator = { path = "thruput-coordinator", version = "=0.62.1" }
+thruput-akkad = { path = "thruput-akkad", version = "=0.62.1" }
+thruput-rpc = { path = "thruput-rpc", version = "=0.62.1" }
+thruput-scheduler = { path = "thruput-scheduler", version = "=0.62.1" }
+thruput-indexer = { path = "thruput-indexer", version = "=0.62.1" }
+thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.62.1" }
+thruput-view = { path = "thruput-view", version = "=0.62.1" }
+thruput-exec-internal = { path = "thruput-exec-internal", version = "=0.62.1" }
+thruput-spec = { path = "thruput-spec", version = "=0.62.1" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;
 # the RPC crates' library names are their package names.
