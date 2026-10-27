@@ -26,7 +26,7 @@ Thruput supports three types of contracts:
 - **`kNative`**: Precompiled native contracts implemented natively by the node. Used for system contracts like the native token. More efficient than RV32 but cannot be deployed by users.
 - **`kMockTest`**: Mock contracts for local testing. Never deployed on-chain; exists only in the test harness.
 
-Discriminant 0 is retired. It selected the Wasmi (WebAssembly) runtime, which was
+Discriminant 0 is retired. It selected an earlier contract runtime, which was
 removed once RV32 became the only deployable execution environment. The value is
 not reused: encodings that carry it fail to decode rather than silently decoding
 as a live contract type.

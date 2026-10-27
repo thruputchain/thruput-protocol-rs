@@ -13,10 +13,22 @@ pub struct SyscallInvocation {
     pub args: [u64; 7],
 }
 
-/// Mock syscall handler that captures invocations
+/// Answers a syscall in place of the runtime: given the syscall number and
+/// its arguments, it writes any outputs (see [`write_output`]) and returns
+/// the syscall's error code.
+pub type Responder = Box<dyn Fn(u32, &[u64; 7]) -> SysErr + Send + Sync>;
+
+/// Mock syscall handler that captures invocations.
+///
+/// Without a responder, a syscall returns the configured return value and
+/// leaves its outputs untouched, as the `raw_*` tests expect: they pass
+/// initialized output buffers. The convenience wrappers read their outputs
+/// after a successful syscall, so testing one needs a responder that writes
+/// them, as the runtime would.
 pub struct MockSyscallHandler {
     invocations: Arc<Mutex<Vec<SyscallInvocation>>>,
     return_value: Arc<Mutex<SysErr>>,
+    responder: Mutex<Option<Responder>>,
 }
 
 impl MockSyscallHandler {
@@ -24,7 +36,17 @@ impl MockSyscallHandler {
         Self {
             invocations: Arc::new(Mutex::new(Vec::new())),
             return_value: Arc::new(Mutex::new(SysErr(0))), // Default to success
+            responder: Mutex::new(None),
         }
+    }
+
+    /// Answers every later syscall with `responder` instead of the configured
+    /// return value.
+    pub fn set_responder(
+        &self,
+        responder: impl Fn(u32, &[u64; 7]) -> SysErr + Send + Sync + 'static,
+    ) {
+        *self.responder.lock().unwrap() = Some(Box::new(responder));
     }
 
     pub fn set_return_value(&self, err: SysErr) {
@@ -48,8 +70,22 @@ impl MockSyscallHandler {
             .lock()
             .unwrap()
             .push(SyscallInvocation { syscall_no, args });
-        *self.return_value.lock().unwrap()
+        match self.responder.lock().unwrap().as_ref() {
+            Some(responder) => responder(syscall_no, &args),
+            None => *self.return_value.lock().unwrap(),
+        }
     }
+}
+
+/// Writes `value` through `arg`, an output argument of a syscall, as the
+/// runtime does when the syscall succeeds.
+///
+/// # Safety
+///
+/// `arg` must be the pointer the syscall received for an output of type `T`.
+pub unsafe fn write_output<T>(arg: u64, value: T) {
+    // SAFETY: the caller guarantees `arg` points to a writable `T`.
+    unsafe { (arg as *mut T).write(value) }
 }
 
 // Thread-local mock handler - each test thread gets its own handler
@@ -57,8 +93,9 @@ thread_local! {
     static MOCK_HANDLER: RefCell<Option<Arc<MockSyscallHandler>>> = RefCell::new(None);
 }
 
-/// Installs `handler` for syscalls made on the current thread. Syscalls on a
-/// thread with no handler succeed without being recorded.
+/// Installs `handler` for syscalls made on the current thread. A syscall on a
+/// thread with no handler panics: succeeding without writing its outputs
+/// would let a convenience wrapper read uninitialized memory.
 pub fn set_mock_handler(handler: Arc<MockSyscallHandler>) {
     MOCK_HANDLER.with(|h| {
         *h.borrow_mut() = Some(handler);
@@ -89,8 +126,10 @@ pub extern "C-unwind" fn syscall_wrapper_impl(
             [arg1, arg2, arg3, arg4, arg5, arg6, arg7],
         )
     } else {
-        // Default: return success if no handler is set
-        SysErr(0)
+        panic!(
+            "syscall {syscall_no} made on a thread with no mock handler; \
+             call set_mock_handler first"
+        )
     }
 }
 

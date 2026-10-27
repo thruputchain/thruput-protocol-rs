@@ -714,7 +714,6 @@ dependencies = [
 name = "thruput-xdr-macros"
 version = "0.63.0"
 dependencies = [
- "darling",
  "proc-macro2",
  "quote",
  "serde",
