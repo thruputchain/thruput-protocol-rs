@@ -28,14 +28,12 @@ serde = [
     "dep:serde",
     "xdrs/serde",
     "thruput-xdr/serde",
-    "thruput-coordinator/serde",
     "thruput-trace/serde",
 ]
 
 [dependencies]
 async-trait = "0.1.89"
 thruput-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
-thruput-coordinator = { workspace = true, features = ["std"] }
 thruput-scp = { workspace = true, features = ["std"] }
 thruput-trace = { workspace = true, features = ["std"] }
 xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }

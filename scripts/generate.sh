@@ -49,14 +49,6 @@ rpcs=(
 )
 
 coordinators=(
-  discovery.x
-  config.x
-  dogwood_kit.x
-  dogwood.x
-)
-
-# dependencies for the rust coordinator
-akkads=(
   batch.x
   bristlecone.x
   catchup.x
@@ -181,10 +173,6 @@ done
 
 for coordinator in "${coordinators[@]}"; do
   generate_rpc "protocol/${coordinator}" "thruput-coordinator"
-done
-
-for akkad in "${akkads[@]}"; do
-  generate_rpc "protocol/${akkad}" "thruput-akkad"
 done
 
 for spec in "${specs[@]}"; do

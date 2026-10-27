@@ -13,7 +13,7 @@ definitions.
 | `thruput-trace` | Transaction traces |
 | `thruput-exec-internal` | FFI enums shared with the executor (invocation, host-function and system error codes), used by the trace bindings |
 | `thruput-scp` | SCP RPC bindings |
-| `thruput-coordinator`, `thruput-akkad` | Coordinator RPC bindings |
+| `thruput-coordinator` | Coordinator RPC bindings |
 | `thruput-scheduler` | Scheduler RPC bindings |
 | `thruput-indexer` | Indexer RPC bindings |
 | `thruput-db-gateway` | Database read-gateway RPC bindings |

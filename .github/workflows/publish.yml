@@ -56,7 +56,6 @@ env:
     thruput-trace
     thruput-scp
     thruput-coordinator
-    thruput-akkad
     thruput-scheduler
     thruput-indexer
     thruput-db-gateway

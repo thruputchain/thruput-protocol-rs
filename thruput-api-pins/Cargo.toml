@@ -11,7 +11,6 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-thruput-akkad = { workspace = true }
 thruput-coordinator = { workspace = true }
 thruput-db-gateway = { workspace = true }
 thruput-indexer = { workspace = true }

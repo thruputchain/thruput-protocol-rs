@@ -1,7 +1,6 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
-use thruput_coordinator::*;
 use thruput_scp::*;
 use thruput_trace::db_conflict::*;
 use thruput_xdr::address_auth::*;

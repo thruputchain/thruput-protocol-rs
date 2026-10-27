@@ -11,7 +11,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
-description =  "Bindings for Thruput coordinator rpcs"
+description = "Bindings for Thruput coordinator rpcs"
 
 # docs.rs builds the default features only; document the whole API.
 [package.metadata.docs.rs]
