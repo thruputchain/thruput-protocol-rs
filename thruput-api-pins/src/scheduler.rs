@@ -1,46 +1,41 @@
 //! Signature pins for `thruput_scheduler` (generated: src/auth_rpc.rs,
-//! src/catchup.rs, src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs,
-//! src/exec_sched.rs, src/loadgen.rs, src/repair.rs, src/sched_coord.rs,
-//! src/sched_db.rs, src/sched_event.rs, src/sched_exec.rs, src/sched_gateway.rs).
+//! src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs, src/exec_sched.rs,
+//! src/sched_coord.rs, src/sched_db.rs, src/sched_event.rs, src/sched_exec.rs,
+//! src/sched_gateway.rs).
 
 use thruput_rpc_api::{ProgramError, RpcError};
 use thruput_scheduler::{
     AuthCard, AuthDB_AuthDB1, AuthDB_AuthDB1_Client, AuthErrorCode,
     AuthErrorCodeBatch, AuthMempool_AuthMempool1,
     AuthMempool_AuthMempool1_Client, BlockExecutionContext,
-    BlockExecutionMode, BlockID, Catchup_Catchup1, Catchup_Catchup1_Client,
-    ConsensusValue, ContractAddressBatch, CoordCard,
-    CoordScheduler_CoordScheduler1, CoordScheduler_CoordScheduler1_Client,
-    CoordinatorRegistrationOutcome, DBAuth_DBAuth1, DBAuth_DBAuth1_Client,
-    DBAuthIntroResult, DBAuthResult, DBAuthResultBatch,
-    DbAddressAuthDataBatchResult, DbBlockResult, DbSched_DbSched1,
-    DbSched_DbSched1_Client, DbSchedResult, DbTipResult,
+    BlockExecutionMode, BlockID, ConsensusValue, ContractAddressBatch,
+    CoordCard, CoordScheduler_CoordScheduler1,
+    CoordScheduler_CoordScheduler1_Client, CoordinatorRegistrationOutcome,
+    DBAuth_DBAuth1, DBAuth_DBAuth1_Client, DBAuthIntroResult, DBAuthResult,
+    DBAuthResultBatch, DbAddressAuthDataBatchResult, DbBlockResult,
+    DbSched_DbSched1, DbSched_DbSched1_Client, DbSchedResult, DbTipResult,
     EventActivationResult, EventBlockResult, EventCard,
     EventExecutor_EventExecutor1, EventExecutor_EventExecutor1_Client,
     EventPrepareResult, EventRegistrationSnapshot, EventSched_EventSched1,
     EventSched_EventSched1_Client, ExecCard, ExecProposeBatchResult,
     ExecProposeResult, ExecValidateBatchResult, ExecutorSched_ExecutorSched1,
-    ExecutorSched_ExecutorSched1_Client, ExpectedDBTip, ExperimentConfig,
+    ExecutorSched_ExecutorSched1_Client, ExpectedDBTip,
     GenesisCeremonyRequest, GenesisCeremonyResult, IntroAuthResult,
-    IntroExecResult, KeyChangeChunk, LoadgenContextID, LoadgenExtensionResult,
-    LoadgenInterface_LoadgenInterfaceV1,
-    LoadgenInterface_LoadgenInterfaceV1_Client, LoadgenResult,
-    MempoolAuth_MempoolAuth1, MempoolAuth_MempoolAuth1_Client,
-    MissingTransactionsEnvelope, NativeTokenAgeBatch, NativeTokenAgeResults,
-    NativeTokensTransferredChunk, OptProposal, ParallelSignedTransactionBatch,
-    PendingTxCount, Proposal, RPCError, Repair_Repair1, Repair_Repair1_Client,
-    RepairedTransactions, SchedDb_SchedDb1, SchedDb_SchedDb1_Client,
-    SchedEvent_SchedEvent1, SchedEvent_SchedEvent1_Client,
-    SchedExec_SchedExec1, SchedExec_SchedExec1_Client,
-    SchedGateway_SchedGateway1, SchedGateway_SchedGateway1_Client,
-    SchedGatewayIntroOutcome, SchedGatewaySubmitOutcomeBatch,
-    SchedulerCommitOutcome, SchedulerCoord_SchedulerCoord1,
-    SchedulerCoord_SchedulerCoord1_Client, SchedulerGetTipResult,
-    SchedulerProposalResult, SchedulerTransactionOutcomeBatch,
-    SchedulerValidationResult, ShardCard, SignedCatchupBlocksRequest,
-    SignedCatchupBlocksResult, TransactionID,
+    IntroExecResult, KeyChangeChunk, MempoolAuth_MempoolAuth1,
+    MempoolAuth_MempoolAuth1_Client, NativeTokenAgeBatch,
+    NativeTokenAgeResults, NativeTokensTransferredChunk,
+    ParallelSignedTransactionBatch, PendingTxCount, Proposal, RPCError,
+    SchedDb_SchedDb1, SchedDb_SchedDb1_Client, SchedEvent_SchedEvent1,
+    SchedEvent_SchedEvent1_Client, SchedExec_SchedExec1,
+    SchedExec_SchedExec1_Client, SchedGateway_SchedGateway1,
+    SchedGateway_SchedGateway1_Client, SchedGatewayIntroOutcome,
+    SchedGatewaySubmitOutcomeBatch, SchedulerCommitOutcome,
+    SchedulerCoord_SchedulerCoord1, SchedulerCoord_SchedulerCoord1_Client,
+    SchedulerGetTipResult, SchedulerProposalResult,
+    SchedulerTransactionOutcomeBatch, SchedulerValidationResult, ShardCard,
+    TransactionID,
 };
-use thruput_scp::scp::{SCPEnvelopes, SCPSlotIndex};
+
 use thruput_trace::db_conflict::TxFailureDiagnostic;
 use thruput_xdr::event::TxEventLog;
 use thruput_xdr::exec_result::ExecResult;
@@ -111,33 +106,6 @@ pub mod auth_mempool {
         arg1: SignedTransactionBatch,
     ) -> Result<impl EncodesAs<AuthErrorCode>, ProgramError> {
         t.authmempool_verify_batch(arg0, arg1).await
-    }
-}
-
-pub mod catchup {
-    use super::*;
-    type S = Catchup_Catchup1_Client;
-
-    pub async fn client_catchup_null(c: &S) -> Result<(), RpcError> {
-        c.catchup_null().await
-    }
-    pub async fn client_catchup_solicit(
-        c: &S,
-        arg0: &(impl EncodesAs<SignedCatchupBlocksRequest> + ?Sized),
-    ) -> Result<SignedCatchupBlocksResult, RpcError> {
-        c.catchup_solicit(arg0).await
-    }
-
-    pub async fn trait_catchup_null<T: Catchup_Catchup1>(
-        t: &T,
-    ) -> Result<impl EncodesAs<()>, ProgramError> {
-        t.catchup_null().await
-    }
-    pub async fn trait_catchup_solicit<T: Catchup_Catchup1>(
-        t: &T,
-        arg0: SignedCatchupBlocksRequest,
-    ) -> Result<impl EncodesAs<SignedCatchupBlocksResult>, ProgramError> {
-        t.catchup_solicit(arg0).await
     }
 }
 
@@ -644,45 +612,6 @@ pub mod executor_sched {
     }
 }
 
-pub mod loadgen_interface {
-    use super::*;
-    type S = LoadgenInterface_LoadgenInterfaceV1_Client;
-
-    pub async fn client_generate_experiment(
-        c: &S,
-        arg0: &(impl EncodesAs<ExperimentConfig> + ?Sized),
-    ) -> Result<LoadgenResult, RpcError> {
-        c.generate_experiment(arg0).await
-    }
-    pub async fn client_extend_experiment(
-        c: &S,
-        arg0: &(impl EncodesAs<LoadgenContextID> + ?Sized),
-        arg1: u64,
-        arg2: &(impl EncodesAs<BlockHeight> + ?Sized),
-    ) -> Result<LoadgenExtensionResult, RpcError> {
-        c.extend_experiment(arg0, arg1, arg2).await
-    }
-
-    pub async fn trait_generate_experiment<
-        T: LoadgenInterface_LoadgenInterfaceV1,
-    >(
-        t: &T,
-        arg0: ExperimentConfig,
-    ) -> Result<impl EncodesAs<LoadgenResult>, ProgramError> {
-        t.generate_experiment(arg0).await
-    }
-    pub async fn trait_extend_experiment<
-        T: LoadgenInterface_LoadgenInterfaceV1,
-    >(
-        t: &T,
-        arg0: LoadgenContextID,
-        arg1: u64,
-        arg2: BlockHeight,
-    ) -> Result<impl EncodesAs<LoadgenExtensionResult>, ProgramError> {
-        t.extend_experiment(arg0, arg1, arg2).await
-    }
-}
-
 pub mod mempool_auth {
     use super::*;
     type S = MempoolAuth_MempoolAuth1_Client;
@@ -713,57 +642,6 @@ pub mod mempool_auth {
         arg0: KeyChangeChunk,
     ) -> Result<impl EncodesAs<()>, ProgramError> {
         t.mempoolauth_auth_data_changed_chunk(arg0).await
-    }
-}
-
-pub mod repair {
-    use super::*;
-    type S = Repair_Repair1_Client;
-
-    pub async fn client_repair_null(c: &S) -> Result<(), RpcError> {
-        c.repair_null().await
-    }
-    pub async fn client_repair_missing_txs(
-        c: &S,
-        arg0: &(impl EncodesAs<MissingTransactionsEnvelope> + ?Sized),
-    ) -> Result<RepairedTransactions, RpcError> {
-        c.repair_missing_txs(arg0).await
-    }
-    pub async fn client_repair_missing_proposal(
-        c: &S,
-        arg0: &(impl EncodesAs<ConsensusValue> + ?Sized),
-    ) -> Result<OptProposal, RpcError> {
-        c.repair_missing_proposal(arg0).await
-    }
-    pub async fn client_repair_missing_scp_envelopes(
-        c: &S,
-        arg0: &(impl EncodesAs<SCPSlotIndex> + ?Sized),
-    ) -> Result<SCPEnvelopes, RpcError> {
-        c.repair_missing_scp_envelopes(arg0).await
-    }
-
-    pub async fn trait_repair_null<T: Repair_Repair1>(
-        t: &T,
-    ) -> Result<impl EncodesAs<()>, ProgramError> {
-        t.repair_null().await
-    }
-    pub async fn trait_repair_missing_txs<T: Repair_Repair1>(
-        t: &T,
-        arg0: MissingTransactionsEnvelope,
-    ) -> Result<impl EncodesAs<RepairedTransactions>, ProgramError> {
-        t.repair_missing_txs(arg0).await
-    }
-    pub async fn trait_repair_missing_proposal<T: Repair_Repair1>(
-        t: &T,
-        arg0: ConsensusValue,
-    ) -> Result<impl EncodesAs<OptProposal>, ProgramError> {
-        t.repair_missing_proposal(arg0).await
-    }
-    pub async fn trait_repair_missing_scp_envelopes<T: Repair_Repair1>(
-        t: &T,
-        arg0: SCPSlotIndex,
-    ) -> Result<impl EncodesAs<SCPEnvelopes>, ProgramError> {
-        t.repair_missing_scp_envelopes(arg0).await
     }
 }
 

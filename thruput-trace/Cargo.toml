@@ -23,6 +23,8 @@ crate-type = ["rlib"]
 [features]
 default = []
 std = []
+# XDR encoding for the `ffi_enums` error codes (opt-in).
+xdrs = []
 serde = [
     "dep:serde",
     "xdrs/serde",
@@ -45,9 +47,6 @@ features = ["xdrs", "alloc", "schema"]
 [dependencies.xdrs]
 workspace = true
 features = ["derive", "int128", "alloc", "schemars"]
-
-[dependencies.thruput-exec-internal]
-workspace = true
 
 [dependencies.xdr-common]
 workspace = true

@@ -2,6 +2,12 @@
 #![allow(unused_imports)]
 
 pub use thruput_scp::*;
+// Generated into thruput-node-types and thruput-scheduler, which own them;
+// re-exported here so coordinator code needs only this crate.
+pub use thruput_node_types::*;
+pub use thruput_node_types::{consensus, parallel, proposal, rpc_types};
+pub use thruput_scheduler::{coord_sched, db_sched, sched_coord};
+pub use thruput_scheduler::{coord_sched::*, db_sched::*, sched_coord::*};
 
 // These types are defined in thruput_xdr and regenerated there on every
 // protocol bump (via the `protos` list in scripts/generate.sh). Re-export them
@@ -28,14 +34,6 @@ pub use config::*;
 #[rustfmt::skip]
 pub mod config2;
 pub use config2::*;
-
-#[rustfmt::skip]
-pub mod consensus;
-pub use consensus::*;
-
-#[rustfmt::skip]
-pub mod coord_sched;
-pub use coord_sched::*;
 
 #[rustfmt::skip]
 pub mod discovery2;
@@ -66,28 +64,8 @@ pub mod multiplex2;
 pub use multiplex2::*;
 
 #[rustfmt::skip]
-pub mod proposal;
-pub use proposal::*;
-
-#[rustfmt::skip]
-pub mod parallel;
-pub use parallel::*;
-
-#[rustfmt::skip]
 pub mod repair2;
 pub use repair2::*;
-
-#[rustfmt::skip]
-pub mod sched_coord;
-pub use sched_coord::*;
-
-#[rustfmt::skip]
-pub mod rpc_types;
-pub use rpc_types::*;
-
-#[rustfmt::skip]
-pub mod db_sched;
-pub use db_sched::*;
 
 #[rustfmt::skip]
 pub mod bristlecone;

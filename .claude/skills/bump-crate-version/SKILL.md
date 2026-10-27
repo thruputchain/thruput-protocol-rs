@@ -45,7 +45,7 @@ thruput-xdr = { path = "thruput-xdr", version = "=X.Y.Z", ... }
 # ... all path-based deps
 ```
 
-**Internal deps** (bump these): `thruput-syscall`, `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-rpc`, `thruput-scheduler`, `thruput-indexer`, `thruput-db-gateway`, `thruput-view`, `thruput-exec-internal`, `thruput-spec`
+**Internal deps** (bump these): `thruput-syscall`, `thruput-xdr`, `thruput-xdr-macros`, `thruput-trace`, `thruput-scp`, `thruput-coordinator`, `thruput-rpc`, `thruput-node-types`, `thruput-scheduler`, `thruput-indexer`, `thruput-db-gateway`, `thruput-view`, `thruput-spec`
 
 **External deps** (DO NOT bump): `xdrs`, `xdr-common`, `xdr-derive`, `thruput-rpc-api`, `thruput-rpc-driver`, `schemars`
 

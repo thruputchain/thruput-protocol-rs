@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use thruput_exec_internal::ffi_enums::*;
+use ffi_enums::*;
 use thruput_xdr::SyscallNo;
 use thruput_xdr::auth_claim::*;
 use thruput_xdr::auth_token::*;
@@ -11,6 +11,12 @@ use thruput_xdr::storage_item::*;
 use thruput_xdr::syscall_error::*;
 use thruput_xdr::transaction::*;
 use thruput_xdr::types::*;
+
+// FFI enums shared with the executor: invocation, host-function and system
+// error codes.
+#[rustfmt::skip]
+pub mod ffi_enums;
+mod ffi_enums_impls;
 
 #[rustfmt::skip]
 pub mod transaction_trace;

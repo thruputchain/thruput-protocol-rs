@@ -510,7 +510,9 @@ dependencies = [
  "async-trait",
  "schemars",
  "serde",
+ "thruput-node-types",
  "thruput-rpc-api",
+ "thruput-scheduler",
  "thruput-scp",
  "thruput-xdr",
  "thruput-xdrs",
@@ -524,18 +526,10 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "thruput-node-types",
  "thruput-rpc-api",
- "thruput-scheduler",
- "thruput-scp",
  "thruput-xdr",
  "thruput-xdr-common",
- "thruput-xdrs",
-]
-
-[[package]]
-name = "thruput-exec-internal"
-version = "0.63.0"
-dependencies = [
  "thruput-xdrs",
 ]
 
@@ -547,10 +541,21 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "thruput-node-types",
  "thruput-rpc-api",
- "thruput-scheduler",
- "thruput-scp",
  "thruput-trace",
+ "thruput-xdr",
+ "thruput-xdr-common",
+ "thruput-xdrs",
+]
+
+[[package]]
+name = "thruput-node-types"
+version = "0.63.0"
+dependencies = [
+ "schemars",
+ "serde",
+ "serde_json",
  "thruput-xdr",
  "thruput-xdr-common",
  "thruput-xdrs",
@@ -604,6 +609,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "thruput-node-types",
  "thruput-rpc-api",
  "thruput-rpc-driver",
  "thruput-scp",
@@ -646,7 +652,6 @@ version = "0.63.0"
 dependencies = [
  "schemars",
  "serde",
- "thruput-exec-internal",
  "thruput-xdr",
  "thruput-xdr-common",
  "thruput-xdrs",
@@ -661,7 +666,6 @@ dependencies = [
  "serde",
  "serde_json",
  "thruput-rpc-api",
- "thruput-scp",
  "thruput-xdr",
  "thruput-xdr-common",
  "thruput-xdrs",

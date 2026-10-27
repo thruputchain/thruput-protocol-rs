@@ -51,12 +51,12 @@ env:
     thruput-syscall
     thruput-xdr-macros
     thruput-xdr
-    thruput-exec-internal
     thruput-spec
     thruput-trace
     thruput-scp
-    thruput-coordinator
+    thruput-node-types
     thruput-scheduler
+    thruput-coordinator
     thruput-indexer
     thruput-db-gateway
     thruput-view

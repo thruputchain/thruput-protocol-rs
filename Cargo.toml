@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "thruput-exec-internal",
     "thruput-xdr-macros",
     "thruput-syscall",
     "thruput-xdr",
@@ -8,6 +7,7 @@ members = [
     "thruput-scp",
     "thruput-coordinator",
     "thruput-trace",
+    "thruput-node-types",
     "thruput-scheduler",
     "thruput-indexer",
     "thruput-db-gateway",
@@ -43,11 +43,11 @@ thruput-trace = { path = "thruput-trace", version = "=0.63.0" }
 thruput-scp = { path = "thruput-scp", version = "=0.63.0" }
 thruput-coordinator = { path = "thruput-coordinator", version = "=0.63.0" }
 thruput-rpc = { path = "thruput-rpc", version = "=0.63.0" }
+thruput-node-types = { path = "thruput-node-types", version = "=0.63.0" }
 thruput-scheduler = { path = "thruput-scheduler", version = "=0.63.0" }
 thruput-indexer = { path = "thruput-indexer", version = "=0.63.0" }
 thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.63.0" }
 thruput-view = { path = "thruput-view", version = "=0.63.0" }
-thruput-exec-internal = { path = "thruput-exec-internal", version = "=0.63.0" }
 thruput-spec = { path = "thruput-spec", version = "=0.63.0" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;

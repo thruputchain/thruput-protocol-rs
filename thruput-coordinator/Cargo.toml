@@ -28,6 +28,8 @@ serde = [
     "dep:serde",
     "xdrs/serde",
     "thruput-scp/serde",
+    "thruput-node-types/serde",
+    "thruput-scheduler/serde",
     "thruput-xdr/serde",
 ]
 
@@ -44,6 +46,14 @@ default-features = false
 features = ["derive"]
 
 [dependencies.thruput-scp]
+workspace = true
+features = ["std"]
+
+[dependencies.thruput-node-types]
+workspace = true
+features = ["std"]
+
+[dependencies.thruput-scheduler]
 workspace = true
 features = ["std"]
 
