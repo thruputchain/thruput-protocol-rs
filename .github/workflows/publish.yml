@@ -55,7 +55,7 @@ env:
     thruput-trace
     thruput-scp
     thruput-node-types
-    thruput-scheduler
+    thruput-node-rpc
     thruput-coordinator
     thruput-indexer
     thruput-db-gateway

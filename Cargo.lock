@@ -493,9 +493,9 @@ dependencies = [
  "thruput-coordinator",
  "thruput-db-gateway",
  "thruput-indexer",
+ "thruput-node-rpc",
  "thruput-rpc",
  "thruput-rpc-api",
- "thruput-scheduler",
  "thruput-scp",
  "thruput-trace",
  "thruput-view",
@@ -510,9 +510,9 @@ dependencies = [
  "async-trait",
  "schemars",
  "serde",
+ "thruput-node-rpc",
  "thruput-node-types",
  "thruput-rpc-api",
- "thruput-scheduler",
  "thruput-scp",
  "thruput-xdr",
  "thruput-xdrs",
@@ -543,6 +543,24 @@ dependencies = [
  "serde_json",
  "thruput-node-types",
  "thruput-rpc-api",
+ "thruput-trace",
+ "thruput-xdr",
+ "thruput-xdr-common",
+ "thruput-xdrs",
+]
+
+[[package]]
+name = "thruput-node-rpc"
+version = "0.63.0"
+dependencies = [
+ "async-trait",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thruput-node-types",
+ "thruput-rpc-api",
+ "thruput-rpc-driver",
+ "thruput-scp",
  "thruput-trace",
  "thruput-xdr",
  "thruput-xdr-common",
@@ -599,24 +617,6 @@ dependencies = [
  "thruput-xdrs",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "thruput-scheduler"
-version = "0.63.0"
-dependencies = [
- "async-trait",
- "schemars",
- "serde",
- "serde_json",
- "thruput-node-types",
- "thruput-rpc-api",
- "thruput-rpc-driver",
- "thruput-scp",
- "thruput-trace",
- "thruput-xdr",
- "thruput-xdr-common",
- "thruput-xdrs",
 ]
 
 [[package]]

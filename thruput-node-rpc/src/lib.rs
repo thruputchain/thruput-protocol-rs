@@ -3,7 +3,7 @@
 
 use thruput_scp::*;
 // Generated into thruput-node-types; re-exported so their module paths
-// (`thruput_scheduler::consensus::…`) keep working.
+// (`thruput_node_rpc::consensus::…`) keep working.
 pub use thruput_node_types::*;
 pub use thruput_node_types::{consensus, parallel, proposal, rpc_types};
 use thruput_trace::db_conflict::*;

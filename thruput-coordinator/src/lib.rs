@@ -2,12 +2,12 @@
 #![allow(unused_imports)]
 
 pub use thruput_scp::*;
-// Generated into thruput-node-types and thruput-scheduler, which own them;
+// Generated into thruput-node-types and thruput-node-rpc, which own them;
 // re-exported here so coordinator code needs only this crate.
+pub use thruput_node_rpc::{coord_sched, db_sched, sched_coord};
+pub use thruput_node_rpc::{coord_sched::*, db_sched::*, sched_coord::*};
 pub use thruput_node_types::*;
 pub use thruput_node_types::{consensus, parallel, proposal, rpc_types};
-pub use thruput_scheduler::{coord_sched, db_sched, sched_coord};
-pub use thruput_scheduler::{coord_sched::*, db_sched::*, sched_coord::*};
 
 // These types are defined in thruput_xdr and regenerated there on every
 // protocol bump (via the `protos` list in scripts/generate.sh). Re-export them

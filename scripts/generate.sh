@@ -193,7 +193,7 @@ for idx in "${indexers[@]}"; do
   generate_rpc "protocol/${idx}" "thruput-indexer"
 done
 
-schedulers=(
+node_rpcs=(
   auth_card.x
   auth_rpc.x
   coord_sched.x
@@ -207,8 +207,8 @@ schedulers=(
   sched_gateway.x
 )
 
-for sched in "${schedulers[@]}"; do
-  generate_rpc "protocol/${sched}" "thruput-scheduler"
+for node_rpc in "${node_rpcs[@]}"; do
+  generate_rpc "protocol/${node_rpc}" "thruput-node-rpc"
 done
 
 db_gateways=(

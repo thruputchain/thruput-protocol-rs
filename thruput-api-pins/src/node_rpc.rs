@@ -1,10 +1,9 @@
-//! Signature pins for `thruput_scheduler` (generated: src/auth_rpc.rs,
+//! Signature pins for `thruput_node_rpc` (generated: src/auth_rpc.rs,
 //! src/coord_sched.rs, src/db_sched.rs, src/event_rpc.rs, src/exec_sched.rs,
 //! src/sched_coord.rs, src/sched_db.rs, src/sched_event.rs, src/sched_exec.rs,
 //! src/sched_gateway.rs).
 
-use thruput_rpc_api::{ProgramError, RpcError};
-use thruput_scheduler::{
+use thruput_node_rpc::{
     AuthCard, AuthDB_AuthDB1, AuthDB_AuthDB1_Client, AuthErrorCode,
     AuthErrorCodeBatch, AuthMempool_AuthMempool1,
     AuthMempool_AuthMempool1_Client, BlockExecutionContext,
@@ -35,6 +34,7 @@ use thruput_scheduler::{
     SchedulerTransactionOutcomeBatch, SchedulerValidationResult, ShardCard,
     TransactionID,
 };
+use thruput_rpc_api::{ProgramError, RpcError};
 
 use thruput_trace::db_conflict::TxFailureDiagnostic;
 use thruput_xdr::event::TxEventLog;

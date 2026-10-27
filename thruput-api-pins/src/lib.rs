@@ -20,7 +20,7 @@
 pub mod coordinator;
 pub mod db_gateway;
 pub mod indexer;
+pub mod node_rpc;
 pub mod rpc;
-pub mod scheduler;
 pub mod scp;
 pub mod view;

@@ -1,6 +1,6 @@
 [package]
-name = "thruput-scheduler"
-description = "Bindings for Thruput scheduler RPCs (coordinator, mempool/auth, database, executor, event, gateway, catchup, repair)"
+name = "thruput-node-rpc"
+description = "Bindings for the Thruput node's internal RPCs between the scheduler, coordinator, database, executor, event, mempool/auth and gateway services"
 version.workspace = true
 rust-version.workspace = true
 edition.workspace = true
