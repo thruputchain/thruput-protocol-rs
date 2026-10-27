@@ -10,11 +10,11 @@ definitions.
 | `thruput-xdr-macros` | Proc macros that generate the syscall bindings in `thruput-xdr` |
 | `thruput-syscall` | Raw syscall dispatch ABI for the Thruput guest |
 | `thruput-spec` | Contract spec types |
-| `thruput-trace` | Transaction traces |
-| `thruput-exec-internal` | FFI enums shared with the executor (invocation, host-function and system error codes), used by the trace bindings |
+| `thruput-trace` | Transaction traces, and the FFI enums shared with the executor (invocation, host-function and system error codes) |
 | `thruput-scp` | SCP RPC bindings |
-| `thruput-coordinator`, `thruput-akkad` | Coordinator RPC bindings |
-| `thruput-scheduler` | Scheduler RPC bindings |
+| `thruput-node-types` | Types shared by the node RPC crates: transaction batches, block proposals, consensus values and common RPC results |
+| `thruput-coordinator` | Coordinator RPC bindings |
+| `thruput-node-rpc` | Node-internal RPC bindings: scheduler, database, executor, event, mempool/auth and gateway services |
 | `thruput-indexer` | Indexer RPC bindings |
 | `thruput-db-gateway` | Database read-gateway RPC bindings |
 | `thruput-view` | Read-only view invocation RPC bindings |

@@ -1,6 +1,6 @@
 [package]
-name = "thruput-scheduler"
-description = "Bindings for Thruput scheduler RPCs (coordinator, mempool/auth, database, executor, event, gateway, catchup, repair)"
+name = "thruput-node-types"
+description = "Thruput node types shared by the node RPC bindings: transaction batches, block proposals, consensus values and common RPC results"
 version.workspace = true
 rust-version.workspace = true
 edition.workspace = true
@@ -28,23 +28,15 @@ serde = [
     "dep:serde",
     "xdrs/serde",
     "thruput-xdr/serde",
-    "thruput-coordinator/serde",
-    "thruput-trace/serde",
 ]
 
 [dependencies]
-async-trait = "0.1.89"
 thruput-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
-thruput-coordinator = { workspace = true, features = ["std"] }
-thruput-scp = { workspace = true, features = ["std"] }
-thruput-trace = { workspace = true, features = ["std"] }
 xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
 xdr-common = { workspace = true }
-thruput-rpc-api = { workspace = true }
 
 schemars = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }
 
 [dev-dependencies]
-thruput-rpc-driver = { workspace = true }
 serde_json = "1"

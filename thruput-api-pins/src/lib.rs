@@ -17,11 +17,10 @@
 //! dry-run action skips private crates; regular CI compiles it via the
 //! workspace-root `cargo test --features=std` in `scripts/ci-check.sh`.
 
-pub mod akkad;
 pub mod coordinator;
 pub mod db_gateway;
 pub mod indexer;
+pub mod node_rpc;
 pub mod rpc;
-pub mod scheduler;
 pub mod scp;
 pub mod view;

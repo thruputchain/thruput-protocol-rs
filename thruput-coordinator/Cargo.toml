@@ -11,7 +11,7 @@ homepage.workspace = true
 readme.workspace = true
 keywords.workspace = true
 categories.workspace = true
-description =  "Bindings for Thruput coordinator rpcs"
+description = "Bindings for Thruput coordinator rpcs"
 
 # docs.rs builds the default features only; document the whole API.
 [package.metadata.docs.rs]
@@ -28,6 +28,8 @@ serde = [
     "dep:serde",
     "xdrs/serde",
     "thruput-scp/serde",
+    "thruput-node-types/serde",
+    "thruput-node-rpc/serde",
     "thruput-xdr/serde",
 ]
 
@@ -44,6 +46,14 @@ default-features = false
 features = ["derive"]
 
 [dependencies.thruput-scp]
+workspace = true
+features = ["std"]
+
+[dependencies.thruput-node-types]
+workspace = true
+features = ["std"]
+
+[dependencies.thruput-node-rpc]
 workspace = true
 features = ["std"]
 

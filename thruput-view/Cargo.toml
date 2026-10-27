@@ -33,7 +33,6 @@ serde = [
 [dependencies]
 async-trait = "0.1.89"
 thruput-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
-thruput-scp = { workspace = true, features = ["std"] }
 xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
 xdr-common = { workspace = true }
 thruput-rpc-api = { workspace = true }

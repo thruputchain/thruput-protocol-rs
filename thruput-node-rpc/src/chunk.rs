@@ -22,7 +22,7 @@
 //!
 //! ```
 //! use thruput_rpc_driver::{ChunkRunAssembler, ProgramError};
-//! use thruput_scheduler::{Delta, NativeTokensTransferredChunk};
+//! use thruput_node_rpc::{Delta, NativeTokensTransferredChunk};
 //! use thruput_xdr::types::BlockHeight;
 //! use xdrs::VecM;
 //!

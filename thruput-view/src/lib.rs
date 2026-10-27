@@ -1,12 +1,12 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
-use thruput_scp::network::*;
 use thruput_xdr::auth_claim::*;
 use thruput_xdr::auth_token::*;
 use thruput_xdr::contract::*;
 use thruput_xdr::event::*;
 use thruput_xdr::invoke_flag::*;
+use thruput_xdr::network::*;
 use thruput_xdr::syscall_error::*;
 use thruput_xdr::transaction::*;
 use thruput_xdr::types::*;

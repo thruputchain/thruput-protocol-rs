@@ -1,8 +1,11 @@
 #![allow(non_snake_case)]
 #![allow(unused_imports)]
 
-use thruput_coordinator::*;
 use thruput_scp::*;
+// Generated into thruput-node-types; re-exported so their module paths
+// (`thruput_node_rpc::consensus::…`) keep working.
+pub use thruput_node_types::*;
+pub use thruput_node_types::{consensus, parallel, proposal, rpc_types};
 use thruput_trace::db_conflict::*;
 use thruput_xdr::address_auth::*;
 use thruput_xdr::contract::*;
@@ -17,18 +20,6 @@ use thruput_xdr::storage_item::*;
 use thruput_xdr::transaction::*;
 use thruput_xdr::types::*;
 pub use thruput_xdr::validator::*;
-
-#[rustfmt::skip]
-pub mod rpc_types;
-pub use rpc_types::*;
-
-#[rustfmt::skip]
-pub mod parallel;
-pub use parallel::*;
-
-#[rustfmt::skip]
-pub mod proposal;
-pub use proposal::*;
 
 #[rustfmt::skip]
 pub mod db_sched;
@@ -63,14 +54,6 @@ pub mod exec_sched;
 pub use exec_sched::*;
 
 #[rustfmt::skip]
-pub mod consensus;
-pub use consensus::*;
-
-#[rustfmt::skip]
-pub mod catchup;
-pub use catchup::*;
-
-#[rustfmt::skip]
 pub mod sched_coord;
 pub use sched_coord::*;
 
@@ -81,17 +64,6 @@ pub use sched_gateway::*;
 #[rustfmt::skip]
 pub mod coord_sched;
 pub use coord_sched::*;
-
-#[rustfmt::skip]
-pub mod repair;
-pub use repair::*;
-
-#[rustfmt::skip]
-pub mod loadgen;
-pub use loadgen::*;
-
-mod parallel_impls;
-pub use parallel_impls::*;
 
 mod impls;
 pub use impls::*;

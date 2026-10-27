@@ -32,8 +32,8 @@ traces=(
   transaction_trace.x
 )
 
-# XDR files for thruput-exec-internal
-exec_internal=(
+# XDR files for thruput-trace generated without schemas
+ffi_enums=(
   ffi_enums.x
 )
 
@@ -48,23 +48,20 @@ rpcs=(
   test_rpc.x
 )
 
-coordinators=(
-  discovery.x
-  config.x
-  dogwood_kit.x
-  dogwood.x
+# Node types shared by the node RPC crates
+node_types=(
+  consensus.x
+  parallel.x
+  proposal.x
+  rpc_types.x
 )
 
-# dependencies for the rust coordinator
-akkads=(
+coordinators=(
   batch.x
   bristlecone.x
   catchup.x
   config.x
   config2.x
-  consensus.x
-  coord_sched.x
-  db_sched.x
   discovery2.x
   dogwood_kit.x
   dogwood.x
@@ -72,11 +69,7 @@ akkads=(
   integration.x
   loadgen.x
   multiplex2.x
-  proposal.x
-  parallel.x
   repair2.x
-  rpc_types.x
-  sched_coord.x
 )
 
 specs=(
@@ -167,8 +160,8 @@ done
 # as an intra-doc link and fails documentation builds with warnings denied.
 perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' thruput-trace/src/db_conflict.rs
 
-for ffi_enum in "${exec_internal[@]}"; do
-  generate_no_schema "protocol/${ffi_enum}" "thruput-exec-internal"
+for ffi_enum in "${ffi_enums[@]}"; do
+  generate_no_schema "protocol/${ffi_enum}" "thruput-trace"
 done
 
 for rpc in "${rpcs[@]}"; do
@@ -179,12 +172,12 @@ for scp in "${scps[@]}"; do
   generate_rpc "protocol/${scp}" "thruput-scp"
 done
 
-for coordinator in "${coordinators[@]}"; do
-  generate_rpc "protocol/${coordinator}" "thruput-coordinator"
+for node_type in "${node_types[@]}"; do
+  generate_rpc "protocol/${node_type}" "thruput-node-types"
 done
 
-for akkad in "${akkads[@]}"; do
-  generate_rpc "protocol/${akkad}" "thruput-akkad"
+for coordinator in "${coordinators[@]}"; do
+  generate_rpc "protocol/${coordinator}" "thruput-coordinator"
 done
 
 for spec in "${specs[@]}"; do
@@ -200,36 +193,22 @@ for idx in "${indexers[@]}"; do
   generate_rpc "protocol/${idx}" "thruput-indexer"
 done
 
-scheduler_deps=(
-  rpc_types.x
-  parallel.x
-  proposal.x
-  db_sched.x
-  sched_db.x
+node_rpcs=(
   auth_card.x
   auth_rpc.x
-  sched_event.x
-  sched_exec.x
+  coord_sched.x
+  db_sched.x
   event_rpc.x
   exec_sched.x
-  consensus.x
-)
-
-schedulers=(
   sched_coord.x
+  sched_db.x
+  sched_event.x
+  sched_exec.x
   sched_gateway.x
-  coord_sched.x
-  catchup.x
-  repair.x
-  loadgen.x
 )
 
-for dep in "${scheduler_deps[@]}"; do
-  generate_rpc "protocol/${dep}" "thruput-scheduler"
-done
-
-for sched in "${schedulers[@]}"; do
-  generate_rpc "protocol/${sched}" "thruput-scheduler"
+for node_rpc in "${node_rpcs[@]}"; do
+  generate_rpc "protocol/${node_rpc}" "thruput-node-rpc"
 done
 
 db_gateways=(

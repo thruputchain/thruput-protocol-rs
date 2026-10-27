@@ -1,0 +1,50 @@
+[package]
+name = "thruput-node-rpc"
+description = "Bindings for the Thruput node's internal RPCs between the scheduler, coordinator, database, executor, event, mempool/auth and gateway services"
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+# docs.rs builds the default features only; document the whole API.
+[package.metadata.docs.rs]
+all-features = true
+
+[lib]
+crate-type = ["rlib"]
+
+[features]
+default = ["alloc", "std"]
+alloc = ["xdrs/alloc", "thruput-xdr/alloc"]
+std = ["alloc"]
+serde = [
+    "dep:serde",
+    "xdrs/serde",
+    "thruput-xdr/serde",
+    "thruput-node-types/serde",
+    "thruput-trace/serde",
+]
+
+[dependencies]
+async-trait = "0.1.89"
+thruput-xdr = { workspace = true, features = ["std", "xdrs", "schema"] }
+thruput-node-types = { workspace = true, features = ["std"] }
+thruput-scp = { workspace = true, features = ["std"] }
+thruput-trace = { workspace = true, features = ["std"] }
+xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
+xdr-common = { workspace = true }
+thruput-rpc-api = { workspace = true }
+
+schemars = { workspace = true }
+serde = { version = "1", features = ["derive"], optional = true }
+
+[dev-dependencies]
+thruput-rpc-driver = { workspace = true }
+serde_json = "1"
