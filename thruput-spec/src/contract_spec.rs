@@ -87,7 +87,7 @@ pub struct ContractSpecId {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractArrayType {
-    // #[rust(box_ptr)]
+    // #[rust(box_ptr)], #[cpp(box)]
     pub element: Box<ContractType>,
     pub len: u32,
 }
@@ -98,9 +98,23 @@ pub struct ContractArrayType {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(C)]
 pub struct ContractVectorType {
-    // #[rust(box_ptr)]
+    // #[rust(box_ptr)], #[cpp(box)]
     pub element: Box<ContractType>,
     pub max_len: u32,
+}
+
+// ---------------------------------------------------------------------------
+// SignedTokenPreimage (Rust: SignedTokenPreimage)
+// ---------------------------------------------------------------------------
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct ContractSignedTokenPreimage {
+    // #[rust(box_ptr)], #[cpp(box)]
+    pub preimage_type: Option<Box<ContractType>>,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -216,20 +230,6 @@ pub enum ContractType {
     //   void;
     I256 = ContractTypeKind::I256.0 as i32,
     
-}
-
-// ---------------------------------------------------------------------------
-// SignedTokenPreimage (Rust: SignedTokenPreimage)
-// ---------------------------------------------------------------------------
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[repr(C)]
-pub struct ContractSignedTokenPreimage {
-    // #[rust(box_ptr)], #[cpp(box)]
-    pub preimage_type: Option<Box<ContractType>>,
 }
 
 // ---------------------------------------------------------------------------
