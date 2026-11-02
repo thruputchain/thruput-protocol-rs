@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from xdrc commit: a1facd04376bbb03ee9f249a4bb969774fb083a6
 
 // clang-format off
 
@@ -122,6 +122,24 @@ pub enum DbGatewayConfigResult {
     #[xdr(default_variant)] Default { error: i32 },
 }
 
+/// Complete canonical XDR Contract bytes, keyed by SHA256 of these bytes.
+/// A miss means unavailable here, not proof that the hash never existed.
+/// Content availability is not proof of deployment or transaction commitment.
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum DbGatewayContractResult {
+    // case kRPCNone:
+    //   BytesM contract_xdr;
+    kRPCNone { contract_xdr: BytesM } = RPCError::kRPCNone.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { error: i32 },
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -169,6 +187,8 @@ pub trait DbGateway_DbGateway1: Send + Sync {
     fn dbgateway_get_items(&self, arg0 : AddressAndKeyBatch) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayResult>, ::thruput_rpc_api::ProgramError>> + Send;
     
     fn dbgateway_get_config(&self) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayConfigResult>, ::thruput_rpc_api::ProgramError>> + Send;
+    
+    fn dbgateway_get_contract(&self, arg0 : SHA256Hash) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<DbGatewayContractResult>, ::thruput_rpc_api::ProgramError>> + Send;
 }
 
 
@@ -209,6 +229,13 @@ impl<__Handler: DbGateway_DbGateway1> ::thruput_rpc_api::RpcHandler for DbGatewa
                 let args: () =
                     xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
                 let res = self.inner.dbgateway_get_config().await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
+                xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
+            }
+            // dbgateway_get_contract
+            3 => {
+                let args: (SHA256Hash, ) =
+                    xdrs::txs::decode(data).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+                let res = self.inner.dbgateway_get_contract(args.0).await.map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?;
                 xdrs::txs::encode(&res).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)
             }
             _ => Err(::thruput_rpc_api::RpcError::InvalidProcedure),
@@ -289,6 +316,26 @@ impl DbGateway_DbGateway1_Client {
          unsafe { self.handle.send_call_decoded(Self::prog_vers(), 2, call, &mut decode) }.await?;
          out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
+    pub async fn dbgateway_get_contract(&self, arg0 : &(impl xdrs::EncodesAs<SHA256Hash> + ?Sized)) -> Result<DbGatewayContractResult, ::thruput_rpc_api::RpcError> {
+         let mut call = self.handle.call_buf();
+         call.append_with(|buf| {
+             let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
+             let r = xdrs::write_xdr(&(arg0), &mut w);
+             *buf = w.into();
+             r
+         }).map_err(|_| ::thruput_rpc_api::RpcError::GarbageArguments)?;
+         let mut out = ::core::option::Option::None;
+         let mut decode = |reply: &[u8]| -> ::core::result::Result<(), ::thruput_rpc_api::RpcError> {
+             out = ::core::option::Option::Some(xdrs::txs::decode(reply).map_err(|_| ::thruput_rpc_api::RpcError::SystemError)?);
+             Ok(())
+         };
+         // SAFETY: the call future is awaited right here, so it lives in
+         // this method's future along with `out` and `decode`. Once that
+         // is polled it is pinned, so neither can be freed without the
+         // call future being dropped first. Decoding never blocks.
+         unsafe { self.handle.send_call_decoded(Self::prog_vers(), 3, call, &mut decode) }.await?;
+         out.ok_or(::thruput_rpc_api::RpcError::SystemError)
+    }
 }
 
 impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for DbGateway_DbGateway1_Client {
@@ -330,6 +377,17 @@ impl DbGatewayConfigResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayConfigResult::Default{ error } => (*error).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl DbGatewayContractResult {
+    #[allow(clippy::match_single_binding)]
+    pub fn error(&self) -> RPCError {
+        match self {
+            DbGatewayContractResult::Default{ error } => (*error).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
