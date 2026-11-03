@@ -61,6 +61,12 @@
         "description": [
           "The transaction already holds kConfigParamMaxCrossInvokeDepth invocation frames open, so admitting another would exceed the network's cross-invoke depth bound. This is a resource limit rather than a malformed call -- the same invocation succeeds from a shallower frame. The invocation is rejected before any child frame runs and the syscall is a no-op."
         ]
+      },
+      {
+        "code": "kSyscallErrorCodeInvokedAddressLimitExceeded",
+        "description": [
+          "The transaction has already entered kMaxInvokedAddressesPerTransaction distinct addresses and this address is new. The invocation is rejected before frame entry and invoke outputs remain unchanged. Calls to an already-entered address remain eligible. Rollback does not reset this transaction-wide set."
+        ]
       }
     ]
   },

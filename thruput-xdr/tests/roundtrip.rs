@@ -330,6 +330,12 @@ fn tx_event_log_roundtrip() {
             return_buffer: b"ret".as_slice().try_into().unwrap(),
         },
         gas_consumed: 12_345,
+        invoked_addresses: vec![
+            ContractAddress::new([0x01; 32]),
+            ContractAddress::new([0x77; 32]),
+        ]
+        .try_into()
+        .unwrap(),
         events: vec![TxEmittedEvent {
             contract_address: ContractAddress::new([0x77; 32]),
             num_topics: 2,

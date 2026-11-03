@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from xdrc commit: 3e4bc931b20b98e736214f37c7c345a9d9cb24e9
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -261,7 +261,7 @@ pub struct EventPage {
 
 /// `get_transactions` request.  Whole-chain walk in `order` from `anchor`.
 /// There is no address filter here — use `get_transactions_by_address` for
-/// per-account (root invoked address) transaction history.
+/// root-target and entered-address transaction history.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -321,8 +321,8 @@ pub struct TransactionRef {
 pub type TransactionRefBatch = VecM::<TransactionRef>;
 
 /// `get_transactions_by_address` request.  Walked in `order` from `anchor`,
-/// returning transactions whose ROOT invocation targets `address` (i.e. the
-/// account's transaction history).
+/// returning transactions whose root targets `address` or whose committed
+/// invoked_addresses contains it. Each transaction appears once.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
@@ -374,6 +374,34 @@ pub struct TransactionRefPage {
     /// Lowest block the query covers: 1 (the first indexed block) for
     /// get_transactions_by_block, and the indexer's oldest retained block
     /// (today always 0) for get_transactions_by_address.
+    pub oldest_block: BlockHeight,
+}
+
+/// Relationship evidence for the queried address, not a per-call result.
+/// At least one flag is true. A root target need not have entered execution.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct AddressTransactionRef {
+    pub tx_hash: TransactionHash,
+    pub height: BlockHeight,
+    pub is_root_target: bool,
+    pub was_invoked: bool,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct AddressTransactionRefPage {
+    pub refs: VecM<AddressTransactionRef>,
+    pub cursor: PaginationCursor,
+    /// Inclusive upper coverage bound, pinned for the duration of a cursor walk.
+    pub latest_block: BlockHeight,
+    /// Inclusive lower bound of contiguous, complete retained address history.
     pub oldest_block: BlockHeight,
 }
 
@@ -492,6 +520,21 @@ pub enum TransactionRefPageResult {
     #[xdr(default_variant)] Default { outcome: i32 },
 }
 
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[repr(i32)]
+#[non_exhaustive]
+pub enum AddressTransactionRefPageResult {
+    // case IndexerQueryOk:
+    //   AddressTransactionRefPage page;
+    IndexerQueryOk { page: AddressTransactionRefPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+    // default:
+    //   void;
+    #[xdr(default_variant)] Default { outcome: i32 },
+}
+
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
@@ -551,10 +594,10 @@ pub trait IndexerBlockExplorer_IndexerBlockExplorer1: Send + Sync {
         // Paginated transactions, whole-chain, in block order.
 
     fn get_transactions(&self, arg0 : TransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
-        // Paginated transaction refs whose root invoked address == the query
-    // address (account transaction history).  Hydrate via get_transaction_info.
+        // Root-target or entered-address membership, deduplicated per transaction.
+    // Hydrate via get_transaction_info; membership does not imply call success.
 
-    fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<TransactionRefPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
+    fn get_transactions_by_address(&self, arg0 : AddressTransactionQuery) -> impl ::core::future::Future<Output = Result<impl xdrs::EncodesAs<AddressTransactionRefPageResult>, ::thruput_rpc_api::ProgramError>> + Send;
         // Paginated transaction refs committed at exactly the requested height.
     // Hydrate via get_transaction_info.
 
@@ -747,7 +790,7 @@ impl IndexerBlockExplorer_IndexerBlockExplorer1_Client {
          unsafe { self.handle.send_call_decoded(Self::prog_vers(), 4, call, &mut decode) }.await?;
          out.ok_or(::thruput_rpc_api::RpcError::SystemError)
     }
-    pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<TransactionRefPageResult, ::thruput_rpc_api::RpcError> {
+    pub async fn get_transactions_by_address(&self, arg0 : &(impl xdrs::EncodesAs<AddressTransactionQuery> + ?Sized)) -> Result<AddressTransactionRefPageResult, ::thruput_rpc_api::RpcError> {
          let mut call = self.handle.call_buf();
          call.append_with(|buf| {
              let mut w = xdrs::txs::buf_writer::BufWriter::from(::core::mem::take(buf));
@@ -1352,6 +1395,17 @@ impl TransactionRefPageResult {
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             TransactionRefPageResult::Default{ outcome } => (*outcome).into(),
+
+            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
+        }
+    }
+}
+
+impl AddressTransactionRefPageResult {
+    #[allow(clippy::match_single_binding)]
+    pub fn outcome(&self) -> IndexerQueryOutcome {
+        match self {
+            AddressTransactionRefPageResult::Default{ outcome } => (*outcome).into(),
 
             _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 6ab835b07c234abb4b0b50b61d687904727a4f32
+// Generated from xdrc commit: 3e4bc931b20b98e736214f37c7c345a9d9cb24e9
 
 // clang-format off
 
@@ -92,6 +92,11 @@ impl SyscallErrorCode {
     /// child frame runs, so the syscall is a complete no-op and the caller's
     /// invoke outputs are left untouched.
     pub const kSyscallErrorCodeInvokeDepthExceeded: Self = Self(11);
+
+    /// Entering a new address would exceed kMaxInvokedAddressesPerTransaction.
+    /// Rejected before frame entry, leaving invoke outputs untouched. Calls to
+    /// already-entered addresses remain eligible. Rollback does not reset the set.
+    pub const kSyscallErrorCodeInvokedAddressLimitExceeded: Self = Self(12);
 }
 impl From<i32> for SyscallErrorCode {
     fn from(v: i32) -> Self {
@@ -137,6 +142,9 @@ impl core::fmt::Display for SyscallErrorCode {
             },
             x if x == Self::kSyscallErrorCodeInvokeDepthExceeded.0 => {
                 write!(f, "SyscallErrorCode::kSyscallErrorCodeInvokeDepthExceeded")
+            },
+            x if x == Self::kSyscallErrorCodeInvokedAddressLimitExceeded.0 => {
+                write!(f, "SyscallErrorCode::kSyscallErrorCodeInvokedAddressLimitExceeded")
             },
             _ => {
                 write!(f, "SyscallErrorCode({})", self.0)

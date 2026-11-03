@@ -1,10 +1,11 @@
 //! Signature pins for `thruput_indexer` (generated: src/indexer.rs).
 
 use thruput_indexer::{
-    AddressTransactionQuery, BlockLookupResult, BlockTransactionQuery,
-    EventIndexer_EventIndexer1, EventIndexer_EventIndexer1_Client,
-    EventIndexerPullRequest, EventIndexerPullResult, EventPageResult,
-    EventQuery, IndexerBlockExplorer_IndexerBlockExplorer1,
+    AddressTransactionQuery, AddressTransactionRefPageResult,
+    BlockLookupResult, BlockTransactionQuery, EventIndexer_EventIndexer1,
+    EventIndexer_EventIndexer1_Client, EventIndexerPullRequest,
+    EventIndexerPullResult, EventPageResult, EventQuery,
+    IndexerBlockExplorer_IndexerBlockExplorer1,
     IndexerBlockExplorer_IndexerBlockExplorer1_Client,
     IndexerBlockExplorerIntroOutcome, IndexerTxFailureNoticeBatch,
     TransactionPageResult, TransactionQuery, TransactionRefPageResult,
@@ -53,7 +54,7 @@ pub mod indexer_block_explorer {
     pub async fn client_get_transactions_by_address(
         c: &S,
         arg0: &(impl EncodesAs<AddressTransactionQuery> + ?Sized),
-    ) -> Result<TransactionRefPageResult, RpcError> {
+    ) -> Result<AddressTransactionRefPageResult, RpcError> {
         c.get_transactions_by_address(arg0).await
     }
     pub async fn client_get_transactions_by_block(
@@ -109,7 +110,8 @@ pub mod indexer_block_explorer {
     >(
         t: &T,
         arg0: AddressTransactionQuery,
-    ) -> Result<impl EncodesAs<TransactionRefPageResult>, ProgramError> {
+    ) -> Result<impl EncodesAs<AddressTransactionRefPageResult>, ProgramError>
+    {
         t.get_transactions_by_address(arg0).await
     }
     pub async fn trait_get_transactions_by_block<
