@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1531,8 +1531,9 @@ impl Signature {
     #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
+            Signature::Ed25519 { .. } => CryptographicScheme::Ed25519,
+            Signature::MlDsa65 { .. } => CryptographicScheme::MlDsa65,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1541,8 +1542,9 @@ impl PublicKey {
     #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
+            PublicKey::Ed25519 { .. } => CryptographicScheme::Ed25519,
+            PublicKey::MlDsa65 { .. } => CryptographicScheme::MlDsa65,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1551,8 +1553,9 @@ impl SecretKey {
     #[allow(clippy::match_single_binding)]
     pub fn scheme(&self) -> CryptographicScheme {
         match self {
+            SecretKey::Ed25519 { .. } => CryptographicScheme::Ed25519,
+            SecretKey::MlDsa65 { .. } => CryptographicScheme::MlDsa65,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1561,8 +1564,8 @@ impl ExtensionPoint {
     #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> i32 {
         match self {
+            ExtensionPoint::_0 => 0 as i32,
             
-            _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
 }
@@ -1571,8 +1574,12 @@ impl StorageKey {
     #[allow(clippy::match_single_binding)]
     pub fn key_type(&self) -> StorageKeyType {
         match self {
+            StorageKey::ContractData { .. } => StorageKeyType::ContractData,
+            StorageKey::FreeNativeTokenBalance => StorageKeyType::FreeNativeTokenBalance,
+            StorageKey::AuthData => StorageKeyType::AuthData,
+            StorageKey::Metadata => StorageKeyType::Metadata,
+            StorageKey::ReplayCache => StorageKeyType::ReplayCache,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -402,8 +402,21 @@ impl ConfigParam {
     #[allow(clippy::match_single_binding)]
     pub fn param(&self) -> ConfigParamID {
         match self {
+            ConfigParam::kConfigParamMaxSHA256Buffers { .. } => ConfigParamID::kConfigParamMaxSHA256Buffers,
+            ConfigParam::kConfigParamMaxCrossInvokeDepth { .. } => ConfigParamID::kConfigParamMaxCrossInvokeDepth,
+            ConfigParam::kConfigParamMaxNewContractsPerTx { .. } => ConfigParamID::kConfigParamMaxNewContractsPerTx,
+            ConfigParam::kConfigParamMaxBytestringLen { .. } => ConfigParamID::kConfigParamMaxBytestringLen,
+            ConfigParam::kConfigParamMaxContractSizeBytes { .. } => ConfigParamID::kConfigParamMaxContractSizeBytes,
+            ConfigParam::kConfigParamMaxSavepointDepth { .. } => ConfigParamID::kConfigParamMaxSavepointDepth,
+            ConfigParam::kConfigParamMaxSHA256BufferBytes { .. } => ConfigParamID::kConfigParamMaxSHA256BufferBytes,
+            ConfigParam::kConfigParamMaxAuthTokenDepth { .. } => ConfigParamID::kConfigParamMaxAuthTokenDepth,
+            ConfigParam::kConfigParamMaxRv32CodeBytes { .. } => ConfigParamID::kConfigParamMaxRv32CodeBytes,
+            ConfigParam::kConfigParamMaxRv32MemoryBytes { .. } => ConfigParamID::kConfigParamMaxRv32MemoryBytes,
+            ConfigParam::kConfigParamMaxAuthTokens { .. } => ConfigParamID::kConfigParamMaxAuthTokens,
+            ConfigParam::kConfigParamMaxCalldataLen { .. } => ConfigParamID::kConfigParamMaxCalldataLen,
+            ConfigParam::kConfigParamMaxReturnBufferLen { .. } => ConfigParamID::kConfigParamMaxReturnBufferLen,
+            ConfigParam::kConfigParamMaxTxGas { .. } => ConfigParamID::kConfigParamMaxTxGas,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -412,8 +425,8 @@ impl NetworkConfig {
     #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> i32 {
         match self {
+            NetworkConfig::_0 { .. } => 0 as i32,
             
-            _ => unsafe { *(self as *const Self as *const i32) },
         }
     }
 }

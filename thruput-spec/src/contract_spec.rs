@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // Thruput contract specification AST
 //
@@ -502,8 +502,27 @@ impl ContractType {
     #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractTypeKind {
         match self {
+            ContractType::Void => ContractTypeKind::Void,
+            ContractType::Bool => ContractTypeKind::Bool,
+            ContractType::U32 => ContractTypeKind::U32,
+            ContractType::I32 => ContractTypeKind::I32,
+            ContractType::U64 => ContractTypeKind::U64,
+            ContractType::I64 => ContractTypeKind::I64,
+            ContractType::U128 => ContractTypeKind::U128,
+            ContractType::I128 => ContractTypeKind::I128,
+            ContractType::String => ContractTypeKind::String,
+            ContractType::Bytes => ContractTypeKind::Bytes,
+            ContractType::Address => ContractTypeKind::Address,
+            ContractType::Option { .. } => ContractTypeKind::Option,
+            ContractType::Vector { .. } => ContractTypeKind::Vector,
+            ContractType::Tuple { .. } => ContractTypeKind::Tuple,
+            ContractType::Named { .. } => ContractTypeKind::Named,
+            ContractType::U8 => ContractTypeKind::U8,
+            ContractType::Array { .. } => ContractTypeKind::Array,
+            ContractType::SignedToken { .. } => ContractTypeKind::SignedToken,
+            ContractType::U256 => ContractTypeKind::U256,
+            ContractType::I256 => ContractTypeKind::I256,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -512,8 +531,10 @@ impl ContractUnionCaseType {
     #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractUnionCaseKind {
         match self {
+            ContractUnionCaseType::UnionCaseVoid => ContractUnionCaseKind::UnionCaseVoid,
+            ContractUnionCaseType::UnionCaseTuple { .. } => ContractUnionCaseKind::UnionCaseTuple,
+            ContractUnionCaseType::UnionCaseStruct { .. } => ContractUnionCaseKind::UnionCaseStruct,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -522,8 +543,10 @@ impl ContractTypeDef {
     #[allow(clippy::match_single_binding)]
     pub fn v(&self) -> ContractTypeDefKind {
         match self {
+            ContractTypeDef::TypeDefStruct { .. } => ContractTypeDefKind::TypeDefStruct,
+            ContractTypeDef::TypeDefEnum { .. } => ContractTypeDefKind::TypeDefEnum,
+            ContractTypeDef::TypeDefUnion { .. } => ContractTypeDefKind::TypeDefUnion,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
