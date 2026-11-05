@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -429,9 +429,12 @@ impl ViewGatewayResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> ViewGatewayOutcome {
         match self {
+            ViewGatewayResult::ViewGatewayOk { .. } => ViewGatewayOutcome::ViewGatewayOk,
+            ViewGatewayResult::ViewGatewayAbandoned => ViewGatewayOutcome::ViewGatewayAbandoned,
+            ViewGatewayResult::ViewGatewayInternalError => ViewGatewayOutcome::ViewGatewayInternalError,
+            ViewGatewayResult::ViewGatewayInvalidInput { .. } => ViewGatewayOutcome::ViewGatewayInvalidInput,
             ViewGatewayResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -440,9 +443,10 @@ impl ViewGatewayBatchResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> ViewGatewayBatchOutcome {
         match self {
+            ViewGatewayBatchResult::ViewGatewayBatchOk { .. } => ViewGatewayBatchOutcome::ViewGatewayBatchOk,
+            ViewGatewayBatchResult::ViewGatewayBatchHeightUnavailable { .. } => ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable,
             ViewGatewayBatchResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

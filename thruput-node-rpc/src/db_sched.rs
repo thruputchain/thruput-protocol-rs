@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -571,9 +571,9 @@ impl NativeTokenAgeResult {
     #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
+            NativeTokenAgeResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
             NativeTokenAgeResult::Default{ result } => (*result).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -582,9 +582,9 @@ impl DbAddressAuthDataBatchResult {
     #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
+            DbAddressAuthDataBatchResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
             DbAddressAuthDataBatchResult::Default{ result } => (*result).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -593,9 +593,9 @@ impl DbBlockResult {
     #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
+            DbBlockResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
             DbBlockResult::Default{ result } => (*result).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -604,9 +604,9 @@ impl DbTipResult {
     #[allow(clippy::match_single_binding)]
     pub fn result(&self) -> DbSchedResult {
         match self {
+            DbTipResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
             DbTipResult::Default{ result } => (*result).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

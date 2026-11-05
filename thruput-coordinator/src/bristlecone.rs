@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -247,8 +247,10 @@ impl BristleconeContent {
     #[allow(clippy::match_single_binding)]
     pub fn content_type(&self) -> BristleconeContentType {
         match self {
+            BristleconeContent::BRISTLECONE_PROPOSAL { .. } => BristleconeContentType::BRISTLECONE_PROPOSAL,
+            BristleconeContent::BRISTLECONE_SAFE_VOTE { .. } => BristleconeContentType::BRISTLECONE_SAFE_VOTE,
+            BristleconeContent::BRISTLECONE_TIMELY_VOTE { .. } => BristleconeContentType::BRISTLECONE_TIMELY_VOTE,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

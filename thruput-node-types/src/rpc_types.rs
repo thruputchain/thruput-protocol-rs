@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -357,9 +357,9 @@ impl ExpectedStorageCost {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedStorageCost::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedStorageCost::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -368,9 +368,9 @@ impl ExpectedContract {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedContract::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedContract::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -379,9 +379,9 @@ impl ExpectedDeployment {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedDeployment::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedDeployment::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -390,9 +390,9 @@ impl ExpectedProposalData {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedProposalData::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedProposalData::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -401,9 +401,9 @@ impl ExpectedRetrocausalQueueBlock {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedRetrocausalQueueBlock::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedRetrocausalQueueBlock::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -412,9 +412,9 @@ impl ExpectedQueueEntry {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedQueueEntry::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedQueueEntry::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -423,9 +423,9 @@ impl ExpectedDBTip {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedDBTip::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedDBTip::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -434,9 +434,9 @@ impl ExpectedViewingSnapshot {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            ExpectedViewingSnapshot::kRPCNone { .. } => RPCError::kRPCNone,
             ExpectedViewingSnapshot::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

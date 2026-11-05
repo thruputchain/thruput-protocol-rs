@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // Copyright 2015 Stellar Development Foundation and contributors. Licensed
 // under the Apache License, Version 2.0. See the COPYING file at the root
@@ -238,8 +238,11 @@ impl SCPStatement_pledges {
     #[allow(clippy::match_single_binding)]
     pub fn stmt_type(&self) -> SCPStatementType {
         match self {
+            SCPStatement_pledges::SCP_ST_PREPARE { .. } => SCPStatementType::SCP_ST_PREPARE,
+            SCPStatement_pledges::SCP_ST_CONFIRM { .. } => SCPStatementType::SCP_ST_CONFIRM,
+            SCPStatement_pledges::SCP_ST_EXTERNALIZE { .. } => SCPStatementType::SCP_ST_EXTERNALIZE,
+            SCPStatement_pledges::SCP_ST_NOMINATE { .. } => SCPStatementType::SCP_ST_NOMINATE,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

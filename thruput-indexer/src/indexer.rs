@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1307,9 +1307,10 @@ impl TxInfoResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> TxInfoOutcome {
         match self {
+            TxInfoResult::TxInfoFound { .. } => TxInfoOutcome::TxInfoFound,
+            TxInfoResult::TxInfoRecentFailure { .. } => TxInfoOutcome::TxInfoRecentFailure,
             TxInfoResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1318,9 +1319,9 @@ impl BlockLookupResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> BlockLookupOutcome {
         match self {
+            BlockLookupResult::BlockFound { .. } => BlockLookupOutcome::BlockFound,
             BlockLookupResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1329,9 +1330,9 @@ impl EventPageResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
+            EventPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
             EventPageResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1340,9 +1341,9 @@ impl TransactionPageResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
+            TransactionPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
             TransactionPageResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1351,9 +1352,9 @@ impl TransactionRefPageResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
+            TransactionRefPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
             TransactionRefPageResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1362,9 +1363,10 @@ impl IndexerProgress {
     #[allow(clippy::match_single_binding)]
     pub fn state(&self) -> IndexerProgressState {
         match self {
+            IndexerProgress::IndexerProgressInitialized { .. } => IndexerProgressState::IndexerProgressInitialized,
+            IndexerProgress::IndexerProgressCaughtUp { .. } => IndexerProgressState::IndexerProgressCaughtUp,
             IndexerProgress::Default{ state } => (*state).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1373,9 +1375,10 @@ impl IndexerEpochResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerEpochOutcome {
         match self {
+            IndexerEpochResult::IndexerEpochInitialized { .. } => IndexerEpochOutcome::IndexerEpochInitialized,
+            IndexerEpochResult::IndexerEpochUnchanged { .. } => IndexerEpochOutcome::IndexerEpochUnchanged,
             IndexerEpochResult::Default{ outcome,..} => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1384,9 +1387,11 @@ impl IndexerBlockApplyResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> IndexerBlockApplyOutcome {
         match self {
+            IndexerBlockApplyResult::IndexerBlockApplied { .. } => IndexerBlockApplyOutcome::IndexerBlockApplied,
+            IndexerBlockApplyResult::IndexerBlockDuplicate { .. } => IndexerBlockApplyOutcome::IndexerBlockDuplicate,
+            IndexerBlockApplyResult::IndexerBlockGap { .. } => IndexerBlockApplyOutcome::IndexerBlockGap,
             IndexerBlockApplyResult::Default{ outcome,..} => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1395,9 +1400,10 @@ impl EventIndexerPullResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> EventIndexerPullOutcome {
         match self {
+            EventIndexerPullResult::EventIndexerPullBlock { .. } => EventIndexerPullOutcome::EventIndexerPullBlock,
+            EventIndexerPullResult::EventIndexerPullCaughtUp { .. } => EventIndexerPullOutcome::EventIndexerPullCaughtUp,
             EventIndexerPullResult::Default{ outcome,..} => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

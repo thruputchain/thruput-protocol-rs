@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -523,8 +523,13 @@ impl StorageItem {
     #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageItemType {
         match self {
+            StorageItem::kItemTypeBytestring { .. } => StorageItemType::kItemTypeBytestring,
+            StorageItem::kItemTypeNonnegativeInt { .. } => StorageItemType::kItemTypeNonnegativeInt,
+            StorageItem::kItemTypeRetrocausalQueue { .. } => StorageItemType::kItemTypeRetrocausalQueue,
+            StorageItem::kItemTypeReplayCacheData { .. } => StorageItemType::kItemTypeReplayCacheData,
+            StorageItem::kItemTypeAuthData { .. } => StorageItemType::kItemTypeAuthData,
+            StorageItem::kItemTypeDeployedContractHash { .. } => StorageItemType::kItemTypeDeployedContractHash,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -533,8 +538,13 @@ impl WireStorageItem {
     #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageItemType {
         match self {
+            WireStorageItem::kItemTypeBytestring { .. } => StorageItemType::kItemTypeBytestring,
+            WireStorageItem::kItemTypeNonnegativeInt { .. } => StorageItemType::kItemTypeNonnegativeInt,
+            WireStorageItem::kItemTypeAuthData { .. } => StorageItemType::kItemTypeAuthData,
+            WireStorageItem::kItemTypeRetrocausalQueue { .. } => StorageItemType::kItemTypeRetrocausalQueue,
+            WireStorageItem::kItemTypeReplayCacheData => StorageItemType::kItemTypeReplayCacheData,
+            WireStorageItem::kItemTypeDeployedContractHash { .. } => StorageItemType::kItemTypeDeployedContractHash,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -543,8 +553,15 @@ impl StorageDelta {
     #[allow(clippy::match_single_binding)]
     pub fn r#type(&self) -> StorageDeltaType {
         match self {
+            StorageDelta::kDeltaTypeBytestringSet { .. } => StorageDeltaType::kDeltaTypeBytestringSet,
+            StorageDelta::kDeltaTypeNonnegativeIntSetAdd { .. } => StorageDeltaType::kDeltaTypeNonnegativeIntSetAdd,
+            StorageDelta::kDeltaTypeNonnegativeIntAdd { .. } => StorageDeltaType::kDeltaTypeNonnegativeIntAdd,
+            StorageDelta::kDeltaTypeDelete => StorageDeltaType::kDeltaTypeDelete,
+            StorageDelta::kDeltaTypeRetrocausalQueue { .. } => StorageDeltaType::kDeltaTypeRetrocausalQueue,
+            StorageDelta::kDeltaTypeAuthDataChange { .. } => StorageDeltaType::kDeltaTypeAuthDataChange,
+            StorageDelta::kDeltaTypeDeployContract { .. } => StorageDeltaType::kDeltaTypeDeployContract,
+            StorageDelta::kDeltaTypeConsumeUniquifier { .. } => StorageDeltaType::kDeltaTypeConsumeUniquifier,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

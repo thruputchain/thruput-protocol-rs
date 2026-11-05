@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1321,9 +1321,47 @@ impl SyscallTraceBody {
     #[allow(clippy::match_single_binding)]
     pub fn syscall_number(&self) -> SyscallNo {
         match self {
+            SyscallTraceBody::kSHA256 { .. } => SyscallNo::kSHA256,
+            SyscallTraceBody::kGetMsgSender { .. } => SyscallNo::kGetMsgSender,
+            SyscallTraceBody::kGetCalldataLen { .. } => SyscallNo::kGetCalldataLen,
+            SyscallTraceBody::kGetCalldata { .. } => SyscallNo::kGetCalldata,
+            SyscallTraceBody::kConsoleLog { .. } => SyscallNo::kConsoleLog,
+            SyscallTraceBody::kInvoke { .. } => SyscallNo::kInvoke,
+            SyscallTraceBody::kReturn { .. } => SyscallNo::kReturn,
+            SyscallTraceBody::kGetReturnedBuffer { .. } => SyscallNo::kGetReturnedBuffer,
+            SyscallTraceBody::kExit { .. } => SyscallNo::kExit,
+            SyscallTraceBody::kGetDeployAddress { .. } => SyscallNo::kGetDeployAddress,
+            SyscallTraceBody::kDeployContract { .. } => SyscallNo::kDeployContract,
+            SyscallTraceBody::kGetSourceTransactionHash { .. } => SyscallNo::kGetSourceTransactionHash,
+            SyscallTraceBody::kVerifySignature { .. } => SyscallNo::kVerifySignature,
+            SyscallTraceBody::kBytestringGetLen { .. } => SyscallNo::kBytestringGetLen,
+            SyscallTraceBody::kBytestringGet { .. } => SyscallNo::kBytestringGet,
+            SyscallTraceBody::kBytestringSet { .. } => SyscallNo::kBytestringSet,
+            SyscallTraceBody::kNonnegativeIntGet { .. } => SyscallNo::kNonnegativeIntGet,
+            SyscallTraceBody::kNonnegativeIntSetAdd { .. } => SyscallNo::kNonnegativeIntSetAdd,
+            SyscallTraceBody::kDeleteObject { .. } => SyscallNo::kDeleteObject,
+            SyscallTraceBody::kGetCurrentAddress { .. } => SyscallNo::kGetCurrentAddress,
+            SyscallTraceBody::kRetrocausalQueueInsert { .. } => SyscallNo::kRetrocausalQueueInsert,
+            SyscallTraceBody::kRetrocausalQueueConsume { .. } => SyscallNo::kRetrocausalQueueConsume,
+            SyscallTraceBody::kGetTransactionStatistics { .. } => SyscallNo::kGetTransactionStatistics,
+            SyscallTraceBody::kChangePublicKeyRegistration { .. } => SyscallNo::kChangePublicKeyRegistration,
+            SyscallTraceBody::kLogEvent { .. } => SyscallNo::kLogEvent,
+            SyscallTraceBody::kGetAuthClaim { .. } => SyscallNo::kGetAuthClaim,
+            SyscallTraceBody::kSHA256Update { .. } => SyscallNo::kSHA256Update,
+            SyscallTraceBody::kSHA256Finalize { .. } => SyscallNo::kSHA256Finalize,
+            SyscallTraceBody::kWriteAddressRequiredWeight { .. } => SyscallNo::kWriteAddressRequiredWeight,
+            SyscallTraceBody::kGetBlockHeight { .. } => SyscallNo::kGetBlockHeight,
+            SyscallTraceBody::kRetrocausalQueuePeekLen { .. } => SyscallNo::kRetrocausalQueuePeekLen,
+            SyscallTraceBody::kMintAuthToken { .. } => SyscallNo::kMintAuthToken,
+            SyscallTraceBody::kConsumeAuthToken { .. } => SyscallNo::kConsumeAuthToken,
+            SyscallTraceBody::kSHA256Copy { .. } => SyscallNo::kSHA256Copy,
+            SyscallTraceBody::kGetNetworkHash { .. } => SyscallNo::kGetNetworkHash,
+            SyscallTraceBody::kGetBlockTimepoint { .. } => SyscallNo::kGetBlockTimepoint,
+            SyscallTraceBody::kSetStorageFlags { .. } => SyscallNo::kSetStorageFlags,
+            SyscallTraceBody::kGetStorageFlags { .. } => SyscallNo::kGetStorageFlags,
+            SyscallTraceBody::kClearStorageFlags { .. } => SyscallNo::kClearStorageFlags,
             SyscallTraceBody::Default{ syscall_number } => (*syscall_number).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1332,9 +1370,9 @@ impl HostFunctionStatusXdr {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> HostFnErrorCode {
         match self {
+            HostFunctionStatusXdr::NoneOrRecoverable { .. } => HostFnErrorCode::NoneOrRecoverable,
             HostFunctionStatusXdr::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

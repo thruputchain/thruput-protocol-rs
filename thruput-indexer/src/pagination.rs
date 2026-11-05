@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -151,8 +151,10 @@ impl BlockAnchor {
     #[allow(clippy::match_single_binding)]
     pub fn kind(&self) -> BlockAnchorKind {
         match self {
+            BlockAnchor::AnchorAtBeginning => BlockAnchorKind::AnchorAtBeginning,
+            BlockAnchor::AnchorAtEnd => BlockAnchorKind::AnchorAtEnd,
+            BlockAnchor::AnchorAtHeight { .. } => BlockAnchorKind::AnchorAtHeight,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

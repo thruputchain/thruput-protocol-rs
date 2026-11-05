@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -354,9 +354,9 @@ impl DbGatewayItemResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            DbGatewayItemResult::kRPCNone { .. } => RPCError::kRPCNone,
             DbGatewayItemResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -365,9 +365,9 @@ impl DbGatewayResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            DbGatewayResult::kRPCNone { .. } => RPCError::kRPCNone,
             DbGatewayResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -376,9 +376,9 @@ impl DbGatewayConfigResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            DbGatewayConfigResult::kRPCNone { .. } => RPCError::kRPCNone,
             DbGatewayConfigResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -387,9 +387,9 @@ impl DbGatewayContractResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> RPCError {
         match self {
+            DbGatewayContractResult::kRPCNone { .. } => RPCError::kRPCNone,
             DbGatewayContractResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -309,8 +309,9 @@ impl ExperimentConfig {
     #[allow(clippy::match_single_binding)]
     pub fn experiment_type(&self) -> ExperimentType {
         match self {
+            ExperimentConfig::kExperimentTypeERC20Payments { .. } => ExperimentType::kExperimentTypeERC20Payments,
+            ExperimentConfig::kExperimentTypeERC20BasicAuthPayments { .. } => ExperimentType::kExperimentTypeERC20BasicAuthPayments,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -319,9 +320,9 @@ impl LoadgenResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> LoadgenRPCError {
         match self {
+            LoadgenResult::kLoadgenRPCErrorOK { .. } => LoadgenRPCError::kLoadgenRPCErrorOK,
             LoadgenResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -330,9 +331,9 @@ impl LoadgenExtensionResult {
     #[allow(clippy::match_single_binding)]
     pub fn error(&self) -> LoadgenRPCError {
         match self {
+            LoadgenExtensionResult::kLoadgenRPCErrorOK { .. } => LoadgenRPCError::kLoadgenRPCErrorOK,
             LoadgenExtensionResult::Default{ error } => (*error).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

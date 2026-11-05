@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 // clang-format off
 
@@ -436,8 +436,10 @@ impl DbConflictResult {
     #[allow(clippy::match_single_binding)]
     pub fn level(&self) -> DbDiagnosticLevel {
         match self {
+            DbConflictResult::kDbDiagnosticNone => DbDiagnosticLevel::kDbDiagnosticNone,
+            DbConflictResult::kDbDiagnosticFirst { .. } => DbDiagnosticLevel::kDbDiagnosticFirst,
+            DbConflictResult::kDbDiagnosticAll { .. } => DbDiagnosticLevel::kDbDiagnosticAll,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -446,8 +448,9 @@ impl TxFailureCause {
     #[allow(clippy::match_single_binding)]
     pub fn kind(&self) -> TxFailureKind {
         match self {
+            TxFailureCause::TxFailureDbConflict { .. } => TxFailureKind::TxFailureDbConflict,
+            TxFailureCause::TxFailureContractRejected { .. } => TxFailureKind::TxFailureContractRejected,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }

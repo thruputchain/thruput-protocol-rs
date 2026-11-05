@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
+// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1055,8 +1055,9 @@ impl SchedulerProposalResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> SchedulerProposalOutcome {
         match self {
+            SchedulerProposalResult::SchedulerProposalOK { .. } => SchedulerProposalOutcome::SchedulerProposalOK,
+            SchedulerProposalResult::SchedulerProposalError => SchedulerProposalOutcome::SchedulerProposalError,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1065,8 +1066,15 @@ impl SchedulerValidationResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> SchedulerValidationOutcome {
         match self {
+            SchedulerValidationResult::SchedulerValidationOK { .. } => SchedulerValidationOutcome::SchedulerValidationOK,
+            SchedulerValidationResult::SchedulerValidationMissingTxs { .. } => SchedulerValidationOutcome::SchedulerValidationMissingTxs,
+            SchedulerValidationResult::SchedulerValidationDbFailed => SchedulerValidationOutcome::SchedulerValidationDbFailed,
+            SchedulerValidationResult::SchedulerValidationExecutorFailed => SchedulerValidationOutcome::SchedulerValidationExecutorFailed,
+            SchedulerValidationResult::SchedulerValidationInvalid => SchedulerValidationOutcome::SchedulerValidationInvalid,
+            SchedulerValidationResult::SchedulerValidationTooLateToValidate => SchedulerValidationOutcome::SchedulerValidationTooLateToValidate,
+            SchedulerValidationResult::SchedulerValidationUnknownParentBlock => SchedulerValidationOutcome::SchedulerValidationUnknownParentBlock,
+            SchedulerValidationResult::SchedulerValidationMalformed => SchedulerValidationOutcome::SchedulerValidationMalformed,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1075,8 +1083,9 @@ impl SchedulerGetTipResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> SchedulerGetTipOutcome {
         match self {
+            SchedulerGetTipResult::SchedulerGetTipOK { .. } => SchedulerGetTipOutcome::SchedulerGetTipOK,
+            SchedulerGetTipResult::SchedulerGetTipNoGenesisBlock => SchedulerGetTipOutcome::SchedulerGetTipNoGenesisBlock,
             
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
@@ -1085,9 +1094,9 @@ impl GenesisCeremonyResult {
     #[allow(clippy::match_single_binding)]
     pub fn outcome(&self) -> GenesisCeremonyOutcome {
         match self {
+            GenesisCeremonyResult::GenesisCeremonyCommitted { .. } => GenesisCeremonyOutcome::GenesisCeremonyCommitted,
             GenesisCeremonyResult::Default{ outcome } => (*outcome).into(),
 
-            _ => (unsafe { *(self as *const Self as *const i32) }).into(),
         }
     }
 }
