@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 1c0e66a3e72c74dcc0ff79107891673ddd79616c
+// Generated from xdrc commit: cb9cab8a8d69ace37c18d49b505f1e93ec802af8
 
 // A program to test the rpc driver, used in {s}rpcthroughput.
 // This file is present in protocol/ to support cross-language RPC testing.
