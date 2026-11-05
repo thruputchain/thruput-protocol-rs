@@ -50,11 +50,8 @@ Each crate's `lib.rs`, its `impls` files and a few other modules, and the
 `thruput-syscall`, `thruput-xdr-macros` and `thruput-api-pins` crates, are
 hand-written.
 
-The protocol definitions and `x23c` are not public yet, so only maintainers
-can regenerate the sources. Everything else (building, testing, the CI
-check) needs only the committed sources.
-
 [thruputchain/thruput-protocol]: https://github.com/thruputchain/thruput-protocol
+[thruputchain/hogd]: https://github.com/thruputchain/hogd
 
 ## CI check
 
@@ -66,7 +63,7 @@ This is what CI's build job runs. It needs no submodule or `x23c`.
 
 ## Regenerating the sources
 
-With access to the protocol submodule, install the Python dependency in the
+Install the Python dependency in the
 active environment, then regenerate:
 
 ```shell
@@ -75,8 +72,8 @@ python3 -m pip install 'PyYAML==6.0.3'
 bash scripts/generate.sh
 ```
 
-Without `XDRC` set, `generate.sh` downloads the latest `x23c` release with
-`gh`; set `XDRC` to use a local build instead. CI checks that the committed
+Without `XDRC` set, `generate.sh` downloads the latest `x23c` release from
+[thruputchain/hogd]; set `XDRC` to use a local build instead. CI checks that the committed
 sources are up to date with `bash scripts/generate.sh --check`.
 
 ## License
