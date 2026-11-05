@@ -17,28 +17,6 @@ jobs:
       pull-requests: write # opens/merges the PR
     runs-on: namespace-profile-hogd-linux-2604
     steps:
-      - name: Generate hogd read token
-        id: hogd-token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with:
-          app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
-          private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
-          owner: thruputchain
-          repositories: hogd
-          # Without this the token inherits every permission the installation
-          # holds on hogd; the step only downloads a release asset.
-          permission-contents: read
-
-      - name: Generate protocol read token
-        id: protocol-token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with:
-          app-id: ${{ vars.PROTOCOL_SYNCHRONIZER_APP_ID }}
-          private-key: ${{ secrets.PROTOCOL_SYNCHRONIZER_SECRET_KEY }}
-          owner: thruputchain
-          repositories: thruput-protocol
-          permission-contents: read
-
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -47,32 +25,17 @@ jobs:
           ssh-key: ${{ secrets.PROT_RS_WRITE_KEY }}
 
       - name: Update protocol submodule to latest main
-        env:
-          GH_TOKEN: ${{ steps.protocol-token.outputs.token }}
-        # `-c` scopes the token to these commands; it is not written to git config.
         run: |
-          rewrite="url.https://x-access-token:${GH_TOKEN}@github.com/thruputchain/thruput-protocol.git.insteadOf=git@github.com:thruputchain/thruput-protocol.git"
-          git -c "$rewrite" submodule update --init protocol
-          git -C protocol -c "$rewrite" fetch origin main
+          git submodule update --init protocol
+          git -C protocol fetch origin main
           git -C protocol checkout origin/main
 
-      - name: Download x23c
-        run: |
-          gh release download latest-x23c \
-            --repo thruputchain/hogd \
-            --pattern 'x23c-linux-x86_64.tar.gz'
-          tar xzf x23c-linux-x86_64.tar.gz
-          chmod +x x23c
-        env:
-          GH_TOKEN: ${{ steps.hogd-token.outputs.token }}
-
       - name: Regenerate
-        run: XDRC=./x23c ./scripts/generate.sh
+        run: ./scripts/generate.sh
 
       - name: Check for changes
         id: diff
         run: |
-          rm -f x23c x23c-linux-x86_64.tar.gz
           if git diff --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Protocol submodule already up to date."

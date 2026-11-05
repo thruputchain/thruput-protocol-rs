@@ -85,10 +85,8 @@ if [[ -z $XDRC ]]; then
   xdrc_tmpdir=$(mktemp -d)
   trap 'rm -rf "$xdrc_tmpdir"' EXIT
   echo "-- Downloading ${asset} from thruputchain/hogd latest-x23c release --" >&2
-  if ! gh release download latest-x23c \
-         --repo thruputchain/hogd \
-         --pattern "${asset}" \
-         --dir "$xdrc_tmpdir"; then
+  if ! curl -fsSL --retry 3 -o "$xdrc_tmpdir/$asset" \
+         "https://github.com/thruputchain/hogd/releases/download/latest-x23c/${asset}"; then
     echo "error: failed to download ${asset} from the latest-x23c release; set XDRC to a local x23c build" >&2
     exit 1
   fi
