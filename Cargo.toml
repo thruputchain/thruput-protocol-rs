@@ -52,14 +52,14 @@ thruput-spec = { path = "thruput-spec", version = "=0.64.0" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;
 # the RPC crates' library names are their package names.
-xdrs = { package = "thruput-xdrs", version = "0.17.0", default-features = false, features = [
+xdrs = { package = "thruput-xdrs", version = "0.18.0", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { package = "thruput-xdr-common", version = "0.17.0" }
-xdr-derive = { package = "thruput-xdr-derive", version = "0.17.0" }
+xdr-common = { package = "thruput-xdr-common", version = "0.18.0" }
+xdr-derive = { package = "thruput-xdr-derive", version = "0.18.0" }
 thruput-rpc-api = { version = "0.4.0" }
-thruput-rpc-driver = { version = "0.17.1" }
+thruput-rpc-driver = { version = "0.18.0" }
 schemars = { version = "1" }
 
 # Build and test share one profile so `cargo build` and `cargo test` reuse
