@@ -20,7 +20,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.64.0"
+version = "0.65.0"
 edition = "2024"
 rust-version = "1.96"
 authors = ["Thruput Team"]
@@ -36,30 +36,30 @@ categories = ["cryptography::cryptocurrencies", "encoding"]
 # These version numbers need to be kept in sync with the workspace package
 # version number: publishing replaces each path with its version requirement.
 [workspace.dependencies]
-thruput-syscall = { path = "thruput-syscall", version = "=0.64.0" }
-thruput-xdr = { path = "thruput-xdr", version = "=0.64.0" }
-thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.64.0" }
-thruput-trace = { path = "thruput-trace", version = "=0.64.0" }
-thruput-scp = { path = "thruput-scp", version = "=0.64.0" }
-thruput-coordinator = { path = "thruput-coordinator", version = "=0.64.0" }
-thruput-rpc = { path = "thruput-rpc", version = "=0.64.0" }
-thruput-node-types = { path = "thruput-node-types", version = "=0.64.0" }
-thruput-node-rpc = { path = "thruput-node-rpc", version = "=0.64.0" }
-thruput-indexer = { path = "thruput-indexer", version = "=0.64.0" }
-thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.64.0" }
-thruput-view = { path = "thruput-view", version = "=0.64.0" }
-thruput-spec = { path = "thruput-spec", version = "=0.64.0" }
+thruput-syscall = { path = "thruput-syscall", version = "=0.65.0" }
+thruput-xdr = { path = "thruput-xdr", version = "=0.65.0" }
+thruput-xdr-macros = { path = "thruput-xdr-macros", version = "=0.65.0" }
+thruput-trace = { path = "thruput-trace", version = "=0.65.0" }
+thruput-scp = { path = "thruput-scp", version = "=0.65.0" }
+thruput-coordinator = { path = "thruput-coordinator", version = "=0.65.0" }
+thruput-rpc = { path = "thruput-rpc", version = "=0.65.0" }
+thruput-node-types = { path = "thruput-node-types", version = "=0.65.0" }
+thruput-node-rpc = { path = "thruput-node-rpc", version = "=0.65.0" }
+thruput-indexer = { path = "thruput-indexer", version = "=0.65.0" }
+thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.65.0" }
+thruput-view = { path = "thruput-view", version = "=0.65.0" }
+thruput-spec = { path = "thruput-spec", version = "=0.65.0" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;
 # the RPC crates' library names are their package names.
-xdrs = { package = "thruput-xdrs", version = "0.17.0", default-features = false, features = [
+xdrs = { package = "thruput-xdrs", version = "0.18.0", default-features = false, features = [
     "int128",
     "derive",
 ] }
-xdr-common = { package = "thruput-xdr-common", version = "0.17.0" }
-xdr-derive = { package = "thruput-xdr-derive", version = "0.17.0" }
+xdr-common = { package = "thruput-xdr-common", version = "0.18.0" }
+xdr-derive = { package = "thruput-xdr-derive", version = "0.18.0" }
 thruput-rpc-api = { version = "0.4.0" }
-thruput-rpc-driver = { version = "0.17.1" }
+thruput-rpc-driver = { version = "0.18.0" }
 schemars = { version = "1" }
 
 # Build and test share one profile so `cargo build` and `cargo test` reuse

@@ -304,7 +304,7 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "thruput-rpc",
@@ -488,7 +488,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-api-pins"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "thruput-coordinator",
  "thruput-db-gateway",
@@ -505,7 +505,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-coordinator"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -520,7 +520,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-db-gateway"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -535,7 +535,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-indexer"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -551,7 +551,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-node-rpc"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -569,7 +569,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-node-types"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "schemars",
  "serde",
@@ -581,7 +581,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-rpc"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -605,9 +605,9 @@ dependencies = [
 
 [[package]]
 name = "thruput-rpc-driver"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b4618ae2d0dba49275a78701d49c2566a514ced29494e5e056b5e506b700ef5"
+checksum = "4de4ca975878d47427e2da38b48bc653d147e1dc6beec255da019371a6d142dd"
 dependencies = [
  "async-trait",
  "libc",
@@ -621,7 +621,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-scp"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -634,7 +634,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-spec"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "schemars",
  "serde",
@@ -644,11 +644,11 @@ dependencies = [
 
 [[package]]
 name = "thruput-syscall"
-version = "0.64.0"
+version = "0.65.0"
 
 [[package]]
 name = "thruput-trace"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "schemars",
  "serde",
@@ -659,7 +659,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-view"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "async-trait",
  "schemars",
@@ -674,7 +674,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "bs58",
  "schemars",
@@ -689,9 +689,9 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-common"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3361c3ea64f5631ec6a9662b270bffa09f001226df68ae7e4e101d6349000b73"
+checksum = "92798565d964a95a7ae1776d0c5e8f0622aeb8c3cbee0b47d8f9fa77a12d428c"
 dependencies = [
  "escape-bytes",
  "schemars",
@@ -700,9 +700,9 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-derive"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66ddedd1ca4ea082511dc1dc00b27d2baeba45764df206073ef851c72bc2b632"
+checksum = "2f5815ff16c23f44a7235903b6de04d28cdf1fab8cc564fc36bed00196794419"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -712,7 +712,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-macros"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -724,25 +724,25 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-repr"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "31c6e03b8d054b7234e082ef377e4a5128e18e1536dc68b783f7c16efa4fbc7c"
+checksum = "5666c2f17ae46e5b01172d2be8f78e52148cb364ca812c435d087df6a8cd540e"
 dependencies = [
  "thruput-xdr-common",
 ]
 
 [[package]]
 name = "thruput-xdr-syscall-tests"
-version = "0.64.0"
+version = "0.65.0"
 dependencies = [
  "thruput-xdr",
 ]
 
 [[package]]
 name = "thruput-xdrs"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b8277012e8878278b22e7f42d7e311ba8f283ceb0acdea2ccd6ee92fda97912"
+checksum = "05b99fca4dafeb8be0574601c8d3eaae4eccd26fc6e35cef93e7bc0e06353b2c"
 dependencies = [
  "thruput-xdr-common",
  "thruput-xdr-derive",
