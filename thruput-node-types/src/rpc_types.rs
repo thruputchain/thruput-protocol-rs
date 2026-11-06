@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // clang-format off
 
@@ -134,6 +134,16 @@ impl From<i32> for RPCError {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for RPCError {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for RPCError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -191,6 +201,16 @@ impl From<i32> for BlockExecutionMode {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for BlockExecutionMode {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for BlockExecutionMode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -217,6 +237,7 @@ pub type StorageCost = int128_xdr;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -226,7 +247,7 @@ pub enum ExpectedStorageCost {
     kRPCNone { storage_cost: StorageCost } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -248,6 +269,7 @@ pub enum ExpectedStorageCost {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -257,7 +279,7 @@ pub enum ExpectedContract {
     kRPCNone { contract: Contract } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -278,6 +300,7 @@ pub enum ExpectedContract {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -287,7 +310,7 @@ pub enum ExpectedDeployment {
     kRPCNone { deployed_hash: DeployedContractHash } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -308,6 +331,7 @@ pub enum ExpectedDeployment {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -317,7 +341,7 @@ pub enum ExpectedProposalData {
     kRPCNone { proposal_data: NondeterministicProposalData } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -338,6 +362,7 @@ pub enum ExpectedProposalData {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -347,7 +372,7 @@ pub enum ExpectedRetrocausalQueueBlock {
     kRPCNone { queue_block: RetrocausalQueueBlock } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -368,6 +393,7 @@ pub enum ExpectedRetrocausalQueueBlock {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -377,7 +403,7 @@ pub enum ExpectedQueueEntry {
     kRPCNone { queue_entry: QueueEntry } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -398,6 +424,7 @@ pub enum ExpectedQueueEntry {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -407,7 +434,7 @@ pub enum ExpectedDBTip {
     kRPCNone { db_tip: DbTip } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -438,6 +465,7 @@ pub struct ViewingSnapshot {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -447,7 +475,7 @@ pub enum ExpectedViewingSnapshot {
     kRPCNone { snapshot: ViewingSnapshot } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -478,7 +506,7 @@ impl ExpectedStorageCost {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedStorageCost::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedStorageCost::Default{ error } => (*error).into(),
+            ExpectedStorageCost::Default{ error } => *error,
 
         }
     }
@@ -489,7 +517,7 @@ impl ExpectedContract {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedContract::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedContract::Default{ error } => (*error).into(),
+            ExpectedContract::Default{ error } => *error,
 
         }
     }
@@ -500,7 +528,7 @@ impl ExpectedDeployment {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedDeployment::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedDeployment::Default{ error } => (*error).into(),
+            ExpectedDeployment::Default{ error } => *error,
 
         }
     }
@@ -511,7 +539,7 @@ impl ExpectedProposalData {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedProposalData::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedProposalData::Default{ error } => (*error).into(),
+            ExpectedProposalData::Default{ error } => *error,
 
         }
     }
@@ -522,7 +550,7 @@ impl ExpectedRetrocausalQueueBlock {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedRetrocausalQueueBlock::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedRetrocausalQueueBlock::Default{ error } => (*error).into(),
+            ExpectedRetrocausalQueueBlock::Default{ error } => *error,
 
         }
     }
@@ -533,7 +561,7 @@ impl ExpectedQueueEntry {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedQueueEntry::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedQueueEntry::Default{ error } => (*error).into(),
+            ExpectedQueueEntry::Default{ error } => *error,
 
         }
     }
@@ -544,7 +572,7 @@ impl ExpectedDBTip {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedDBTip::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedDBTip::Default{ error } => (*error).into(),
+            ExpectedDBTip::Default{ error } => *error,
 
         }
     }
@@ -555,7 +583,7 @@ impl ExpectedViewingSnapshot {
     pub fn error(&self) -> RPCError {
         match self {
             ExpectedViewingSnapshot::kRPCNone { .. } => RPCError::kRPCNone,
-            ExpectedViewingSnapshot::Default{ error } => (*error).into(),
+            ExpectedViewingSnapshot::Default{ error } => *error,
 
         }
     }

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -53,6 +53,16 @@ impl From<i32> for AuthErrorCode {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for AuthErrorCode {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for AuthErrorCode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -350,6 +360,16 @@ impl From<i32> for DBAuthError {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DBAuthError {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DBAuthError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -377,6 +397,7 @@ impl core::fmt::Display for DBAuthError {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DBAuthError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -386,7 +407,7 @@ pub enum DBAuthResult {
     kDBAuthSuccess { auth_data: AddressAuthData } = DBAuthError::kDBAuthSuccess.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: DBAuthError } = {
         const __XDR_CASES: &[i32] = &[
             DBAuthError::kDBAuthSuccess.0 as i32,
         ];
@@ -422,6 +443,16 @@ impl From<i32> for DBAuthIntroOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DBAuthIntroOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DBAuthIntroOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -443,6 +474,7 @@ impl core::fmt::Display for DBAuthIntroOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DBAuthIntroOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -452,7 +484,7 @@ pub enum DBAuthIntroResult {
     kIntroSuccess { current_height: BlockHeight } = DBAuthIntroOutcome::kIntroSuccess.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: DBAuthIntroOutcome } = {
         const __XDR_CASES: &[i32] = &[
             DBAuthIntroOutcome::kIntroSuccess.0 as i32,
         ];
@@ -636,6 +668,16 @@ impl From<i32> for IntroAuthOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IntroAuthOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IntroAuthOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -667,6 +709,7 @@ pub struct MempoolAuthIntroSuccess {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IntroAuthOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -676,7 +719,7 @@ pub enum IntroAuthResult {
     kSuccess { success: MempoolAuthIntroSuccess } = IntroAuthOutcome::kSuccess.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: IntroAuthOutcome } = {
         const __XDR_CASES: &[i32] = &[
             IntroAuthOutcome::kSuccess.0 as i32,
         ];
@@ -862,7 +905,7 @@ impl DBAuthResult {
     pub fn error(&self) -> DBAuthError {
         match self {
             DBAuthResult::kDBAuthSuccess { .. } => DBAuthError::kDBAuthSuccess,
-            DBAuthResult::Default{ error } => (*error).into(),
+            DBAuthResult::Default{ error } => *error,
 
         }
     }
@@ -873,7 +916,7 @@ impl DBAuthIntroResult {
     pub fn outcome(&self) -> DBAuthIntroOutcome {
         match self {
             DBAuthIntroResult::kIntroSuccess { .. } => DBAuthIntroOutcome::kIntroSuccess,
-            DBAuthIntroResult::Default{ outcome } => (*outcome).into(),
+            DBAuthIntroResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -884,7 +927,7 @@ impl IntroAuthResult {
     pub fn outcome(&self) -> IntroAuthOutcome {
         match self {
             IntroAuthResult::kSuccess { .. } => IntroAuthOutcome::kSuccess,
-            IntroAuthResult::Default{ outcome } => (*outcome).into(),
+            IntroAuthResult::Default{ outcome } => *outcome,
 
         }
     }

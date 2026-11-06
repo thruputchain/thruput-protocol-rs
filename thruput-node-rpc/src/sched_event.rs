@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -77,6 +77,16 @@ impl From<i32> for EventPrepareOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for EventPrepareOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for EventPrepareOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -101,6 +111,7 @@ impl core::fmt::Display for EventPrepareOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "EventPrepareOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -110,7 +121,7 @@ pub enum EventPrepareResult {
     EventPrepareOK { snapshot: EventRegistrationSnapshot } = EventPrepareOutcome::EventPrepareOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: EventPrepareOutcome } = {
         const __XDR_CASES: &[i32] = &[
             EventPrepareOutcome::EventPrepareOK.0 as i32,
         ];
@@ -147,6 +158,16 @@ impl From<i32> for EventActivationOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for EventActivationOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for EventActivationOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -171,6 +192,7 @@ impl core::fmt::Display for EventActivationOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "EventActivationOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -180,7 +202,7 @@ pub enum EventActivationResult {
     EventActivationRetry { current_tip: EventCanonicalTip } = EventActivationOutcome::EventActivationRetry.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: EventActivationOutcome } = {
         const __XDR_CASES: &[i32] = &[
             EventActivationOutcome::EventActivationRetry.0 as i32,
         ];
@@ -319,7 +341,7 @@ impl EventPrepareResult {
     pub fn outcome(&self) -> EventPrepareOutcome {
         match self {
             EventPrepareResult::EventPrepareOK { .. } => EventPrepareOutcome::EventPrepareOK,
-            EventPrepareResult::Default{ outcome } => (*outcome).into(),
+            EventPrepareResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -330,7 +352,7 @@ impl EventActivationResult {
     pub fn outcome(&self) -> EventActivationOutcome {
         match self {
             EventActivationResult::EventActivationRetry { .. } => EventActivationOutcome::EventActivationRetry,
-            EventActivationResult::Default{ outcome } => (*outcome).into(),
+            EventActivationResult::Default{ outcome } => *outcome,
 
         }
     }

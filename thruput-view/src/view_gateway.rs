@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // clang-format off
 
@@ -78,6 +78,16 @@ impl From<i32> for ViewGatewayOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ViewGatewayOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for ViewGatewayOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -105,6 +115,7 @@ impl core::fmt::Display for ViewGatewayOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ViewGatewayOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -123,7 +134,7 @@ pub enum ViewGatewayResult {
     ViewGatewayInvalidInput { error_code: SyscallErrorCode } = ViewGatewayOutcome::ViewGatewayInvalidInput.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: ViewGatewayOutcome } = {
         const __XDR_CASES: &[i32] = &[
             ViewGatewayOutcome::ViewGatewayOk.0 as i32,
             ViewGatewayOutcome::ViewGatewayAbandoned.0 as i32,
@@ -162,6 +173,16 @@ impl From<i32> for ViewGatewayIntroOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ViewGatewayIntroOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for ViewGatewayIntroOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -244,6 +265,16 @@ impl From<i32> for ViewGatewayBatchOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ViewGatewayBatchOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for ViewGatewayBatchOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -283,6 +314,7 @@ impl core::fmt::Display for ViewGatewayBatchOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ViewGatewayBatchOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -295,7 +327,7 @@ pub enum ViewGatewayBatchResult {
     ViewGatewayBatchHeightUnavailable { height_unavailable: ViewGatewayHeightUnavailable } = ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: ViewGatewayBatchOutcome } = {
         const __XDR_CASES: &[i32] = &[
             ViewGatewayBatchOutcome::ViewGatewayBatchOk.0 as i32,
             ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable.0 as i32,
@@ -467,7 +499,7 @@ impl ViewGatewayResult {
             ViewGatewayResult::ViewGatewayAbandoned => ViewGatewayOutcome::ViewGatewayAbandoned,
             ViewGatewayResult::ViewGatewayInternalError => ViewGatewayOutcome::ViewGatewayInternalError,
             ViewGatewayResult::ViewGatewayInvalidInput { .. } => ViewGatewayOutcome::ViewGatewayInvalidInput,
-            ViewGatewayResult::Default{ outcome } => (*outcome).into(),
+            ViewGatewayResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -479,7 +511,7 @@ impl ViewGatewayBatchResult {
         match self {
             ViewGatewayBatchResult::ViewGatewayBatchOk { .. } => ViewGatewayBatchOutcome::ViewGatewayBatchOk,
             ViewGatewayBatchResult::ViewGatewayBatchHeightUnavailable { .. } => ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable,
-            ViewGatewayBatchResult::Default{ outcome } => (*outcome).into(),
+            ViewGatewayBatchResult::Default{ outcome } => *outcome,
 
         }
     }

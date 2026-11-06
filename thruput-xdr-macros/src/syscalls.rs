@@ -1131,9 +1131,22 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
         #[cfg_attr(feature = "serde", derive(::serde::Serialize, ::serde::Deserialize))]
         #[cfg_attr(feature = "serde", serde(transparent))]
         #[cfg_attr(feature = "xdrs", derive(xdrs::ReadXDR, xdrs::WriteXDR, xdrs::ConstWriteXDR, xdrs::ConstXDRSize))]
-        #[derive(Eq,PartialEq,Copy,Debug,Clone,Hash)]
+        #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+        #[derive(Eq,PartialEq,Ord,PartialOrd,Copy,Debug,Clone,Hash)]
         #[repr(transparent)]
         pub struct SyscallNo(pub u32);
+
+        // Lets XDR unions switch on a syscall number, as transaction traces do.
+        #[cfg(feature = "xdrs")]
+        impl xdrs::XDRDiscriminant for SyscallNo {
+            const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Unsigned;
+            fn discriminant(&self) -> i32 {
+                self.0 as i32
+            }
+            fn from_discriminant(d: i32) -> Self {
+                Self(d as u32)
+            }
+        }
 
         impl SyscallNo {
             #(#lines)*

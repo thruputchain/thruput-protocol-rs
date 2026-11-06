@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -44,6 +44,16 @@ impl From<i32> for MultiplexMessageType {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for MultiplexMessageType {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for MultiplexMessageType {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -71,6 +81,7 @@ impl core::fmt::Display for MultiplexMessageType {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "MultiplexMessageType")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -86,7 +97,7 @@ pub enum MultiplexMessage {
     MultiplexMessageEnvelope { envelope: BristleconeEnvelope } = MultiplexMessageType::MultiplexMessageEnvelope.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { r#type: i32 } = {
+    #[xdr(default_variant)] Default { r#type: MultiplexMessageType } = {
         const __XDR_CASES: &[i32] = &[
             MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
             MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
@@ -118,7 +129,7 @@ impl MultiplexMessage {
             MultiplexMessage::MultiplexMessageSubmittedTxs { .. } => MultiplexMessageType::MultiplexMessageSubmittedTxs,
             MultiplexMessage::MultiplexMessageConsensusBasis { .. } => MultiplexMessageType::MultiplexMessageConsensusBasis,
             MultiplexMessage::MultiplexMessageEnvelope { .. } => MultiplexMessageType::MultiplexMessageEnvelope,
-            MultiplexMessage::Default{ r#type } => (*r#type).into(),
+            MultiplexMessage::Default{ r#type } => *r#type,
 
         }
     }

@@ -32,7 +32,7 @@ traces=(
   transaction_trace.x
 )
 
-# XDR files for thruput-trace generated without schemas
+# XDR files for thruput-trace's ffi_enums module
 ffi_enums=(
   ffi_enums.x
 )
@@ -115,13 +115,6 @@ generate() {
   $XDRC --rust --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
 }
 
-generate_no_schema() {
-  proto=${1:?}
-  package=${2:?}
-  name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-no-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
-}
-
 generate_rpc() {
   proto=${1:?}
   package=${2:?}
@@ -157,8 +150,10 @@ done
 # as an intra-doc link and fails documentation builds with warnings denied.
 perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' thruput-trace/src/db_conflict.rs
 
+# transaction_trace switches unions on these codes, so they need the same
+# unconditional XDR and schema derives as the traces.
 for ffi_enum in "${ffi_enums[@]}"; do
-  generate_no_schema "protocol/${ffi_enum}" "thruput-trace"
+  generate_trace "protocol/${ffi_enum}" "thruput-trace"
 done
 
 for rpc in "${rpcs[@]}"; do

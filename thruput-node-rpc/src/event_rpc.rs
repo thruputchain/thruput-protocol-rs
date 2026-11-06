@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -245,6 +245,7 @@ impl From<::std::sync::Arc<dyn ::thruput_rpc_api::RpcSender>> for EventExecutor_
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -254,7 +255,7 @@ pub enum EventBlockResult {
     kRPCNone { root_hash: SHA256Hash } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -483,7 +484,7 @@ impl EventBlockResult {
     pub fn error(&self) -> RPCError {
         match self {
             EventBlockResult::kRPCNone { .. } => RPCError::kRPCNone,
-            EventBlockResult::Default{ error } => (*error).into(),
+            EventBlockResult::Default{ error } => *error,
 
         }
     }

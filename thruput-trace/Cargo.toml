@@ -23,8 +23,6 @@ crate-type = ["rlib"]
 [features]
 default = []
 std = []
-# XDR encoding for the `ffi_enums` error codes (opt-in).
-xdrs = []
 serde = [
     "dep:serde",
     "xdrs/serde",

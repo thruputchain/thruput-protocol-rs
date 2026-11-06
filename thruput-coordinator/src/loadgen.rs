@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // clang-format off
 
@@ -47,6 +47,16 @@ impl From<i32> for ExperimentType {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ExperimentType {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for ExperimentType {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -78,6 +88,7 @@ pub struct ERC20PaymentsConfig {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ExperimentType")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -134,6 +145,16 @@ impl From<i32> for LoadgenRPCError {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for LoadgenRPCError {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for LoadgenRPCError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -158,6 +179,7 @@ impl core::fmt::Display for LoadgenRPCError {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "LoadgenRPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -167,7 +189,7 @@ pub enum LoadgenResult {
     kLoadgenRPCErrorOK { success: LoadgenSuccessResult } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: LoadgenRPCError } = {
         const __XDR_CASES: &[i32] = &[
             LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
         ];
@@ -188,6 +210,7 @@ pub enum LoadgenResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "LoadgenRPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -197,7 +220,7 @@ pub enum LoadgenExtensionResult {
     kLoadgenRPCErrorOK { success: LoadgenExtension } = LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: LoadgenRPCError } = {
         const __XDR_CASES: &[i32] = &[
             LoadgenRPCError::kLoadgenRPCErrorOK.0 as i32,
         ];
@@ -351,7 +374,7 @@ impl LoadgenResult {
     pub fn error(&self) -> LoadgenRPCError {
         match self {
             LoadgenResult::kLoadgenRPCErrorOK { .. } => LoadgenRPCError::kLoadgenRPCErrorOK,
-            LoadgenResult::Default{ error } => (*error).into(),
+            LoadgenResult::Default{ error } => *error,
 
         }
     }
@@ -362,7 +385,7 @@ impl LoadgenExtensionResult {
     pub fn error(&self) -> LoadgenRPCError {
         match self {
             LoadgenExtensionResult::kLoadgenRPCErrorOK { .. } => LoadgenRPCError::kLoadgenRPCErrorOK,
-            LoadgenExtensionResult::Default{ error } => (*error).into(),
+            LoadgenExtensionResult::Default{ error } => *error,
 
         }
     }
