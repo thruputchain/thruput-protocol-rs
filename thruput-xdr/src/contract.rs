@@ -64,6 +64,77 @@ pub struct ContractBlob {
     pub data: BytesM,
 }
 
+/// What an RV32 artifact extension carries. Values are permanent: a value is
+/// never reused.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy)]
+#[repr(transparent)]
+pub struct Rv32ArtifactExtensionKind(pub i32);
+
+impl Rv32ArtifactExtensionKind {
+    /// The body is an `Rv32ContractSpecExtension`.
+    pub const kRv32ExtensionContractSpec: Self = Self(1);
+}
+impl From<i32> for Rv32ArtifactExtensionKind {
+    fn from(v: i32) -> Self {
+        Self(v)
+    }
+}
+#[cfg(feature = "std")]
+impl core::fmt::Display for Rv32ArtifactExtensionKind {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self.0 {
+            x if x == Self::kRv32ExtensionContractSpec.0 => {
+                write!(f, "Rv32ArtifactExtensionKind::kRv32ExtensionContractSpec")
+            },
+            _ => {
+                write!(f, "Rv32ArtifactExtensionKind({})", self.0)
+            }
+        }
+    }
+}
+
+
+/// One extension in a v6 RV32 artifact: data after initial memory that the
+/// runtime never loads into guest memory.
+///
+/// `kind` is an `Rv32ArtifactExtensionKind`, typed as `unsigned int` so a
+/// decoder accepts kinds it does not know. Zero is reserved. The chain stores
+/// `body` without interpreting it.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct Rv32ArtifactExtension {
+    pub kind: u32,
+    pub body: BytesM,
+}
+
+/// The extension list that ends a v6 RV32 artifact, running from the end of
+/// initial memory exactly to the end of the artifact.
+///
+/// Kinds are strictly ascending, so there is at most one extension of each
+/// kind and exactly one encoding of any set of extensions. The chain checks
+/// only this framing; adding a kind needs no runtime change.
+pub type Rv32ArtifactExtensions = VecM::<Rv32ArtifactExtension>;
+
+/// The body of a `kRv32ExtensionContractSpec` extension.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct Rv32ContractSpecExtension {
+    /// Schema of `spec`. 1: `spec` is an XDR `ContractSpec` (contract_spec.x).
+    pub schema_version: u32,
+    pub spec: BytesM,
+}
+
 /// The execution environment for a contract.
 ///
 /// Discriminant 0 is retired. It selected an earlier contract runtime, which
