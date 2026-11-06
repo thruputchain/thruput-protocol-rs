@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
+// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
 
 // clang-format off
 
@@ -123,7 +123,25 @@ pub enum ViewGatewayResult {
     ViewGatewayInvalidInput { error_code: SyscallErrorCode } = ViewGatewayOutcome::ViewGatewayInvalidInput.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            ViewGatewayOutcome::ViewGatewayOk.0 as i32,
+            ViewGatewayOutcome::ViewGatewayAbandoned.0 as i32,
+            ViewGatewayOutcome::ViewGatewayInternalError.0 as i32,
+            ViewGatewayOutcome::ViewGatewayInvalidInput.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -277,7 +295,23 @@ pub enum ViewGatewayBatchResult {
     ViewGatewayBatchHeightUnavailable { height_unavailable: ViewGatewayHeightUnavailable } = ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            ViewGatewayBatchOutcome::ViewGatewayBatchOk.0 as i32,
+            ViewGatewayBatchOutcome::ViewGatewayBatchHeightUnavailable.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 

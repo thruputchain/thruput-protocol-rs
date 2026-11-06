@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
+// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -104,7 +104,23 @@ pub enum TxInfoResult {
     TxInfoRecentFailure { recent_failure: TxFailureDiagnostic } = TxInfoOutcome::TxInfoRecentFailure.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            TxInfoOutcome::TxInfoFound.0 as i32,
+            TxInfoOutcome::TxInfoRecentFailure.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -155,7 +171,22 @@ pub enum BlockLookupResult {
     BlockFound { value: ConsensusValue } = BlockLookupOutcome::BlockFound.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            BlockLookupOutcome::BlockFound.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 pub type IdentifiedEventBatch = VecM::<IdentifiedEvent>;
@@ -459,7 +490,22 @@ pub enum EventPageResult {
     IndexerQueryOk { page: EventPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -474,7 +520,22 @@ pub enum TransactionPageResult {
     IndexerQueryOk { page: TransactionPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -489,7 +550,22 @@ pub enum TransactionRefPageResult {
     IndexerQueryOk { page: TransactionRefPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 },
+    #[xdr(default_variant)] Default { outcome: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerQueryOutcome::IndexerQueryOk.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -935,7 +1011,23 @@ pub enum IndexerProgress {
     IndexerProgressCaughtUp { initialized: IndexerInitializedProgress } = IndexerProgressState::IndexerProgressCaughtUp.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { state: i32 },
+    #[xdr(default_variant)] Default { state: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerProgressState::IndexerProgressInitialized.0 as i32,
+            IndexerProgressState::IndexerProgressCaughtUp.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 pub type IndexerFailureMessage = StringM::<1024>;
@@ -998,7 +1090,23 @@ pub enum IndexerEpochResult {
     IndexerEpochUnchanged { progress: IndexerInitializedProgress } = IndexerEpochOutcome::IndexerEpochUnchanged.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage },
+    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerEpochOutcome::IndexerEpochInitialized.0 as i32,
+            IndexerEpochOutcome::IndexerEpochUnchanged.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1079,7 +1187,24 @@ pub enum IndexerBlockApplyResult {
     IndexerBlockGap { gap: IndexerHeightGap } = IndexerBlockApplyOutcome::IndexerBlockGap.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage },
+    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+        const __XDR_CASES: &[i32] = &[
+            IndexerBlockApplyOutcome::IndexerBlockApplied.0 as i32,
+            IndexerBlockApplyOutcome::IndexerBlockDuplicate.0 as i32,
+            IndexerBlockApplyOutcome::IndexerBlockGap.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 /// The indexer's durable progress is its replay cursor. A lost reply is safe:
@@ -1172,7 +1297,23 @@ pub enum EventIndexerPullResult {
     EventIndexerPullCaughtUp { origin: IndexerOutboxOrigin } = EventIndexerPullOutcome::EventIndexerPullCaughtUp.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage },
+    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+        const __XDR_CASES: &[i32] = &[
+            EventIndexerPullOutcome::EventIndexerPullBlock.0 as i32,
+            EventIndexerPullOutcome::EventIndexerPullCaughtUp.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

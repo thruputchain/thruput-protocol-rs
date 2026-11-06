@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
+// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
 
 // Copyright 2015 Stellar Development Foundation and contributors. Licensed
 // under the Apache License, Version 2.0. See the COPYING file at the root
