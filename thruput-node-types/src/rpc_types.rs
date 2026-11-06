@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
+// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
 
 // clang-format off
 
@@ -226,7 +226,22 @@ pub enum ExpectedStorageCost {
     kRPCNone { storage_cost: StorageCost } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 // Is this the XDR pattern we want?
@@ -242,7 +257,22 @@ pub enum ExpectedContract {
     kRPCNone { contract: Contract } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -257,7 +287,22 @@ pub enum ExpectedDeployment {
     kRPCNone { deployed_hash: DeployedContractHash } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -272,7 +317,22 @@ pub enum ExpectedProposalData {
     kRPCNone { proposal_data: NondeterministicProposalData } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -287,7 +347,22 @@ pub enum ExpectedRetrocausalQueueBlock {
     kRPCNone { queue_block: RetrocausalQueueBlock } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -302,7 +377,22 @@ pub enum ExpectedQueueEntry {
     kRPCNone { queue_entry: QueueEntry } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -317,7 +407,22 @@ pub enum ExpectedDBTip {
     kRPCNone { db_tip: DbTip } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -342,7 +447,22 @@ pub enum ExpectedViewingSnapshot {
     kRPCNone { snapshot: ViewingSnapshot } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 },
+    #[xdr(default_variant)] Default { error: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            RPCError::kRPCNone.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 /// Typedef for a list of contract addresses.

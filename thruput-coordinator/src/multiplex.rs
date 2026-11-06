@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: 0b59180aed1fefa0f2629444e1673213e6738189
+// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -86,7 +86,24 @@ pub enum MultiplexMessage {
     MultiplexMessageEnvelope { envelope: BristleconeEnvelope } = MultiplexMessageType::MultiplexMessageEnvelope.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { r#type: i32 },
+    #[xdr(default_variant)] Default { r#type: i32 } = {
+        const __XDR_CASES: &[i32] = &[
+            MultiplexMessageType::MultiplexMessageSubmittedTxs.0 as i32,
+            MultiplexMessageType::MultiplexMessageConsensusBasis.0 as i32,
+            MultiplexMessageType::MultiplexMessageEnvelope.0 as i32,
+        ];
+        let mut tag = i32::MIN;
+        let mut i = 0;
+        while i < __XDR_CASES.len() {
+            if __XDR_CASES[i] == tag {
+                tag += 1;
+                i = 0;
+            } else {
+                i += 1;
+            }
+        }
+        tag
+    },
 }
 
 
