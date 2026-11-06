@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // clang-format off
 
@@ -96,6 +96,16 @@ impl From<i32> for DbConflictCode {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DbConflictCode {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DbConflictCode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -167,6 +177,16 @@ impl From<i32> for DbDiagnosticLevel {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DbDiagnosticLevel {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DbDiagnosticLevel {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -208,6 +228,7 @@ pub struct DbConflictDiagnostic {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DbDiagnosticLevel")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -292,6 +313,16 @@ impl From<i32> for ContractRejectCode {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ContractRejectCode {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for ContractRejectCode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -377,6 +408,16 @@ impl From<i32> for TxFailureKind {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for TxFailureKind {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for TxFailureKind {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -398,6 +439,7 @@ impl core::fmt::Display for TxFailureKind {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "TxFailureKind")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]

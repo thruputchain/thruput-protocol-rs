@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -68,6 +68,16 @@ impl From<i32> for TxInfoOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for TxInfoOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for TxInfoOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -92,6 +102,7 @@ impl core::fmt::Display for TxInfoOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "TxInfoOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -104,7 +115,7 @@ pub enum TxInfoResult {
     TxInfoRecentFailure { recent_failure: TxFailureDiagnostic } = TxInfoOutcome::TxInfoRecentFailure.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: TxInfoOutcome } = {
         const __XDR_CASES: &[i32] = &[
             TxInfoOutcome::TxInfoFound.0 as i32,
             TxInfoOutcome::TxInfoRecentFailure.0 as i32,
@@ -141,6 +152,16 @@ impl From<i32> for BlockLookupOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for BlockLookupOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for BlockLookupOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -162,6 +183,7 @@ impl core::fmt::Display for BlockLookupOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "BlockLookupOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -171,7 +193,7 @@ pub enum BlockLookupResult {
     BlockFound { value: ConsensusValue } = BlockLookupOutcome::BlockFound.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: BlockLookupOutcome } = {
         const __XDR_CASES: &[i32] = &[
             BlockLookupOutcome::BlockFound.0 as i32,
         ];
@@ -451,6 +473,16 @@ impl From<i32> for IndexerQueryOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IndexerQueryOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IndexerQueryOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -481,6 +513,7 @@ impl core::fmt::Display for IndexerQueryOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerQueryOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -490,7 +523,7 @@ pub enum EventPageResult {
     IndexerQueryOk { page: EventPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: IndexerQueryOutcome } = {
         const __XDR_CASES: &[i32] = &[
             IndexerQueryOutcome::IndexerQueryOk.0 as i32,
         ];
@@ -511,6 +544,7 @@ pub enum EventPageResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerQueryOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -520,7 +554,7 @@ pub enum TransactionPageResult {
     IndexerQueryOk { page: TransactionPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: IndexerQueryOutcome } = {
         const __XDR_CASES: &[i32] = &[
             IndexerQueryOutcome::IndexerQueryOk.0 as i32,
         ];
@@ -541,6 +575,7 @@ pub enum TransactionPageResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerQueryOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -550,7 +585,7 @@ pub enum TransactionRefPageResult {
     IndexerQueryOk { page: TransactionRefPage } = IndexerQueryOutcome::IndexerQueryOk.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: IndexerQueryOutcome } = {
         const __XDR_CASES: &[i32] = &[
             IndexerQueryOutcome::IndexerQueryOk.0 as i32,
         ];
@@ -586,6 +621,16 @@ impl From<i32> for IndexerBlockExplorerIntroOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IndexerBlockExplorerIntroOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IndexerBlockExplorerIntroOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -976,6 +1021,16 @@ impl From<i32> for IndexerProgressState {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IndexerProgressState {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IndexerProgressState {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1000,6 +1055,7 @@ impl core::fmt::Display for IndexerProgressState {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerProgressState")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1011,7 +1067,7 @@ pub enum IndexerProgress {
     IndexerProgressCaughtUp { initialized: IndexerInitializedProgress } = IndexerProgressState::IndexerProgressCaughtUp.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { state: i32 } = {
+    #[xdr(default_variant)] Default { state: IndexerProgressState } = {
         const __XDR_CASES: &[i32] = &[
             IndexerProgressState::IndexerProgressInitialized.0 as i32,
             IndexerProgressState::IndexerProgressCaughtUp.0 as i32,
@@ -1052,6 +1108,16 @@ impl From<i32> for IndexerEpochOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IndexerEpochOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IndexerEpochOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1079,6 +1145,7 @@ impl core::fmt::Display for IndexerEpochOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerEpochOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1090,7 +1157,7 @@ pub enum IndexerEpochResult {
     IndexerEpochUnchanged { progress: IndexerInitializedProgress } = IndexerEpochOutcome::IndexerEpochUnchanged.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+    #[xdr(default_variant)] Default { outcome: IndexerEpochOutcome, diagnostic: IndexerFailureMessage } = {
         const __XDR_CASES: &[i32] = &[
             IndexerEpochOutcome::IndexerEpochInitialized.0 as i32,
             IndexerEpochOutcome::IndexerEpochUnchanged.0 as i32,
@@ -1140,6 +1207,16 @@ impl From<i32> for IndexerBlockApplyOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for IndexerBlockApplyOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for IndexerBlockApplyOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1173,6 +1250,7 @@ impl core::fmt::Display for IndexerBlockApplyOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "IndexerBlockApplyOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1187,7 +1265,7 @@ pub enum IndexerBlockApplyResult {
     IndexerBlockGap { gap: IndexerHeightGap } = IndexerBlockApplyOutcome::IndexerBlockGap.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+    #[xdr(default_variant)] Default { outcome: IndexerBlockApplyOutcome, diagnostic: IndexerFailureMessage } = {
         const __XDR_CASES: &[i32] = &[
             IndexerBlockApplyOutcome::IndexerBlockApplied.0 as i32,
             IndexerBlockApplyOutcome::IndexerBlockDuplicate.0 as i32,
@@ -1252,6 +1330,16 @@ impl From<i32> for EventIndexerPullOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for EventIndexerPullOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for EventIndexerPullOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1285,6 +1373,7 @@ impl core::fmt::Display for EventIndexerPullOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "EventIndexerPullOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1297,7 +1386,7 @@ pub enum EventIndexerPullResult {
     EventIndexerPullCaughtUp { origin: IndexerOutboxOrigin } = EventIndexerPullOutcome::EventIndexerPullCaughtUp.0 as i32,
     // default:
     //   IndexerFailureMessage diagnostic;
-    #[xdr(default_variant)] Default { outcome: i32, diagnostic: IndexerFailureMessage } = {
+    #[xdr(default_variant)] Default { outcome: EventIndexerPullOutcome, diagnostic: IndexerFailureMessage } = {
         const __XDR_CASES: &[i32] = &[
             EventIndexerPullOutcome::EventIndexerPullBlock.0 as i32,
             EventIndexerPullOutcome::EventIndexerPullCaughtUp.0 as i32,
@@ -1450,7 +1539,7 @@ impl TxInfoResult {
         match self {
             TxInfoResult::TxInfoFound { .. } => TxInfoOutcome::TxInfoFound,
             TxInfoResult::TxInfoRecentFailure { .. } => TxInfoOutcome::TxInfoRecentFailure,
-            TxInfoResult::Default{ outcome } => (*outcome).into(),
+            TxInfoResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -1461,7 +1550,7 @@ impl BlockLookupResult {
     pub fn outcome(&self) -> BlockLookupOutcome {
         match self {
             BlockLookupResult::BlockFound { .. } => BlockLookupOutcome::BlockFound,
-            BlockLookupResult::Default{ outcome } => (*outcome).into(),
+            BlockLookupResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -1472,7 +1561,7 @@ impl EventPageResult {
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             EventPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
-            EventPageResult::Default{ outcome } => (*outcome).into(),
+            EventPageResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -1483,7 +1572,7 @@ impl TransactionPageResult {
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             TransactionPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
-            TransactionPageResult::Default{ outcome } => (*outcome).into(),
+            TransactionPageResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -1494,7 +1583,7 @@ impl TransactionRefPageResult {
     pub fn outcome(&self) -> IndexerQueryOutcome {
         match self {
             TransactionRefPageResult::IndexerQueryOk { .. } => IndexerQueryOutcome::IndexerQueryOk,
-            TransactionRefPageResult::Default{ outcome } => (*outcome).into(),
+            TransactionRefPageResult::Default{ outcome } => *outcome,
 
         }
     }
@@ -1506,7 +1595,7 @@ impl IndexerProgress {
         match self {
             IndexerProgress::IndexerProgressInitialized { .. } => IndexerProgressState::IndexerProgressInitialized,
             IndexerProgress::IndexerProgressCaughtUp { .. } => IndexerProgressState::IndexerProgressCaughtUp,
-            IndexerProgress::Default{ state } => (*state).into(),
+            IndexerProgress::Default{ state } => *state,
 
         }
     }
@@ -1518,7 +1607,7 @@ impl IndexerEpochResult {
         match self {
             IndexerEpochResult::IndexerEpochInitialized { .. } => IndexerEpochOutcome::IndexerEpochInitialized,
             IndexerEpochResult::IndexerEpochUnchanged { .. } => IndexerEpochOutcome::IndexerEpochUnchanged,
-            IndexerEpochResult::Default{ outcome,..} => (*outcome).into(),
+            IndexerEpochResult::Default{ outcome,..} => *outcome,
 
         }
     }
@@ -1531,7 +1620,7 @@ impl IndexerBlockApplyResult {
             IndexerBlockApplyResult::IndexerBlockApplied { .. } => IndexerBlockApplyOutcome::IndexerBlockApplied,
             IndexerBlockApplyResult::IndexerBlockDuplicate { .. } => IndexerBlockApplyOutcome::IndexerBlockDuplicate,
             IndexerBlockApplyResult::IndexerBlockGap { .. } => IndexerBlockApplyOutcome::IndexerBlockGap,
-            IndexerBlockApplyResult::Default{ outcome,..} => (*outcome).into(),
+            IndexerBlockApplyResult::Default{ outcome,..} => *outcome,
 
         }
     }
@@ -1543,7 +1632,7 @@ impl EventIndexerPullResult {
         match self {
             EventIndexerPullResult::EventIndexerPullBlock { .. } => EventIndexerPullOutcome::EventIndexerPullBlock,
             EventIndexerPullResult::EventIndexerPullCaughtUp { .. } => EventIndexerPullOutcome::EventIndexerPullCaughtUp,
-            EventIndexerPullResult::Default{ outcome,..} => (*outcome).into(),
+            EventIndexerPullResult::Default{ outcome,..} => *outcome,
 
         }
     }

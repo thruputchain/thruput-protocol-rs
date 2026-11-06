@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -616,6 +616,17 @@ impl From<i32> for CryptographicScheme {
         Self(v)
     }
 }
+#[cfg(feature = "xdrs")]
+impl xdrs::XDRDiscriminant for CryptographicScheme {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for CryptographicScheme {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -643,6 +654,7 @@ impl core::fmt::Display for CryptographicScheme {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", xdr(discriminant = "CryptographicScheme"))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -661,6 +673,7 @@ pub enum Signature {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", xdr(discriminant = "CryptographicScheme"))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -759,6 +772,7 @@ impl schemars::JsonSchema for PublicKeyHash {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", xdr(discriminant = "CryptographicScheme"))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -783,6 +797,7 @@ pub enum SecretKey {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstWriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", xdr(discriminant = "i32"))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1336,6 +1351,17 @@ impl From<i32> for StorageKeyType {
         Self(v)
     }
 }
+#[cfg(feature = "xdrs")]
+impl xdrs::XDRDiscriminant for StorageKeyType {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for StorageKeyType {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1444,6 +1470,7 @@ impl schemars::JsonSchema for StorageKeyContractData {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "xdrs", xdr(discriminant = "StorageKeyType"))]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]

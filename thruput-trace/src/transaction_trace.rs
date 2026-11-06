@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -1135,6 +1135,7 @@ pub struct SyscallClearStorageFlagsTrace {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "SyscallNo")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1258,7 +1259,7 @@ pub enum SyscallTraceBody {
     kClearStorageFlags { clear_storage_flags: SyscallClearStorageFlagsTrace } = SyscallNo::kClearStorageFlags.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { syscall_number: i32 } = {
+    #[xdr(default_variant)] Default { syscall_number: SyscallNo } = {
         const __XDR_CASES: &[i32] = &[
             SyscallNo::kSHA256.0 as i32,
             SyscallNo::kGetMsgSender.0 as i32,
@@ -1317,6 +1318,7 @@ pub enum SyscallTraceBody {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "HostFnErrorCode")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -1326,7 +1328,7 @@ pub enum HostFunctionStatusXdr {
     NoneOrRecoverable { syscall_return_code: SyscallErrorCode } = HostFnErrorCode::NoneOrRecoverable.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: HostFnErrorCode } = {
         const __XDR_CASES: &[i32] = &[
             HostFnErrorCode::NoneOrRecoverable.0 as i32,
         ];
@@ -1428,7 +1430,7 @@ impl SyscallTraceBody {
             SyscallTraceBody::kSetStorageFlags { .. } => SyscallNo::kSetStorageFlags,
             SyscallTraceBody::kGetStorageFlags { .. } => SyscallNo::kGetStorageFlags,
             SyscallTraceBody::kClearStorageFlags { .. } => SyscallNo::kClearStorageFlags,
-            SyscallTraceBody::Default{ syscall_number } => (*syscall_number).into(),
+            SyscallTraceBody::Default{ syscall_number } => *syscall_number,
 
         }
     }
@@ -1439,7 +1441,7 @@ impl HostFunctionStatusXdr {
     pub fn error(&self) -> HostFnErrorCode {
         match self {
             HostFunctionStatusXdr::NoneOrRecoverable { .. } => HostFnErrorCode::NoneOrRecoverable,
-            HostFunctionStatusXdr::Default{ error } => (*error).into(),
+            HostFunctionStatusXdr::Default{ error } => *error,
 
         }
     }

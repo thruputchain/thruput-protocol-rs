@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -46,6 +46,16 @@ impl From<i32> for CoordinatorRegistrationOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for CoordinatorRegistrationOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for CoordinatorRegistrationOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -95,6 +105,16 @@ impl From<i32> for SchedulerProposalOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerProposalOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerProposalOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -127,6 +147,7 @@ pub struct SchedulerProposedBlock {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "SchedulerProposalOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -168,6 +189,16 @@ impl From<i32> for SchedulerValidationOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerValidationOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerValidationOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -217,6 +248,7 @@ pub struct SchedulerValidationBlock {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "SchedulerValidationOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -265,6 +297,16 @@ impl From<i32> for SchedulerCommitOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerCommitOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerCommitOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -307,6 +349,16 @@ impl From<i32> for SchedulerGetTipOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerGetTipOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerGetTipOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -328,6 +380,7 @@ impl core::fmt::Display for SchedulerGetTipOutcome {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "SchedulerGetTipOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -374,6 +427,16 @@ impl From<i32> for GenesisCeremonyOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for GenesisCeremonyOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for GenesisCeremonyOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -450,6 +513,16 @@ impl From<i32> for SchedulerTransactionStatus {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerTransactionStatus {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerTransactionStatus {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -504,6 +577,16 @@ impl From<i32> for SchedulerTransactionErrorSource {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerTransactionErrorSource {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerTransactionErrorSource {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -555,6 +638,16 @@ impl From<i32> for SchedulerErrorCode {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for SchedulerErrorCode {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for SchedulerErrorCode {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -614,6 +707,7 @@ pub type SchedulerTransactionOutcomeBatch = VecM::<SchedulerTransactionOutcome>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "GenesisCeremonyOutcome")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -623,7 +717,7 @@ pub enum GenesisCeremonyResult {
     GenesisCeremonyCommitted { commit: GenesisCeremonyCommit } = GenesisCeremonyOutcome::GenesisCeremonyCommitted.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { outcome: i32 } = {
+    #[xdr(default_variant)] Default { outcome: GenesisCeremonyOutcome } = {
         const __XDR_CASES: &[i32] = &[
             GenesisCeremonyOutcome::GenesisCeremonyCommitted.0 as i32,
         ];
@@ -1110,7 +1204,7 @@ impl GenesisCeremonyResult {
     pub fn outcome(&self) -> GenesisCeremonyOutcome {
         match self {
             GenesisCeremonyResult::GenesisCeremonyCommitted { .. } => GenesisCeremonyOutcome::GenesisCeremonyCommitted,
-            GenesisCeremonyResult::Default{ outcome } => (*outcome).into(),
+            GenesisCeremonyResult::Default{ outcome } => *outcome,
 
         }
     }

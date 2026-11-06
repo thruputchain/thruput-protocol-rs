@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // Thruput contract specification AST
 //
@@ -159,11 +159,22 @@ impl From<i32> for ContractTypeKind {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ContractTypeKind {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ContractTypeKind")]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -288,6 +299,16 @@ impl From<i32> for ContractMethodEffect {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ContractMethodEffect {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -370,11 +391,22 @@ impl From<i32> for ContractUnionCaseKind {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ContractUnionCaseKind {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ContractUnionCaseKind")]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]
@@ -431,11 +463,22 @@ impl From<i32> for ContractTypeDefKind {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for ContractTypeDefKind {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ContractTypeDefKind")]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
 #[repr(i32)]
 #[non_exhaustive]

@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -30,6 +30,7 @@ use ::serde::{{Serialize, Deserialize}};
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "ExecResult")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -43,7 +44,7 @@ pub enum ExecProposeResult {
     ExecResultTxRootFrameReverted { proposal_data: NondeterministicProposalData } = ExecResult::ExecResultTxRootFrameReverted.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { result: i32 } = {
+    #[xdr(default_variant)] Default { result: ExecResult } = {
         const __XDR_CASES: &[i32] = &[
             ExecResult::ExecResultOK.0 as i32,
             ExecResult::ExecResultTxDeterministicError.0 as i32,
@@ -447,7 +448,7 @@ impl ExecProposeResult {
             ExecProposeResult::ExecResultOK { .. } => ExecResult::ExecResultOK,
             ExecProposeResult::ExecResultTxDeterministicError { .. } => ExecResult::ExecResultTxDeterministicError,
             ExecProposeResult::ExecResultTxRootFrameReverted { .. } => ExecResult::ExecResultTxRootFrameReverted,
-            ExecProposeResult::Default{ result } => (*result).into(),
+            ExecProposeResult::Default{ result } => *result,
 
         }
     }

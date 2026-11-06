@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -44,6 +44,16 @@ impl From<i32> for DbSchedResult {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DbSchedResult {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DbSchedResult {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -89,6 +99,7 @@ pub type NativeTokenAgeBatch = VecM::<NativeTokenAge>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DbSchedResult")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -98,7 +109,7 @@ pub enum NativeTokenAgeResult {
     DbSchedResultOK { native_token_age: NativeTokenAge } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { result: i32 } = {
+    #[xdr(default_variant)] Default { result: DbSchedResult } = {
         const __XDR_CASES: &[i32] = &[
             DbSchedResult::DbSchedResultOK.0 as i32,
         ];
@@ -121,6 +132,7 @@ pub type NativeTokenAgeResults = VecM::<NativeTokenAgeResult>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DbSchedResult")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -130,7 +142,7 @@ pub enum DbAddressAuthDataBatchResult {
     DbSchedResultOK { address_auth_data_batch: VecM<AddressAuthData> } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { result: i32 } = {
+    #[xdr(default_variant)] Default { result: DbSchedResult } = {
         const __XDR_CASES: &[i32] = &[
             DbSchedResult::DbSchedResultOK.0 as i32,
         ];
@@ -162,6 +174,7 @@ pub struct DbBlockOk {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DbSchedResult")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -171,7 +184,7 @@ pub enum DbBlockResult {
     DbSchedResultOK { block: DbBlockOk } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { result: i32 } = {
+    #[xdr(default_variant)] Default { result: DbSchedResult } = {
         const __XDR_CASES: &[i32] = &[
             DbSchedResult::DbSchedResultOK.0 as i32,
         ];
@@ -206,6 +219,16 @@ impl From<i32> for DbShardResult {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DbShardResult {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DbShardResult {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -224,6 +247,7 @@ impl core::fmt::Display for DbShardResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "DbSchedResult")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -233,7 +257,7 @@ pub enum DbTipResult {
     DbSchedResultOK { db_tip: DbTip } = DbSchedResult::DbSchedResultOK.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { result: i32 } = {
+    #[xdr(default_variant)] Default { result: DbSchedResult } = {
         const __XDR_CASES: &[i32] = &[
             DbSchedResult::DbSchedResultOK.0 as i32,
         ];
@@ -632,7 +656,7 @@ impl NativeTokenAgeResult {
     pub fn result(&self) -> DbSchedResult {
         match self {
             NativeTokenAgeResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
-            NativeTokenAgeResult::Default{ result } => (*result).into(),
+            NativeTokenAgeResult::Default{ result } => *result,
 
         }
     }
@@ -643,7 +667,7 @@ impl DbAddressAuthDataBatchResult {
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbAddressAuthDataBatchResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
-            DbAddressAuthDataBatchResult::Default{ result } => (*result).into(),
+            DbAddressAuthDataBatchResult::Default{ result } => *result,
 
         }
     }
@@ -654,7 +678,7 @@ impl DbBlockResult {
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbBlockResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
-            DbBlockResult::Default{ result } => (*result).into(),
+            DbBlockResult::Default{ result } => *result,
 
         }
     }
@@ -665,7 +689,7 @@ impl DbTipResult {
     pub fn result(&self) -> DbSchedResult {
         match self {
             DbTipResult::DbSchedResultOK { .. } => DbSchedResult::DbSchedResultOK,
-            DbTipResult::Default{ result } => (*result).into(),
+            DbTipResult::Default{ result } => *result,
 
         }
     }

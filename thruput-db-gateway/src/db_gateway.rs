@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: d927489bf7556a90f3a453858b4c2d4f2e702872
+// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
 
 // clang-format off
 
@@ -43,6 +43,7 @@ pub type AddressAndKeyBatch = VecM::<AddressAndKey>;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -52,7 +53,7 @@ pub enum DbGatewayItemResult {
     kRPCNone { item: WireStorageItem } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -89,6 +90,7 @@ pub struct DbGatewayPayload {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -98,7 +100,7 @@ pub enum DbGatewayResult {
     kRPCNone { payload: DbGatewayPayload } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -140,6 +142,7 @@ pub struct DbGatewayConfig {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -149,7 +152,7 @@ pub enum DbGatewayConfigResult {
     kRPCNone { config: DbGatewayConfig } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -173,6 +176,7 @@ pub enum DbGatewayConfigResult {
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[xdr(discriminant = "RPCError")]
 #[derive(schemars::JsonSchema)]
 #[repr(i32)]
 #[non_exhaustive]
@@ -182,7 +186,7 @@ pub enum DbGatewayContractResult {
     kRPCNone { contract_xdr: BytesM } = RPCError::kRPCNone.0 as i32,
     // default:
     //   void;
-    #[xdr(default_variant)] Default { error: i32 } = {
+    #[xdr(default_variant)] Default { error: RPCError } = {
         const __XDR_CASES: &[i32] = &[
             RPCError::kRPCNone.0 as i32,
         ];
@@ -218,6 +222,16 @@ impl From<i32> for DbGatewayIntroOutcome {
         Self(v)
     }
 }
+impl xdrs::XDRDiscriminant for DbGatewayIntroOutcome {
+    const ENCODING: xdrs::DiscriminantEncoding = xdrs::DiscriminantEncoding::Signed;
+    fn discriminant(&self) -> i32 {
+        self.0
+    }
+    fn from_discriminant(d: i32) -> Self {
+        Self(d)
+    }
+}
+
 #[cfg(feature = "std")]
 impl core::fmt::Display for DbGatewayIntroOutcome {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -415,7 +429,7 @@ impl DbGatewayItemResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayItemResult::kRPCNone { .. } => RPCError::kRPCNone,
-            DbGatewayItemResult::Default{ error } => (*error).into(),
+            DbGatewayItemResult::Default{ error } => *error,
 
         }
     }
@@ -426,7 +440,7 @@ impl DbGatewayResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayResult::kRPCNone { .. } => RPCError::kRPCNone,
-            DbGatewayResult::Default{ error } => (*error).into(),
+            DbGatewayResult::Default{ error } => *error,
 
         }
     }
@@ -437,7 +451,7 @@ impl DbGatewayConfigResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayConfigResult::kRPCNone { .. } => RPCError::kRPCNone,
-            DbGatewayConfigResult::Default{ error } => (*error).into(),
+            DbGatewayConfigResult::Default{ error } => *error,
 
         }
     }
@@ -448,7 +462,7 @@ impl DbGatewayContractResult {
     pub fn error(&self) -> RPCError {
         match self {
             DbGatewayContractResult::kRPCNone { .. } => RPCError::kRPCNone,
-            DbGatewayContractResult::Default{ error } => (*error).into(),
+            DbGatewayContractResult::Default{ error } => *error,
 
         }
     }

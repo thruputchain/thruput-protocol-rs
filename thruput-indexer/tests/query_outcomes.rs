@@ -38,10 +38,11 @@ fn page_failures_preserve_old_new_and_unknown_outcomes() {
     assert_eq!(IndexerQueryOutcome::IndexerQueryInvalidCursor.0, 3);
     assert_eq!(IndexerQueryOutcome::IndexerQueryHistoryUnavailable.0, 4);
 
-    for outcome in [1, 2, 3, 4, 99] {
-        check_failure(&EventPageResult::Default { outcome }, outcome);
-        check_failure(&TransactionPageResult::Default { outcome }, outcome);
-        check_failure(&TransactionRefPageResult::Default { outcome }, outcome);
+    for code in [1, 2, 3, 4, 99] {
+        let outcome = IndexerQueryOutcome(code);
+        check_failure(&EventPageResult::Default { outcome }, code);
+        check_failure(&TransactionPageResult::Default { outcome }, code);
+        check_failure(&TransactionRefPageResult::Default { outcome }, code);
     }
 }
 

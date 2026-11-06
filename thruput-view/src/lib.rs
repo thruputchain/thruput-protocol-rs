@@ -185,7 +185,9 @@ mod tests {
 
     #[test]
     fn view_gateway_result_round_trips_unknown_default_outcome() {
-        round_trip(ViewGatewayResult::Default { outcome: 99 });
+        round_trip(ViewGatewayResult::Default {
+            outcome: ViewGatewayOutcome(99),
+        });
     }
 
     #[test]
@@ -283,10 +285,11 @@ mod tests {
                     observed: BlockHeight::from(42),
                 },
             }];
-        failures.extend(
-            [1, 3, 4, 5, 6, 99]
-                .map(|outcome| ViewGatewayBatchResult::Default { outcome }),
-        );
+        failures.extend([1, 3, 4, 5, 6, 99].map(|code| {
+            ViewGatewayBatchResult::Default {
+                outcome: ViewGatewayBatchOutcome(code),
+            }
+        }));
         for result in failures {
             let encoded = xdrs::txs::encode(&result).unwrap();
             let decoded: ViewGatewayBatchResult =
