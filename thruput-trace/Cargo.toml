@@ -23,9 +23,6 @@ crate-type = ["rlib"]
 [features]
 default = []
 std = []
-# No-op, kept for compatibility: the `ffi_enums` error codes now always
-# derive XDR encoding, since transaction traces switch unions on them.
-xdrs = []
 serde = [
     "dep:serde",
     "xdrs/serde",
