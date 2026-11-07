@@ -44,13 +44,15 @@ features:
 ## Generated code
 
 The files `scripts/generate.sh` writes (most of each crate's `src/`) are
-emitted by the `x23c` XDR compiler from the definitions in `protocol/`, a
-submodule of [thruputchain/thruput-protocol], and are not edited by hand.
+emitted by the `xdrc` XDR compiler, from [thruputchain/xdrs], from the
+definitions in `protocol/`, a submodule of [thruputchain/thruput-protocol].
+They are not edited by hand.
 Each crate's `lib.rs`, its `impls` files and a few other modules, and the
 `thruput-syscall`, `thruput-xdr-macros` and `thruput-api-pins` crates, are
 hand-written.
 
 [thruputchain/thruput-protocol]: https://github.com/thruputchain/thruput-protocol
+[thruputchain/xdrs]: https://github.com/thruputchain/xdrs
 [thruputchain/hogd]: https://github.com/thruputchain/hogd
 
 ## CI check
@@ -59,7 +61,7 @@ hand-written.
 bash scripts/ci-check.sh
 ```
 
-This is what CI's build job runs. It needs no submodule or `x23c`.
+This is what CI's build job runs. It needs neither the submodule nor `xdrc`.
 
 ## Regenerating the sources
 
@@ -72,9 +74,28 @@ python3 -m pip install 'PyYAML==6.0.3'
 bash scripts/generate.sh
 ```
 
-Without `XDRC` set, `generate.sh` downloads the latest `x23c` release from
-[thruputchain/hogd]; set `XDRC` to use a local build instead. CI checks that the committed
-sources are up to date with `bash scripts/generate.sh --check`.
+`generate.sh` uses the `xdrc` pinned in `scripts/xdrc.sh`, which it builds
+with `cargo install` on first use and caches under
+`~/.cache/thruput-protocol-rs/xdrc`. Set `XDRC` to use another build, such
+as a local one. To move to a newer `xdrc`, change the commit in
+`scripts/xdrc.sh` and commit the regenerated sources with it. CI checks that
+the committed sources are up to date with `bash scripts/generate.sh --check`.
+
+### Comparing xdrc with x23c
+
+`xdrc` replaced the `x23c` compiler from [thruputchain/hogd]. To check that
+a version of `xdrc` generates the same public API as `x23c`, run:
+
+```shell
+bash scripts/compare-xdrc-api.sh
+```
+
+It generates the sources with each compiler, describes every crate's public
+API from rustdoc's JSON output (with the nightly toolchain), and prints any
+difference. By default it compares the pinned `xdrc` with the latest `x23c`
+release; `--x23c` and `--xdrc` select other builds. `--docs` and `--attrs`
+also compare doc comments and attributes; one known difference in the docs
+is expected, which the script's header describes. CI does not run it.
 
 ## License
 
