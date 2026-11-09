@@ -1,7 +1,7 @@
 // -*-Rust-*-
 // Generated Code: DO NOT CHECK IN
 
-// Generated from xdrc commit: b465b3d7b15c2be882ec6df4f07a5927001bd36a
+// Generated from xdrc commit: 1a0af366169a99b67ad0a6ed7a8eb58f45da5b7c
 
 // Thruput contract specification AST
 //
