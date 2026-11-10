@@ -56,6 +56,8 @@ impl ConfigParamID {
     pub const kConfigParamMaxCalldataLen: Self = Self(11);
     pub const kConfigParamMaxReturnBufferLen: Self = Self(12);
     pub const kConfigParamMaxTxGas: Self = Self(13);
+    pub const kConfigParamMinRv32ArtifactVersion: Self = Self(14);
+    pub const kConfigParamMaxRv32ArtifactVersion: Self = Self(15);
 }
 impl From<i32> for ConfigParamID {
     fn from(v: i32) -> Self {
@@ -118,6 +120,12 @@ impl core::fmt::Display for ConfigParamID {
             },
             x if x == Self::kConfigParamMaxTxGas.0 => {
                 write!(f, "ConfigParamID::kConfigParamMaxTxGas")
+            },
+            x if x == Self::kConfigParamMinRv32ArtifactVersion.0 => {
+                write!(f, "ConfigParamID::kConfigParamMinRv32ArtifactVersion")
+            },
+            x if x == Self::kConfigParamMaxRv32ArtifactVersion.0 => {
+                write!(f, "ConfigParamID::kConfigParamMaxRv32ArtifactVersion")
             },
             _ => {
                 write!(f, "ConfigParamID({})", self.0)
@@ -325,6 +333,35 @@ pub enum ConfigParam {
     // case kConfigParamMaxTxGas:
     //   GasAmount max_tx_gas;
     kConfigParamMaxTxGas { max_tx_gas: GasAmount } = ConfigParamID::kConfigParamMaxTxGas.0 as i32,
+    /// Lowest RV32 artifact format version (`format_version` in the artifact
+    /// header) admitted as an attached contract. 5 is the value in force for a
+    /// configuration that does not state one, which is the oldest format
+    /// admitted before this parameter.
+    ///
+    /// Checked where a contract is attached, like
+    /// `kConfigParamMaxRv32CodeBytes`, not where a deployed one is
+    /// instantiated: raising it stops new deployments in an old format and
+    /// leaves contracts already deployed in one runnable. Retiring a format
+    /// from execution is a separate decision about stored contracts.
+    ///
+    /// A node admits only formats it can read, so the node rejects a genesis
+    /// whose range reaches below the oldest format its build reads, or whose
+    /// minimum exceeds `kConfigParamMaxRv32ArtifactVersion`.
+    // case kConfigParamMinRv32ArtifactVersion:
+    //   u32 min_rv32_artifact_version;
+    kConfigParamMinRv32ArtifactVersion { min_rv32_artifact_version: u32 } = ConfigParamID::kConfigParamMinRv32ArtifactVersion.0 as i32,
+    /// Highest RV32 artifact format version admitted as an attached contract,
+    /// checked with `kConfigParamMinRv32ArtifactVersion` and inclusive like it.
+    /// 6 is the value in force for a configuration that does not state one,
+    /// which is the newest format admitted before this parameter.
+    ///
+    /// This is what activates a format: a node whose build reads a newer
+    /// format still refuses it until the chain's configuration admits it, so
+    /// nodes on different builds agree on which contracts attach. The node
+    /// rejects a genesis above the newest format its build reads.
+    // case kConfigParamMaxRv32ArtifactVersion:
+    //   u32 max_rv32_artifact_version;
+    kConfigParamMaxRv32ArtifactVersion { max_rv32_artifact_version: u32 } = ConfigParamID::kConfigParamMaxRv32ArtifactVersion.0 as i32,
     
 }
 
@@ -429,6 +466,8 @@ impl ConfigParam {
             ConfigParam::kConfigParamMaxCalldataLen { .. } => ConfigParamID::kConfigParamMaxCalldataLen,
             ConfigParam::kConfigParamMaxReturnBufferLen { .. } => ConfigParamID::kConfigParamMaxReturnBufferLen,
             ConfigParam::kConfigParamMaxTxGas { .. } => ConfigParamID::kConfigParamMaxTxGas,
+            ConfigParam::kConfigParamMinRv32ArtifactVersion { .. } => ConfigParamID::kConfigParamMinRv32ArtifactVersion,
+            ConfigParam::kConfigParamMaxRv32ArtifactVersion { .. } => ConfigParamID::kConfigParamMaxRv32ArtifactVersion,
             
         }
     }
