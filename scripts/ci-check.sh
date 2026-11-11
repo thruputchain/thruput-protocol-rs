@@ -6,7 +6,7 @@
 # scripts/workflow-check.sh is a thin wrapper around it.
 #
 # It builds the committed sources only, so it needs neither the protocol
-# submodule nor x23c. Whether those sources are up to date with the protocol
+# submodule nor xdrc. Whether those sources are up to date with the protocol
 # is checked separately, by `scripts/generate.sh --check` (the build
 # workflow's generated-sources job).
 
@@ -71,7 +71,7 @@ kargo clippy -p thruput-xdr-macros -- -D warnings
 
 # Clippy over thruput-xdr, including tests. The two allowed lints
 # (match_single_binding, large_enum_variant) fire only inside the
-# x23c-generated sources, which must not be edited by hand.
+# generated sources, which must not be edited by hand.
 kargo clippy -p thruput-xdr --all-targets --features=std,xdrs,serde -- \
     -D warnings \
     -A clippy::match-single-binding \

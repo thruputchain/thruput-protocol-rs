@@ -76,32 +76,34 @@ specs=(
 )
 
 
-# Without XDRC, download the latest x23c release the way CI does.
+# Arguments: --check fails if the regenerated sources differ from the
+# committed ones. --out DIR writes only the compiler's output, under DIR,
+# leaving this checkout alone; compare-xdrc-api.sh uses it.
+check=false
+out=.
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --check) check=true ;;
+    --out) out=${2:?--out needs a directory}; shift ;;
+    *) echo "usage: $0 [--check] [--out DIR]" >&2; exit 2 ;;
+  esac
+  shift
+done
+
+# Without XDRC, use the pinned xdrc, as CI does. XDRC may name another
+# compiler that takes the same options, such as a local xdrc or x23c build.
 if [[ -z $XDRC ]]; then
-  os=$(uname -s | tr '[:upper:]' '[:lower:]')
-  [[ $os == darwin ]] && os=macos
-  arch=$(uname -m)
-  asset="x23c-${os}-${arch}.tar.gz"
-  xdrc_tmpdir=$(mktemp -d)
-  trap 'rm -rf "$xdrc_tmpdir"' EXIT
-  echo "-- Downloading ${asset} from thruputchain/hogd latest-x23c release --" >&2
-  if ! curl -fsSL --retry 3 -o "$xdrc_tmpdir/$asset" \
-         "https://github.com/thruputchain/hogd/releases/download/latest-x23c/${asset}"; then
-    echo "error: failed to download ${asset} from the latest-x23c release; set XDRC to a local x23c build" >&2
-    exit 1
-  fi
-  tar xzf "$xdrc_tmpdir/$asset" -C "$xdrc_tmpdir"
-  chmod +x "$xdrc_tmpdir/x23c"
-  XDRC="$xdrc_tmpdir/x23c"
+  source "$(dirname "$0")/xdrc.sh"
+  XDRC=$(xdrc_install)
 fi
 
 echo "-- Using XDRC=${XDRC} --" >&2
 
 if [[ ! -x "${XDRC}" ]]; then
-  echo "error: x23c is not executable at ${XDRC}; build hogd's x23c or set XDRC" >&2
+  echo "error: no compiler is executable at ${XDRC}; set XDRC" >&2
   exit 1
 fi
-if ! python3 -c 'import yaml' >/dev/null 2>&1; then
+if [[ $out == . ]] && ! python3 -c 'import yaml' >/dev/null 2>&1; then
   echo "error: PyYAML is required; install PyYAML==6.0.3 in the active Python environment" >&2
   exit 1
 fi
@@ -112,30 +114,30 @@ generate() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-no-feature spec -o "${out}/${package}/src/${name}.rs" "${proto}"
 }
 
 generate_rpc() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${out}/${package}/src/${name}.rs" "${proto}"
 }
 
 generate_trace() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-feature xdrs --rust-feature schema --rust-no-feature spec -o "${out}/${package}/src/${name}.rs" "${proto}"
 }
 
 # thruput-spec is always no_std and has no `std` feature, so leave out what
-# x23c would otherwise gate on one.
+# the compiler would otherwise gate on one.
 generate_contract_spec() {
   proto=${1:?}
   package=${2:?}
   name=$(basename "${proto}" .x)
-  $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature std -o "${package}/src/${name}.rs" "${proto}"
+  $XDRC --rust --rust-feature xdrs --rust-no-feature spec --rust-no-feature std -o "${out}/${package}/src/${name}.rs" "${proto}"
 }
 
 for proto in "${protos[@]}"; do
@@ -146,9 +148,9 @@ for trace in "${traces[@]}"; do
   generate_trace "protocol/${trace}" "thruput-trace"
 done
 
-# x23c preserves this XDR fixed-opaque notation in rustdoc, where it is parsed
+# The compiler preserves this XDR fixed-opaque notation in rustdoc, where it is parsed
 # as an intra-doc link and fails documentation builds with warnings denied.
-perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' thruput-trace/src/db_conflict.rs
+perl -pi -e 's/ContractAddress\[32\]/`ContractAddress[32]`/' "${out}/thruput-trace/src/db_conflict.rs"
 
 # transaction_trace switches unions on these codes, so they need the same
 # unconditional XDR and schema derives as the traces.
@@ -219,6 +221,10 @@ for view in "${views[@]}"; do
   generate_rpc "protocol/${view}" "thruput-view"
 done
 
+if [[ $out != . ]]; then
+  exit 0
+fi
+
 # Generate protocol version constant from the checked-out protocol submodule revision.
 # ProtocolCommit is a fixed opaque[20], so the token must be exactly 20 bytes:
 # the "hogp/" prefix leaves 15 for the commit id. Cut to width rather than
@@ -250,7 +256,7 @@ python3 protocol/generate_syscalls_doc.py --json-output thruput-xdr/syscalls_doc
 echo "-- Copying syscall.yaml to thruput-xdr/src/syscalls.yaml --" >&2
 cp protocol/syscalls.yaml thruput-xdr/src/syscalls.yaml
 
-if [[ "${1:-}" == "--check" ]]; then
+if $check; then
   set +x
   generation_status=$(git status --porcelain --untracked-files=all)
   if [[ -n $generation_status ]]; then

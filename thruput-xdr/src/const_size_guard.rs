@@ -1,8 +1,8 @@
 //! Compile-time guard that generated types carry `#[derive(ConstXDRSize)]`.
 //!
-//! x23c emits `ConstXDRSize` alongside the other XDR derives; regenerating
-//! with an older x23c drops it silently. These assertions break the build
-//! under the `xdrs` feature if that happens.
+//! The XDR compiler emits `ConstXDRSize` alongside the other XDR derives; a
+//! compiler that left it out would drop it silently. These assertions break
+//! the build under the `xdrs` feature if that happens.
 
 const _: () = {
     const fn assert_const_xdr_size<

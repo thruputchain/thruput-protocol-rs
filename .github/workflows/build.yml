@@ -45,7 +45,7 @@ jobs:
         run: ./scripts/ci-check.sh
 
   # Checks that the committed generated sources match the protocol submodule
-  # and the latest x23c.
+  # and the xdrc pinned in scripts/xdrc.sh, which generate.sh builds.
   generated:
     name: Generated sources
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
