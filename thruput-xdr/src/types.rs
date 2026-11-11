@@ -205,6 +205,80 @@ impl schemars::JsonSchema for Ed25519Signature {
     }
 }
 
+/// Canonical compressed Ristretto255 group element.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Default, Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct Ristretto255Point {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 32],
+}
+
+impl From<[u8; 32]> for Ristretto255Point {
+    fn from(_inner: [u8; 32]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Ristretto255Point {
+    pub fn into_inner(self) -> [u8; 32] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 32]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for Ristretto255Point {
+    type Target = [u8; 32];
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl DerefMut for Ristretto255Point {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+impl AsRef<[u8]> for Ristretto255Point {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+
+impl<'a> From<&'a [u8; 32]> for &'a Ristretto255Point {
+    fn from(arr: &[u8; 32]) -> Self {
+        let ptr = arr as *const [u8; 32] as *const Ristretto255Point;
+        unsafe { &*ptr }
+    }
+}
+
+#[cfg(feature = "xdrs")]
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a Ristretto255Point {
+    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+        Ok(Self::from(arr))
+    }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for Ristretto255Point {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "Ristretto255Point".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!(
+            { "type" : "string", "contentEncoding" : "hex", "contentMediaType" :
+            "application/binary", "minLength" : 64, "maxLength" : 64 }
+        )
+    }
+}
+
 /// Represents a 256-bit Ed25519 public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]

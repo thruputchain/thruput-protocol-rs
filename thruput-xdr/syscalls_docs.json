@@ -449,5 +449,18 @@
       "Clears every storage flag the current transaction requests for the key, as visible in the current call frame. Does nothing if no write to the key is pending, since such a key has no flags. As with SetStorageFlags, a clear made in a frame that aborts is discarded with that frame."
     ],
     "errors": []
+  },
+  "Ristretto255Msm": {
+    "description": [
+      "Experimental bounded Ristretto255 sum of scalar-point products. Each 64-byte term contains a canonical 32-byte little-endian scalar followed by a canonical compressed point. Accepts zero scalars, identity points and an empty sum. Validates every term, including zero-scalar terms. At most 256 terms. Output is canonical; invalid-input and out-of-gas failures leave output untouched. All operands are public to the executor."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "Invalid length, too many terms, noncanonical scalar or invalid point."
+        ]
+      }
+    ]
   }
 }

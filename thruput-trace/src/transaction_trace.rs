@@ -1093,6 +1093,34 @@ pub struct SyscallClearStorageFlagsTrace {
     pub outputs: Option<SyscallClearStorageFlagsOutputs>,
 }
 
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRistretto255MsmInputs {
+    pub terms: BytesM,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRistretto255MsmOutputs {
+    pub point: Ristretto255Point,
+}
+
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(ReadXDR, WriteXDR, ConstXDRSize)]
+#[derive(schemars::JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(C)]
+pub struct SyscallRistretto255MsmTrace {
+    pub inputs: SyscallRistretto255MsmInputs,
+    pub outputs: Option<SyscallRistretto255MsmOutputs>,
+}
+
 // === Main Trace Body ===
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -1209,6 +1237,9 @@ pub enum SyscallTraceBody {
     kClearStorageFlags {
         clear_storage_flags: SyscallClearStorageFlagsTrace,
     } = SyscallNo::kClearStorageFlags.0 as i32,
+    kRistretto255Msm {
+        ristretto255_msm: SyscallRistretto255MsmTrace,
+    } = SyscallNo::kRistretto255Msm.0 as i32,
     #[xdr(default_variant)]
     Default {
         syscall_number: SyscallNo,
@@ -1253,6 +1284,7 @@ pub enum SyscallTraceBody {
             SyscallNo::kSetStorageFlags.0 as i32,
             SyscallNo::kGetStorageFlags.0 as i32,
             SyscallNo::kClearStorageFlags.0 as i32,
+            SyscallNo::kRistretto255Msm.0 as i32,
         ];
         let mut tag = i32::MIN;
         let mut i = 0;
@@ -1327,6 +1359,7 @@ impl SyscallTraceBody {
             SyscallTraceBody::kSetStorageFlags { .. } => SyscallNo::kSetStorageFlags,
             SyscallTraceBody::kGetStorageFlags { .. } => SyscallNo::kGetStorageFlags,
             SyscallTraceBody::kClearStorageFlags { .. } => SyscallNo::kClearStorageFlags,
+            SyscallTraceBody::kRistretto255Msm { .. } => SyscallNo::kRistretto255Msm,
             SyscallTraceBody::Default { syscall_number, .. } => *syscall_number,
         }
     }
