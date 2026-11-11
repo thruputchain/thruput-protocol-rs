@@ -7,7 +7,7 @@
 # commit the regenerated sources with it.
 
 XDRC_REPO=https://github.com/thruputchain/xdrs
-XDRC_REV=900e8e94ddefe19817572df3a7fb730ec54fab89
+XDRC_REV=d7777c37264da66eb41f8139bd539c4aa049fcc5
 
 # Prints the path to the pinned xdrc, building it on first use into a cache
 # keyed by the commit.
