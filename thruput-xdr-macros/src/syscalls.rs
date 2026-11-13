@@ -583,6 +583,7 @@ fn generate_syscall_uninit_decl(
     syscall: &Syscall,
     type_map: &TypeMap,
     syscall_input_count: usize,
+    api_major: u32,
     doc: Option<&SyscallDoc>,
 ) -> TokenStream2 {
     //  pub fn uninit_SHA256(buffer : &[u8], hash : &mut MaybeUninit<SHA256Hash>) -> SyscallResult<()> {
@@ -630,7 +631,7 @@ fn generate_syscall_uninit_decl(
     let mut doc_lines = Vec::new();
 
     if let Some(doc) = doc {
-        add_description_section(&mut doc_lines, doc);
+        add_header_sections(&mut doc_lines, syscall, doc, api_major);
         add_uninit_arguments_section(
             &mut doc_lines,
             &syscall.inputs,
@@ -665,6 +666,7 @@ fn generate_syscall_uninit_decl(
 fn generate_syscall_raw_decl(
     syscall: &Syscall,
     type_map: &TypeMap,
+    api_major: u32,
     doc: Option<&SyscallDoc>,
 ) -> TokenStream2 {
     let raw_syscall_inputs = generate_raw_syscall_args(syscall, type_map);
@@ -680,7 +682,7 @@ fn generate_syscall_raw_decl(
     let has_outputs = !syscall.outputs.is_empty();
 
     if let Some(doc) = doc {
-        add_description_section(&mut doc_lines, doc);
+        add_header_sections(&mut doc_lines, syscall, doc, api_major);
         add_raw_arguments_section(
             &mut doc_lines,
             &syscall.inputs,
@@ -725,6 +727,7 @@ fn generate_syscall_raw_decl(
 fn generate_syscall_result_decl(
     syscall: &Syscall,
     type_map: &TypeMap,
+    api_major: u32,
     doc: Option<&SyscallDoc>,
 ) -> TokenStream2 {
     // Skip generation for syscalls with span outputs - these need pre-allocated buffers
@@ -775,7 +778,7 @@ fn generate_syscall_result_decl(
 
         let mut doc_lines = Vec::new();
         if let Some(doc) = doc {
-            add_description_section(&mut doc_lines, doc);
+            add_header_sections(&mut doc_lines, syscall, doc, api_major);
             add_arguments_section(&mut doc_lines, &syscall.inputs);
             doc_lines.push(format!(
                 "This is a convenience wrapper around [`uninit_{}`](uninit_{}).",
@@ -837,7 +840,7 @@ fn generate_syscall_result_decl(
     let mut doc_lines = Vec::new();
 
     if let Some(doc) = doc {
-        add_description_section(&mut doc_lines, doc);
+        add_header_sections(&mut doc_lines, syscall, doc, api_major);
         add_arguments_section(&mut doc_lines, &syscall.inputs);
         add_outputs_section(&mut doc_lines, &syscall.outputs);
 
@@ -933,6 +936,50 @@ fn generate_doc_comment(lines: &[String]) -> TokenStream2 {
     quote! {
         #(#doc_lines)*
     }
+}
+
+/// The rustdoc warning box put at the top of everything generated for an
+/// experimental syscall. It restates the rule in syscalls.yaml.
+///
+/// The box is a single line of HTML rather than markdown inside a `<div>`:
+/// rustdoc takes an item's summary in a module listing from the first block
+/// of its docs, and a `<div>` whose content is in later blocks leaves that
+/// summary an empty, unclosed box.
+fn experimental_warning_lines(syscall: &Syscall) -> Vec<String> {
+    vec![
+        format!(
+            "<div class=\"warning\"><strong>Experimental syscall.</strong> \
+             <code>{}</code> is outside the syscall API's compatibility \
+             contract: it may change or be removed in any release, and a \
+             chain may refuse to offer it.</div>",
+            syscall.name
+        ),
+        String::new(),
+    ]
+}
+
+/// The syscall API version that introduced the syscall. A major bump resets
+/// every surviving syscall's `since_minor` to 0, so the current major is
+/// always the right one to pair it with.
+fn since_line(syscall: &Syscall, api_major: u32) -> String {
+    format!("Since syscall API {api_major}.{}.", syscall.since_minor)
+}
+
+/// The top of every generated function's docs: the experimental warning if
+/// the spec marks the syscall experimental, its description, and the API
+/// version that introduced it.
+fn add_header_sections(
+    doc_lines: &mut Vec<String>,
+    syscall: &Syscall,
+    doc: &SyscallDoc,
+    api_major: u32,
+) {
+    if syscall.experimental {
+        doc_lines.extend(experimental_warning_lines(syscall));
+    }
+    add_description_section(doc_lines, doc);
+    doc_lines.push(since_line(syscall, api_major));
+    doc_lines.push(String::new());
 }
 
 fn add_description_section(doc_lines: &mut Vec<String>, doc: &SyscallDoc) {
@@ -1079,12 +1126,21 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path.clone());
     validate_spec_args(&spec, &file_path);
-    let type_map = spec.get_type_map();
 
     // Load the documentation JSON from the crate directory. scripts/generate.sh
     // writes it into thruput-xdr from protocol/syscalls.yaml.
     let docs_path = "syscalls_docs.json";
     let docs = load_syscall_docs(docs_path.to_string());
+
+    syscall_decls(&spec, &docs).into()
+}
+
+fn syscall_decls(
+    spec: &SyscallSpec,
+    docs: &BTreeMap<String, SyscallDoc>,
+) -> TokenStream2 {
+    let type_map = spec.get_type_map();
+    let api_major = spec.syscall_api_version.major;
 
     let decls = spec.syscalls.iter().map(|func| {
         let doc = docs.get(&func.name);
@@ -1092,10 +1148,12 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
             func,
             &type_map,
             spec.syscall_input_count,
+            api_major,
             doc,
         );
-        let raw = generate_syscall_raw_decl(func, &type_map, doc);
-        let result = generate_syscall_result_decl(func, &type_map, doc);
+        let raw = generate_syscall_raw_decl(func, &type_map, api_major, doc);
+        let result =
+            generate_syscall_result_decl(func, &type_map, api_major, doc);
         quote! {
             #uninit
             #raw
@@ -1106,13 +1164,28 @@ pub fn generate_syscall_decls(input: TokenStream) -> TokenStream {
     quote! {
         #(#decls)*
     }
-    .into()
 }
 
-fn generate_syscall_no_line(syscall: &Syscall) -> TokenStream2 {
+fn generate_syscall_no_line(
+    syscall: &Syscall,
+    api_major: u32,
+) -> TokenStream2 {
     let name = format_ident!("k{}", &syscall.name);
     let num = syscall.number;
+
+    let mut doc_lines = Vec::new();
+    if syscall.experimental {
+        doc_lines.extend(experimental_warning_lines(syscall));
+    }
+    doc_lines.push(format!(
+        "The number of the `{}` syscall. {}",
+        syscall.name,
+        since_line(syscall, api_major)
+    ));
+    let doc_comment = generate_doc_comment(&doc_lines);
+
     quote! {
+        #doc_comment
         pub const #name: Self = Self(#num as u32);
     }
 }
@@ -1134,11 +1207,19 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     let file_path = syn::parse_macro_input!(input as syn::LitStr).value();
     let spec = load_syscall_yaml(file_path);
 
-    let lines = spec.syscalls.iter().map(generate_syscall_no_line);
+    syscall_numbers(&spec).into()
+}
+
+fn syscall_numbers(spec: &SyscallSpec) -> TokenStream2 {
+    let ApiVersion { major, minor } = spec.syscall_api_version;
+
+    let lines = spec
+        .syscalls
+        .iter()
+        .map(|syscall| generate_syscall_no_line(syscall, major));
     let display_lines =
         spec.syscalls.iter().map(generate_syscall_no_display_line);
 
-    let ApiVersion { major, minor } = spec.syscall_api_version;
     for syscall in &spec.syscalls {
         assert!(
             syscall.since_minor <= minor,
@@ -1236,5 +1317,219 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
             }
         };
     }
-    .into()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const SPEC: &str = r#"
+syscall_api_version:
+  major: 3
+  minor: 2
+syscall_input_count: 7
+type_mappings: []
+syscalls:
+  - name: "Stable"
+    number: 0
+    since_minor: 0
+    inputs:
+      - name: "buffer"
+        span_argument: true
+    outputs:
+      - name: "value"
+        typename: "u32"
+  - name: "Unstable"
+    number: 1
+    since_minor: 2
+    experimental: true
+    inputs:
+      - name: "buffer"
+        span_argument: true
+    outputs:
+      - name: "value"
+        typename: "u32"
+"#;
+
+    // Neither description starts with "Experimental": the warning has to
+    // come from the spec's flag. The stable one says it, to show that the
+    // text does not produce a warning either.
+    const DOCS: &str = r#"{
+  "Stable": {
+    "description": ["Experimental-sounding, but stable."],
+    "errors": []
+  },
+  "Unstable": {
+    "description": ["Does something."],
+    "errors": []
+  }
+}"#;
+
+    fn spec() -> SyscallSpec {
+        serde_saphyr::from_str(SPEC).unwrap()
+    }
+
+    /// The rustdoc of `item`, one line per `#[doc]` attribute.
+    fn doc_of(attrs: &[syn::Attribute]) -> Vec<String> {
+        attrs
+            .iter()
+            .filter(|attr| attr.path().is_ident("doc"))
+            .map(|attr| {
+                let syn::Meta::NameValue(meta) = &attr.meta else {
+                    panic!("unexpected doc attribute");
+                };
+                let syn::Expr::Lit(syn::ExprLit {
+                    lit: syn::Lit::Str(line),
+                    ..
+                }) = &meta.value
+                else {
+                    panic!("unexpected doc attribute value");
+                };
+                line.value()
+            })
+            .collect()
+    }
+
+    fn assert_warned(name: &str, doc: &[String]) {
+        // The whole box is the first line, so that it is also the item's
+        // summary in a module listing.
+        let warning = &doc[0];
+        assert!(
+            warning.starts_with(
+                "<div class=\"warning\"><strong>Experimental syscall.</strong>"
+            ),
+            "`{name}` docs do not start with the warning: {warning}"
+        );
+        assert!(warning.ends_with("</div>"), "`{name}`: {warning}");
+        for rule in [
+            "outside the syscall API's compatibility contract",
+            "may change or be removed in any release",
+            "a chain may refuse to offer it",
+        ] {
+            assert!(warning.contains(rule), "`{name}` warning lacks: {rule}");
+        }
+        assert_eq!(doc[1], "", "`{name}`: no blank line after the warning");
+    }
+
+    fn assert_not_warned(name: &str, doc: &[String]) {
+        let text = doc.join("\n");
+        assert!(!text.contains("class=\"warning\""), "`{name}`: {text}");
+        assert!(!text.contains("Experimental syscall"), "`{name}`: {text}");
+    }
+
+    #[test]
+    fn experimental_functions_carry_warning() {
+        let spec = spec();
+        let docs = serde_json::from_str(DOCS).unwrap();
+        let file: syn::File =
+            syn::parse2(syscall_decls(&spec, &docs)).unwrap();
+
+        let mut seen = Vec::new();
+        for item in &file.items {
+            let syn::Item::Fn(func) = item else {
+                panic!("unexpected item");
+            };
+            let name = func.sig.ident.to_string();
+            let doc = doc_of(&func.attrs);
+            if name.ends_with("Unstable") {
+                assert_warned(&name, &doc);
+                assert!(doc.contains(&"Since syscall API 3.2.".to_string()));
+            } else {
+                assert_not_warned(&name, &doc);
+                assert!(doc.contains(&"Since syscall API 3.0.".to_string()));
+            }
+            seen.push(name);
+        }
+        assert_eq!(
+            seen,
+            [
+                "uninit_Stable",
+                "raw_Stable",
+                "Stable",
+                "uninit_Unstable",
+                "raw_Unstable",
+                "Unstable"
+            ]
+        );
+    }
+
+    #[test]
+    fn experimental_syscall_numbers_carry_warning() {
+        let file: syn::File = syn::parse2(syscall_numbers(&spec())).unwrap();
+
+        let consts: Vec<_> = file
+            .items
+            .iter()
+            .filter_map(|item| match item {
+                syn::Item::Impl(imp) if imp.trait_.is_none() => Some(imp),
+                _ => None,
+            })
+            .flat_map(|imp| &imp.items)
+            .filter_map(|item| match item {
+                syn::ImplItem::Const(c) => Some(c),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(consts.len(), 2);
+
+        for c in consts {
+            let name = c.ident.to_string();
+            let doc = doc_of(&c.attrs);
+            match name.as_str() {
+                "kStable" => {
+                    assert_not_warned(&name, &doc);
+                    assert!(doc[0].ends_with("Since syscall API 3.0."));
+                }
+                "kUnstable" => {
+                    assert_warned(&name, &doc);
+                    assert!(doc[2].ends_with("Since syscall API 3.2."));
+                }
+                other => panic!("unexpected constant `{other}`"),
+            }
+        }
+    }
+
+    /// The spec the bindings are generated from: whatever it marks
+    /// experimental is warned about, and nothing else is.
+    #[test]
+    fn shipped_spec_warns_exactly_for_experimental_syscalls() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../thruput-xdr");
+        let spec: SyscallSpec = serde_saphyr::from_str(
+            &std::fs::read_to_string(root.join("src/syscalls.yaml")).unwrap(),
+        )
+        .unwrap();
+        let docs = serde_json::from_str(
+            &std::fs::read_to_string(root.join("syscalls_docs.json")).unwrap(),
+        )
+        .unwrap();
+        let file: syn::File =
+            syn::parse2(syscall_decls(&spec, &docs)).unwrap();
+
+        assert!(spec.syscalls.iter().any(|syscall| syscall.experimental));
+        let mut checked = 0;
+        for item in &file.items {
+            let syn::Item::Fn(func) = item else {
+                panic!("unexpected item");
+            };
+            let name = func.sig.ident.to_string();
+            let base = name
+                .strip_prefix("uninit_")
+                .or_else(|| name.strip_prefix("raw_"))
+                .unwrap_or(&name);
+            let syscall = spec
+                .syscalls
+                .iter()
+                .find(|syscall| syscall.name == base)
+                .unwrap_or_else(|| panic!("no syscall for `{name}`"));
+            let doc = doc_of(&func.attrs);
+            if syscall.experimental {
+                assert_warned(&name, &doc);
+            } else {
+                assert_not_warned(&name, &doc);
+            }
+            checked += 1;
+        }
+        assert!(checked >= 2 * spec.syscalls.len());
+    }
 }
