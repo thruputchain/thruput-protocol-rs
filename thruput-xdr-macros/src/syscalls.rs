@@ -49,14 +49,12 @@ struct Syscall {
 struct TypeMapping {
     base_name: String,
     rust_name: String,
-    #[serde(default = "default_true")]
-    rust_uses_as_ptr: bool,
+    /// The type is passed by value in a single syscall slot, rather than by
+    /// reference. It must fit in 32 bits. This is the only place a syscall
+    /// argument's passing mode is set: an argument of an unmapped type, or of
+    /// a mapped type without this flag, is passed by reference.
     #[serde(default = "default_false")]
     primitive_type: bool,
-    /// Rust newtype wrappers (the transparent wrapper structs in the
-    /// generated code) pass `.into_inner()` when passed by value.
-    #[serde(default = "default_false")]
-    newtype: bool,
     /// Enum types and other tuple structs with a public `.0` (e.g.
     /// `TransactionStatistic(i32)`) pass `.0 as SyscallWord` when passed by
     /// value.
@@ -67,9 +65,7 @@ struct TypeMapping {
 #[derive(Debug)]
 struct TypeInfo {
     rust_name: String,
-    rust_uses_as_ptr: bool,
     primitive_type: bool,
-    newtype: bool,
     dot_zero_type: bool,
 }
 
@@ -83,9 +79,7 @@ impl SyscallSpec {
                 elt.base_name.clone(),
                 TypeInfo {
                     rust_name: elt.rust_name.clone(),
-                    rust_uses_as_ptr: elt.rust_uses_as_ptr,
                     primitive_type: elt.primitive_type,
-                    newtype: elt.newtype,
                     dot_zero_type: elt.dot_zero_type,
                 },
             );
@@ -209,9 +203,6 @@ struct Arg {
     typename: Option<String>,
 
     #[serde(default)]
-    primitive_type: bool, // default to false
-
-    #[serde(default)]
     optional: bool, // default to false
 }
 
@@ -259,22 +250,11 @@ impl Arg {
         }
     }
 
+    /// Whether this arg's type is passed by value, which only its
+    /// `type_mappings` entry decides.
     fn is_primitive(&self, type_map: &TypeMap) -> bool {
-        if let Some(type_details) = self.get_type_details(type_map) {
-            type_details.primitive_type
-        } else {
-            self.primitive_type
-        }
-    }
-
-    /// Returns true if this arg's type is a generated newtype wrapper that
-    /// needs `.into_inner() as SyscallWord` instead of `as SyscallWord`.
-    fn is_newtype(&self, type_map: &TypeMap) -> bool {
-        if let Some(type_details) = self.get_type_details(type_map) {
-            type_details.newtype
-        } else {
-            false
-        }
+        self.get_type_details(type_map)
+            .is_some_and(|type_details| type_details.primitive_type)
     }
 
     fn is_dot_zero_type(&self, type_map: &TypeMap) -> bool {
@@ -282,14 +262,6 @@ impl Arg {
             type_details.dot_zero_type
         } else {
             false
-        }
-    }
-
-    fn uses_as_ptr(&self, type_map: &TypeMap) -> bool {
-        if let Some(type_details) = self.get_type_details(type_map) {
-            type_details.rust_uses_as_ptr
-        } else {
-            true
         }
     }
 
@@ -348,64 +320,47 @@ impl Arg {
             };
             vec![span_ptr, span_len]
         } else if let Some(arg_ty) = self.fixed_size_type(type_map) {
+            // Every slot that is not a by-value primitive carries the address
+            // of the argument itself, taken by casting the reference. That
+            // works for any type, where `.as_ptr()` needs one that has it
+            // (arrays, slices, `MaybeUninit`); for those it gives the same
+            // address.
             let arg = if self.optional {
                 assert!(is_input);
-                if self.uses_as_ptr(type_map) {
-                    quote! {
-                        match #name {
-                            Some(x) => x.as_ptr() as SyscallWord,
-                            None => SyscallWord::MAX,
-                        }
-                    }
-                } else {
-                    quote! {
-                        match #name {
-                            Some(x) => x as *const _ as SyscallWord,
-                            None => SyscallWord::MAX,
-                        }
+                quote! {
+                    match #name {
+                        Some(x) => x as *const _ as SyscallWord,
+                        None => SyscallWord::MAX,
                     }
                 }
-            } else if self.is_primitive(type_map) {
-                if is_input {
-                    // A primitive input is passed by value in a single slot, so
-                    // it MUST fit in a `SyscallWord`. On riscv32 that slot is
-                    // 32 bits, so this assertion (resolved per-target in the
-                    // consuming crate) turns an oversized by-value argument into
-                    // a compile error instead of a silent truncation. Wider
-                    // values must be passed by reference.
-                    let value = if self.is_newtype(type_map) {
-                        quote! { #name.into_inner() }
-                    } else if self.is_dot_zero_type(type_map) {
-                        quote! { #name.0 }
-                    } else {
-                        quote! { #name }
-                    };
-                    quote! {
-                        {
-                            const _: () = assert!(
-                                ::core::mem::size_of::<#arg_ty>()
-                                    <= ::core::mem::size_of::<SyscallWord>(),
-                                "syscall by-value primitive argument is wider than a syscall word; pass it by reference instead"
-                            );
-                            #value as SyscallWord
-                        }
+            } else if is_input && self.is_primitive(type_map) {
+                // A primitive input is passed by value in a single slot, so
+                // it MUST fit in a `SyscallWord`. On riscv32 that slot is
+                // 32 bits, so this assertion (resolved per-target in the
+                // consuming crate) turns an oversized by-value argument into
+                // a compile error instead of a silent truncation. Wider
+                // values must be passed by reference.
+                let value = if self.is_dot_zero_type(type_map) {
+                    quote! { #name.0 }
+                } else {
+                    quote! { #name }
+                };
+                quote! {
+                    {
+                        const _: () = assert!(
+                            ::core::mem::size_of::<#arg_ty>()
+                                <= ::core::mem::size_of::<SyscallWord>(),
+                            "syscall by-value primitive argument is wider than a syscall word; pass it by reference instead"
+                        );
+                        #value as SyscallWord
                     }
-                } else {
-                    quote! { #name as *mut _ as SyscallWord }
                 }
-            } else if self.uses_as_ptr(type_map) {
-                if is_input {
-                    quote! { #name.as_ptr() as SyscallWord }
-                } else {
-                    quote! { #name.as_mut_ptr() as SyscallWord }
-                }
+            } else if is_input {
+                quote! { #name as *const _ as SyscallWord }
             } else {
-                // else it's, at this point in time, a 128 bit int
-                if is_input {
-                    quote! { #name as *const _ as SyscallWord }
-                } else {
-                    quote! { #name as *mut _ as SyscallWord }
-                }
+                // Outputs are always written through a pointer, whether or
+                // not their type is primitive.
+                quote! { #name as *mut _ as SyscallWord }
             };
 
             vec![arg]

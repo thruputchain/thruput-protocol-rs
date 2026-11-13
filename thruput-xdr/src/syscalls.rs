@@ -17,8 +17,9 @@
 //!    syscall can write the output.
 //!
 //! 2. **raw_{syscall_name}**: Takes input arguments as immutable references (&) or,
-//!    for non-optional arguments marked `primitive_type` in syscalls.yaml, as the
-//!    value itself; such a type must fit in one `SyscallWord` (32 bits on riscv32).
+//!    for non-optional arguments whose type's `type_mappings` entry in syscalls.yaml
+//!    sets `primitive_type`, as the value itself; such a type must fit in one
+//!    `SyscallWord` (32 bits on riscv32).
 //!    Outputs are taken as mutable references (&mut). Returns a `SysErr` error code.
 //!
 //! 3. **uninit_{syscall_name}**: Low-level variant that takes outputs as
