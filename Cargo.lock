@@ -304,7 +304,7 @@ dependencies = [
 
 [[package]]
 name = "rpcthroughput_server"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "thruput-rpc",
@@ -488,7 +488,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-api-pins"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "thruput-coordinator",
  "thruput-db-gateway",
@@ -505,7 +505,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-coordinator"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -520,7 +520,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-db-gateway"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -535,7 +535,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-indexer"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -551,7 +551,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-node-rpc"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -569,7 +569,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-node-types"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "schemars",
  "serde",
@@ -581,7 +581,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-rpc"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -621,7 +621,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-scp"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -634,7 +634,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-spec"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "schemars",
  "serde",
@@ -644,11 +644,11 @@ dependencies = [
 
 [[package]]
 name = "thruput-syscall"
-version = "0.66.0"
+version = "0.66.1"
 
 [[package]]
 name = "thruput-trace"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "schemars",
  "serde",
@@ -659,7 +659,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-view"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "async-trait",
  "schemars",
@@ -674,7 +674,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "bs58",
  "schemars",
@@ -712,7 +712,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-macros"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -733,7 +733,7 @@ dependencies = [
 
 [[package]]
 name = "thruput-xdr-syscall-tests"
-version = "0.66.0"
+version = "0.66.1"
 dependencies = [
  "thruput-xdr",
 ]
