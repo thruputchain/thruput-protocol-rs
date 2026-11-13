@@ -7,9 +7,17 @@ use std::collections::HashMap;
 
 #[derive(Debug, serde::Deserialize)]
 struct SyscallSpec {
+    syscall_api_version: ApiVersion,
     syscall_input_count: usize,
     type_mappings: Vec<TypeMapping>,
     syscalls: Vec<Syscall>,
+}
+
+/// The syscall API version; syscalls.yaml states its rules.
+#[derive(Debug, serde::Deserialize)]
+struct ApiVersion {
+    major: u32,
+    minor: u32,
 }
 
 fn default_true() -> bool {
@@ -30,6 +38,11 @@ struct Syscall {
     outputs: Vec<Arg>,
     #[serde(default = "default_true")]
     returns: bool, // default to true
+    /// The minor version of the syscall API that introduced the syscall.
+    since_minor: u32,
+    /// Outside the API's compatibility contract.
+    #[serde(default)]
+    experimental: bool,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -1125,6 +1138,26 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
     let display_lines =
         spec.syscalls.iter().map(generate_syscall_no_display_line);
 
+    let ApiVersion { major, minor } = spec.syscall_api_version;
+    for syscall in &spec.syscalls {
+        assert!(
+            syscall.since_minor <= minor,
+            "syscall `{}` has since_minor {}, later than the API minor {minor}",
+            syscall.name,
+            syscall.since_minor
+        );
+    }
+    let since_lines = spec.syscalls.iter().map(|syscall| {
+        let name = format_ident!("k{}", &syscall.name);
+        let since = syscall.since_minor;
+        quote! { Self::#name => Some(#since), }
+    });
+    let experimental = spec
+        .syscalls
+        .iter()
+        .filter(|syscall| syscall.experimental)
+        .map(|syscall| format_ident!("k{}", &syscall.name));
+
     quote! {
         /// Syscall numbers identifying each system call.
         /// Generated from the syscalls.yaml specification.
@@ -1150,7 +1183,38 @@ pub fn generate_syscall_numbers(input: TokenStream) -> TokenStream {
 
         impl SyscallNo {
             #(#lines)*
+
+            /// The minor version of the syscall API that introduced this
+            /// syscall, or `None` for a number this version does not define.
+            ///
+            /// A guest that makes only syscalls with `since_minor() <= n`
+            /// runs on any host implementing
+            /// [`SYSCALL_API_MAJOR`]`.h` with `h >= n`.
+            pub const fn since_minor(self) -> Option<u32> {
+                match self {
+                    #(#since_lines)*
+                    _ => None,
+                }
+            }
+
+            /// Whether this syscall is outside the API's compatibility
+            /// contract: it may change or be removed in any release.
+            pub const fn is_experimental(self) -> bool {
+                match self {
+                    #(Self::#experimental => true,)*
+                    _ => false,
+                }
+            }
         }
+
+        /// Major version of the syscall API these bindings were generated
+        /// from. It changes when anything a guest can observe changes other
+        /// than by adding a syscall.
+        pub const SYSCALL_API_MAJOR: u32 = #major;
+
+        /// Minor version of the syscall API these bindings were generated
+        /// from. It rises by one whenever syscalls are added.
+        pub const SYSCALL_API_MINOR: u32 = #minor;
 
         #[cfg(feature = "std")]
         const _: () = {
