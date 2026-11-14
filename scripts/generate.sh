@@ -78,7 +78,7 @@ specs=(
 
 # Arguments: --check fails if the regenerated sources differ from the
 # committed ones. --out DIR writes only the compiler's output, under DIR,
-# leaving this checkout alone; compare-xdrc-api.sh uses it.
+# leaving this checkout alone.
 check=false
 out=.
 while [[ $# -gt 0 ]]; do
@@ -91,7 +91,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Without XDRC, use the pinned xdrc, as CI does. XDRC may name another
-# compiler that takes the same options, such as a local xdrc or x23c build.
+# compiler that takes the same options, such as a local xdrc build.
 if [[ -z $XDRC ]]; then
   source "$(dirname "$0")/xdrc.sh"
   XDRC=$(xdrc_install)

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # The xdrc that generates this repository's sources, pinned to a commit of
-# thruputchain/xdrs. Sourced by generate.sh and compare-xdrc-api.sh.
+# thruputchain/xdrs. Sourced by generate.sh.
 #
 # To move to a newer xdrc, change XDRC_REV, run scripts/generate.sh, and
 # commit the regenerated sources with it.
