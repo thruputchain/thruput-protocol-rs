@@ -5,6 +5,7 @@ use thruput_xdr::address_auth::*;
 use thruput_xdr::contract::*;
 use thruput_xdr::header::*;
 use thruput_xdr::network_config::*;
+use thruput_xdr::preimage::*;
 use thruput_xdr::retrocausal_queue::*;
 use thruput_xdr::transaction::*;
 use thruput_xdr::types::*;
