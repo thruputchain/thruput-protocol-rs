@@ -49,6 +49,8 @@ impl ConfigParamID {
     pub const kConfigParamMinRv32ArtifactVersion: Self = Self(14);
     pub const kConfigParamMaxRv32ArtifactVersion: Self = Self(15);
     pub const kConfigParamMaxSubtransactionOutputBytes: Self = Self(16);
+    pub const kConfigParamMinSyscallApiMinor: Self = Self(17);
+    pub const kConfigParamMaxSyscallApiMinor: Self = Self(18);
 }
 
 impl From<i32> for ConfigParamID {
@@ -122,6 +124,12 @@ impl core::fmt::Display for ConfigParamID {
             }
             x if x == Self::kConfigParamMaxSubtransactionOutputBytes.0 => {
                 f.write_str("ConfigParamID::kConfigParamMaxSubtransactionOutputBytes")
+            }
+            x if x == Self::kConfigParamMinSyscallApiMinor.0 => {
+                f.write_str("ConfigParamID::kConfigParamMinSyscallApiMinor")
+            }
+            x if x == Self::kConfigParamMaxSyscallApiMinor.0 => {
+                f.write_str("ConfigParamID::kConfigParamMaxSyscallApiMinor")
             }
             _ => write!(f, "ConfigParamID({})", self.0),
         }
@@ -345,8 +353,8 @@ pub enum ConfigParam {
     } = ConfigParamID::kConfigParamMinRv32ArtifactVersion.0 as i32,
     /// Highest RV32 artifact format version admitted as an attached contract,
     /// checked with `kConfigParamMinRv32ArtifactVersion` and inclusive like it.
-    /// 6 is the value in force for a configuration that does not state one,
-    /// which is the newest format admitted before this parameter.
+    /// The value in force for a configuration that does not state one is the
+    /// newest format the node's build reads.
     ///
     /// This is what activates a format: a node whose build reads a newer
     /// format still refuses it until the chain's configuration admits it, so
@@ -395,6 +403,49 @@ pub enum ConfigParam {
     kConfigParamMaxSubtransactionOutputBytes {
         max_subtransaction_output_bytes: u32,
     } = ConfigParamID::kConfigParamMaxSubtransactionOutputBytes.0 as i32,
+    /// Lowest syscall API minor version an RV32 artifact may declare and be
+    /// admitted as an attached contract. `syscalls.yaml` defines the syscall
+    /// API version and its compatibility rules; an artifact in format 7 or
+    /// later declares the version its guest was built against. 0 is the value
+    /// in force for a configuration that does not state one, which admits every
+    /// minor up to the maximum.
+    ///
+    /// Only the minor is configurable. The major is fixed by what a node
+    /// implements: an artifact declaring another major does not attach under
+    /// any configuration.
+    ///
+    /// A guest built against an older minor calls a subset of what a newer one
+    /// provides, so nothing in the API requires a floor. A chain raises this to
+    /// stop admitting contracts built against a syscall API it considers too
+    /// old.
+    ///
+    /// Checked where a contract is attached, like
+    /// `kConfigParamMinRv32ArtifactVersion`, not where a deployed one is
+    /// instantiated: raising it leaves contracts already deployed runnable. It
+    /// does not apply to an artifact in format 5 or 6, which declares no minor;
+    /// `kConfigParamMinRv32ArtifactVersion` is what stops those attaching.
+    ///
+    /// The node rejects a genesis whose minimum exceeds
+    /// `kConfigParamMaxSyscallApiMinor`.
+    kConfigParamMinSyscallApiMinor {
+        min_syscall_api_minor: u32,
+    } = ConfigParamID::kConfigParamMinSyscallApiMinor.0 as i32,
+    /// Highest syscall API minor version an RV32 artifact may declare and be
+    /// admitted as an attached contract, checked with
+    /// `kConfigParamMinSyscallApiMinor` and inclusive like it. The value in
+    /// force for a configuration that does not state one is the newest minor
+    /// the node's build implements.
+    ///
+    /// This is what activates the syscalls a minor adds: a guest built against
+    /// minor n may call anything introduced up to n, and a node whose build
+    /// implements a newer minor still refuses an artifact declaring it until
+    /// the chain's configuration admits it, so nodes on different builds agree
+    /// on which contracts attach. A chain that relies on that MUST state this
+    /// parameter. The node rejects a genesis above the newest minor its build
+    /// implements.
+    kConfigParamMaxSyscallApiMinor {
+        max_syscall_api_minor: u32,
+    } = ConfigParamID::kConfigParamMaxSyscallApiMinor.0 as i32,
 }
 
 impl ConfigParam {
@@ -451,6 +502,12 @@ impl ConfigParam {
             }
             ConfigParam::kConfigParamMaxSubtransactionOutputBytes { .. } => {
                 ConfigParamID::kConfigParamMaxSubtransactionOutputBytes
+            }
+            ConfigParam::kConfigParamMinSyscallApiMinor { .. } => {
+                ConfigParamID::kConfigParamMinSyscallApiMinor
+            }
+            ConfigParam::kConfigParamMaxSyscallApiMinor { .. } => {
+                ConfigParamID::kConfigParamMaxSyscallApiMinor
             }
         }
     }

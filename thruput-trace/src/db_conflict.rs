@@ -264,8 +264,10 @@ impl ContractRejectCode {
     /// (`kConfigParamMinRv32ArtifactVersion`,
     /// `kConfigParamMaxRv32ArtifactVersion`).
     pub const ContractRejectUnsupportedFormat: Self = Self(5);
-    /// The artifact's VM profile, flags, entry ABI, or syscall ABI is not one
-    /// this node runs.
+    /// The artifact's VM profile, flags, entry ABI, or syscall API major is not
+    /// one this node runs, or the syscall API minor it declares is outside the
+    /// range the chain's configuration admits
+    /// (`kConfigParamMinSyscallApiMinor`, `kConfigParamMaxSyscallApiMinor`).
     pub const ContractRejectUnsupportedAbi: Self = Self(6);
     /// The gas schedule (version, digest) stamped into the artifact is not one
     /// the node accepts: the artifact was lowered by a toolchain whose gas
