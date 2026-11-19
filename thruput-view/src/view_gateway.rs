@@ -53,9 +53,10 @@ impl ViewGatewayOutcome {
     // Server-side invariant failure or unavailable execution dependency.
     pub const ViewGatewayInternalError: Self = Self(2);
     // The request was rejected before any frame output existed: forwarded
-    // tokens without a parent address or deeper than the network allows, an
-    // invocation the executor would not admit, or a root frame that failed on a
-    // syscall error before it returned, aborted, or faulted. Deterministic for
+    // tokens without a parent address or deeper than the network allows, a
+    // block_timepoint earlier than the snapshot tip's, an invocation the
+    // executor would not admit, or a root frame that failed on a syscall error
+    // before it returned, aborted, or faulted. Deterministic for
     // the same request against the same state, so retrying does not help. The
     // error_code arm carries the SyscallErrorCode the executor reported.
     pub const ViewGatewayInvalidInput: Self = Self(3);
@@ -205,8 +206,9 @@ impl core::fmt::Display for ViewGatewayIntroOutcome {
 }
 
 // Independent simulations against one committed snapshot. Calls do not see
-// each other's simulated writes. The trusted gateway applies operator request
-// limits before dispatch. RPC message-size limits also bound decoding.
+// each other's simulated writes, and each runs at its own block_timepoint.
+// The trusted gateway applies operator request limits before dispatch. RPC
+// message-size limits also bound decoding.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(ReadXDR, WriteXDR, ConstXDRSize)]
 #[derive(schemars::JsonSchema)]
