@@ -306,7 +306,6 @@ dependencies = [
 name = "rpcthroughput_server"
 version = "0.66.2"
 dependencies = [
- "async-trait",
  "thruput-rpc",
  "thruput-rpc-driver",
  "tokio",
@@ -525,11 +524,9 @@ dependencies = [
  "async-trait",
  "schemars",
  "serde",
- "serde_json",
  "thruput-node-types",
  "thruput-rpc-api",
  "thruput-xdr",
- "thruput-xdr-common",
  "thruput-xdrs",
 ]
 
@@ -540,12 +537,10 @@ dependencies = [
  "async-trait",
  "schemars",
  "serde",
- "serde_json",
  "thruput-node-types",
  "thruput-rpc-api",
  "thruput-trace",
  "thruput-xdr",
- "thruput-xdr-common",
  "thruput-xdrs",
 ]
 
@@ -556,14 +551,12 @@ dependencies = [
  "async-trait",
  "schemars",
  "serde",
- "serde_json",
  "thruput-node-types",
  "thruput-rpc-api",
  "thruput-rpc-driver",
  "thruput-scp",
  "thruput-trace",
  "thruput-xdr",
- "thruput-xdr-common",
  "thruput-xdrs",
 ]
 
@@ -584,7 +577,6 @@ name = "thruput-rpc"
 version = "0.66.2"
 dependencies = [
  "async-trait",
- "schemars",
  "serde",
  "thruput-rpc-api",
  "thruput-rpc-driver",
@@ -628,7 +620,6 @@ dependencies = [
  "serde",
  "thruput-rpc-api",
  "thruput-xdr",
- "thruput-xdr-common",
  "thruput-xdrs",
 ]
 
@@ -653,7 +644,6 @@ dependencies = [
  "schemars",
  "serde",
  "thruput-xdr",
- "thruput-xdr-common",
  "thruput-xdrs",
 ]
 

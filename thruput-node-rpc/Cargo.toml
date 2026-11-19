@@ -39,7 +39,6 @@ thruput-node-types = { workspace = true, features = ["std"] }
 thruput-scp = { workspace = true, features = ["std"] }
 thruput-trace = { workspace = true, features = ["std"] }
 xdrs = { workspace = true, features = ["derive", "alloc", "schemars"] }
-xdr-common = { workspace = true }
 thruput-rpc-api = { workspace = true }
 
 schemars = { workspace = true }
@@ -47,4 +46,3 @@ serde = { version = "1", features = ["derive"], optional = true }
 
 [dev-dependencies]
 thruput-rpc-driver = { workspace = true }
-serde_json = "1"

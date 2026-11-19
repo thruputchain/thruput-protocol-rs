@@ -48,7 +48,6 @@ thruput-node-rpc = { path = "thruput-node-rpc", version = "=0.66.2" }
 thruput-indexer = { path = "thruput-indexer", version = "=0.66.2" }
 thruput-db-gateway = { path = "thruput-db-gateway", version = "=0.66.2" }
 thruput-view = { path = "thruput-view", version = "=0.66.2" }
-thruput-spec = { path = "thruput-spec", version = "=0.66.2" }
 # Published on crates.io under thruput-* package names. The xdrs dependency keys
 # keep the library names that the generated bindings and xdr-derive output use;
 # the RPC crates' library names are their package names.
@@ -57,7 +56,6 @@ xdrs = { package = "thruput-xdrs", version = "0.18.0", default-features = false,
     "derive",
 ] }
 xdr-common = { package = "thruput-xdr-common", version = "0.18.0" }
-xdr-derive = { package = "thruput-xdr-derive", version = "0.18.0" }
 thruput-rpc-api = { version = "0.4.0" }
 thruput-rpc-driver = { version = "0.18.0" }
 schemars = { version = "1" }
