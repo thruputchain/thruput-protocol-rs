@@ -34,6 +34,11 @@ pub struct TransactionViewQuery {
     pub auth_claim: AuthClaim,
     pub forwarded_tokens: VecM<SerializedAuthToken>,
     pub invoke_flags: InvokeFlagSet,
+    // The block timepoint the view observes (GetBlockTimepoint). The executor
+    // supplies no default. A value earlier than the timepoint of the committed
+    // tip the view runs against is rejected as invalid input: no block could
+    // follow that tip at an earlier time. The executing height is unaffected.
+    pub block_timepoint: TimePoint,
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
