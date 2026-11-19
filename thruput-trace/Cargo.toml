@@ -45,6 +45,3 @@ features = ["xdrs", "alloc", "schema"]
 [dependencies.xdrs]
 workspace = true
 features = ["derive", "int128", "alloc", "schemars"]
-
-[dependencies.xdr-common]
-workspace = true

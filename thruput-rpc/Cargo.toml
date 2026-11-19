@@ -26,9 +26,6 @@ serde = ["dep:serde", "xdrs/serde"]
 [dependencies]
 async-trait = "0.1.89"
 
-[dependencies.schemars]
-workspace = true
-
 [dependencies.serde]
 optional = true
 version = "1.0.219"
