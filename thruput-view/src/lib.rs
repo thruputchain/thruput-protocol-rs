@@ -163,6 +163,7 @@ mod tests {
             },
             forwarded_tokens: VecM(vec![]),
             invoke_flags: InvokeFlag::ReadOnly.0.cast_unsigned(),
+            block_timepoint: TimePoint::new(1_700_000_000_000_000_000),
         }
     }
 
