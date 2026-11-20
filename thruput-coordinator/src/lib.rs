@@ -15,8 +15,8 @@ pub use thruput_node_types::{consensus, parallel, proposal, rpc_types};
 // refreshes.
 pub use thruput_xdr::{
     address_auth::*, auth_claim::*, contract::*, genesis::*, header::*,
-    network_config::*, precompiles::*, retrocausal_queue::*, storage_cost::*,
-    transaction::*, types::*, validator::*,
+    network_config::*, precompiles::*, preimage::*, retrocausal_queue::*,
+    storage_cost::*, transaction::*, types::*, validator::*,
 };
 
 #[rustfmt::skip]
