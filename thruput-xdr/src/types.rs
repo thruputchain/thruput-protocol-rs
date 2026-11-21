@@ -279,6 +279,81 @@ impl schemars::JsonSchema for Ristretto255Point {
     }
 }
 
+/// An unsigned 256-bit integer as a syscall passes it: 32 bytes, least
+/// significant byte first.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Default, Copy)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct U256Le {
+    #[cfg_attr(feature = "serde", serde(with = "xdr_common::serde_hex"))]
+    inner: [u8; 32],
+}
+
+impl From<[u8; 32]> for U256Le {
+    fn from(_inner: [u8; 32]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl U256Le {
+    pub fn into_inner(self) -> [u8; 32] {
+        self.inner
+    }
+    pub const fn new(_inner: [u8; 32]) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for U256Le {
+    type Target = [u8; 32];
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl DerefMut for U256Le {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+impl AsRef<[u8]> for U256Le {
+    fn as_ref(&self) -> &[u8] {
+        self.deref().as_slice()
+    }
+}
+
+impl<'a> From<&'a [u8; 32]> for &'a U256Le {
+    fn from(arr: &[u8; 32]) -> Self {
+        let ptr = arr as *const [u8; 32] as *const U256Le;
+        unsafe { &*ptr }
+    }
+}
+
+#[cfg(feature = "xdrs")]
+impl<'r: 'a, 'a> ReadXDR<'r> for &'a U256Le {
+    fn read_xdr<R: xdrs::Reader<'r>>(r: &mut R) -> xdrs::ReadResult<Self> {
+        let arr: &[u8; 32] = xdrs::read_xdr(r)?;
+        Ok(Self::from(arr))
+    }
+}
+
+#[cfg(feature = "schema")]
+impl schemars::JsonSchema for U256Le {
+    fn schema_name() -> ::std::borrow::Cow<'static, str> {
+        "U256Le".into()
+    }
+    fn json_schema(_gen: &mut schemars::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!(
+            { "type" : "string", "contentEncoding" : "hex", "contentMediaType" :
+            "application/binary", "minLength" : 64, "maxLength" : 64 }
+        )
+    }
+}
+
 /// Represents a 256-bit Ed25519 public key.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
