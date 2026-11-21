@@ -462,5 +462,11 @@
         ]
       }
     ]
+  },
+  "U256Sqrt": {
+    "description": [
+      "Experimental unsigned 256-bit integer square root. value is 32 bytes, least significant byte first, as a 128-bit integer argument is 16. Returns the largest root with root * root <= value, which always fits 128 bits."
+    ],
+    "errors": []
   }
 }
