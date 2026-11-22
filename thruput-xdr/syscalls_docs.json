@@ -462,5 +462,37 @@
         ]
       }
     ]
+  },
+  "U256Sqrt": {
+    "description": [
+      "Experimental unsigned 256-bit integer square root. value is 32 bytes, least significant byte first, as a 128-bit integer argument is 16. Returns the largest root with root * root <= value, which always fits 128 bits."
+    ],
+    "errors": []
+  },
+  "U256MulDivRem": {
+    "description": [
+      "Experimental unsigned 256-bit multiply-then-divide. Divides the exact 512-bit product a * b by divisor. Returns the quotient as its low and high 256 bits, and the remainder, so that a * b = (quotient_hi * 2^256 + quotient_lo) * divisor + remainder with remainder < divisor. A nonzero quotient_hi means the quotient does not fit 256 bits. Each value is 32 bytes, least significant byte first. A zero divisor leaves the outputs untouched."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "The divisor is zero."
+        ]
+      }
+    ]
+  },
+  "U128MulDivRem": {
+    "description": [
+      "Experimental unsigned 128-bit multiply-then-divide: U256MulDivRem at half the width. Divides the exact 256-bit product a * b by divisor. Returns the quotient as its low and high 128 bits, and the remainder, so that a * b = (quotient_hi * 2^128 + quotient_lo) * divisor + remainder with remainder < divisor. A zero divisor leaves the outputs untouched."
+    ],
+    "errors": [
+      {
+        "code": "kSyscallErrorCodeInvalidSyscallInput",
+        "description": [
+          "The divisor is zero."
+        ]
+      }
+    ]
   }
 }
