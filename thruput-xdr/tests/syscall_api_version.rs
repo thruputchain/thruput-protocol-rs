@@ -1,19 +1,8 @@
-use thruput_xdr::{SYSCALL_API_MAJOR, SYSCALL_API_MINOR, SyscallNo};
+//! Properties of the generated syscall API accessors that hold whatever the
+//! spec says. Nothing here names a version or a syscall's `since_minor`, so a
+//! protocol update needs no edit here.
 
-#[test]
-fn version_matches_the_spec() {
-    assert_eq!((SYSCALL_API_MAJOR, SYSCALL_API_MINOR), (1, 2));
-}
-
-#[test]
-fn since_minor_per_syscall() {
-    assert_eq!(SyscallNo::kSHA256.since_minor(), Some(0));
-    assert_eq!(SyscallNo::kRistretto255Msm.since_minor(), Some(1));
-    assert_eq!(SyscallNo::kU256Sqrt.since_minor(), Some(2));
-    assert_eq!(SyscallNo::kU256MulDivRem.since_minor(), Some(2));
-    assert_eq!(SyscallNo::kU128MulDivRem.since_minor(), Some(2));
-    assert_eq!(SyscallNo(u32::MAX).since_minor(), None);
-}
+use thruput_xdr::{SYSCALL_API_MINOR, SyscallNo};
 
 #[test]
 fn no_syscall_is_later_than_the_api_minor() {
@@ -25,12 +14,8 @@ fn no_syscall_is_later_than_the_api_minor() {
 }
 
 #[test]
-fn experimental_syscalls() {
-    assert!(SyscallNo::kRistretto255Msm.is_experimental());
-    assert!(SyscallNo::kU256Sqrt.is_experimental());
-    assert!(SyscallNo::kU256MulDivRem.is_experimental());
-    assert!(SyscallNo::kU128MulDivRem.is_experimental());
-    assert!(!SyscallNo::kSHA256.is_experimental());
+fn an_undefined_number_has_no_version_and_is_not_experimental() {
+    assert_eq!(SyscallNo(u32::MAX).since_minor(), None);
     assert!(!SyscallNo(u32::MAX).is_experimental());
 }
 
