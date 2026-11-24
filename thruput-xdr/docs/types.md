@@ -32,14 +32,17 @@ use core::time::Duration;
 use thruput_xdr::types::{BlockHeight, TimePoint};
 
 let now = TimePoint::UNIX_EPOCH + Duration::from_secs(1_700_000_000);
-let deadline = &now + 7 * Duration::from_hours(24);
+let deadline = now + 7 * Duration::from_hours(24);
 assert!(now < deadline);
-assert_eq!(&deadline - &now, Duration::from_hours(7 * 24));
+assert_eq!(deadline - now, Duration::from_hours(7 * 24));
 
 let height = BlockHeight::new(1_000);
-let expiry = &height + 100;
-assert_eq!(&expiry - &height, 100);
+let expiry = height + 100;
+assert_eq!(expiry - height, 100);
 ```
+
+Both types are `Copy`, so a struct that holds one can derive `Copy`. The
+operators also accept references.
 
 Every `+` and `-` operator on these types checks for overflow in every
 build profile and panics when it happens, as `core::time` does and the

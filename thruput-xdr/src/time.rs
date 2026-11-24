@@ -7,6 +7,12 @@ use core::time::Duration;
 
 use crate::types::{BlockHeight, TimePoint};
 
+// Each is one integer. `types.rs` is generated and derives `Clone` alone, so
+// `Copy` is added here: a struct that holds a timepoint or a height can then
+// derive `Copy` too, and an operand need not be borrowed or cloned.
+impl Copy for TimePoint {}
+impl Copy for BlockHeight {}
+
 /// The nanoseconds in `duration`, or `None` if they do not fit `u64` (about
 /// 584 years).
 const fn duration_nanos(duration: Duration) -> Option<u64> {
@@ -94,13 +100,13 @@ impl Add<Duration> for TimePoint {
     type Output = TimePoint;
 
     fn add(self, rhs: Duration) -> TimePoint {
-        &self + rhs
+        <&TimePoint as Add<Duration>>::add(&self, rhs)
     }
 }
 
 impl AddAssign<Duration> for TimePoint {
     fn add_assign(&mut self, rhs: Duration) {
-        *self = &*self + rhs;
+        *self = <&TimePoint as Add<Duration>>::add(self, rhs);
     }
 }
 
@@ -117,13 +123,13 @@ impl Sub<Duration> for TimePoint {
     type Output = TimePoint;
 
     fn sub(self, rhs: Duration) -> TimePoint {
-        &self - rhs
+        <&TimePoint as Sub<Duration>>::sub(&self, rhs)
     }
 }
 
 impl SubAssign<Duration> for TimePoint {
     fn sub_assign(&mut self, rhs: Duration) {
-        *self = &*self - rhs;
+        *self = <&TimePoint as Sub<Duration>>::sub(self, rhs);
     }
 }
 
@@ -202,13 +208,13 @@ impl Add<i64> for BlockHeight {
     type Output = BlockHeight;
 
     fn add(self, rhs: i64) -> BlockHeight {
-        &self + rhs
+        <&BlockHeight as Add<i64>>::add(&self, rhs)
     }
 }
 
 impl AddAssign<i64> for BlockHeight {
     fn add_assign(&mut self, rhs: i64) {
-        *self = &*self + rhs;
+        *self = <&BlockHeight as Add<i64>>::add(self, rhs);
     }
 }
 
@@ -225,13 +231,13 @@ impl Sub<i64> for BlockHeight {
     type Output = BlockHeight;
 
     fn sub(self, rhs: i64) -> BlockHeight {
-        &self - rhs
+        <&BlockHeight as Sub<i64>>::sub(&self, rhs)
     }
 }
 
 impl SubAssign<i64> for BlockHeight {
     fn sub_assign(&mut self, rhs: i64) {
-        *self = &*self - rhs;
+        *self = <&BlockHeight as Sub<i64>>::sub(self, rhs);
     }
 }
 
@@ -268,6 +274,8 @@ impl Sub<BlockHeight> for BlockHeight {
 }
 
 #[cfg(test)]
+// The operators on references are part of what is tested.
+#[allow(clippy::op_ref)]
 mod tests {
     use super::*;
 
@@ -282,15 +290,35 @@ mod tests {
     }
 
     #[test]
+    fn timepoints_and_heights_are_copy() {
+        #[derive(Clone, Copy)]
+        struct Terms {
+            end: TimePoint,
+            expiry: BlockHeight,
+        }
+
+        let terms = Terms {
+            end: timepoint(1_000),
+            expiry: height(10),
+        };
+        let copy = terms;
+        // Both operands by value, and both still usable afterwards.
+        assert_eq!(terms.end + DAY - DAY, copy.end);
+        assert_eq!(terms.end - copy.end, Duration::ZERO);
+        assert_eq!(terms.expiry + 1 - copy.expiry, 1);
+        assert_eq!(terms.expiry, copy.expiry);
+    }
+
+    #[test]
     fn timepoint_plus_and_minus_duration() {
         let now = timepoint(1_000);
         let deadline = &now + Duration::from_nanos(7);
         assert_eq!(deadline, timepoint(1_007));
         assert!(now < deadline);
         assert_eq!(&deadline - Duration::from_nanos(7), now);
-        assert_eq!(deadline.clone() - Duration::from_nanos(7), now);
+        assert_eq!(deadline - Duration::from_nanos(7), now);
 
-        let mut moving = now.clone();
+        let mut moving = now;
         moving += Duration::from_nanos(10);
         moving -= Duration::from_nanos(3);
         assert_eq!(moving, timepoint(1_007));
@@ -312,9 +340,9 @@ mod tests {
         let start = timepoint(100);
         let end = timepoint(250);
         assert_eq!(&end - &start, Duration::from_nanos(150));
-        assert_eq!(end.clone() - &start, Duration::from_nanos(150));
-        assert_eq!(&end - start.clone(), Duration::from_nanos(150));
-        assert_eq!(end.clone() - start.clone(), Duration::from_nanos(150));
+        assert_eq!(end - &start, Duration::from_nanos(150));
+        assert_eq!(&end - start, Duration::from_nanos(150));
+        assert_eq!(end - start, Duration::from_nanos(150));
         assert_eq!(end.duration_since(&start), Duration::from_nanos(150));
         assert_eq!(
             end.checked_duration_since(&start),
@@ -373,9 +401,9 @@ mod tests {
         assert_eq!(expiry, height(1_100));
         assert!(now < expiry);
         assert_eq!(&expiry - 100, now);
-        assert_eq!(expiry.clone() - 100, now);
+        assert_eq!(expiry - 100, now);
 
-        let mut moving = now.clone();
+        let mut moving = now;
         moving += 10;
         moving -= 3;
         assert_eq!(moving, height(1_007));
@@ -386,9 +414,9 @@ mod tests {
         let earlier = height(100);
         let later = height(250);
         assert_eq!(&later - &earlier, 150);
-        assert_eq!(later.clone() - &earlier, 150);
-        assert_eq!(&later - earlier.clone(), 150);
-        assert_eq!(later.clone() - earlier.clone(), 150);
+        assert_eq!(later - &earlier, 150);
+        assert_eq!(&later - earlier, 150);
+        assert_eq!(later - earlier, 150);
         assert_eq!(later.blocks_since(&earlier), 150);
         assert_eq!(&earlier - &later, -150);
         assert_eq!(earlier.checked_blocks_since(&later), Some(-150));
