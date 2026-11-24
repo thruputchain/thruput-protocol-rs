@@ -38,8 +38,8 @@ use types::*;
 pub mod impls;
 use impls::*;
 
-// Arithmetic on `TimePoint` and `BlockHeight`; the methods surface on the
-// types themselves.
+// Arithmetic on `TimePoint`, `TimeSpan` and `BlockHeight`; the methods
+// surface on the types themselves.
 mod time;
 
 /// Contract deployment, execution, and interface management.

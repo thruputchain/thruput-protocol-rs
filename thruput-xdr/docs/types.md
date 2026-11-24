@@ -24,30 +24,35 @@ contract. The two encode identically.
 
 ## Time and Height Arithmetic
 
-Arithmetic on [`TimePoint`] with [`core::time::Duration`], and on
-[`BlockHeight`] with a signed number of blocks.
+Arithmetic on [`TimePoint`] with [`TimeSpan`], the length of time between
+two timepoints, and on [`BlockHeight`] with a signed number of blocks. All
+three are `Copy`.
 
 ```
-use core::time::Duration;
-use thruput_xdr::types::{BlockHeight, TimePoint};
+use thruput_xdr::types::{BlockHeight, TimePoint, TimeSpan};
 
-let now = TimePoint::UNIX_EPOCH + Duration::from_secs(1_700_000_000);
-let deadline = &now + 7 * Duration::from_hours(24);
+let now = TimePoint::UNIX_EPOCH + TimeSpan::from_secs(1_700_000_000);
+let deadline = now + TimeSpan::from_days(7);
 assert!(now < deadline);
-assert_eq!(&deadline - &now, Duration::from_hours(7 * 24));
+assert_eq!(deadline - now, TimeSpan::from_hours(7 * 24));
 
 let height = BlockHeight::new(1_000);
-let expiry = &height + 100;
-assert_eq!(&expiry - &height, 100);
+let expiry = height + 100;
+assert_eq!(expiry - height, 100);
 ```
 
-Every `+` and `-` operator on these types checks for overflow in every
+A `TimeSpan` counts in the unit of `TimePoint` and encodes as a timepoint
+does. Build one with [`TimeSpan::from_secs`] and its siblings, so that code
+does not depend on the unit. [`TimeSpan::from_duration`] and `Duration::from`
+convert from and to [`core::time::Duration`].
+
+Every `+`, `-` and `*` operator on these types checks for overflow in every
 build profile and panics when it happens, as `core::time` does and the
 integer primitives do not: a deadline that silently wrapped into the past
 would be a security bug in a contract. The `checked_*` methods (and, on
 `TimePoint`, the `saturating_*` methods) handle the edge without panicking.
 
-Subtracting one timepoint from another saturates to `Duration::ZERO` when
+Subtracting one timepoint from another saturates to [`TimeSpan::ZERO`] when
 the right-hand side is later, as `std::time::Instant` does; use
 [`TimePoint::checked_duration_since`] to detect that case. Subtracting one
 height from another is a plain signed difference.
