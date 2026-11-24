@@ -120,6 +120,46 @@ impl DerefMut for TimePoint {
     }
 }
 
+/// uint64_t, a length of time in nanoseconds: the difference between
+/// two TimePoints, in the unit of TimePoint.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "xdrs", derive(ReadXDR, WriteXDR, ConstXDRSize))]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[repr(transparent)]
+#[cfg_attr(feature = "serde", serde(transparent))]
+pub struct TimeSpan {
+    inner: u64,
+}
+
+impl From<u64> for TimeSpan {
+    fn from(_inner: u64) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl TimeSpan {
+    pub fn into_inner(self) -> u64 {
+        self.inner
+    }
+    pub const fn new(_inner: u64) -> Self {
+        Self { inner: _inner }
+    }
+}
+
+impl Deref for TimeSpan {
+    type Target = u64;
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl DerefMut for TimeSpan {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 /// Typedef representing a length of memory in bytes, within
 /// a contract's memory.  This is primarily used as an argument to syscalls,
 /// and should not be directly used by most contracts.
