@@ -10,6 +10,18 @@ The `types` module provides the foundational types used throughout the Thruput p
 - **Storage types**: Contract addresses, storage keys, and hashes
 - **Protocol primitives**: Time points, gas amounts, block heights
 
+## Contract Addresses
+
+Contract code written with `thruput-sdk` should hold the address of a
+contract it calls as `thruput_sdk::Address<C>`. That type names the generated
+client, or tuple of clients, used to call the contract, so the interface is
+stated once, at the declaration.
+
+If you really need an address untyped, [`ContractAddress`] is the bare
+32 bytes: for an address that is never called, such as an owner or a
+recipient, for one whose interface is not known, and for code outside a
+contract. The two encode identically.
+
 ## Time and Height Arithmetic
 
 Arithmetic on [`TimePoint`] with [`core::time::Duration`], and on
