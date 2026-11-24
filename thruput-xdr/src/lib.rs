@@ -38,6 +38,9 @@ use types::*;
 pub mod impls;
 use impls::*;
 
+// `Copy` for the newtypes over a single integer.
+mod copy;
+
 // Arithmetic on `TimePoint`, `TimeSpan` and `BlockHeight`; the methods
 // surface on the types themselves.
 mod time;

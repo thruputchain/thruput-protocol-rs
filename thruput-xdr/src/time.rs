@@ -7,13 +7,6 @@ use core::time::Duration;
 
 use crate::types::{BlockHeight, TimePoint, TimeSpan};
 
-// Each is one integer. `types.rs` is generated and derives `Clone` alone, so
-// `Copy` is added here: a struct that holds one can then derive `Copy` too,
-// and an operand need not be borrowed or cloned.
-impl Copy for TimePoint {}
-impl Copy for TimeSpan {}
-impl Copy for BlockHeight {}
-
 /// How many of the unit of [`TimePoint`] make a second. The one place the
 /// unit is stated: everything else in this module is derived from it.
 const TICKS_PER_SEC: u64 = 1_000_000_000;
