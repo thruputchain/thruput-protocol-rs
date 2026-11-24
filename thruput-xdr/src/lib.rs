@@ -38,7 +38,9 @@ use types::*;
 pub mod impls;
 use impls::*;
 
-pub mod time;
+// Arithmetic on `TimePoint`, `TimeSpan` and `BlockHeight`; the methods
+// surface on the types themselves.
+mod time;
 
 /// Contract deployment, execution, and interface management.
 #[doc = include_str!("../docs/contract.md")]
