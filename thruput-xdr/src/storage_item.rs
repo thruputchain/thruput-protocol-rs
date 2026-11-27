@@ -34,9 +34,6 @@ impl StorageItemType {
     pub const kItemTypeReplayCacheData: Self = Self(3);
     pub const kItemTypeAuthData: Self = Self(4);
     pub const kItemTypeDeployedContractHash: Self = Self(5);
-    // This will be removed when we get rid of the old db interface.
-    #[doc(hidden)]
-    pub const kItemTypeDeleted: Self = Self(-1);
 }
 
 impl From<i32> for StorageItemType {
@@ -77,9 +74,6 @@ impl core::fmt::Display for StorageItemType {
             }
             x if x == Self::kItemTypeDeployedContractHash.0 => {
                 f.write_str("StorageItemType::kItemTypeDeployedContractHash")
-            }
-            x if x == Self::kItemTypeDeleted.0 => {
-                f.write_str("StorageItemType::kItemTypeDeleted")
             }
             _ => write!(f, "StorageItemType({})", self.0),
         }
