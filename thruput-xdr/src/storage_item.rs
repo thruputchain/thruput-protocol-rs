@@ -86,7 +86,7 @@ impl core::fmt::Display for StorageItemType {
 pub const kBytestringCeilingLen: u32 = 65000;
 
 /// The limit in force when a configuration does not state one.
-pub const kDefaultMaxBytestringLen: u32 = 1024;
+pub const kDefaultMaxBytestringLen: u32 = 4096;
 
 /// An arbitrary value, stored as an opaque string of bytes.
 ///
